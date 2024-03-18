@@ -1,19 +1,30 @@
-from hiddenlayer.rest.api.model_scan_api import ModelScanApi
-from hiddenlayer.rest.api_client import ApiClient
-from hiddenlayer.rest.api.sensor_api import SensorApi
-from hiddenlayer.rest.models import (
-    MultipartUploadPart,
-    CreateSensorRequest,
-)
-
-import time
 import os
-
-from typing import Union, Optional, List
-
+import random
+import time
 from pathlib import Path
+from typing import List, Optional, Union
 
+from hiddenlayer.constants import ScanStatus
+from hiddenlayer.rest.api.model_scan_api import ModelScanApi
+from hiddenlayer.rest.api.sensor_api import SensorApi
+from hiddenlayer.rest.api_client import ApiClient
+from hiddenlayer.rest.models import (
+    CreateSensorRequest,
+    MultipartUploadPart,
+)
 from hiddenlayer.services.models import ScanResults
+from hiddenlayer.utils import filter_path_objects
+
+EXCLUDE_FILE_TYPES = [
+    "*.txt",
+    "*.md",
+    "*.lock",
+    ".git*",
+    ".git",
+    ".git/*",
+    "*/.git",
+    "**/.git/**",
+]
 
 
 class ModelScanAPI:
@@ -56,8 +67,8 @@ class ModelScanAPI:
                 group: List[MultipartUploadPart] = upload.parts[i : i + chunk_size]
                 for part in group:
                     read_amount = part.end_offset - part.start_offset
-                    f.seek(part.start_offset)
-                    part_data = f.read(read_amount)
+                    f.seek(int(part.start_offset))
+                    part_data = f.read(int(read_amount))
                     self._sensor_api.upload_model_part(
                         sensor_id=sensor.sensor_id,
                         upload_id=upload.upload_id,
@@ -69,13 +80,19 @@ class ModelScanAPI:
 
         self._model_scan_api.scan_model(sensor.sensor_id)
 
-        scan_results = self.get_scan_results(model_id=sensor.sensor_id)
+        scan_results = self._get_scan_results(model_id=sensor.sensor_id)
 
+        base_delay = 5  # seconds
+        retries = 0
         if wait_for_results:
-            while scan_results.status not in ["done", "failed"]:
-                time.sleep(5)
-                scan_results = self.get_scan_results(model_id=sensor.sensor_id)
-                print(f"Scan Status: {scan_results.status}")
+            while scan_results.status not in [ScanStatus.DONE, ScanStatus.FAILED]:
+                retries += 1
+                delay = base_delay * 2**retries + random.uniform(
+                    0, 1
+                )  # exponential back off retry
+                time.sleep(delay)
+                scan_results = self._get_scan_results(model_id=sensor.sensor_id)
+                print(f"{file_path.name} scan status: {scan_results.status}")
 
         scan_results = ScanResults.from_scanresultsv2(scan_results_v2=scan_results)
         scan_results.file_name = file_path.name
@@ -102,6 +119,9 @@ class ModelScanAPI:
         :param key: Path to the model file on s3.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
         :param s3_client: boto3 s3 client.
+        :param threads: Number of threads used to upload the file, defaults to 1.
+        :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
+        :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
         :returns: Scan Results
         """
@@ -132,31 +152,72 @@ class ModelScanAPI:
         self,
         *,
         repo_id: str,
-        model_id: str,
+        # model_id: str,
+        # HF parameters
         revision: Optional[str] = None,
         local_dir: str = "/tmp",
+        allow_file_patterns: Optional[List[str]] = None,
+        ignore_file_patterns: Optional[List[str]] = None,
+        force_download: bool = False,
         hf_token: Optional[str | bool] = None,
+        # HL parameters
         threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
-    ):
+    ) -> List[ScanResults]:
+        """
+        Scans a model on HuggingFace.
+
+        Note: Requires the `huggingface_hub` pip package to be installed.
+
+        :param revision: An optional Git revision id which can be a branch name, a tag, or a commit hash.
+        :param local_dir: If provided, the downloaded files will be placed under this directory.
+        :param allow_file_patterns: If provided, only files matching at least one pattern are scanned.
+        :param ignore_file_patterns: If provided, files matching any of the patterns are not scanned.
+        :param force_download: Whether the file should be downloaded even if it already exists in the local cache.
+        :param hf_token: A token to be used for the download.
+            If True, the token is read from the HuggingFace config folder.
+            If a string, it’s used as the authentication token.
+        :param threads: Number of threads used to upload the file, defaults to 1.
+        :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
+        :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
+
+        :returns: List of ScanResults
+        """
         try:
             from huggingface_hub import snapshot_download
         except ImportError:
             raise ImportError("Python package huggingface_hub is not installed.")
 
+        local_dir = f"/tmp/{repo_id}" if local_dir == "/tmp" else local_dir
+        ignore_file_patterns = (
+            EXCLUDE_FILE_TYPES + ignore_file_patterns
+            if ignore_file_patterns
+            else EXCLUDE_FILE_TYPES
+        )
+
         snapshot_download(
-            repo_id, revision=revision, local_dir=local_dir, token=hf_token
+            repo_id,
+            revision=revision,
+            allow_patterns=allow_file_patterns,
+            ignore_patterns=ignore_file_patterns,
+            local_dir=local_dir,
+            local_dir_use_symlinks=False,
+            cache_dir=local_dir,
+            force_download=force_download,
+            token=hf_token,
         )
 
         return self.scan_folder(
             path=local_dir,
+            allow_file_patterns=allow_file_patterns,
+            ignore_file_patterns=ignore_file_patterns,
             threads=threads,
             chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )
 
-    def get_scan_results(self, *, model_id: str) -> ScanResults:
+    def _get_scan_results(self, *, model_id: str) -> ScanResults:
         """
         Get results from a model scan.
 
@@ -172,17 +233,41 @@ class ModelScanAPI:
         self,
         *,
         path: Union[str, os.PathLike],
+        allow_file_patterns: Optional[List[str]] = None,
+        ignore_file_patterns: Optional[List[str]] = None,
         threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> List[ScanResults]:
-        model_path = Path(path)
+        """
+        Submits all files in a directory and its sub directories to be scanned.
 
-        files = model_path.rglob("*")
+        :param path: Path to the folder on disk to be scanned.
+        :param allow_file_patterns: If provided, only files matching at least one pattern are scanned.
+        :param ignore_file_patterns: If provided, files matching any of the patterns are not scanned.
+        :param threads: Number of threads used to upload the file, defaults to 1.
+        :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
+        :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
+
+        :returns: List of ScanResults
+        """
+
+        model_path = Path(path)
+        ignore_file_patterns = (
+            EXCLUDE_FILE_TYPES + ignore_file_patterns
+            if ignore_file_patterns
+            else EXCLUDE_FILE_TYPES
+        )
+
+        files = filter_path_objects(
+            model_path.rglob("*"),
+            allow_patterns=allow_file_patterns,
+            ignore_patterns=ignore_file_patterns,
+        )
 
         return [
             self.scan_model_file(
-                model_id=file.name,
+                model_id=str(file),
                 model_path=file,
                 threads=threads,
                 chunk_size=chunk_size,
