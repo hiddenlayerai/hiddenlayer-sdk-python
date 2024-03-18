@@ -13,7 +13,7 @@ from typing import Union, Optional, List
 
 from pathlib import Path
 
-from hiddenlayer.rest.models.scan_results_v2 import ScanResultsV2
+from hiddenlayer.services.models import ScanResults
 
 
 class ModelScanAPI:
@@ -29,7 +29,7 @@ class ModelScanAPI:
         threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
-    ) -> ScanResultsV2:
+    ) -> ScanResults:
         """
         Scan a local model file using the HiddenLayer Model Scanner.
 
@@ -42,14 +42,16 @@ class ModelScanAPI:
         :returns: Scan Results
         """
 
-        filesize = Path(model_path).stat().st_size
+        file_path = Path(model_path)
+
+        filesize = file_path.stat().st_size
         sensor = self._sensor_api.create_sensor(
             CreateSensorRequest(plaintext_name=model_id)
         )
 
         upload = self._sensor_api.begin_multipart_upload(filesize, sensor.sensor_id)
 
-        with open(model_path, "rb") as f:
+        with open(file_path, "rb") as f:
             for i in range(0, len(upload.parts), chunk_size):
                 group: List[MultipartUploadPart] = upload.parts[i : i + chunk_size]
                 for part in group:
@@ -75,6 +77,10 @@ class ModelScanAPI:
                 scan_results = self.get_scan_results(model_id=sensor.sensor_id)
                 print(f"Scan Status: {scan_results.status}")
 
+        scan_results = ScanResults.from_scanresultsv2(scan_results_v2=scan_results)
+        scan_results.file_name = file_path.name
+        scan_results.file_path = str(file_path)
+
         return scan_results
 
     def scan_s3_model(
@@ -83,9 +89,11 @@ class ModelScanAPI:
         model_id: str,
         bucket: str,
         key: str,
-        wait_for_results: bool = True,
         s3_client: Optional[object] = None,
-    ) -> ScanResultsV2:
+        threads: int = 1,
+        chunk_size: int = 4,
+        wait_for_results: bool = True,
+    ) -> ScanResults:
         """
         Scan a model file on S3.
 
@@ -100,7 +108,7 @@ class ModelScanAPI:
         try:
             import boto3
         except ImportError:
-            raise ImportError("Python Package boto3 is not installed.")
+            raise ImportError("Python package boto3 is not installed.")
 
         if not s3_client:
             s3_client = boto3.client("s3")
@@ -115,10 +123,40 @@ class ModelScanAPI:
         return self.scan_model_file(
             model_path=f"/tmp/{file_name}",
             model_id=model_id,
+            threads=threads,
+            chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )
 
-    def get_scan_results(self, *, model_id: str) -> ScanResultsV2:
+    def scan_huggingface_model(
+        self,
+        *,
+        repo_id: str,
+        model_id: str,
+        revision: Optional[str] = None,
+        local_dir: str = "/tmp",
+        hf_token: Optional[str | bool] = None,
+        threads: int = 1,
+        chunk_size: int = 4,
+        wait_for_results: bool = True,
+    ):
+        try:
+            from huggingface_hub import snapshot_download
+        except ImportError:
+            raise ImportError("Python package huggingface_hub is not installed.")
+
+        snapshot_download(
+            repo_id, revision=revision, local_dir=local_dir, token=hf_token
+        )
+
+        return self.scan_folder(
+            path=local_dir,
+            threads=threads,
+            chunk_size=chunk_size,
+            wait_for_results=wait_for_results,
+        )
+
+    def get_scan_results(self, *, model_id: str) -> ScanResults:
         """
         Get results from a model scan.
 
@@ -126,4 +164,29 @@ class ModelScanAPI:
 
         :returns: Scan results.
         """
-        return self._model_scan_api.scan_status(model_id)
+        scan_results_v2 = self._model_scan_api.scan_status(model_id)
+
+        return ScanResults.from_scanresultsv2(scan_results_v2=scan_results_v2)
+
+    def scan_folder(
+        self,
+        *,
+        path: Union[str, os.PathLike],
+        threads: int = 1,
+        chunk_size: int = 4,
+        wait_for_results: bool = True,
+    ) -> List[ScanResults]:
+        model_path = Path(path)
+
+        files = model_path.rglob("*")
+
+        return [
+            self.scan_model_file(
+                model_id=file.name,
+                model_path=file,
+                threads=threads,
+                chunk_size=chunk_size,
+                wait_for_results=wait_for_results,
+            )
+            for file in files
+        ]

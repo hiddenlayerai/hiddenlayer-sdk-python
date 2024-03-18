@@ -24,6 +24,10 @@ aws = [
   "boto3>=1.0.0"
 ]
 
+hf = [
+  "huggingface_hub"
+]
+
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
