@@ -14,7 +14,11 @@ X = np.random.rand(100, 5)
 y = np.random.rand(100, 1)
 
 # First have to create a model
-model = hl_client.mldr.create_model(model_name="example_model")
+model = hl_client.model.create(model_name="example_model")
+
+# If you already have a model you can get the sensor id from the HiddenLayer model object
+model = hl_client.model.get(model_name="example_model")
+
 
 # Submit vectors to MLDR
 hl_client.mldr.submit_vectors(

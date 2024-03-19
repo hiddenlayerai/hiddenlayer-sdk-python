@@ -4,11 +4,9 @@ from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 
-from hiddenlayer.rest.api import MldrApi, SensorApi
+from hiddenlayer.rest.api import MldrApi
 from hiddenlayer.rest.api_client import ApiClient
 from hiddenlayer.rest.models import (
-    CreateSensorRequest,
-    SensorSORItemResponse,
     SubmissionResponse,
     SubmissionV2,
 )
@@ -17,7 +15,6 @@ from hiddenlayer.rest.models import (
 class MLDRAPI:
     def __init__(self, api_client: ApiClient) -> None:
         self._mldr_api = MldrApi(api_client=api_client)
-        self._sensor_api = SensorApi(api_client=api_client)
 
     def submit_vectors(
         self,
@@ -77,16 +74,4 @@ class MLDRAPI:
                 if event_time
                 else str(datetime.now().isoformat()),
             )
-        )
-
-    def create_model(self, *, model_name: str) -> SensorSORItemResponse:
-        """
-        Creates a model in the HiddenLayer Platform.
-
-        :params model_name: Name of the model
-
-        :returns: HiddenLayer ModelID
-        """
-        return self._sensor_api.create_sensor(
-            CreateSensorRequest(plaintext_name=model_name)
         )

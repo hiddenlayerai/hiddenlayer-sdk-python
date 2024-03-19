@@ -11,7 +11,7 @@ from hiddenlayer.rest.models import (
     CreateSensorRequest,
     MultipartUploadPart,
 )
-from hiddenlayer.services.models import ScanResults
+from hiddenlayer.models import ScanResults
 from hiddenlayer.utils import filter_path_objects
 
 EXCLUDE_FILE_TYPES = [

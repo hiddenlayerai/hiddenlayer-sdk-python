@@ -5,6 +5,7 @@ from hiddenlayer.rest.api_client import ApiClient
 from hiddenlayer.rest.configuration import Configuration
 from hiddenlayer.services.model_scan import ModelScanAPI
 from hiddenlayer.services.mldr import MLDRAPI
+from hiddenlayer.services.model import ModelAPI
 
 
 class HiddenlayerServiceAuthError(Exception):
@@ -23,6 +24,7 @@ class HiddenlayerServiceClient:
         self._api_client = ApiClient(configuration=self._config)
         self._model_scan = ModelScanAPI(self._api_client)
         self._mldr = MLDRAPI(self._api_client)
+        self._model = ModelAPI(self._api_client)
 
     def _get_jwt(self, *, api_id: str, api_key: str) -> str:
         "Get the JWT token to auth to the Hiddenlayer API."
@@ -60,3 +62,7 @@ class HiddenlayerServiceClient:
     @property
     def mldr(self) -> MLDRAPI:
         return self._mldr
+
+    @property
+    def model(self) -> ModelAPI:
+        return self._model
