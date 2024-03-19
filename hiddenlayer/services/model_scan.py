@@ -158,7 +158,7 @@ class ModelScanAPI:
         allow_file_patterns: Optional[List[str]] = None,
         ignore_file_patterns: Optional[List[str]] = None,
         force_download: bool = False,
-        hf_token: Optional[str | bool] = None,
+        hf_token: Optional[Union[str, bool]] = None,
         # HL parameters
         threads: int = 1,
         chunk_size: int = 4,
