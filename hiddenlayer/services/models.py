@@ -1,6 +1,8 @@
 from hiddenlayer.rest.models import ScanResultsV2
 
-from typing import Optional, Self
+from typing import Optional
+
+from typing_extensions import Self
 
 
 class ScanResults(ScanResultsV2):
