@@ -16,6 +16,15 @@ Install from PyPi using [pip](https://pip.pypa.io/en/latest/), a package manager
 
 `pip install git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git`
 
+Scanning models on different platforms such as AWS S3 and Huggingface are supported. You can install the dependenices yourself or via optional dependencies:
+
+```bash
+pip install 'hiddenlayer[aws] @ git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git'
+
+pip install 'hiddenlayer[hf] @ git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git'
+
+```
+
 ## Getting Started
 
 Once you've installed the hiddenlayer-python package, instantiate the `HiddenlayerServiceClient`:
