@@ -1,7 +1,7 @@
-from enum import StrEnum
+from enum import Enum
 
 
-class ScanStatus(StrEnum):
+class ScanStatus(str, Enum):
     DONE = "done"
     ACCEPTED = "accepted"
     FAILED = "failed"

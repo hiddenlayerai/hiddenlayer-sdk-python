@@ -10,7 +10,7 @@ hl_client = HiddenlayerServiceClient(
 
 # Scan a model saved locally on disk
 scan_results = hl_client.model_scanner.scan_model_file(
-    model_path="./models/example_model.xgb", model_id="sdk_example_model"
+    model_path="./models/example_model.xgb", model_name="sdk_example_model"
 )
 
 # View scan results

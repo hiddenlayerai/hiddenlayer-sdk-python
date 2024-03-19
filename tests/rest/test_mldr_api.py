@@ -14,14 +14,14 @@
 
 import unittest
 
-from hiddenlayer.rest.api.default_api import DefaultApi
+from hiddenlayer.rest.api.mldr_api import MldrApi
 
 
-class TestDefaultApi(unittest.TestCase):
-    """DefaultApi unit test stubs"""
+class TestMldrApi(unittest.TestCase):
+    """MldrApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = DefaultApi()
+        self.api = MldrApi()
 
     def tearDown(self) -> None:
         pass

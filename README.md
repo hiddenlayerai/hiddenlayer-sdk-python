@@ -28,8 +28,24 @@ hl_client = HiddenlayerServiceClient(
   api_id=..., # Your Hiddenlayer API Client ID
   api_key=... # Your Hiddenalyer API Secret Key
 )
+```
 
-hl_client.model_scanner.scan_model_file(model_id="name_of_the_model", model_path="path/to/model/file.pkl")
+### Scanning Models
+
+```python
+hl_client.model_scanner.scan_model_file(model_name="name_of_the_model", model_path="path/to/model/file.pkl")
+```
+
+### Using MLDR
+
+```python
+model = hl_client.mldr.create_model(model_name="example_model")
+
+hl_client.mldr.submit_vectors(
+  model_id=model.sensor_id,
+  input_vectors=X,
+  output=y
+)
 ```
 
 ## Code Examples

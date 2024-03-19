@@ -10,7 +10,8 @@ version = "0.1.0"
 dependencies = [
   "requests",
   "pydantic>=2.0.0",
-  "python-dateutil>=2.0.0"
+  "python-dateutil>=2.0.0",
+  "numpy>=1.0.0",
 ]
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -18,7 +19,8 @@ license = {file = "LICENSE"}
 [project.optional-dependencies]
 dev = [
   "ruff>=0.2.2",
-  "pytest"
+  "pytest",
+  "pandas"
 ]
 aws = [
   "boto3>=1.0.0"

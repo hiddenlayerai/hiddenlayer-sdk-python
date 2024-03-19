@@ -28,8 +28,7 @@ class SubmissionV2(BaseModel):
     """ # noqa: E501
     metadata: Optional[Dict[str, Any]] = None
     tags: Optional[List[StrictStr]] = None
-    sensor_id: Optional[StrictStr] = None
-    model_id: StrictStr
+    sensor_id: StrictStr
     requester_id: Optional[StrictStr] = 'UNKNOWN'
     input_layer: StrictStr
     input_layer_dtype: StrictStr
@@ -39,7 +38,7 @@ class SubmissionV2(BaseModel):
     output_layer_shape: List[Union[StrictFloat, StrictInt]]
     predictions: Optional[List[Union[StrictFloat, StrictInt]]] = None
     event_time: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["metadata", "tags", "sensor_id", "model_id", "requester_id", "input_layer", "input_layer_dtype", "input_layer_shape", "output_layer", "output_layer_dtype", "output_layer_shape", "predictions", "event_time"]
+    __properties: ClassVar[List[str]] = ["metadata", "tags", "sensor_id", "requester_id", "input_layer", "input_layer_dtype", "input_layer_shape", "output_layer", "output_layer_dtype", "output_layer_shape", "predictions", "event_time"]
 
     model_config = {
         "populate_by_name": True,
@@ -95,7 +94,6 @@ class SubmissionV2(BaseModel):
             "metadata": obj.get("metadata"),
             "tags": obj.get("tags"),
             "sensor_id": obj.get("sensor_id"),
-            "model_id": obj.get("model_id"),
             "requester_id": obj.get("requester_id") if obj.get("requester_id") is not None else 'UNKNOWN',
             "input_layer": obj.get("input_layer"),
             "input_layer_dtype": obj.get("input_layer_dtype"),

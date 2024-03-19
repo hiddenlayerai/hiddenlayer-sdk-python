@@ -7,8 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **metadata** | **object** |  | [optional] 
 **tags** | **List[str]** |  | [optional] 
-**sensor_id** | **str** |  | [optional] 
-**model_id** | **str** |  | 
+**sensor_id** | **str** |  | 
 **requester_id** | **str** |  | [optional] [default to 'UNKNOWN']
 **input_layer** | **str** |  | 
 **input_layer_dtype** | **str** |  | 

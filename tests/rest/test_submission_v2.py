@@ -40,7 +40,6 @@ class TestSubmissionV2(unittest.TestCase):
                     ''
                     ],
                 sensor_id = '',
-                model_id = '',
                 requester_id = 'UNKNOWN',
                 input_layer = '',
                 input_layer_dtype = '',
@@ -59,7 +58,7 @@ class TestSubmissionV2(unittest.TestCase):
             )
         else:
             return SubmissionV2(
-                model_id = '',
+                sensor_id = '',
                 input_layer = '',
                 input_layer_dtype = '',
                 input_layer_shape = [

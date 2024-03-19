@@ -5,8 +5,7 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 from hiddenlayer.constants import ScanStatus
-from hiddenlayer.rest.api.model_scan_api import ModelScanApi
-from hiddenlayer.rest.api.sensor_api import SensorApi
+from hiddenlayer.rest.api import ModelScanApi, SensorApi
 from hiddenlayer.rest.api_client import ApiClient
 from hiddenlayer.rest.models import (
     CreateSensorRequest,
@@ -19,7 +18,7 @@ EXCLUDE_FILE_TYPES = [
     "*.txt",
     "*.md",
     "*.lock",
-    ".git*",
+    ".gitattributes",
     ".git",
     ".git/*",
     "*/.git",
@@ -35,7 +34,7 @@ class ModelScanAPI:
     def scan_model_file(
         self,
         *,
-        model_id: str,
+        model_name: str,
         model_path: Union[str, os.PathLike],
         threads: int = 1,
         chunk_size: int = 4,
@@ -44,7 +43,7 @@ class ModelScanAPI:
         """
         Scan a local model file using the HiddenLayer Model Scanner.
 
-        :param model_id: Name of the model to be shown on the HiddenLayer UI
+        :param model_name: Name of the model to be shown on the HiddenLayer UI
         :param model_path: Local path to the model file.
         :param threads: Number of threads used to upload the file, defaults to 1.
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
@@ -57,7 +56,7 @@ class ModelScanAPI:
 
         filesize = file_path.stat().st_size
         sensor = self._sensor_api.create_sensor(
-            CreateSensorRequest(plaintext_name=model_id)
+            CreateSensorRequest(plaintext_name=model_name)
         )
 
         upload = self._sensor_api.begin_multipart_upload(filesize, sensor.sensor_id)
@@ -103,7 +102,7 @@ class ModelScanAPI:
     def scan_s3_model(
         self,
         *,
-        model_id: str,
+        model_name: str,
         bucket: str,
         key: str,
         s3_client: Optional[object] = None,
@@ -114,7 +113,7 @@ class ModelScanAPI:
         """
         Scan a model file on S3.
 
-        :param model_id: Name of the model to be shown on the HiddenLayer UI.
+        :param model_name: Name of the model to be shown on the HiddenLayer UI.
         :param bucket: Name of the s3 bucket where the model file is stored.
         :param key: Path to the model file on s3.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
@@ -142,7 +141,7 @@ class ModelScanAPI:
 
         return self.scan_model_file(
             model_path=f"/tmp/{file_name}",
-            model_id=model_id,
+            model_name=model_name,
             threads=threads,
             chunk_size=chunk_size,
             wait_for_results=wait_for_results,
@@ -267,7 +266,7 @@ class ModelScanAPI:
 
         return [
             self.scan_model_file(
-                model_id=str(file),
+                model_name=str(file),
                 model_path=file,
                 threads=threads,
                 chunk_size=chunk_size,
