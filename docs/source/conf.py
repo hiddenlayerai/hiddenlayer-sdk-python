@@ -6,9 +6,9 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../../hiddenlayer"))
 
-project = "Lumache"
-copyright = "2021, Graziella"
-author = "Graziella"
+project = "HiddenLayer Python SDK"
+copyright = "2023"
+author = "HiddenLayer Integrations Team"
 
 release = "0.1"
 version = "0.1.0"
@@ -22,6 +22,9 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
 ]
+
+autoclass_content = "both"
+autodoc_typehints = "description"
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
