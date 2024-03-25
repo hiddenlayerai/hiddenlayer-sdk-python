@@ -35,4 +35,4 @@ venvPath = "."
 venv = ".venv"
 
 [tool.ruff]
-exclude = [".venv", "hiddenlayer/rest", "tests/rest"]
+exclude = [".venv", "hiddenlayer/rest", "tests/rest", "docs/"]
