@@ -1,4 +1,4 @@
-Welcome to HidenLayer's SDKJ documentation!
+Welcome to HidenLayer's SDK documentation!
 ===================================
 
 Check out the :doc:`usage` section for further information, including
