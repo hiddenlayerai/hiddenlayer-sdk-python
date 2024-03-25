@@ -3,7 +3,7 @@
 Model Scanner
 -------------
 
-.. py:module:: hiddenlayer.services
+.. py:module:: hiddenlayer.services.model_scan
    :noindex:
 
 .. autoclass:: ModelScanAPI
