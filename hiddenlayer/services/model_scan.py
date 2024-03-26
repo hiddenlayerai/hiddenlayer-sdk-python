@@ -5,13 +5,11 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 from hiddenlayer.constants import ScanStatus
+from hiddenlayer.models import ScanResults
 from hiddenlayer.rest.api import ModelScanApi, SensorApi
 from hiddenlayer.rest.api_client import ApiClient
-from hiddenlayer.rest.models import (
-    CreateSensorRequest,
-    MultipartUploadPart,
-)
-from hiddenlayer.models import ScanResults
+from hiddenlayer.rest.models import MultipartUploadPart
+from hiddenlayer.services.model import ModelAPI
 from hiddenlayer.utils import filter_path_objects
 
 EXCLUDE_FILE_TYPES = [
@@ -29,7 +27,10 @@ EXCLUDE_FILE_TYPES = [
 class ModelScanAPI:
     def __init__(self, api_client: ApiClient) -> None:
         self._model_scan_api = ModelScanApi(api_client=api_client)
-        self._sensor_api = SensorApi(api_client=api_client)
+        self._model_api = ModelAPI(api_client=api_client)
+        self._sensor_api = SensorApi(
+            api_client=api_client
+        )  # lower level api of ModelAPI
 
     def scan_file(
         self,
@@ -55,9 +56,7 @@ class ModelScanAPI:
         file_path = Path(model_path)
 
         filesize = file_path.stat().st_size
-        sensor = self._sensor_api.create_sensor(
-            CreateSensorRequest(plaintext_name=model_name)
-        )
+        sensor = self._model_api.create(model_name=model_name)
 
         upload = self._sensor_api.begin_multipart_upload(filesize, sensor.sensor_id)
 
@@ -79,7 +78,7 @@ class ModelScanAPI:
 
         self._model_scan_api.scan_model(sensor.sensor_id)
 
-        scan_results = self._get_scan_results(model_id=sensor.sensor_id)
+        scan_results = self.get_scan_results(model_name=model_name)
 
         base_delay = 5  # seconds
         retries = 0
@@ -90,7 +89,7 @@ class ModelScanAPI:
                     0, 1
                 )  # exponential back off retry
                 time.sleep(delay)
-                scan_results = self._get_scan_results(model_id=sensor.sensor_id)
+                scan_results = self.get_scan_results(model_name=model_name)
                 print(f"{file_path.name} scan status: {scan_results.status}")
 
         scan_results = ScanResults.from_scanresultsv2(scan_results_v2=scan_results)
@@ -216,15 +215,18 @@ class ModelScanAPI:
             wait_for_results=wait_for_results,
         )
 
-    def _get_scan_results(self, *, model_id: str) -> ScanResults:
+    def get_scan_results(self, *, model_name: str) -> ScanResults:
         """
         Get results from a model scan.
 
-        :param sensor_id: ID of the model.
+        :param model_name: Name of the model.
 
         :returns: Scan results.
         """
-        scan_results_v2 = self._model_scan_api.scan_status(model_id)
+
+        model = self._model_api.get(model_name=model_name)
+
+        scan_results_v2 = self._model_scan_api.scan_status(model.sensor_id)
 
         return ScanResults.from_scanresultsv2(scan_results_v2=scan_results_v2)
 
