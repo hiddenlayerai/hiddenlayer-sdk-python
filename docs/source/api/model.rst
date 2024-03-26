@@ -3,7 +3,7 @@
 Models
 ------
 
-.. py:module:: hiddenlayer.services.models
+.. py:module:: hiddenlayer.services.model
    :noindex:
 
 .. autoclass:: ModelAPI
