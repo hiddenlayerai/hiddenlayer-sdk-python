@@ -21,9 +21,9 @@ from typing import Any, Optional, Union
 from typing_extensions import Annotated
 from hiddenlayer.rest.models.create_sensor_request import CreateSensorRequest
 from hiddenlayer.rest.models.get_multipart_upload_response import GetMultipartUploadResponse
-from hiddenlayer.rest.models.sensor_sor_item_response import SensorSORItemResponse
+from hiddenlayer.rest.models.model import Model
+from hiddenlayer.rest.models.model_query_response import ModelQueryResponse
 from hiddenlayer.rest.models.sensor_sor_query_request import SensorSORQueryRequest
-from hiddenlayer.rest.models.sensor_sor_query_response import SensorSORQueryResponse
 
 from hiddenlayer.rest.api_client import ApiClient, RequestSerialized
 from hiddenlayer.rest.api_response import ApiResponse
@@ -605,7 +605,7 @@ class SensorApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> SensorSORItemResponse:
+    ) -> Model:
         """Create a Sensor
 
 
@@ -642,7 +642,7 @@ class SensorApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '201': "SensorSORItemResponse",
+            '201': "Model",
             '400': None,
             '422': "ValidationErrorModel",
         }
@@ -673,7 +673,7 @@ class SensorApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[SensorSORItemResponse]:
+    ) -> ApiResponse[Model]:
         """Create a Sensor
 
 
@@ -710,7 +710,7 @@ class SensorApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '201': "SensorSORItemResponse",
+            '201': "Model",
             '400': None,
             '422': "ValidationErrorModel",
         }
@@ -778,7 +778,7 @@ class SensorApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '201': "SensorSORItemResponse",
+            '201': "Model",
             '400': None,
             '422': "ValidationErrorModel",
         }
@@ -879,7 +879,7 @@ class SensorApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> SensorSORQueryResponse:
+    ) -> ModelQueryResponse:
         """Query a Sensor
 
 
@@ -916,7 +916,7 @@ class SensorApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SensorSORQueryResponse",
+            '200': "ModelQueryResponse",
             '400': None,
         }
         response_data = self.api_client.call_api(
@@ -946,7 +946,7 @@ class SensorApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[SensorSORQueryResponse]:
+    ) -> ApiResponse[ModelQueryResponse]:
         """Query a Sensor
 
 
@@ -983,7 +983,7 @@ class SensorApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SensorSORQueryResponse",
+            '200': "ModelQueryResponse",
             '400': None,
         }
         response_data = self.api_client.call_api(
@@ -1050,7 +1050,7 @@ class SensorApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SensorSORQueryResponse",
+            '200': "ModelQueryResponse",
             '400': None,
         }
         response_data = self.api_client.call_api(

@@ -14,10 +14,10 @@
 
 import unittest
 
-from hiddenlayer.rest.models.sensor_sor_item_response import SensorSORItemResponse
+from hiddenlayer.rest.models.model import Model
 
-class TestSensorSORItemResponse(unittest.TestCase):
-    """SensorSORItemResponse unit test stubs"""
+class TestModel(unittest.TestCase):
+    """Model unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,16 +25,16 @@ class TestSensorSORItemResponse(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> SensorSORItemResponse:
-        """Test SensorSORItemResponse
+    def make_instance(self, include_optional) -> Model:
+        """Test Model
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `SensorSORItemResponse`
+        # uncomment below to create an instance of `Model`
         """
-        model = SensorSORItemResponse()
+        model = Model()
         if include_optional:
-            return SensorSORItemResponse(
+            return Model(
                 sensor_id = '',
                 created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 tenant_id = '',
@@ -44,7 +44,7 @@ class TestSensorSORItemResponse(unittest.TestCase):
                 tags = { }
             )
         else:
-            return SensorSORItemResponse(
+            return Model(
                 sensor_id = '',
                 created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 tenant_id = '',
@@ -54,8 +54,8 @@ class TestSensorSORItemResponse(unittest.TestCase):
         )
         """
 
-    def testSensorSORItemResponse(self):
-        """Test SensorSORItemResponse"""
+    def testModel(self):
+        """Test Model"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

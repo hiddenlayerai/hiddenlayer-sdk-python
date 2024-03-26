@@ -23,9 +23,9 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SensorSORItemResponse(BaseModel):
+class Model(BaseModel):
     """
-    SensorSORItemResponse
+    Model
     """ # noqa: E501
     sensor_id: StrictStr
     created_at: datetime
@@ -54,7 +54,7 @@ class SensorSORItemResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SensorSORItemResponse from a JSON string"""
+        """Create an instance of Model from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -79,7 +79,7 @@ class SensorSORItemResponse(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SensorSORItemResponse from a dict"""
+        """Create an instance of Model from a dict"""
         if obj is None:
             return None
 

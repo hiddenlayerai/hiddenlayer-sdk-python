@@ -31,7 +31,7 @@ class ModelScanAPI:
         self._model_scan_api = ModelScanApi(api_client=api_client)
         self._sensor_api = SensorApi(api_client=api_client)
 
-    def scan_model_file(
+    def scan_file(
         self,
         *,
         model_name: str,
@@ -139,7 +139,7 @@ class ModelScanAPI:
         except Exception as e:
             raise RuntimeError(f"Couldn't download model s3://{bucket}/{key}: {e}")
 
-        return self.scan_model_file(
+        return self.scan_file(
             model_path=f"/tmp/{file_name}",
             model_name=model_name,
             threads=threads,
@@ -265,7 +265,7 @@ class ModelScanAPI:
         )
 
         return [
-            self.scan_model_file(
+            self.scan_file(
                 model_name=str(file),
                 model_path=file,
                 threads=threads,

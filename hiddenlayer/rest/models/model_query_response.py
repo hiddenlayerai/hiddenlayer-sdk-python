@@ -19,18 +19,18 @@ import json
 
 from pydantic import BaseModel, StrictInt
 from typing import Any, ClassVar, Dict, List
-from hiddenlayer.rest.models.sensor_sor_item_response import SensorSORItemResponse
+from hiddenlayer.rest.models.model import Model
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SensorSORQueryResponse(BaseModel):
+class ModelQueryResponse(BaseModel):
     """
-    SensorSORQueryResponse
+    ModelQueryResponse
     """ # noqa: E501
     total_count: StrictInt
     page_size: StrictInt
     page_number: StrictInt
-    results: List[SensorSORItemResponse]
+    results: List[Model]
     __properties: ClassVar[List[str]] = ["total_count", "page_size", "page_number", "results"]
 
     model_config = {
@@ -51,7 +51,7 @@ class SensorSORQueryResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SensorSORQueryResponse from a JSON string"""
+        """Create an instance of ModelQueryResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -83,7 +83,7 @@ class SensorSORQueryResponse(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SensorSORQueryResponse from a dict"""
+        """Create an instance of ModelQueryResponse from a dict"""
         if obj is None:
             return None
 
@@ -94,7 +94,7 @@ class SensorSORQueryResponse(BaseModel):
             "total_count": obj.get("total_count"),
             "page_size": obj.get("page_size"),
             "page_number": obj.get("page_number"),
-            "results": [SensorSORItemResponse.from_dict(_item) for _item in obj["results"]] if obj.get("results") is not None else None
+            "results": [Model.from_dict(_item) for _item in obj["results"]] if obj.get("results") is not None else None
         })
         return _obj
 

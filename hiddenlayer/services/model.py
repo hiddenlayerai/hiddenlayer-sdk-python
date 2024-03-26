@@ -4,7 +4,7 @@ from hiddenlayer.rest.api import SensorApi
 from hiddenlayer.rest.api_client import ApiClient
 from hiddenlayer.rest.models import (
     CreateSensorRequest,
-    SensorSORItemResponse,
+    Model,
     SensorSORQueryFilter,
     SensorSORQueryRequest,
 )
@@ -18,7 +18,7 @@ class ModelAPI:
     def __init__(self, api_client: ApiClient) -> None:
         self._sensor_api = SensorApi(api_client=api_client)
 
-    def create(self, *, model_name: str) -> SensorSORItemResponse:
+    def create(self, *, model_name: str) -> Model:
         """
         Creates a model in the HiddenLayer Platform.
 
@@ -30,9 +30,7 @@ class ModelAPI:
             CreateSensorRequest(plaintext_name=model_name)
         )
 
-    def get(
-        self, *, model_name: str, version: Optional[int] = None
-    ) -> SensorSORItemResponse:
+    def get(self, *, model_name: str, version: Optional[int] = None) -> Model:
         """
         Gets a HiddenLayer model object. If not version is supplied, the latest model is returned.
 

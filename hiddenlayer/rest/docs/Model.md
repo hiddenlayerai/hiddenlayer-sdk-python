@@ -1,4 +1,4 @@
-# SensorSORItemResponse
+# Model
 
 
 ## Properties
@@ -16,19 +16,19 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from hiddenlayer.rest.models.sensor_sor_item_response import SensorSORItemResponse
+from hiddenlayer.rest.models.model import Model
 
 # TODO update the JSON string below
 json = "{}"
-# create an instance of SensorSORItemResponse from a JSON string
-sensor_sor_item_response_instance = SensorSORItemResponse.from_json(json)
+# create an instance of Model from a JSON string
+model_instance = Model.from_json(json)
 # print the JSON string representation of the object
-print SensorSORItemResponse.to_json()
+print Model.to_json()
 
 # convert the object into a dict
-sensor_sor_item_response_dict = sensor_sor_item_response_instance.to_dict()
-# create an instance of SensorSORItemResponse from a dict
-sensor_sor_item_response_form_dict = sensor_sor_item_response.from_dict(sensor_sor_item_response_dict)
+model_dict = model_instance.to_dict()
+# create an instance of Model from a dict
+model_form_dict = model.from_dict(model_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

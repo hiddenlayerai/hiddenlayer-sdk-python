@@ -169,7 +169,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_sensor**
-> SensorSORItemResponse create_sensor(create_sensor_request)
+> Model create_sensor(create_sensor_request)
 
 Create a Sensor
 
@@ -180,7 +180,7 @@ Create a Sensor
 ```python
 import hiddenlayer.rest
 from hiddenlayer.rest.models.create_sensor_request import CreateSensorRequest
-from hiddenlayer.rest.models.sensor_sor_item_response import SensorSORItemResponse
+from hiddenlayer.rest.models.model import Model
 from hiddenlayer.rest.rest import ApiException
 from pprint import pprint
 
@@ -226,7 +226,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SensorSORItemResponse**](SensorSORItemResponse.md)
+[**Model**](Model.md)
 
 ### Authorization
 
@@ -248,7 +248,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **query_sensor**
-> SensorSORQueryResponse query_sensor(sensor_sor_query_request=sensor_sor_query_request)
+> ModelQueryResponse query_sensor(sensor_sor_query_request=sensor_sor_query_request)
 
 Query a Sensor
 
@@ -258,8 +258,8 @@ Query a Sensor
 
 ```python
 import hiddenlayer.rest
+from hiddenlayer.rest.models.model_query_response import ModelQueryResponse
 from hiddenlayer.rest.models.sensor_sor_query_request import SensorSORQueryRequest
-from hiddenlayer.rest.models.sensor_sor_query_response import SensorSORQueryResponse
 from hiddenlayer.rest.rest import ApiException
 from pprint import pprint
 
@@ -305,7 +305,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SensorSORQueryResponse**](SensorSORQueryResponse.md)
+[**ModelQueryResponse**](ModelQueryResponse.md)
 
 ### Authorization
 
