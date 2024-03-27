@@ -74,7 +74,7 @@ The Hiddenlayer SDK uses Pydantic to represent data for APIs making the code mor
 
 Specific data models are organized under `hiddenlayer.sdk.rest.models`.
 
-For more information, consult the [Data Models API Reference](data_models.rst).
+For more information, consult the [Data Models API Reference](api/hiddenlayer.sdk.rest.models.rst).
 
 ## Examples
 

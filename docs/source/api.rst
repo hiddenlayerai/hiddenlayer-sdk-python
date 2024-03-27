@@ -12,5 +12,5 @@ distinction between required and optional arguments to the calls.
 	api/mldr
 	api/model_scanner
 	api/model
-	data_models
+	api/hiddenlayer.sdk.rest.models
 
