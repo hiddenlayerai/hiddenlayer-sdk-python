@@ -10,6 +10,7 @@ hl_client = HiddenlayerServiceClient(
     api_key=os.environ.get("HL_CLIENT_SECRET"),
 )
 
+# [docs_submit_vectors_start]
 # Generate some mock data
 X = np.random.rand(100, 5)
 y = np.random.rand(100, 1)
@@ -27,3 +28,4 @@ hl_client.mldr.submit_vectors(
     input_vectors=X,
     output=y,
 )
+# [docs_submit_vectors_end]
