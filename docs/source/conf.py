@@ -21,7 +21,6 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "myst_parser",
-    "db_sphinx_ext",
 ]
 
 autoclass_content = "both"
