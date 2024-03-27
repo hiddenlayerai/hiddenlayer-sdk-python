@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.models.get_multipart_upload_response import GetMultipartUploadResponse
+from hiddenlayer.sdk.rest.models.get_multipart_upload_response import GetMultipartUploadResponse
 
 class TestGetMultipartUploadResponse(unittest.TestCase):
     """GetMultipartUploadResponse unit test stubs"""
@@ -37,7 +37,7 @@ class TestGetMultipartUploadResponse(unittest.TestCase):
             return GetMultipartUploadResponse(
                 upload_id = '',
                 parts = [
-                    hiddenlayer.rest.models.multipart_upload_part.Multipart Upload Part(
+                    hiddenlayer.sdk.rest.models.multipart_upload_part.Multipart Upload Part(
                         part_number = 1.337, 
                         start_offset = 1.337, 
                         end_offset = 1.337, )
@@ -47,7 +47,7 @@ class TestGetMultipartUploadResponse(unittest.TestCase):
             return GetMultipartUploadResponse(
                 upload_id = '',
                 parts = [
-                    hiddenlayer.rest.models.multipart_upload_part.Multipart Upload Part(
+                    hiddenlayer.sdk.rest.models.multipart_upload_part.Multipart Upload Part(
                         part_number = 1.337, 
                         start_offset = 1.337, 
                         end_offset = 1.337, )

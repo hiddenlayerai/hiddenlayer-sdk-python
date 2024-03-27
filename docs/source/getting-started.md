@@ -5,7 +5,7 @@
 To install the HiddenLayer SDK for Python, simply run:
 
 ```bash
-pip install hiddenlayer-python
+python -m pip install hiddenlayer-sdk
 ```
 
 The HiddenLayer Python SDK offers functionality to interact with other services such as HuggingFace, AWS, etc.
@@ -13,7 +13,7 @@ The HiddenLayer Python SDK offers functionality to interact with other services 
 As an example if you want to scan models from HuggingFace, you can install the necessary HuggingFace dependencies via:
 
 ```bash
-pip install hiddenlayer-python[hf]
+python -m pip install hiddenlayer-sdk[hf]
 ```
 
 

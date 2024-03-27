@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.models.submission_response import SubmissionResponse
+from hiddenlayer.sdk.rest.models.submission_response import SubmissionResponse
 
 class TestSubmissionResponse(unittest.TestCase):
     """SubmissionResponse unit test stubs"""

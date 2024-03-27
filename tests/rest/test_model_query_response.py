@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.models.model_query_response import ModelQueryResponse
+from hiddenlayer.sdk.rest.models.model_query_response import ModelQueryResponse
 
 class TestModelQueryResponse(unittest.TestCase):
     """ModelQueryResponse unit test stubs"""

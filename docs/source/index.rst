@@ -13,13 +13,13 @@ Installation
 ------------
 
 Install the ``hiddenlayer-python`` package with `pip
-<https://pypi.org/project/hiddenlayer-python>`_:
+<https://pypi.org/project/hiddenlayer-sdk>`_:
 
 .. code-block:: console
 
-    $ python -m pip install hiddenlayer-python
+    $ python -m pip install hiddenlayer-sdk
 
-Check out the :ref:`getting-started` section for further information, including example usage.
+Check out the :doc:`getting-started.md` section for further information, including example usage.
 .. note::
 
    This project is under active development.

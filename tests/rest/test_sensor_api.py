@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.api.sensor_api import SensorApi
+from hiddenlayer.sdk.rest.api.sensor_api import SensorApi
 
 
 class TestSensorApi(unittest.TestCase):

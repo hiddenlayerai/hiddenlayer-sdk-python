@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.models.sensor_sor_query_filter import SensorSORQueryFilter
+from hiddenlayer.sdk.rest.models.sensor_sor_query_filter import SensorSORQueryFilter
 
 class TestSensorSORQueryFilter(unittest.TestCase):
     """SensorSORQueryFilter unit test stubs"""

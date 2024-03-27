@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.api.model_scan_api import ModelScanApi
+from hiddenlayer.sdk.rest.api.model_scan_api import ModelScanApi
 
 
 class TestModelScanApi(unittest.TestCase):

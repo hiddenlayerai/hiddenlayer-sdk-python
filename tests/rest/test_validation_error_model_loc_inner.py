@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.models.validation_error_model_loc_inner import ValidationErrorModelLocInner
+from hiddenlayer.sdk.rest.models.validation_error_model_loc_inner import ValidationErrorModelLocInner
 
 class TestValidationErrorModelLocInner(unittest.TestCase):
     """ValidationErrorModelLocInner unit test stubs"""

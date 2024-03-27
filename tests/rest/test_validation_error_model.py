@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.models.validation_error_model import ValidationErrorModel
+from hiddenlayer.sdk.rest.models.validation_error_model import ValidationErrorModel
 
 class TestValidationErrorModel(unittest.TestCase):
     """ValidationErrorModel unit test stubs"""

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from hiddenlayer.utils import filter_path_objects
+from hiddenlayer.sdk.utils import filter_path_objects
 
 
 @pytest.fixture(scope="class")

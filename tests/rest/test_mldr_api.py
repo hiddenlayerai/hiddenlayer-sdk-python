@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.api.mldr_api import MldrApi
+from hiddenlayer.sdk.rest.api.mldr_api import MldrApi
 
 
 class TestMldrApi(unittest.TestCase):

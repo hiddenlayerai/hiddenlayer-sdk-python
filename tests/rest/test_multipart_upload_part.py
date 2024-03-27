@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.models.multipart_upload_part import MultipartUploadPart
+from hiddenlayer.sdk.rest.models.multipart_upload_part import MultipartUploadPart
 
 class TestMultipartUploadPart(unittest.TestCase):
     """MultipartUploadPart unit test stubs"""

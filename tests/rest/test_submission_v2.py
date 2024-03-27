@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.models.submission_v2 import SubmissionV2
+from hiddenlayer.sdk.rest.models.submission_v2 import SubmissionV2
 
 class TestSubmissionV2(unittest.TestCase):
     """SubmissionV2 unit test stubs"""
@@ -35,7 +35,7 @@ class TestSubmissionV2(unittest.TestCase):
         model = SubmissionV2()
         if include_optional:
             return SubmissionV2(
-                metadata = hiddenlayer.rest.models.metadata.Metadata(),
+                metadata = hiddenlayer.sdk.rest.models.metadata.Metadata(),
                 tags = [
                     ''
                     ],

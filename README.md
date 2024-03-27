@@ -14,20 +14,19 @@ Hiddenlayer is a Python SDK that provides a simple and efficient way to interact
 
 Install from PyPi using [pip](https://pip.pypa.io/en/latest/), a package manager for Python.
 
-`pip install git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git`
+`python -m pip install hiddenlayer-sdk`
 
 Scanning models on different platforms such as AWS S3 and Huggingface are supported. You can install the dependenices yourself or via optional dependencies:
 
 ```bash
-pip install 'hiddenlayer[aws] @ git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git'
+python -m pip install 'hiddenlayer-sdk[aws]'
 
-pip install 'hiddenlayer[hf] @ git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git'
-
+python -m pip install 'hiddenlayer-sdk[hf]'
 ```
 
 ## Getting Started
 
-Once you've installed the hiddenlayer-python package, instantiate the `HiddenlayerServiceClient`:
+Once you've installed the hiddenlayer package, instantiate the `HiddenlayerServiceClient`:
 
 ```python
 from hiddenlayer import HiddenlayerServiceClient

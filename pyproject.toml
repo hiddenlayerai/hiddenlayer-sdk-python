@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 requires-python = ">=3.8"
-name = "hiddenlayer"
+name = "hiddenlayer-sdk"
 description = "Official HiddenLayer Python SDK"
 version = "0.1.0"
 dependencies = [
@@ -56,7 +56,7 @@ venvPath = "."
 venv = ".venv"
 
 [tool.ruff]
-exclude = [".venv", "hiddenlayer/rest", "tests/rest", "docs/"]
+exclude = [".venv", "hiddenlayer/sdk/rest", "tests/rest", "docs/"]
 select = [
   "I" # isort formatting
 ]

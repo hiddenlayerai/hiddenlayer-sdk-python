@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.models.create_sensor_request import CreateSensorRequest
+from hiddenlayer.sdk.rest.models.create_sensor_request import CreateSensorRequest
 
 class TestCreateSensorRequest(unittest.TestCase):
     """CreateSensorRequest unit test stubs"""

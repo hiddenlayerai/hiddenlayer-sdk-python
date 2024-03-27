@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.models.scan_model_request import ScanModelRequest
+from hiddenlayer.sdk.rest.models.scan_model_request import ScanModelRequest
 
 class TestScanModelRequest(unittest.TestCase):
     """ScanModelRequest unit test stubs"""

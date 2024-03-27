@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.models.file_info import FileInfo
+from hiddenlayer.sdk.rest.models.file_info import FileInfo
 
 class TestFileInfo(unittest.TestCase):
     """FileInfo unit test stubs"""

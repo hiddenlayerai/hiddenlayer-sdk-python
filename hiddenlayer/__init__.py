@@ -1,11 +1,11 @@
 import requests
 from requests.auth import HTTPBasicAuth
 
-from hiddenlayer.rest.api_client import ApiClient
-from hiddenlayer.rest.configuration import Configuration
-from hiddenlayer.services.mldr import MLDRAPI
-from hiddenlayer.services.model import ModelAPI
-from hiddenlayer.services.model_scan import ModelScanAPI
+from hiddenlayer.sdk.rest.api_client import ApiClient
+from hiddenlayer.sdk.rest.configuration import Configuration
+from hiddenlayer.sdk.services.mldr import MLDRAPI
+from hiddenlayer.sdk.services.model import ModelAPI
+from hiddenlayer.sdk.services.model_scan import ModelScanAPI
 
 
 class HiddenlayerServiceAuthError(Exception):

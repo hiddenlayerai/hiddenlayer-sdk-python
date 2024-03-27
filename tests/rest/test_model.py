@@ -14,7 +14,7 @@
 
 import unittest
 
-from hiddenlayer.rest.models.model import Model
+from hiddenlayer.sdk.rest.models.model import Model
 
 class TestModel(unittest.TestCase):
     """Model unit test stubs"""
