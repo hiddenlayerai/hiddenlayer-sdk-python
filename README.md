@@ -42,7 +42,10 @@ hl_client = HiddenlayerServiceClient(
 ### Scanning Models
 
 ```python
-hl_client.model_scanner.scan_model_file(model_name="name_of_the_model", model_path="path/to/model/file.pkl")
+hl_client.model_scanner.scan_file(
+  model_name="name_of_the_model",
+  model_path="path/to/model/file.pkl"
+)
 ```
 
 ### Using MLDR
