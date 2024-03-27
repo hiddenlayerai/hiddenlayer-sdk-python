@@ -3,7 +3,7 @@
 MLDR 
 ----
 
-.. py:module:: hiddenlayer.services.mldr
+.. py:module:: hiddenlayer.sdk.services.mldr
    :noindex:
 
 .. autoclass:: MLDRAPI
