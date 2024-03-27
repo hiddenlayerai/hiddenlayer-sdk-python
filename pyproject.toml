@@ -15,6 +15,28 @@ dependencies = [
 ]
 readme = "README.md"
 license = {file = "LICENSE"}
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+authors = [
+  {name = "HiddenLayer Integrations Team", email = "integrations@hiddenlayer.com"}
+]
+maintainers = [
+  {name = "HiddenLayer Integrations Team", email = "integrations@hiddenlayer.com"}
+]
+
+[project.urls]
+Homepage = "https://hiddenlayer.com"
+Documentation = "https://hiddenlayer-python-sdk.readthedocs.io/en/latest/#"
+Repository = "https://github.com/hiddenlayerai/hiddenlayer-sdk-python"
+Issues = "https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -25,7 +47,6 @@ dev = [
 aws = [
   "boto3>=1.0.0"
 ]
-
 hf = [
   "huggingface_hub"
 ]
@@ -36,3 +57,6 @@ venv = ".venv"
 
 [tool.ruff]
 exclude = [".venv", "hiddenlayer/rest", "tests/rest", "docs/"]
+select = [
+  "I" # isort formatting
+]

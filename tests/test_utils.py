@@ -1,6 +1,6 @@
-import pytest
-
 from pathlib import Path
+
+import pytest
 
 from hiddenlayer.utils import filter_path_objects
 

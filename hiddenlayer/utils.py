@@ -1,9 +1,7 @@
 import os
 from fnmatch import fnmatch
-
-from typing import List, Union, Optional, Generator
-
 from pathlib import Path
+from typing import Generator, List, Optional, Union
 
 PathInputType = Union[str, os.PathLike]
 
