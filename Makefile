@@ -1,5 +1,7 @@
 .PHONY: tests
 
+PYTHON_ENV = .venv/bin/python
+
 install:
 	uv pip install -e .
 
@@ -16,7 +18,7 @@ venv:
 	uv venv
 
 lint:
-	.venv/bin/python -m ruff check .
+	$(PYTHON_ENV) -m ruff check .
 
 format:
-	.venv/bin/python -m ruff format .
+	$(PYTHON_ENV) -m ruff format .

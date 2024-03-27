@@ -28,6 +28,22 @@ hiddenlayer.rest.models.get\_multipart\_upload\_response module
    :undoc-members:
    :show-inheritance:
 
+hiddenlayer.rest.models.model module
+------------------------------------
+
+.. automodule:: hiddenlayer.rest.models.model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+hiddenlayer.rest.models.model\_query\_response module
+-----------------------------------------------------
+
+.. automodule:: hiddenlayer.rest.models.model_query_response
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 hiddenlayer.rest.models.multipart\_upload\_part module
 ------------------------------------------------------
 
@@ -52,14 +68,6 @@ hiddenlayer.rest.models.scan\_results\_v2 module
    :undoc-members:
    :show-inheritance:
 
-hiddenlayer.rest.models.sensor\_sor\_item\_response module
-----------------------------------------------------------
-
-.. automodule:: hiddenlayer.rest.models.sensor_sor_item_response
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 hiddenlayer.rest.models.sensor\_sor\_query\_filter module
 ---------------------------------------------------------
 
@@ -72,14 +80,6 @@ hiddenlayer.rest.models.sensor\_sor\_query\_request module
 ----------------------------------------------------------
 
 .. automodule:: hiddenlayer.rest.models.sensor_sor_query_request
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-hiddenlayer.rest.models.sensor\_sor\_query\_response module
------------------------------------------------------------
-
-.. automodule:: hiddenlayer.rest.models.sensor_sor_query_response
    :members:
    :undoc-members:
    :show-inheritance:
