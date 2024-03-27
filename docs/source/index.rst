@@ -8,9 +8,18 @@ It currently covers the following HiddenLayer services:
 1. Model Scanner
 2. MLDR
 
-Check out the :doc:`usage` section for further information, including
-how to :ref:`installation` the project.
 
+Installation
+------------
+
+Install the ``hiddenlayer-python`` package with `pip
+<https://pypi.org/project/hiddenlayer-python>`_:
+
+.. code-block:: console
+
+    $ python -m pip install hiddenlayer-python
+
+Check out the :ref:`getting-started` section for further information, including example usage.
 .. note::
 
    This project is under active development.
@@ -22,5 +31,5 @@ Contents
    :maxdepth: 3
 
    getting-started
-   examples
+   example-usage
    api

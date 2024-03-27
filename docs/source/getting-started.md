@@ -68,7 +68,7 @@ hl_client = HiddenlayerServiceClient(
 
 Coming soon...
 
-## Using Data Classes & Enums
+## Data Models
 
 The Hiddenlayer SDK uses Pydantic to represent data for APIs making the code more readable and typsafe, while also making it easier to work with the code.
 
