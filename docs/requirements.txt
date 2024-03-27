@@ -4,3 +4,4 @@ requests
 pydantic
 numpy
 python-dateutil>=2.0.0
+myst_parser
