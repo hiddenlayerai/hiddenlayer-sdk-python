@@ -122,16 +122,16 @@ class ModelScanAPI:
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
-        :examples:
-        .. code-block:: python
-
-            hl_client.model_scanner.scan_s3_model(
-                model_name="your-model-name",
-                bucket="s3_bucket",
-                key="path/to/file"
-            )
-
         :returns: Scan Results
+
+        :examples:
+            .. code-block:: python
+
+                hl_client.model_scanner.scan_s3_model(
+                    model_name="your-model-name",
+                    bucket="s3_bucket",
+                    key="path/to/file"
+                )
         """
         try:
             import boto3
