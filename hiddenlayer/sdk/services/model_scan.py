@@ -125,7 +125,6 @@ class ModelScanAPI:
         :returns: Scan Results
 
         :examples:
-
         .. code-block:: python
 
             hl_client.model_scanner.scan_s3_model(

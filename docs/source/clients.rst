@@ -6,7 +6,7 @@ Clients
 .. py:module:: hiddenlayer
    :noindex:
 
-.. autoclass:: HiddenlayerServiceAPI
+.. autoclass:: HiddenlayerServiceClient
    :members:
 
 
