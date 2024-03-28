@@ -17,7 +17,7 @@ class HiddenlayerServiceClient:
     The Hiddenlayer Service Client is a client for the Hiddenlayer services REST API.
     """
 
-    def __init__(self, *, host: str, api_id: str, api_key: str):
+    def __init__(self, *, api_id: str, api_key: str, host="https://api.hiddenlayer.ai"):
         jwt_token = self._get_jwt(api_id=api_id, api_key=api_key)
 
         self._config = Configuration(host=host, access_token=jwt_token)

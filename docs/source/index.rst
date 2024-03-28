@@ -32,4 +32,6 @@ Contents
 
    getting-started
    example-usage
-   api
+   clients
+   services
+   data-models

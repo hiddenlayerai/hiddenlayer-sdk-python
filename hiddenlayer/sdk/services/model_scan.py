@@ -4,6 +4,8 @@ import time
 from pathlib import Path
 from typing import List, Optional, Union
 
+from huggingface_hub.utils import smoothly_deprecate_use_auth_token
+
 from hiddenlayer.sdk.constants import ScanStatus
 from hiddenlayer.sdk.models import ScanResults
 from hiddenlayer.sdk.rest.api import ModelScanApi, SensorApi
@@ -95,6 +97,7 @@ class ModelScanAPI:
         scan_results = ScanResults.from_scanresultsv2(scan_results_v2=scan_results)
         scan_results.file_name = file_path.name
         scan_results.file_path = str(file_path)
+        scan_results.sensor_id = sensor.sensor_id
 
         return scan_results
 
@@ -122,6 +125,16 @@ class ModelScanAPI:
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
         :returns: Scan Results
+
+        :examples:
+
+        .. code-block:: python
+
+            hl_client.model_scanner.scan_s3_model(
+                model_name="your-model-name",
+                bucket="s3_bucket",
+                key="path/to/file"
+            )
         """
         try:
             import boto3
@@ -228,7 +241,9 @@ class ModelScanAPI:
 
         scan_results_v2 = self._model_scan_api.scan_status(model.sensor_id)
 
-        return ScanResults.from_scanresultsv2(scan_results_v2=scan_results_v2)
+        return ScanResults.from_scanresultsv2(
+            scan_results_v2=scan_results_v2, sensor_id=model.sensor_id
+        )
 
     def scan_folder(
         self,

@@ -10,7 +10,13 @@ class ScanResults(ScanResultsV2):
 
     file_name: Optional[str] = None
     file_path: Optional[str] = None
+    sensor_id: Optional[str] = None
 
     @classmethod
-    def from_scanresultsv2(cls, *, scan_results_v2: ScanResultsV2) -> Self:
-        return cls(**scan_results_v2.to_dict())
+    def from_scanresultsv2(
+        cls, *, scan_results_v2: ScanResultsV2, sensor_id: Optional[str] = None
+    ) -> Self:
+        scan_results_dict = scan_results_v2.to_dict()
+        scan_results_dict["sensor_id"] = sensor_id
+
+        return cls(**scan_results_dict)

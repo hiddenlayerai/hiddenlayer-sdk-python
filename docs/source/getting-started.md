@@ -35,7 +35,7 @@ from hiddenlayer import HiddenlayerServiceClient
 hl_client = HiddenlayerServiceClient(
   host="https://api.hiddenlayer.ai",
   api_id=..., # Your Hiddenlayer API Client ID
-  api_key=... # Your Hiddenalyer API Secret Key
+  api_key=... # Your Hiddenlayer API Secret Key
 )
 
 hl_client.model_scanner.scan_file(
@@ -46,13 +46,7 @@ hl_client.model_scanner.scan_file(
 
 ## Authentication
 
-Authentication currently depends on whether you are using the SaaS version of HiddenLayer or the OEM version.
-
-To tell if you are using the SaaS or the OEM, you can use the url. If you the URL you use to access HiddenLayer is `https://api.hiddenlayer.ai` then you're using the SaaS version, otherwise you're using the OEM version.
-
-### SAAS
-
-To authenticate to the SaaS version of HiddenLayer, you have to generate a client ID and secret from the platform UI.
+To authenticate to HiddenLayer, you have to generate a client ID and secret from the platform UI.
 
 Once you have those, you can authenticate using the SDK like so:
 
@@ -63,10 +57,6 @@ hl_client = HiddenlayerServiceClient(
   api_key=... # Your Hiddenalyer API Secret Key
 )
 ```
-
-### OEM
-
-Coming soon...
 
 ## Data Models
 
