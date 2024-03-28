@@ -4,8 +4,6 @@ import time
 from pathlib import Path
 from typing import List, Optional, Union
 
-from huggingface_hub.utils import smoothly_deprecate_use_auth_token
-
 from hiddenlayer.sdk.constants import ScanStatus
 from hiddenlayer.sdk.models import ScanResults
 from hiddenlayer.sdk.rest.api import ModelScanApi, SensorApi
