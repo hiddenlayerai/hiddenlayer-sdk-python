@@ -35,6 +35,13 @@ Scanning a HuggingFace model
   :start-after: [docs_scan_hf_model_start]
   :end-before: [docs_scan_hf_model_end]
 
+Scanning a model on Azure Blob
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../../examples/model_scanning.py
+  :start-after: [docs_scan_azure_blob_model]
+  :end-before: [docs_scan_azure_blob_model_end]
+
 MLDR
 -----
 
