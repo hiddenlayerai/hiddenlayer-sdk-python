@@ -50,6 +50,10 @@ aws = [
 hf = [
   "huggingface_hub"
 ]
+azure = [
+  "azure-storage-blob",
+  "azure-identity"
+]
 
 [tool.pyright]
 venvPath = "."

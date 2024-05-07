@@ -83,6 +83,7 @@ class ModelScanAPI:
         base_delay = 5  # seconds
         retries = 0
         if wait_for_results:
+            print(f"{file_path.name} scan status: {scan_results.status}")
             while scan_results.status not in [ScanStatus.DONE, ScanStatus.FAILED]:
                 retries += 1
                 delay = base_delay * 2**retries + random.uniform(
@@ -147,6 +148,86 @@ class ModelScanAPI:
             s3_client.download_file(bucket, key, f"/tmp/{file_name}")
         except Exception as e:
             raise RuntimeError(f"Couldn't download model s3://{bucket}/{key}: {e}")
+
+        return self.scan_file(
+            model_path=f"/tmp/{file_name}",
+            model_name=model_name,
+            threads=threads,
+            chunk_size=chunk_size,
+            wait_for_results=wait_for_results,
+        )
+
+    def scan_azure_blob_model(
+        self,
+        *,
+        model_name: str,
+        account_url: str,
+        container: str,
+        blob: str,
+        blob_service_client: Optional[object] = None,
+        credential: Optional[object] = None,
+        threads: int = 1,
+        chunk_size: int = 4,
+        wait_for_results: bool = True,
+    ) -> ScanResults:
+        """
+        Scan a model file on Azure Blob Storage.
+
+        :param model_name: Name of the model to be shown on the HiddenLayer UI.
+        :param account_url: Azure Blob url of where the file is stored.
+        :param container: Azure Blob container containing the model file.
+        :param blob: Path to the model file inside the Azure blob container.
+        :param blob_service_client: BlobServiceClient object. Defaults to creating one using DefaultCredential().
+        :param credential: Credential to be passed to the BlobServiceClient object, can be a credential object, SAS key, etc.
+            Defaults to `DefaultCredential`
+        :param threads: Number of threads used to upload the file, defaults to 1.
+        :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
+        :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
+
+        :returns: Scan Results
+
+        :examples:
+            .. code-block:: python
+
+                hl_client.model_scanner.scan_azure_blob_model(
+                    model_name="your-model-name",
+                    account_url="https://<storageaccountname>.blob.core.windows.net",
+                    container="container_name",
+                    blob="path/to/file.bin",
+                    credential="?<sas_key>" # If using a SAS key and not DefaultCredentials
+                )
+        """
+        try:
+            from azure.identity import DefaultAzureCredential
+        except ImportError:
+            raise ImportError("Python package azure-identity is not installed.")
+
+        try:
+            from azure.storage.blob import BlobServiceClient
+        except ImportError:
+            raise ImportError("Python package azure-storage-blob is not installed.")
+
+        if not credential:
+            credential = DefaultAzureCredential()
+
+        if not blob_service_client:
+            blob_service_client = BlobServiceClient(account_url, credential=credential)
+
+        file_name = blob.split("/")[-1]
+
+        blob_client = blob_service_client.get_blob_client(
+            container=container, blob=blob
+        )
+
+        try:
+            with open(os.path.join("/tmp", file_name), "wb") as f:
+                download_stream = blob_client.download_blob()
+                f.write(download_stream.readall())
+
+        except Exception as e:
+            raise RuntimeError(
+                f"Couldn't download model {account_url}, {container}, {blob}: {e}"
+            )
 
         return self.scan_file(
             model_path=f"/tmp/{file_name}",

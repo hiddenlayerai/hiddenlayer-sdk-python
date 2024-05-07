@@ -3,7 +3,7 @@
 PYTHON_ENV = .venv/bin/python
 
 install:
-	uv pip install -e .
+	uv pip install -e '.[dev,s3,azure,hf]'
 
 install-dev:
 	uv pip install -e '.[dev]'
