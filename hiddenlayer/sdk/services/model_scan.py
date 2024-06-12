@@ -1,6 +1,7 @@
 import os
 import random
 import time
+import warnings
 from pathlib import Path
 from typing import List, Optional, Union
 
@@ -38,7 +39,7 @@ class ModelScanAPI:
         model_name: str,
         model_path: Union[str, os.PathLike],
         threads: int = 1,
-        chunk_size: int = 4,
+        chunk_size: int = 16,
         wait_for_results: bool = True,
     ) -> ScanResults:
         """
@@ -53,9 +54,16 @@ class ModelScanAPI:
         :returns: Scan Results
         """
 
+        warnings.warn(
+            "Use of the threads parameter is deprecated and will be removed in version 0.2.0.",
+            category=DeprecationWarning,
+            stacklevel=2,
+        )
+
         file_path = Path(model_path)
 
         filesize = file_path.stat().st_size
+
         sensor = self._model_api.create(model_name=model_name)
 
         upload = self._sensor_api.begin_multipart_upload(filesize, sensor.sensor_id)
@@ -80,7 +88,7 @@ class ModelScanAPI:
 
         scan_results = self.get_scan_results(model_name=model_name)
 
-        base_delay = 5  # seconds
+        base_delay = 0.1  # seconds
         retries = 0
         if wait_for_results:
             print(f"{file_path.name} scan status: {scan_results.status}")
