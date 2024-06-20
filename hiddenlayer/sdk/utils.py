@@ -2,6 +2,7 @@ import os
 from fnmatch import fnmatch
 from pathlib import Path
 from typing import Generator, List, Optional, Union
+from urllib.parse import urlparse
 
 PathInputType = Union[str, os.PathLike]
 
@@ -78,3 +79,14 @@ def filter_path_objects(
             continue
 
         yield item
+
+
+def is_saas(host: str) -> bool:
+    """Checks whether the connection is to the SaaS platform"""
+
+    o = urlparse(host)
+
+    if o.hostname and o.hostname.endswith("hiddenlayer.ai"):
+        return True
+
+    return False

@@ -60,7 +60,7 @@ venvPath = "."
 venv = ".venv"
 
 [tool.ruff]
-exclude = [".venv", "hiddenlayer/sdk/rest", "tests/rest", "docs/"]
+exclude = [".venv", "hiddenlayer/sdk/rest", "tests/rest", "docs/", "hiddenlayer/sdk/enterprise"]
 select = [
   "I" # isort formatting
 ]
