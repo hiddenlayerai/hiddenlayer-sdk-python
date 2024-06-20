@@ -26,7 +26,7 @@ pip install 'hiddenlayer[hf] @ git+https://github.com/hiddenlayerai/hiddenlayer-
 
 ## Getting Started
 
-Once you've installed the hiddenlayer package, instantiate the `HiddenlayerServiceClient`:
+Once you've installed the hiddenlayer package, you can instantiate the `HiddenlayerServiceClient` for the SaaS platform as follows:
 
 ```python
 from hiddenlayer import HiddenlayerServiceClient
@@ -35,6 +35,16 @@ hl_client = HiddenlayerServiceClient(
   host="https://api.hiddenlayer.ai",
   api_id=..., # Your Hiddenlayer API Client ID
   api_key=... # Your Hiddenalyer API Secret Key
+)
+```
+
+If you are using the Enterprise version of the production, you can instantiate the `HiddenlayerServiceClient` as follows:
+
+```python
+from hiddenlayer import HiddenlayerServiceClient
+
+hl_client = HiddenlayerServiceClient(
+  host="https://your.hiddenlayer.enterprise.url",
 )
 ```
 
@@ -48,6 +58,8 @@ hl_client.model_scanner.scan_file(
 ```
 
 ### Using MLDR
+
+> Note: This is only supported using the SaaS version of the platform.
 
 ```python
 model = hl_client.mldr.create_model(model_name="example_model")

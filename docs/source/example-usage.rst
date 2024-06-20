@@ -45,6 +45,8 @@ Scanning a model on Azure Blob
 MLDR
 -----
 
+Note: This is currently only supported when using the SaaS version of the platform.
+
 Submitting Vectors to MLDR
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
