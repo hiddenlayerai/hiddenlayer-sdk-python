@@ -1,3 +1,5 @@
+from typing import Optional
+
 import requests
 from requests.auth import HTTPBasicAuth
 
@@ -6,9 +8,14 @@ from hiddenlayer.sdk.rest.configuration import Configuration
 from hiddenlayer.sdk.services.mldr import MLDRAPI
 from hiddenlayer.sdk.services.model import ModelAPI
 from hiddenlayer.sdk.services.model_scan import ModelScanAPI
+from hiddenlayer.sdk.utils import is_saas
 
 
 class HiddenlayerServiceAuthError(Exception):
+    pass
+
+
+class HiddenlayerUnsupportedPlatformError(Exception):
     pass
 
 
@@ -18,15 +25,35 @@ class HiddenlayerServiceClient:
     """
 
     def __init__(
-        self, *, api_id: str, api_key: str, host: str = "https://api.hiddenlayer.ai"
+        self,
+        *,
+        api_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        host: str = "https://api.hiddenlayer.ai",
     ):
-        jwt_token = self._get_jwt(api_id=api_id, api_key=api_key)
+        self.is_saas = is_saas(host)
 
-        self._config = Configuration(host=host, access_token=jwt_token)
+        if self.is_saas:
+            if not api_id:
+                raise EnvironmentError(
+                    "`api_id` cannot be None when using the SaaS version of HiddenLayer."
+                )
+
+            if not api_key:
+                raise EnvironmentError(
+                    "`api_key` cannot be None when using the SaaS version of HiddenLayer."
+                )
+
+            jwt_token = self._get_jwt(api_id=api_id, api_key=api_key)
+            self._config = Configuration(host=host, access_token=jwt_token)
+
+        else:
+            self._config = Configuration(host=host)
+
         self._api_client = ApiClient(configuration=self._config)
-        self._model_scan = ModelScanAPI(self._api_client)
         self._mldr = MLDRAPI(self._api_client)
         self._model = ModelAPI(self._api_client)
+        self._model_scan = ModelScanAPI(self._api_client)
 
     def _get_jwt(self, *, api_id: str, api_key: str) -> str:
         "Get the JWT token to auth to the Hiddenlayer API."
@@ -63,8 +90,17 @@ class HiddenlayerServiceClient:
 
     @property
     def mldr(self) -> MLDRAPI:
+        # If the platform is not SaaS, it's not supported
+        if not self.is_saas:
+            raise HiddenlayerUnsupportedPlatformError(
+                "MLDR is currently only supported with the SaaS version of the platform."
+            )
         return self._mldr
 
     @property
     def model(self) -> ModelAPI:
+        if not self.is_saas:
+            raise HiddenlayerUnsupportedPlatformError(
+                "Model management is currently only supported with the SaaS version of the platform."
+            )
         return self._model
