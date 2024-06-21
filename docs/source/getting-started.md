@@ -33,7 +33,7 @@ For example, to scan a model, run:
 from hiddenlayer import HiddenlayerServiceClient
 
 hl_client = HiddenlayerServiceClient(
-  host="https://api.hiddenlayer.ai",
+  host="https://api.us.hiddenlayer.ai",
   api_id=..., # Your Hiddenlayer API Client ID
   api_key=... # Your Hiddenlayer API Secret Key
 )
@@ -52,7 +52,7 @@ Once you have those, you can authenticate using the SDK like so:
 
 ```python
 hl_client = HiddenlayerServiceClient(
-  host="https://api.hiddenlayer.ai",
+  host="https://api.us.hiddenlayer.ai",
   api_id=..., # Your Hiddenlayer API Client ID
   api_key=... # Your Hiddenalyer API Secret Key
 )
