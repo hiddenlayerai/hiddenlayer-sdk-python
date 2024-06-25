@@ -21,12 +21,12 @@ json = "{}"
 # create an instance of SensorSORQueryRequest from a JSON string
 sensor_sor_query_request_instance = SensorSORQueryRequest.from_json(json)
 # print the JSON string representation of the object
-print SensorSORQueryRequest.to_json()
+print(SensorSORQueryRequest.to_json())
 
 # convert the object into a dict
 sensor_sor_query_request_dict = sensor_sor_query_request_instance.to_dict()
 # create an instance of SensorSORQueryRequest from a dict
-sensor_sor_query_request_form_dict = sensor_sor_query_request.from_dict(sensor_sor_query_request_dict)
+sensor_sor_query_request_from_dict = SensorSORQueryRequest.from_dict(sensor_sor_query_request_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

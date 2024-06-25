@@ -41,7 +41,10 @@ class TestFileInfo(unittest.TestCase):
                 subtype = [
                     ''
                     ],
-                tlsh = ''
+                tlsh = '',
+                pickle_modules = [
+                    ''
+                    ]
             )
         else:
             return FileInfo(
