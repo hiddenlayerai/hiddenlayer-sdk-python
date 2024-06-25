@@ -5,14 +5,19 @@ import pytest
 
 from hiddenlayer import HiddenlayerServiceClient
 
+params = [
+    ("https://api.us.hiddenlayer.ai"),
+    pytest.param("http://localhost:8000", marks=pytest.mark.xfail),
+]
+
 
 class MaliciousPickle:
     def __reduce__(self):
         return exec, ("import os; os.system('env')",)
 
 
-@pytest.fixture(scope="session")
-def hl_client_saas() -> HiddenlayerServiceClient:
+@pytest.fixture(params=params)
+def hl_client_saas(request) -> HiddenlayerServiceClient:
     hl_client_id = os.getenv("HL_CLIENT_ID")
     hl_client_secret = os.getenv("HL_CLIENT_SECRET")
 
@@ -22,7 +27,9 @@ def hl_client_saas() -> HiddenlayerServiceClient:
     if not hl_client_secret:
         raise RuntimeError("HL_CLIENT_SECRET env var not set.")
 
-    return HiddenlayerServiceClient(api_id=hl_client_id, api_key=hl_client_secret)
+    return HiddenlayerServiceClient(
+        api_id=hl_client_id, api_key=hl_client_secret, host=request.param
+    )
 
 
 def test_scan_model(tmp_path, hl_client_saas: HiddenlayerServiceClient):
@@ -39,6 +46,8 @@ def test_scan_model(tmp_path, hl_client_saas: HiddenlayerServiceClient):
     )
 
     detections = results.detections
+
+    assert results.results.pickle_modules == ["builtsins.exec"]
 
     assert detections
     assert detections[0]["severity"] == "MALICIOUS"
