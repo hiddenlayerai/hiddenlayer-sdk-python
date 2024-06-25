@@ -94,6 +94,7 @@ class ModelScanAPI:
             self._sensor_api.complete_multipart_upload(
                 sensor.sensor_id, upload.upload_id
             )
+
             self._model_scan_api.scan_model(sensor.sensor_id)
         else:
             with open(file_path, "rb") as f:

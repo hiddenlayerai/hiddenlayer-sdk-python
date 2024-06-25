@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, StrictBool, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
@@ -32,11 +32,11 @@ class CreateSensorRequest(BaseModel):
     tags: Optional[Dict[str, Any]] = None
     __properties: ClassVar[List[str]] = ["plaintext_name", "version", "active", "tags"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True,
-        "protected_namespaces": (),
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -86,6 +86,7 @@ class CreateSensorRequest(BaseModel):
             "plaintext_name": obj.get("plaintext_name"),
             "version": obj.get("version"),
             "active": obj.get("active") if obj.get("active") is not None else True,
+            "tags": obj.get("tags")
         })
         return _obj
 
