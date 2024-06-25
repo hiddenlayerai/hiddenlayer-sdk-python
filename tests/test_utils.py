@@ -38,7 +38,7 @@ def test_filter_paths_allow_list(paths):
 def test_is_saas():
     """Test if a url is our SaaS"""
 
-    assert is_saas("https://api.hiddenlayer.ai")
+    assert is_saas("https://api.us.hiddenlayer.ai")
 
 
 def test_is_not_saas():

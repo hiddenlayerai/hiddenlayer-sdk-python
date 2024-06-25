@@ -29,7 +29,7 @@ class HiddenlayerServiceClient:
         *,
         api_id: Optional[str] = None,
         api_key: Optional[str] = None,
-        host: str = "https://api.hiddenlayer.ai",
+        host: str = "https://api.us.hiddenlayer.ai",
     ):
         self.is_saas = is_saas(host)
 

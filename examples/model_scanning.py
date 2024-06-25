@@ -3,7 +3,7 @@ import os
 from hiddenlayer import HiddenlayerServiceClient
 
 hl_client = HiddenlayerServiceClient(
-    host="https://api.hiddenlayer.ai",
+    host="https://api.us.hiddenlayer.ai",
     api_id=os.environ.get("HL_CLIENT_ID"),
     api_key=os.environ.get("HL_CLIENT_SECRET"),
 )

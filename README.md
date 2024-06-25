@@ -32,7 +32,7 @@ Once you've installed the hiddenlayer package, you can instantiate the `Hiddenla
 from hiddenlayer import HiddenlayerServiceClient
 
 hl_client = HiddenlayerServiceClient(
-  host="https://api.hiddenlayer.ai",
+  host="https://api.us.hiddenlayer.ai",
   api_id=..., # Your Hiddenlayer API Client ID
   api_key=... # Your Hiddenalyer API Secret Key
 )
