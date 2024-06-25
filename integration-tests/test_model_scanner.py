@@ -1,5 +1,6 @@
 import os
 import pickle
+from uuid import uuid4
 
 import pytest
 
@@ -42,12 +43,12 @@ def test_scan_model(tmp_path, hl_client_saas: HiddenlayerServiceClient):
         pickle.dump(malicious_model, f)
 
     results = hl_client_saas.model_scanner.scan_file(
-        model_name="sdk-integration-scan_model", model_path=model_path
+        model_name=f"sdk-integration-scan-model-{uuid4}", model_path=model_path
     )
 
     detections = results.detections
 
-    assert results.results.pickle_modules == ["builtsins.exec"]
+    assert results.results.pickle_modules == ["builtins.exec"]
 
     assert detections
     assert detections[0]["severity"] == "MALICIOUS"
