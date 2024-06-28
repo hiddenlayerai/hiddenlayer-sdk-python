@@ -32,6 +32,7 @@ EXCLUDE_FILE_TYPES = [
 class ModelScanAPI:
     def __init__(self, api_client: ApiClient) -> None:
         self.is_saas = is_saas(api_client.configuration.host)
+        self._api_client = api_client
 
         if self.is_saas:
             self._model_scan_api = ModelScanApi(api_client=api_client)
@@ -84,11 +85,14 @@ class ModelScanAPI:
                         read_amount = part.end_offset - part.start_offset
                         f.seek(int(part.start_offset))
                         part_data = f.read(int(read_amount))
-                        self._sensor_api.upload_model_part(
-                            sensor_id=sensor.sensor_id,
-                            upload_id=upload.upload_id,
-                            part=part.part_number,
+
+                        # The SaaS multipart upload returns a upload url for each part
+                        # So there is no specified route
+                        self._api_client.call_api(
+                            "PUT",
+                            part.upload_url,
                             body=part_data,
+                            header_params={"Content-Type": "application/octet-binary"},
                         )
 
             self._sensor_api.complete_multipart_upload(
