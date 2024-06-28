@@ -47,6 +47,20 @@ class TestSensorApi(unittest.TestCase):
         """
         pass
 
+    def test_delete_model(self) -> None:
+        """Test case for delete_model
+
+        Remove an Adhoc Sensor
+        """
+        pass
+
+    def test_get_model(self) -> None:
+        """Test case for get_model
+
+        Get Model
+        """
+        pass
+
     def test_query_sensor(self) -> None:
         """Test case for query_sensor
 

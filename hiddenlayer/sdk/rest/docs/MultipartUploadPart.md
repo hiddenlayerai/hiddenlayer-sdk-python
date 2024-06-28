@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **part_number** | **float** |  | 
 **start_offset** | **float** |  | 
 **end_offset** | **float** |  | 
+**upload_url** | **str** | only provided when part is to be directly uploaded to a cloud provider (adhoc) | [optional] 
 
 ## Example
 
