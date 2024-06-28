@@ -40,7 +40,8 @@ class TestGetMultipartUploadResponse(unittest.TestCase):
                     hiddenlayer.sdk.rest.models.multipart_upload_part.Multipart Upload Part(
                         part_number = 1.337, 
                         start_offset = 1.337, 
-                        end_offset = 1.337, )
+                        end_offset = 1.337, 
+                        upload_url = '', )
                     ]
             )
         else:
@@ -50,7 +51,8 @@ class TestGetMultipartUploadResponse(unittest.TestCase):
                     hiddenlayer.sdk.rest.models.multipart_upload_part.Multipart Upload Part(
                         part_number = 1.337, 
                         start_offset = 1.337, 
-                        end_offset = 1.337, )
+                        end_offset = 1.337, 
+                        upload_url = '', )
                     ],
         )
         """

@@ -274,6 +274,7 @@ class ApiClient:
                 body=body, post_params=post_params,
                 _request_timeout=_request_timeout
             )
+
         except ApiException as e:
             raise e
 

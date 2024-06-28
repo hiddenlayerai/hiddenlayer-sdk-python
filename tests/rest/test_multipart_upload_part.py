@@ -37,7 +37,8 @@ class TestMultipartUploadPart(unittest.TestCase):
             return MultipartUploadPart(
                 part_number = 1.337,
                 start_offset = 1.337,
-                end_offset = 1.337
+                end_offset = 1.337,
+                upload_url = ''
             )
         else:
             return MultipartUploadPart(

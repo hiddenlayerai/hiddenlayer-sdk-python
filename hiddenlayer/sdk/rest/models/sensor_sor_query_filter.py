@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
@@ -32,7 +32,18 @@ class SensorSORQueryFilter(BaseModel):
     version: Optional[StrictInt] = None
     created_at_start: Optional[datetime] = None
     created_at_stop: Optional[datetime] = None
-    __properties: ClassVar[List[str]] = ["plaintext_name", "active", "version", "created_at_start", "created_at_stop"]
+    source: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["plaintext_name", "active", "version", "created_at_start", "created_at_stop", "source"]
+
+    @field_validator('source')
+    def source_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['adhoc']):
+            raise ValueError("must be one of enum values ('adhoc')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -89,7 +100,8 @@ class SensorSORQueryFilter(BaseModel):
             "active": obj.get("active"),
             "version": obj.get("version"),
             "created_at_start": obj.get("created_at_start"),
-            "created_at_stop": obj.get("created_at_stop")
+            "created_at_stop": obj.get("created_at_stop"),
+            "source": obj.get("source")
         })
         return _obj
 

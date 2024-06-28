@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **version** | **int** |  | [optional] 
 **active** | **bool** |  | [optional] [default to True]
 **tags** | **Dict[str, object]** |  | [optional] 
+**adhoc** | **bool** |  | [optional] [default to False]
 
 ## Example
 

@@ -30,7 +30,8 @@ class CreateSensorRequest(BaseModel):
     version: Optional[StrictInt] = None
     active: Optional[StrictBool] = True
     tags: Optional[Dict[str, Any]] = None
-    __properties: ClassVar[List[str]] = ["plaintext_name", "version", "active", "tags"]
+    adhoc: Optional[StrictBool] = False
+    __properties: ClassVar[List[str]] = ["plaintext_name", "version", "active", "tags", "adhoc"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -86,7 +87,8 @@ class CreateSensorRequest(BaseModel):
             "plaintext_name": obj.get("plaintext_name"),
             "version": obj.get("version"),
             "active": obj.get("active") if obj.get("active") is not None else True,
-            "tags": obj.get("tags")
+            "tags": obj.get("tags"),
+            "adhoc": obj.get("adhoc") if obj.get("adhoc") is not None else False
         })
         return _obj
 
