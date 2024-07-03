@@ -1,3 +1,4 @@
+import importlib.metadata
 from typing import Optional
 
 import requests
@@ -5,10 +6,12 @@ from requests.auth import HTTPBasicAuth
 
 from hiddenlayer.sdk.rest.api_client import ApiClient
 from hiddenlayer.sdk.rest.configuration import Configuration
-from hiddenlayer.sdk.services.mldr import MLDRAPI
+from hiddenlayer.sdk.services.mldr import AIDRPredictive
 from hiddenlayer.sdk.services.model import ModelAPI
 from hiddenlayer.sdk.services.model_scan import ModelScanAPI
 from hiddenlayer.sdk.utils import is_saas
+
+__version__ = importlib.metadata.version("hiddenlayer-sdk")
 
 
 class HiddenlayerServiceAuthError(Exception):
@@ -51,7 +54,7 @@ class HiddenlayerServiceClient:
             self._config = Configuration(host=host)
 
         self._api_client = ApiClient(configuration=self._config)
-        self._mldr = MLDRAPI(self._api_client)
+        self._mldr = AIDRPredictive(self._api_client)
         self._model = ModelAPI(self._api_client)
         self._model_scan = ModelScanAPI(self._api_client)
 
@@ -89,7 +92,7 @@ class HiddenlayerServiceClient:
         return self._model_scan
 
     @property
-    def mldr(self) -> MLDRAPI:
+    def aidr_predictive(self) -> AIDRPredictive:
         # If the platform is not SaaS, it's not supported
         if not self.is_saas:
             raise HiddenlayerUnsupportedPlatformError(

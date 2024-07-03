@@ -12,9 +12,9 @@ from hiddenlayer.sdk.rest.models import (
 )
 
 
-class MLDRAPI:
+class AIDRPredictive:
     def __init__(self, api_client: ApiClient) -> None:
-        self._mldr_api = MldrApi(api_client=api_client)
+        self._aidr_predictive = MldrApi(api_client=api_client)
 
     def submit_vectors(
         self,
@@ -57,7 +57,7 @@ class MLDRAPI:
         input_layer = base64.b64encode(input_vectors.tobytes()).decode()
         output_layer = base64.b64encode(output.tobytes()).decode()
 
-        return self._mldr_api.submit_vectors(
+        return self._aidr_predictive.submit_vectors(
             SubmissionV2(
                 metadata=metadata if metadata else {},
                 tags=tags if tags else [],

@@ -23,7 +23,7 @@ model = hl_client.model.get(model_name="example_model")
 
 
 # Submit vectors to MLDR
-hl_client.mldr.submit_vectors(
+hl_client.aidr_predictive.submit_vectors(
     model_id=model.sensor_id,
     input_vectors=X,
     output=y,
