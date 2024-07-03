@@ -14,14 +14,14 @@ Hiddenlayer is a Python SDK that provides a simple and efficient way to interact
 
 Install from PyPi using [pip](https://pip.pypa.io/en/latest/), a package manager for Python.
 
-`pip install git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git`
+`pip install hiddenlayer-sdk`
 
 Scanning models on different platforms such as AWS S3 and Huggingface are supported. You can install the dependenices yourself or via optional dependencies:
 
 ```bash
-pip install 'hiddenlayer[aws] @ git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git'
-pip install 'hiddenlayer[azure] @ git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git'
-pip install 'hiddenlayer[hf] @ git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git'
+pip install hiddenlayer-sdk[aws]
+pip install hiddenlayer-sdk[azure]
+pip install hiddenlayer-sdk[hf]
 ```
 
 ## Getting Started
@@ -62,7 +62,7 @@ hl_client.model_scanner.scan_file(
 > Note: This is only supported using the SaaS version of the platform.
 
 ```python
-model = hl_client.aidr_predictive.create_model(model_name="example_model")
+model = hl_client.model.create_model(model_name="example_model")
 
 hl_client.aidr_predictive.submit_vectors(
   model_id=model.sensor_id,
