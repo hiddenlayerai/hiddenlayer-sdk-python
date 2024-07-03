@@ -14,14 +14,14 @@
 
 import unittest
 
-from hiddenlayer.sdk.rest.api.mldr_api import MldrApi
+from hiddenlayer.sdk.rest.api.aidr_predictive_api import AidrPredictiveApi
 
 
-class TestMldrApi(unittest.TestCase):
-    """MldrApi unit test stubs"""
+class TestAidrPredictiveApi(unittest.TestCase):
+    """AidrPredictiveApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = MldrApi()
+        self.api = AidrPredictiveApi()
 
     def tearDown(self) -> None:
         pass
