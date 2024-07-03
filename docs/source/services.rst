@@ -9,7 +9,7 @@ distinction between required and optional arguments to the calls.
 .. toctree::
 	:maxdepth: 1
 
-	api/mldr
+	api/aidr_predictive
 	api/model_scanner
 	api/model
 

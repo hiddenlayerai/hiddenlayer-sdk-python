@@ -18,7 +18,7 @@ def test_fail_api_key_missing():
 
 
 def test_fail_access_aidr_predictive():
-    """Test failing accessing mldr for non SaaS deployments."""
+    """Test failing accessing to AIDR Predictive for non SaaS deployments."""
 
     hl_client = HiddenlayerServiceClient(host="http://localhost:8000")
 

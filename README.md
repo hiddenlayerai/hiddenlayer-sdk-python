@@ -57,14 +57,14 @@ hl_client.model_scanner.scan_file(
 )
 ```
 
-### Using MLDR
+### Using AIDR for Predictive Models
 
 > Note: This is only supported using the SaaS version of the platform.
 
 ```python
-model = hl_client.mldr.create_model(model_name="example_model")
+model = hl_client.aidr_predictive.create_model(model_name="example_model")
 
-hl_client.mldr.submit_vectors(
+hl_client.aidr_predictive.submit_vectors(
   model_id=model.sensor_id,
   input_vectors=X,
   output=y

@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 
-from hiddenlayer.sdk.rest.api import MldrApi
+from hiddenlayer.sdk.rest.api import AidrPredictiveApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
 from hiddenlayer.sdk.rest.models import (
     SubmissionResponse,
@@ -14,7 +14,7 @@ from hiddenlayer.sdk.rest.models import (
 
 class AIDRPredictive:
     def __init__(self, api_client: ApiClient) -> None:
-        self._aidr_predictive = MldrApi(api_client=api_client)
+        self._aidr_predictive = AidrPredictiveApi(api_client=api_client)
 
     def submit_vectors(
         self,
@@ -51,7 +51,7 @@ class AIDRPredictive:
         )
         output = np.array(output) if isinstance(output, list) else output
 
-        # Output vectors need to be at least 2d or MLDR will fail silently
+        # Output vectors need to be at least 2d or AIDR will fail silently
         output = output.reshape(-1, 1) if len(output.shape) == 1 else output
 
         input_layer = base64.b64encode(input_vectors.tobytes()).decode()
