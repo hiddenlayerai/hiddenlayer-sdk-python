@@ -6,7 +6,7 @@ The HiddenLayer SDK for Python includes functionality to enhance the developer e
 It currently covers the following HiddenLayer services:
 
 1. Model Scanner
-2. MLDR
+2. AIDR for Predictive Models
 
 
 Installation

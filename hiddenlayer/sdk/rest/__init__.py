@@ -17,7 +17,7 @@
 __version__ = "1.0.0"
 
 # import apis into sdk package
-from hiddenlayer.sdk.rest.api.mldr_api import MldrApi
+from hiddenlayer.sdk.rest.api.aidr_predictive_api import AidrPredictiveApi
 from hiddenlayer.sdk.rest.api.model_scan_api import ModelScanApi
 from hiddenlayer.sdk.rest.api.sensor_api import SensorApi
 

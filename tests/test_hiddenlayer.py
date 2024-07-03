@@ -17,13 +17,13 @@ def test_fail_api_key_missing():
         HiddenlayerServiceClient(api_id="test")
 
 
-def test_fail_access_mldr():
-    """Test failing accessing mldr for non SaaS deployments."""
+def test_fail_access_aidr_predictive():
+    """Test failing accessing to AIDR Predictive for non SaaS deployments."""
 
     hl_client = HiddenlayerServiceClient(host="http://localhost:8000")
 
     with pytest.raises(HiddenlayerUnsupportedPlatformError):
-        hl_client.mldr.submit_vectors
+        hl_client.aidr_predictive.submit_vectors
 
 
 def test_fail_access_model():

@@ -4,10 +4,10 @@ hiddenlayer.sdk.rest.api package
 Submodules
 ----------
 
-hiddenlayer.sdk.rest.api.mldr\_api module
------------------------------------------
+hiddenlayer.sdk.rest.api.aidr\_predictive\_api module
+-----------------------------------------------------
 
-.. automodule:: hiddenlayer.sdk.rest.api.mldr_api
+.. automodule:: hiddenlayer.sdk.rest.api.aidr_predictive_api
    :members:
    :undoc-members:
    :show-inheritance:

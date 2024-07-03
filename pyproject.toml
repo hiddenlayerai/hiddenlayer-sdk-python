@@ -64,3 +64,4 @@ exclude = [".venv", "hiddenlayer/sdk/rest", "tests/rest", "docs/", "hiddenlayer/
 select = [
   "I" # isort formatting
 ]
+

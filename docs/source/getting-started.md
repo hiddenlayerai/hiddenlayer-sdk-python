@@ -71,6 +71,6 @@ For more information, consult the [Data Models API Reference](api/hiddenlayer.sd
 The HiddenLayer Python SDK comes with a number of examples demonstrating how to use the library for various common use-cases, including
 
 * [Scanning models](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/blob/main/examples/model_scanning.py)
-* [Submitting vectors to MLDR](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/blob/main/examples/mldr.py)
+* [Submitting vectors to AIDR for Predictive Models](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/blob/main/examples/aidr_predictive.py)
 
 These examples and more are located in the [`examples/` directory of the Github repository](https://github.com/hiddenlayerai/hiddenlayer-sdk-python).
