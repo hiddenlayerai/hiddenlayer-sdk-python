@@ -20,10 +20,10 @@ class AIDRPredictive:
         self,
         *,
         model_id: str,
+        requester_id: str,
         input_vectors: Union[List[float], np.ndarray],
         output: Union[List[float], np.ndarray],
         predictions: Optional[List[float]] = None,
-        requester_id: str = "PythonSDK",
         tags: Optional[List[str]] = None,
         metadata: Optional[Dict[str, Any]] = None,
         event_time: Optional[str] = None,
@@ -32,11 +32,10 @@ class AIDRPredictive:
         Submit feature vectors and model outputs via the HiddenLayer API.
 
         :param model_id: Model id.
+        :param requester_id: Custom identifier for the inbound request. This should be a value that can be used to identify individual users interacting with the model.
         :param input_vectors: Feature vectors for your model.
         :param output: Output vectors directly from your model.
         :param predictions: If you ran `np.argmax` or `np.argmin` or provided custom logic onto the model output.
-        :param requester_id: Custom identifier for the request.
-            Generally used to identify where the request is coming from, defaults to PythonSDK.
         :param tags: Custom tags attached to the request.
         :param metadata: Custom metadata attached to the request.
         :param event_time: Time when the features and outputs were created, defaults to now.

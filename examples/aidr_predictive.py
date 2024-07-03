@@ -25,6 +25,7 @@ model = hl_client.model.get(model_name="example_model")
 # Submit vectors to AIDR for Predictive Models
 hl_client.aidr_predictive.submit_vectors(
     model_id=model.sensor_id,
+    requester_id="example_script_user",
     input_vectors=X,
     output=y,
 )
