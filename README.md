@@ -66,6 +66,7 @@ model = hl_client.aidr_predictive.create_model(model_name="example_model")
 
 hl_client.aidr_predictive.submit_vectors(
   model_id=model.sensor_id,
+  requestor_id="custom-source-id",
   input_vectors=X,
   output=y
 )
