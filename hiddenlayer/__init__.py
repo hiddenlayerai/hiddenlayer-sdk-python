@@ -1,4 +1,3 @@
-import importlib.metadata
 from typing import Optional
 
 import requests
@@ -10,8 +9,9 @@ from hiddenlayer.sdk.services.aidr_predictive import AIDRPredictive
 from hiddenlayer.sdk.services.model import ModelAPI
 from hiddenlayer.sdk.services.model_scan import ModelScanAPI
 from hiddenlayer.sdk.utils import is_saas
+from hiddenlayer.sdk.version import VERSION
 
-__version__ = importlib.metadata.version("hiddenlayer-sdk")
+__version__ = VERSION
 
 
 class HiddenlayerServiceAuthError(Exception):
