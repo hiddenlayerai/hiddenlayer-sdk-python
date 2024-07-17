@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 
 import requests
@@ -34,6 +35,7 @@ class HiddenlayerServiceClient:
         api_key: Optional[str] = None,
         host: str = "https://api.us.hiddenlayer.ai",
     ):
+        self.host = host.strip()
         self.is_saas = is_saas(host)
 
         if self.is_saas:
@@ -48,10 +50,10 @@ class HiddenlayerServiceClient:
                 )
 
             jwt_token = self._get_jwt(api_id=api_id, api_key=api_key)
-            self._config = Configuration(host=host, access_token=jwt_token)
+            self._config = Configuration(host=self.host, access_token=jwt_token)
 
         else:
-            self._config = Configuration(host=host)
+            self._config = Configuration(host=self.host)
 
         self._api_client = ApiClient(configuration=self._config)
         self._aidr_predictive = AIDRPredictive(self._api_client)
@@ -61,9 +63,9 @@ class HiddenlayerServiceClient:
     def _get_jwt(self, *, api_id: str, api_key: str) -> str:
         "Get the JWT token to auth to the Hiddenlayer API."
 
-        token_url = (
-            "https://auth.hiddenlayer.ai/oauth2/token?grant_type=client_credentials"
-        )
+        auth_url = os.getenv("HL_AUTH_URL", "https://auth.hiddenlayer.ai")
+
+        token_url = f"{auth_url}/oauth2/token?grant_type=client_credentials"
 
         resp = requests.post(token_url, auth=HTTPBasicAuth(api_id, api_key))
 
