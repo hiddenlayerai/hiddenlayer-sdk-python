@@ -61,6 +61,8 @@ venv = ".venv"
 
 [tool.ruff]
 exclude = [".venv", "hiddenlayer/sdk/rest", "tests/rest", "docs/", "hiddenlayer/sdk/enterprise"]
+
+[tool.ruff.lint]
 select = [
   "I" # isort formatting
 ]
