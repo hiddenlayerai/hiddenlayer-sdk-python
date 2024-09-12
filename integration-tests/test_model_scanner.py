@@ -49,7 +49,7 @@ def test_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
 
     detections = results.detections
 
-    assert results.results.pickle_modules == ["builtins.exec"]
+    assert results.results.pickle_modules == ["callable: builtins.exec"]
 
     assert detections
     assert detections[0]["severity"] == "MALICIOUS"
