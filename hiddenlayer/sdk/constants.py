@@ -8,3 +8,7 @@ class ScanStatus(str, Enum):
     PENDING = "pending"
     CREATED = "created"
     RETRY = "retry"
+
+
+class ApiErrors(str, Enum):
+    NON_ADHOC_SENSOR_DELETE = "only adhoc sensors may be deleted"

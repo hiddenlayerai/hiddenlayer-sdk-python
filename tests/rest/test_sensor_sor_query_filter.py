@@ -39,7 +39,8 @@ class TestSensorSORQueryFilter(unittest.TestCase):
                 active = True,
                 version = 56,
                 created_at_start = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                created_at_stop = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f')
+                created_at_stop = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
+                source = 'adhoc'
             )
         else:
             return SensorSORQueryFilter(

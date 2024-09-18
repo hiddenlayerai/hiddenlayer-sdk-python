@@ -17,7 +17,11 @@ The HiddenLayer SDK uses Python to provide a simple and efficient way to interac
 This SDK includes the following HiddenLayer services:
 
 1. Model Scanner
+<<<<<<< HEAD
 2. AIDR
+=======
+2. AIDR for Predictive Models
+>>>>>>> main
 
 .. note::
 

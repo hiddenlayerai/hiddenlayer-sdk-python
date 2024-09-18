@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
@@ -31,14 +31,15 @@ class FileInfo(BaseModel):
     type: Optional[StrictStr] = None
     subtype: Optional[List[StrictStr]] = None
     tlsh: Optional[StrictStr] = None
+    pickle_modules: Optional[List[StrictStr]] = None
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["md5", "sha256", "type", "subtype", "tlsh"]
+    __properties: ClassVar[List[str]] = ["md5", "sha256", "type", "subtype", "tlsh", "pickle_modules"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True,
-        "protected_namespaces": (),
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -96,7 +97,8 @@ class FileInfo(BaseModel):
             "sha256": obj.get("sha256"),
             "type": obj.get("type"),
             "subtype": obj.get("subtype"),
-            "tlsh": obj.get("tlsh")
+            "tlsh": obj.get("tlsh"),
+            "pickle_modules": obj.get("pickle_modules")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

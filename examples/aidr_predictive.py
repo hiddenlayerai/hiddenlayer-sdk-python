@@ -5,7 +5,7 @@ import numpy as np
 from hiddenlayer import HiddenlayerServiceClient
 
 hl_client = HiddenlayerServiceClient(
-    host="https://api.hiddenlayer.ai",
+    host="https://api.us.hiddenlayer.ai",
     api_id=os.environ.get("HL_CLIENT_ID"),
     api_key=os.environ.get("HL_CLIENT_SECRET"),
 )
@@ -22,9 +22,10 @@ model = hl_client.model.create(model_name="example_model")
 model = hl_client.model.get(model_name="example_model")
 
 
-# Submit vectors to MLDR
-hl_client.mldr.submit_vectors(
+# Submit vectors to AIDR for Predictive Models
+hl_client.aidr_predictive.submit_vectors(
     model_id=model.sensor_id,
+    requester_id="example_script_user",
     input_vectors=X,
     output=y,
 )

@@ -40,7 +40,8 @@ class TestCreateSensorRequest(unittest.TestCase):
                 active = True,
                 tags = {
                     'key' : null
-                    }
+                    },
+                adhoc = True
             )
         else:
             return CreateSensorRequest(

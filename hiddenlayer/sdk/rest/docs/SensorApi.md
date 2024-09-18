@@ -7,6 +7,8 @@ Method | HTTP request | Description
 [**begin_multipart_upload**](SensorApi.md#begin_multipart_upload) | **POST** /api/v2/sensors/{sensor_id}/upload/begin | Begin Multipart Upload
 [**complete_multipart_upload**](SensorApi.md#complete_multipart_upload) | **POST** /api/v2/sensors/{sensor_id}/upload/{upload_id}/complete | Complete Multipart Upload
 [**create_sensor**](SensorApi.md#create_sensor) | **POST** /api/v2/sensors/create | Create a Sensor
+[**delete_model**](SensorApi.md#delete_model) | **DELETE** /api/v2/sensors/{sensor_id} | Remove an Adhoc Sensor
+[**get_model**](SensorApi.md#get_model) | **GET** /api/v2/sensors/{sensor_id} | Get Model
 [**query_sensor**](SensorApi.md#query_sensor) | **POST** /api/v2/sensors/query | Query a Sensor
 [**upload_model_part**](SensorApi.md#upload_model_part) | **PUT** /api/v2/sensors/{sensor_id}/upload/{upload_id}/part/{part} | Upload part
 
@@ -244,6 +246,159 @@ Name | Type | Description  | Notes
 **201** | Successful response |  -  |
 **400** | The request failed due to a client error, with one or more of the following possible causes: 1. The request required a tenant_id field, which was missing. 2. The request was malformed syntactically or semantically. |  -  |
 **422** | Validation Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_model**
+> delete_model(sensor_id)
+
+Remove an Adhoc Sensor
+
+### Example
+
+* Bearer (JWT) Authentication (BearerAuth):
+
+```python
+import hiddenlayer.sdk.rest
+from hiddenlayer.sdk.rest.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = hiddenlayer.sdk.rest.Configuration(
+    host = "http://localhost"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): BearerAuth
+configuration = hiddenlayer.sdk.rest.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = hiddenlayer.sdk.rest.SensorApi(api_client)
+    sensor_id = 'sensor_id_example' # str | 
+
+    try:
+        # Remove an Adhoc Sensor
+        api_instance.delete_model(sensor_id)
+    except Exception as e:
+        print("Exception when calling SensorApi->delete_model: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **sensor_id** | **str**|  | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successful response |  -  |
+**400** | The request failed due to a client error, with one or more of the following possible causes: 1. The request required a tenant_id field, which was missing. 2. The request was malformed syntactically or semantically. |  -  |
+**404** | The specified resource was not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_model**
+> Model get_model(sensor_id)
+
+Get Model
+
+### Example
+
+* Bearer (JWT) Authentication (BearerAuth):
+
+```python
+import hiddenlayer.sdk.rest
+from hiddenlayer.sdk.rest.models.model import Model
+from hiddenlayer.sdk.rest.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = hiddenlayer.sdk.rest.Configuration(
+    host = "http://localhost"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): BearerAuth
+configuration = hiddenlayer.sdk.rest.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = hiddenlayer.sdk.rest.SensorApi(api_client)
+    sensor_id = 'sensor_id_example' # str | 
+
+    try:
+        # Get Model
+        api_response = api_instance.get_model(sensor_id)
+        print("The response of SensorApi->get_model:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling SensorApi->get_model: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **sensor_id** | **str**|  | 
+
+### Return type
+
+[**Model**](Model.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful response |  -  |
+**400** | The request failed due to a client error, with one or more of the following possible causes: 1. The request required a tenant_id field, which was missing. 2. The request was malformed syntactically or semantically. |  -  |
+**404** | The specified resource was not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

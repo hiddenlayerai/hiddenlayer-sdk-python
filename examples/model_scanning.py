@@ -3,7 +3,7 @@ import os
 from hiddenlayer import HiddenlayerServiceClient
 
 hl_client = HiddenlayerServiceClient(
-    host="https://api.hiddenlayer.ai",
+    host="https://api.us.hiddenlayer.ai",
     api_id=os.environ.get("HL_CLIENT_ID"),
     api_key=os.environ.get("HL_CLIENT_SECRET"),
 )
@@ -31,3 +31,16 @@ for result in huggingface_scan_results:
     if result.detections:
         print(result)
 # [docs_scan_hf_model_end]
+
+# [docs_scan_azure_blob_model]
+scan_results = hl_client.model_scanner.scan_azure_blob_model(
+    model_name="azure_model",
+    account_url="https://<storageaccountname>.blob.core.windows.net",
+    container="<your_container>",
+    blob="path/to/model.safetensors",
+    # If you want to use a SAS key as your credential method
+    credential="<sas_key>",
+)
+
+print(scan_results)
+# [docs_scan_azure_blob_model_end]

@@ -1,10 +1,10 @@
-# hiddenlayer.sdk.rest.MldrApi
+# hiddenlayer.sdk.rest.AidrPredictiveApi
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**submit_vectors**](MldrApi.md#submit_vectors) | **POST** /api/v2/submit | Submit vectors
+[**submit_vectors**](AidrPredictiveApi.md#submit_vectors) | **POST** /api/v2/submit | Submit vectors
 
 
 # **submit_vectors**
@@ -42,16 +42,16 @@ configuration = hiddenlayer.sdk.rest.Configuration(
 # Enter a context with an instance of the API client
 with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = hiddenlayer.sdk.rest.MldrApi(api_client)
+    api_instance = hiddenlayer.sdk.rest.AidrPredictiveApi(api_client)
     submission_v2 = hiddenlayer.sdk.rest.SubmissionV2() # SubmissionV2 | 
 
     try:
         # Submit vectors
         api_response = api_instance.submit_vectors(submission_v2)
-        print("The response of MldrApi->submit_vectors:\n")
+        print("The response of AidrPredictiveApi->submit_vectors:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling MldrApi->submit_vectors: %s\n" % e)
+        print("Exception when calling AidrPredictiveApi->submit_vectors: %s\n" % e)
 ```
 
 
