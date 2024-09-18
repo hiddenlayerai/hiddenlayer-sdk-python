@@ -6,10 +6,9 @@ build-backend = "setuptools.build_meta"
 requires-python = ">=3.8"
 name = "hiddenlayer-sdk"
 description = "Official HiddenLayer Python SDK"
-version = "0.1.0"
 dependencies = [
   "requests",
-  "pydantic>=2.0.0",
+  "pydantic>=1.10.9",
   "python-dateutil>=2.0.0",
   "numpy>=1.0.0",
 ]
@@ -31,6 +30,7 @@ authors = [
 maintainers = [
   {name = "HiddenLayer Integrations Team", email = "integrations@hiddenlayer.com"}
 ]
+dynamic = ["version"]
 
 [project.urls]
 Homepage = "https://hiddenlayer.com"
@@ -60,7 +60,12 @@ venvPath = "."
 venv = ".venv"
 
 [tool.ruff]
-exclude = [".venv", "hiddenlayer/sdk/rest", "tests/rest", "docs/"]
+exclude = [".venv", "hiddenlayer/sdk/rest", "tests/rest", "docs/", "hiddenlayer/sdk/enterprise"]
+
+[tool.ruff.lint]
 select = [
   "I" # isort formatting
 ]
+
+[tool.setuptools.dynamic]
+version = {attr = "hiddenlayer.sdk.version.VERSION"}

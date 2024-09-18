@@ -1,16 +1,21 @@
 import os
 import random
 import time
+import warnings
+from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Union
+from uuid import uuid4
 
 from hiddenlayer.sdk.constants import ScanStatus
+from hiddenlayer.sdk.enterprise.enterprise_model_scan_api import EnterpriseModelScanApi
 from hiddenlayer.sdk.models import ScanResults
 from hiddenlayer.sdk.rest.api import ModelScanApi, SensorApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
 from hiddenlayer.sdk.rest.models import MultipartUploadPart
+from hiddenlayer.sdk.rest.models.model import Model
 from hiddenlayer.sdk.services.model import ModelAPI
-from hiddenlayer.sdk.utils import filter_path_objects
+from hiddenlayer.sdk.utils import filter_path_objects, is_saas
 
 EXCLUDE_FILE_TYPES = [
     "*.txt",
@@ -26,11 +31,17 @@ EXCLUDE_FILE_TYPES = [
 
 class ModelScanAPI:
     def __init__(self, api_client: ApiClient) -> None:
-        self._model_scan_api = ModelScanApi(api_client=api_client)
-        self._model_api = ModelAPI(api_client=api_client)
-        self._sensor_api = SensorApi(
-            api_client=api_client
-        )  # lower level api of ModelAPI
+        self.is_saas = is_saas(api_client.configuration.host)
+        self._api_client = api_client
+
+        if self.is_saas:
+            self._model_scan_api = ModelScanApi(api_client=api_client)
+            self._model_api = ModelAPI(api_client=api_client)
+            self._sensor_api = SensorApi(
+                api_client=api_client
+            )  # lower level api of ModelAPI
+        else:
+            self._model_scan_api = EnterpriseModelScanApi(api_client=api_client)
 
     def scan_file(
         self,
@@ -38,7 +49,7 @@ class ModelScanAPI:
         model_name: str,
         model_path: Union[str, os.PathLike],
         threads: int = 1,
-        chunk_size: int = 4,
+        chunk_size: int = 16,
         wait_for_results: bool = True,
     ) -> ScanResults:
         """
@@ -53,34 +64,62 @@ class ModelScanAPI:
         :returns: Scan Results
         """
 
+        warnings.warn(
+            "Use of the threads parameter is deprecated and will be removed in version 0.2.0.",
+            category=DeprecationWarning,
+            stacklevel=2,
+        )
+
         file_path = Path(model_path)
 
-        filesize = file_path.stat().st_size
-        sensor = self._model_api.create(model_name=model_name)
+        # Can combine the 2 paths when SaaS API and Enterprise APIs are in sync
+        if self.is_saas:
+            filesize = file_path.stat().st_size
+            sensor = self._model_api.create(model_name=model_name)
+            upload = self._sensor_api.begin_multipart_upload(filesize, sensor.sensor_id)
 
-        upload = self._sensor_api.begin_multipart_upload(filesize, sensor.sensor_id)
+            with open(file_path, "rb") as f:
+                for i in range(0, len(upload.parts), chunk_size):
+                    group: List[MultipartUploadPart] = upload.parts[i : i + chunk_size]
+                    for part in group:
+                        read_amount = part.end_offset - part.start_offset
+                        f.seek(int(part.start_offset))
+                        part_data = f.read(int(read_amount))
 
-        with open(file_path, "rb") as f:
-            for i in range(0, len(upload.parts), chunk_size):
-                group: List[MultipartUploadPart] = upload.parts[i : i + chunk_size]
-                for part in group:
-                    read_amount = part.end_offset - part.start_offset
-                    f.seek(int(part.start_offset))
-                    part_data = f.read(int(read_amount))
-                    self._sensor_api.upload_model_part(
-                        sensor_id=sensor.sensor_id,
-                        upload_id=upload.upload_id,
-                        part=part.part_number,
-                        body=part_data,
-                    )
+                        # The SaaS multipart upload returns a upload url for each part
+                        # So there is no specified route
+                        self._api_client.call_api(
+                            "PUT",
+                            part.upload_url,
+                            body=part_data,
+                            header_params={"Content-Type": "application/octet-binary"},
+                        )
 
-        self._sensor_api.complete_multipart_upload(sensor.sensor_id, upload.upload_id)
+            self._sensor_api.complete_multipart_upload(
+                sensor.sensor_id, upload.upload_id
+            )
 
-        self._model_scan_api.scan_model(sensor.sensor_id)
+            self._model_scan_api.scan_model(sensor.sensor_id)
+        else:
+            with open(file_path, "rb") as f:
+                data = f.read()
+
+            sensor = Model(
+                sensor_id=str(uuid4()),
+                created_at=datetime.now(),
+                tenant_id="0000",
+                plaintext_name=model_name,
+                active=True,
+                version=1,
+            )
+
+            self._model_scan_api: EnterpriseModelScanApi
+            self._model_scan_api.scan_model(sensor.sensor_id, data)
+            model_name = sensor.sensor_id
 
         scan_results = self.get_scan_results(model_name=model_name)
 
-        base_delay = 5  # seconds
+        base_delay = 0.1  # seconds
         retries = 0
         if wait_for_results:
             print(f"{file_path.name} scan status: {scan_results.status}")
@@ -315,12 +354,16 @@ class ModelScanAPI:
         :returns: Scan results.
         """
 
-        model = self._model_api.get(model_name=model_name)
+        if self.is_saas:
+            model = self._model_api.get(model_name=model_name)
+            sensor_id = model.sensor_id
+        else:
+            sensor_id = model_name
 
-        scan_results_v2 = self._model_scan_api.scan_status(model.sensor_id)
+        scan_results_v2 = self._model_scan_api.scan_status(sensor_id)
 
         return ScanResults.from_scanresultsv2(
-            scan_results_v2=scan_results_v2, sensor_id=model.sensor_id
+            scan_results_v2=scan_results_v2, sensor_id=sensor_id
         )
 
     def scan_folder(

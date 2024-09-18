@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   hiddenlayer.sdk.enterprise
    hiddenlayer.sdk.rest
    hiddenlayer.sdk.services
 
@@ -17,6 +18,14 @@ hiddenlayer.sdk.constants module
 --------------------------------
 
 .. automodule:: hiddenlayer.sdk.constants
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+hiddenlayer.sdk.exceptions module
+---------------------------------
+
+.. automodule:: hiddenlayer.sdk.exceptions
    :members:
    :undoc-members:
    :show-inheritance:

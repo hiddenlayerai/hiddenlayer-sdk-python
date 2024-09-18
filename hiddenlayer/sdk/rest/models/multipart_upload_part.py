@@ -17,8 +17,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, StrictFloat, StrictInt
-from typing import Any, ClassVar, Dict, List, Union
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -29,13 +29,14 @@ class MultipartUploadPart(BaseModel):
     part_number: Union[StrictFloat, StrictInt]
     start_offset: Union[StrictFloat, StrictInt]
     end_offset: Union[StrictFloat, StrictInt]
-    __properties: ClassVar[List[str]] = ["part_number", "start_offset", "end_offset"]
+    upload_url: Optional[StrictStr] = Field(default=None, description="only provided when part is to be directly uploaded to a cloud provider (adhoc)")
+    __properties: ClassVar[List[str]] = ["part_number", "start_offset", "end_offset", "upload_url"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True,
-        "protected_namespaces": (),
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -84,7 +85,8 @@ class MultipartUploadPart(BaseModel):
         _obj = cls.model_validate({
             "part_number": obj.get("part_number"),
             "start_offset": obj.get("start_offset"),
-            "end_offset": obj.get("end_offset")
+            "end_offset": obj.get("end_offset"),
+            "upload_url": obj.get("upload_url")
         })
         return _obj
 

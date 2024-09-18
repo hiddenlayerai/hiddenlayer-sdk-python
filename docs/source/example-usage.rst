@@ -13,7 +13,7 @@ Initiate Client
    from hiddenlayer import HiddenlayerServiceClient
 
    hl_client = HiddenlayerServiceClient(
-     host="https://api.hiddenlayer.ai",
+     host="https://api.us.hiddenlayer.ai",
      api_id=..., # Your Hiddenlayer API Client ID
      api_key=... # Your Hiddenalyer API Secret Key
    )
@@ -42,13 +42,16 @@ Scanning a model on Azure Blob
   :start-after: [docs_scan_azure_blob_model]
   :end-before: [docs_scan_azure_blob_model_end]
 
-MLDR
------
+AIDR for Predictive Modelling
+-----------------------------
 
-Submitting Vectors to MLDR
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. note::
+   This is currently only supported when using the SaaS version of the platform.
 
-.. literalinclude:: ../../examples/mldr.py
+Submitting Vectors to AIDR for Predictive Modelling
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../../examples/aidr_predictive.py
   :start-after: [docs_submit_vectors_start]
   :end-before: [docs_submit_vectors_end]
 

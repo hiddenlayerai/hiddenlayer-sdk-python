@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from hiddenlayer.sdk.utils import filter_path_objects
+from hiddenlayer.sdk.utils import filter_path_objects, is_saas
 
 
 @pytest.fixture(scope="class")
@@ -33,3 +33,15 @@ def test_filter_paths_allow_list(paths):
     filtered_paths = list(filter_path_objects(paths, allow_patterns=["*.xgb"]))
 
     assert filtered_paths == [Path("/tmp/test.xgb")]
+
+
+def test_is_saas():
+    """Test if a url is our SaaS"""
+
+    assert is_saas("https://api.us.hiddenlayer.ai")
+
+
+def test_is_not_saas():
+    """Test if a host is not our SaaS"""
+
+    assert not is_saas("http://enterprise.deployment.com")

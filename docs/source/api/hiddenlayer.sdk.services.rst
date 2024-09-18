@@ -4,10 +4,10 @@ hiddenlayer.sdk.services package
 Submodules
 ----------
 
-hiddenlayer.sdk.services.mldr module
-------------------------------------
+hiddenlayer.sdk.services.aidr\_predictive module
+------------------------------------------------
 
-.. automodule:: hiddenlayer.sdk.services.mldr
+.. automodule:: hiddenlayer.sdk.services.aidr_predictive
    :members:
    :undoc-members:
    :show-inheritance:

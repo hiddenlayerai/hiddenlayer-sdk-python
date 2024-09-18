@@ -5,7 +5,7 @@
 To install the HiddenLayer SDK for Python, simply run:
 
 ```bash
-pip install git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git
+pip install hiddenlayer-sdk
 ```
 
 The HiddenLayer Python SDK offers functionality to interact with other services such as HuggingFace, AWS, etc.
@@ -13,7 +13,7 @@ The HiddenLayer Python SDK offers functionality to interact with other services 
 As an example if you want to scan models from HuggingFace, you can install the necessary HuggingFace dependencies via:
 
 ```bash
-pip install 'hiddenlayer[hf] @ git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git'
+pip install hiddenlayer-sdk[hf]
 ```
 
 
@@ -33,7 +33,7 @@ For example, to scan a model, run:
 from hiddenlayer import HiddenlayerServiceClient
 
 hl_client = HiddenlayerServiceClient(
-  host="https://api.hiddenlayer.ai",
+  host="https://api.us.hiddenlayer.ai",
   api_id=..., # Your Hiddenlayer API Client ID
   api_key=... # Your Hiddenlayer API Secret Key
 )
@@ -52,7 +52,7 @@ Once you have those, you can authenticate using the SDK like so:
 
 ```python
 hl_client = HiddenlayerServiceClient(
-  host="https://api.hiddenlayer.ai",
+  host="https://api.us.hiddenlayer.ai",
   api_id=..., # Your Hiddenlayer API Client ID
   api_key=... # Your Hiddenalyer API Secret Key
 )
@@ -71,6 +71,6 @@ For more information, consult the [Data Models API Reference](api/hiddenlayer.sd
 The HiddenLayer Python SDK comes with a number of examples demonstrating how to use the library for various common use-cases, including
 
 * [Scanning models](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/blob/main/examples/model_scanning.py)
-* [Submitting vectors to MLDR](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/blob/main/examples/mldr.py)
+* [Submitting vectors to AIDR for Predictive Models](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/blob/main/examples/aidr_predictive.py)
 
 These examples and more are located in the [`examples/` directory of the Github repository](https://github.com/hiddenlayerai/hiddenlayer-sdk-python).

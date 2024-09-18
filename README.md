@@ -14,27 +14,37 @@ Hiddenlayer is a Python SDK that provides a simple and efficient way to interact
 
 Install from PyPi using [pip](https://pip.pypa.io/en/latest/), a package manager for Python.
 
-`pip install git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git`
+`pip install hiddenlayer-sdk`
 
 Scanning models on different platforms such as AWS S3 and Huggingface are supported. You can install the dependenices yourself or via optional dependencies:
 
 ```bash
-pip install 'hiddenlayer[aws] @ git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git'
-pip install 'hiddenlayer[azure] @ git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git'
-pip install 'hiddenlayer[hf] @ git+https://github.com/hiddenlayerai/hiddenlayer-sdk-python.git'
+pip install hiddenlayer-sdk[aws]
+pip install hiddenlayer-sdk[azure]
+pip install hiddenlayer-sdk[hf]
 ```
 
 ## Getting Started
 
-Once you've installed the hiddenlayer package, instantiate the `HiddenlayerServiceClient`:
+Once you've installed the hiddenlayer package, you can instantiate the `HiddenlayerServiceClient` for the SaaS platform as follows:
 
 ```python
 from hiddenlayer import HiddenlayerServiceClient
 
 hl_client = HiddenlayerServiceClient(
-  host="https://api.hiddenlayer.ai",
+  host="https://api.us.hiddenlayer.ai",
   api_id=..., # Your Hiddenlayer API Client ID
   api_key=... # Your Hiddenalyer API Secret Key
+)
+```
+
+If you are using the Enterprise version of the production, you can instantiate the `HiddenlayerServiceClient` as follows:
+
+```python
+from hiddenlayer import HiddenlayerServiceClient
+
+hl_client = HiddenlayerServiceClient(
+  host="https://your.hiddenlayer.enterprise.url",
 )
 ```
 
@@ -47,13 +57,16 @@ hl_client.model_scanner.scan_file(
 )
 ```
 
-### Using MLDR
+### Using AIDR for Predictive Models
+
+> Note: This is only supported using the SaaS version of the platform.
 
 ```python
-model = hl_client.mldr.create_model(model_name="example_model")
+model = hl_client.model.create_model(model_name="example_model")
 
-hl_client.mldr.submit_vectors(
+hl_client.aidr_predictive.submit_vectors(
   model_id=model.sensor_id,
+  requestor_id="custom-source-id",
   input_vectors=X,
   output=y
 )
