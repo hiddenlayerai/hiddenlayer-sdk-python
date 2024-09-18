@@ -6,11 +6,11 @@ sys.path.insert(0, os.path.abspath("../.."))
 
 # -- Project information
 project = "HiddenLayer Python SDK"
-copyright = "2023"
+copyright = "2024"
 author = "HiddenLayer Integrations Team"
 
 release = "0.1"
-version = "0.1.0"
+version = "0.1.2"
 
 # -- General configuration
 
@@ -21,6 +21,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "myst_parser",
+    "sphinx_copybutton",
 ]
 
 autoclass_content = "both"
@@ -36,7 +37,7 @@ templates_path = ["_templates"]
 
 # -- Options for HTML output
 
-html_theme = "sphinx_rtd_theme"
+html_theme = "press"
 
 # -- Options for EPUB output
 epub_show_urls = "footnote"
