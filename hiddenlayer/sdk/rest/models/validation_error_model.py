@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    HiddenLayer ModelScan
+    HiddenLayer ModelScan V2
 
     HiddenLayer ModelScan API for scanning of models
 
@@ -19,7 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List
-from hiddenlayer.sdk.rest.models.validation_error_model_loc_inner import ValidationErrorModelLocInner
+from hiddenlayer.sdk.rest.models.location_inner import LocationInner
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -27,7 +27,7 @@ class ValidationErrorModel(BaseModel):
     """
     ValidationErrorModel
     """ # noqa: E501
-    loc: List[ValidationErrorModelLocInner]
+    loc: List[LocationInner]
     msg: StrictStr
     type: StrictStr
     __properties: ClassVar[List[str]] = ["loc", "msg", "type"]
@@ -90,7 +90,7 @@ class ValidationErrorModel(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "loc": [ValidationErrorModelLocInner.from_dict(_item) for _item in obj["loc"]] if obj.get("loc") is not None else None,
+            "loc": [LocationInner.from_dict(_item) for _item in obj["loc"]] if obj.get("loc") is not None else None,
             "msg": obj.get("msg"),
             "type": obj.get("type")
         })

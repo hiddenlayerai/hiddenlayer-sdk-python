@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    HiddenLayer ModelScan
+    HiddenLayer ModelScan V2
 
     HiddenLayer ModelScan API for scanning of models
 
@@ -38,9 +38,7 @@ class TestCreateSensorRequest(unittest.TestCase):
                 plaintext_name = '',
                 version = 56,
                 active = True,
-                tags = {
-                    'key' : null
-                    },
+                tags = { },
                 adhoc = True
             )
         else:

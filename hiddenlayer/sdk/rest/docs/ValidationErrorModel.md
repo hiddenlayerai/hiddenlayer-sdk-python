@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**loc** | [**List[ValidationErrorModelLocInner]**](ValidationErrorModelLocInner.md) |  | 
+**loc** | [**List[LocationInner]**](LocationInner.md) |  | 
 **msg** | **str** |  | 
 **type** | **str** |  | 
 

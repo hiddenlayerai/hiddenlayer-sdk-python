@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    HiddenLayer ModelScan
+    HiddenLayer ModelScan V2
 
     HiddenLayer ModelScan API for scanning of models
 
@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from pydantic import Field, StrictFloat, StrictInt, StrictStr
-from typing import Any, Optional, Union
+from typing import Any, Dict, Optional, Union
 from typing_extensions import Annotated
 from hiddenlayer.sdk.rest.models.create_sensor_request import CreateSensorRequest
 from hiddenlayer.sdk.rest.models.get_multipart_upload_response import GetMultipartUploadResponse
@@ -46,8 +46,8 @@ class SensorApi:
     @validate_call
     def begin_multipart_upload(
         self,
-        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
         sensor_id: StrictStr,
+        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -64,10 +64,10 @@ class SensorApi:
         """Begin Multipart Upload
 
 
-        :param x_content_length: The total size of multipart upload. (required)
-        :type x_content_length: float
         :param sensor_id: (required)
         :type sensor_id: str
+        :param x_content_length: The total size of multipart upload. (required)
+        :type x_content_length: float
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -91,8 +91,8 @@ class SensorApi:
         """ # noqa: E501
 
         _param = self._begin_multipart_upload_serialize(
-            x_content_length=x_content_length,
             sensor_id=sensor_id,
+            x_content_length=x_content_length,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -117,8 +117,8 @@ class SensorApi:
     @validate_call
     def begin_multipart_upload_with_http_info(
         self,
-        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
         sensor_id: StrictStr,
+        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -135,10 +135,10 @@ class SensorApi:
         """Begin Multipart Upload
 
 
-        :param x_content_length: The total size of multipart upload. (required)
-        :type x_content_length: float
         :param sensor_id: (required)
         :type sensor_id: str
+        :param x_content_length: The total size of multipart upload. (required)
+        :type x_content_length: float
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -162,8 +162,8 @@ class SensorApi:
         """ # noqa: E501
 
         _param = self._begin_multipart_upload_serialize(
-            x_content_length=x_content_length,
             sensor_id=sensor_id,
+            x_content_length=x_content_length,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -188,8 +188,8 @@ class SensorApi:
     @validate_call
     def begin_multipart_upload_without_preload_content(
         self,
-        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
         sensor_id: StrictStr,
+        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -206,10 +206,10 @@ class SensorApi:
         """Begin Multipart Upload
 
 
-        :param x_content_length: The total size of multipart upload. (required)
-        :type x_content_length: float
         :param sensor_id: (required)
         :type sensor_id: str
+        :param x_content_length: The total size of multipart upload. (required)
+        :type x_content_length: float
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -233,8 +233,8 @@ class SensorApi:
         """ # noqa: E501
 
         _param = self._begin_multipart_upload_serialize(
-            x_content_length=x_content_length,
             sensor_id=sensor_id,
+            x_content_length=x_content_length,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -254,8 +254,8 @@ class SensorApi:
 
     def _begin_multipart_upload_serialize(
         self,
-        x_content_length,
         sensor_id,
+        x_content_length,
         _request_auth,
         _content_type,
         _headers,

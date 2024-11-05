@@ -76,7 +76,7 @@ class ModelScanAPI:
         if self.is_saas:
             filesize = file_path.stat().st_size
             sensor = self._model_api.create(model_name=model_name)
-            upload = self._sensor_api.begin_multipart_upload(filesize, sensor.sensor_id)
+            upload = self._sensor_api.begin_multipart_upload(sensor.sensor_id, filesize)
 
             with open(file_path, "rb") as f:
                 for i in range(0, len(upload.parts), chunk_size):

@@ -52,8 +52,8 @@ def test_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
     assert results.results.pickle_modules == ["callable: builtins.exec"]
 
     assert detections
-    assert detections[0]["severity"] == "MALICIOUS"
-    assert "system" in detections[0]["description"]
+    assert detections[0].severity == "MALICIOUS"
+    assert "system" in str(detections[0].description)
 
     if hl_client.is_saas:
         hl_client.model.delete(model_name=model_name)

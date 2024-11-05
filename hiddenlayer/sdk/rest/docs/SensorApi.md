@@ -1,6 +1,6 @@
 # hiddenlayer.sdk.rest.SensorApi
 
-All URIs are relative to *http://localhost*
+All URIs are relative to *https://api.hiddenlayer.ai*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 
 # **begin_multipart_upload**
-> GetMultipartUploadResponse begin_multipart_upload(x_content_length, sensor_id)
+> GetMultipartUploadResponse begin_multipart_upload(sensor_id, x_content_length)
 
 Begin Multipart Upload
 
@@ -28,10 +28,10 @@ from hiddenlayer.sdk.rest.models.get_multipart_upload_response import GetMultipa
 from hiddenlayer.sdk.rest.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
 # See configuration.py for a list of all supported configuration parameters.
 configuration = hiddenlayer.sdk.rest.Configuration(
-    host = "http://localhost"
+    host = "https://api.hiddenlayer.ai"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -48,12 +48,12 @@ configuration = hiddenlayer.sdk.rest.Configuration(
 with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = hiddenlayer.sdk.rest.SensorApi(api_client)
-    x_content_length = 3.4 # float | The total size of multipart upload.
     sensor_id = 'sensor_id_example' # str | 
+    x_content_length = 3.4 # float | The total size of multipart upload.
 
     try:
         # Begin Multipart Upload
-        api_response = api_instance.begin_multipart_upload(x_content_length, sensor_id)
+        api_response = api_instance.begin_multipart_upload(sensor_id, x_content_length)
         print("The response of SensorApi->begin_multipart_upload:\n")
         pprint(api_response)
     except Exception as e:
@@ -67,8 +67,8 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **x_content_length** | **float**| The total size of multipart upload. | 
  **sensor_id** | **str**|  | 
+ **x_content_length** | **float**| The total size of multipart upload. | 
 
 ### Return type
 
@@ -106,10 +106,10 @@ import hiddenlayer.sdk.rest
 from hiddenlayer.sdk.rest.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
 # See configuration.py for a list of all supported configuration parameters.
 configuration = hiddenlayer.sdk.rest.Configuration(
-    host = "http://localhost"
+    host = "https://api.hiddenlayer.ai"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -186,10 +186,10 @@ from hiddenlayer.sdk.rest.models.model import Model
 from hiddenlayer.sdk.rest.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
 # See configuration.py for a list of all supported configuration parameters.
 configuration = hiddenlayer.sdk.rest.Configuration(
-    host = "http://localhost"
+    host = "https://api.hiddenlayer.ai"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -263,10 +263,10 @@ import hiddenlayer.sdk.rest
 from hiddenlayer.sdk.rest.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
 # See configuration.py for a list of all supported configuration parameters.
 configuration = hiddenlayer.sdk.rest.Configuration(
-    host = "http://localhost"
+    host = "https://api.hiddenlayer.ai"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -339,10 +339,10 @@ from hiddenlayer.sdk.rest.models.model import Model
 from hiddenlayer.sdk.rest.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
 # See configuration.py for a list of all supported configuration parameters.
 configuration = hiddenlayer.sdk.rest.Configuration(
-    host = "http://localhost"
+    host = "https://api.hiddenlayer.ai"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -418,10 +418,10 @@ from hiddenlayer.sdk.rest.models.sensor_sor_query_request import SensorSORQueryR
 from hiddenlayer.sdk.rest.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
 # See configuration.py for a list of all supported configuration parameters.
 configuration = hiddenlayer.sdk.rest.Configuration(
-    host = "http://localhost"
+    host = "https://api.hiddenlayer.ai"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -494,10 +494,10 @@ import hiddenlayer.sdk.rest
 from hiddenlayer.sdk.rest.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
 # See configuration.py for a list of all supported configuration parameters.
 configuration = hiddenlayer.sdk.rest.Configuration(
-    host = "http://localhost"
+    host = "https://api.hiddenlayer.ai"
 )
 
 # The client must configure the authentication and authorization parameters

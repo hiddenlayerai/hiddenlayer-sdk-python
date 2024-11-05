@@ -1,4 +1,4 @@
-# FileInfo
+# ScanResults
 
 
 ## Properties
@@ -6,6 +6,10 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **md5** | **str** |  | [optional] 
+**rds_encoding** | **str** |  | [optional] 
+**rds_min_reader_version** | **str** |  | [optional] 
+**rds_version** | **str** |  | [optional] 
+**rds_writer_version** | **str** |  | [optional] 
 **sha256** | **str** |  | [optional] 
 **type** | **str** |  | [optional] 
 **subtype** | **List[str]** |  | [optional] 
@@ -15,19 +19,19 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from hiddenlayer.sdk.rest.models.file_info import FileInfo
+from hiddenlayer.sdk.rest.models.scan_results import ScanResults
 
 # TODO update the JSON string below
 json = "{}"
-# create an instance of FileInfo from a JSON string
-file_info_instance = FileInfo.from_json(json)
+# create an instance of ScanResults from a JSON string
+scan_results_instance = ScanResults.from_json(json)
 # print the JSON string representation of the object
-print(FileInfo.to_json())
+print(ScanResults.to_json())
 
 # convert the object into a dict
-file_info_dict = file_info_instance.to_dict()
-# create an instance of FileInfo from a dict
-file_info_from_dict = FileInfo.from_dict(file_info_dict)
+scan_results_dict = scan_results_instance.to_dict()
+# create an instance of ScanResults from a dict
+scan_results_from_dict = ScanResults.from_dict(scan_results_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

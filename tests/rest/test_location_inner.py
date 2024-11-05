@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    HiddenLayer ModelScan
+    HiddenLayer ModelScan V2
 
     HiddenLayer ModelScan API for scanning of models
 
@@ -14,10 +14,10 @@
 
 import unittest
 
-from hiddenlayer.sdk.rest.models.file_info import FileInfo
+from hiddenlayer.sdk.rest.models.location_inner import LocationInner
 
-class TestFileInfo(unittest.TestCase):
-    """FileInfo unit test stubs"""
+class TestLocationInner(unittest.TestCase):
+    """LocationInner unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,34 +25,24 @@ class TestFileInfo(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> FileInfo:
-        """Test FileInfo
+    def make_instance(self, include_optional) -> LocationInner:
+        """Test LocationInner
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `FileInfo`
+        # uncomment below to create an instance of `LocationInner`
         """
-        model = FileInfo()
+        model = LocationInner()
         if include_optional:
-            return FileInfo(
-                md5 = '',
-                sha256 = '',
-                type = '',
-                subtype = [
-                    ''
-                    ],
-                tlsh = '',
-                pickle_modules = [
-                    ''
-                    ]
+            return LocationInner(
             )
         else:
-            return FileInfo(
+            return LocationInner(
         )
         """
 
-    def testFileInfo(self):
-        """Test FileInfo"""
+    def testLocationInner(self):
+        """Test LocationInner"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

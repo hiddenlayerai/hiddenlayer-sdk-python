@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    HiddenLayer ModelScan
+    HiddenLayer ModelScan V2
 
     HiddenLayer ModelScan API for scanning of models
 
@@ -19,7 +19,8 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List
-from hiddenlayer.sdk.rest.models.file_info import FileInfo
+from hiddenlayer.sdk.rest.models.detections import Detections
+from hiddenlayer.sdk.rest.models.scan_results import ScanResults
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -31,15 +32,23 @@ class ScanResultsV2(BaseModel):
     status: StrictStr
     start_time: StrictInt
     end_time: StrictInt
-    results: FileInfo
-    detections: List[Dict[str, Any]]
-    __properties: ClassVar[List[str]] = ["scan_id", "status", "start_time", "end_time", "results", "detections"]
+    results: ScanResults
+    severity: StrictStr
+    detections: List[Detections]
+    __properties: ClassVar[List[str]] = ["scan_id", "status", "start_time", "end_time", "results", "severity", "detections"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['done', 'accepted', 'failed', 'pending', 'created', 'retry']):
-            raise ValueError("must be one of enum values ('done', 'accepted', 'failed', 'pending', 'created', 'retry')")
+        if value not in set(['done', 'accepted', 'failed', 'pending', 'created', 'retry', 'unknown']):
+            raise ValueError("must be one of enum values ('done', 'accepted', 'failed', 'pending', 'created', 'retry', 'unknown')")
+        return value
+
+    @field_validator('severity')
+    def severity_validate_enum(cls, value):
+        """Validates the enum"""
+        if value not in set(['UNKNOWN', 'SAFE', 'SUSPICIOUS', 'MALICIOUS']):
+            raise ValueError("must be one of enum values ('UNKNOWN', 'SAFE', 'SUSPICIOUS', 'MALICIOUS')")
         return value
 
     model_config = ConfigDict(
@@ -84,6 +93,13 @@ class ScanResultsV2(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of results
         if self.results:
             _dict['results'] = self.results.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each item in detections (list)
+        _items = []
+        if self.detections:
+            for _item in self.detections:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict['detections'] = _items
         return _dict
 
     @classmethod
@@ -100,8 +116,9 @@ class ScanResultsV2(BaseModel):
             "status": obj.get("status"),
             "start_time": obj.get("start_time"),
             "end_time": obj.get("end_time"),
-            "results": FileInfo.from_dict(obj["results"]) if obj.get("results") is not None else None,
-            "detections": obj.get("detections")
+            "results": ScanResults.from_dict(obj["results"]) if obj.get("results") is not None else None,
+            "severity": obj.get("severity"),
+            "detections": [Detections.from_dict(_item) for _item in obj["detections"]] if obj.get("detections") is not None else None
         })
         return _obj
 

@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    HiddenLayer ModelScan
+    HiddenLayer ModelScan V2
 
     HiddenLayer ModelScan API for scanning of models
 
@@ -40,8 +40,12 @@ class TestScanResultsV2(unittest.TestCase):
                 start_time = 56,
                 end_time = 56,
                 results = { },
+                severity = 'UNKNOWN',
                 detections = [
-                    None
+                    hiddenlayer.sdk.rest.models.detections.Detections(
+                        description = '', 
+                        message = '', 
+                        severity = 'MISS', )
                     ]
             )
         else:
@@ -51,8 +55,12 @@ class TestScanResultsV2(unittest.TestCase):
                 start_time = 56,
                 end_time = 56,
                 results = { },
+                severity = 'UNKNOWN',
                 detections = [
-                    None
+                    hiddenlayer.sdk.rest.models.detections.Detections(
+                        description = '', 
+                        message = '', 
+                        severity = 'MISS', )
                     ],
         )
         """
