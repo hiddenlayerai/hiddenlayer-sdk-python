@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**items** | [**ScanReportV3**](ScanReportV3.md) |  | 
+**items** | [**List[ScanReportV3]**](ScanReportV3.md) |  | 
 **total** | **float** | Total number of items available based on the query criteria. | 
 **limit** | **int** | Maximum number of items to return | [default to 25]
 **offset** | **int** | Begin returning the results from this offset | [default to 0]

@@ -28,7 +28,7 @@ class ModelScanApiV3ScanQuery200Response(BaseModel):
     """
     ModelScanApiV3ScanQuery200Response
     """ # noqa: E501
-    items: ScanReportV3
+    items: List[ScanReportV3]
     total: Union[Annotated[float, Field(strict=True, ge=0)], Annotated[int, Field(strict=True, ge=0)]] = Field(description="Total number of items available based on the query criteria.")
     limit: Annotated[int, Field(le=100, strict=True, ge=1)] = Field(description="Maximum number of items to return")
     offset: Annotated[int, Field(strict=True, ge=0)] = Field(description="Begin returning the results from this offset")
@@ -73,9 +73,13 @@ class ModelScanApiV3ScanQuery200Response(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of items
+        # override the default output from pydantic by calling `to_dict()` of each item in items (list)
+        _items = []
         if self.items:
-            _dict['items'] = self.items.to_dict()
+            for _item in self.items:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict['items'] = _items
         return _dict
 
     @classmethod
@@ -88,7 +92,7 @@ class ModelScanApiV3ScanQuery200Response(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "items": ScanReportV3.from_dict(obj["items"]) if obj.get("items") is not None else None,
+            "items": [ScanReportV3.from_dict(_item) for _item in obj["items"]] if obj.get("items") is not None else None,
             "total": obj.get("total"),
             "limit": obj.get("limit") if obj.get("limit") is not None else 25,
             "offset": obj.get("offset") if obj.get("offset") is not None else 0

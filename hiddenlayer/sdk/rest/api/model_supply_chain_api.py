@@ -49,8 +49,6 @@ class ModelSupplyChainApi:
     def model_scan_api_v3_scan_model_version_id_get(
         self,
         scan_id: StrictStr,
-        x_correlation_id: Annotated[StrictStr, Field(description="The unique identifier for the request.")],
-        x_tenant_id: Annotated[StrictStr, Field(description="The unique identifier for the tenant.")],
         has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
         _request_timeout: Union[
             None,
@@ -70,10 +68,6 @@ class ModelSupplyChainApi:
 
         :param scan_id: (required)
         :type scan_id: str
-        :param x_correlation_id: The unique identifier for the request. (required)
-        :type x_correlation_id: str
-        :param x_tenant_id: The unique identifier for the tenant. (required)
-        :type x_tenant_id: str
         :param has_detections: Filter file_results to only those that have detections (and parents)
         :type has_detections: bool
         :param _request_timeout: timeout setting for this request. If one
@@ -100,8 +94,6 @@ class ModelSupplyChainApi:
 
         _param = self._model_scan_api_v3_scan_model_version_id_get_serialize(
             scan_id=scan_id,
-            x_correlation_id=x_correlation_id,
-            x_tenant_id=x_tenant_id,
             has_detections=has_detections,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -129,8 +121,6 @@ class ModelSupplyChainApi:
     def model_scan_api_v3_scan_model_version_id_get_with_http_info(
         self,
         scan_id: StrictStr,
-        x_correlation_id: Annotated[StrictStr, Field(description="The unique identifier for the request.")],
-        x_tenant_id: Annotated[StrictStr, Field(description="The unique identifier for the tenant.")],
         has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
         _request_timeout: Union[
             None,
@@ -150,10 +140,6 @@ class ModelSupplyChainApi:
 
         :param scan_id: (required)
         :type scan_id: str
-        :param x_correlation_id: The unique identifier for the request. (required)
-        :type x_correlation_id: str
-        :param x_tenant_id: The unique identifier for the tenant. (required)
-        :type x_tenant_id: str
         :param has_detections: Filter file_results to only those that have detections (and parents)
         :type has_detections: bool
         :param _request_timeout: timeout setting for this request. If one
@@ -180,8 +166,6 @@ class ModelSupplyChainApi:
 
         _param = self._model_scan_api_v3_scan_model_version_id_get_serialize(
             scan_id=scan_id,
-            x_correlation_id=x_correlation_id,
-            x_tenant_id=x_tenant_id,
             has_detections=has_detections,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -209,8 +193,6 @@ class ModelSupplyChainApi:
     def model_scan_api_v3_scan_model_version_id_get_without_preload_content(
         self,
         scan_id: StrictStr,
-        x_correlation_id: Annotated[StrictStr, Field(description="The unique identifier for the request.")],
-        x_tenant_id: Annotated[StrictStr, Field(description="The unique identifier for the tenant.")],
         has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
         _request_timeout: Union[
             None,
@@ -230,10 +212,6 @@ class ModelSupplyChainApi:
 
         :param scan_id: (required)
         :type scan_id: str
-        :param x_correlation_id: The unique identifier for the request. (required)
-        :type x_correlation_id: str
-        :param x_tenant_id: The unique identifier for the tenant. (required)
-        :type x_tenant_id: str
         :param has_detections: Filter file_results to only those that have detections (and parents)
         :type has_detections: bool
         :param _request_timeout: timeout setting for this request. If one
@@ -260,8 +238,6 @@ class ModelSupplyChainApi:
 
         _param = self._model_scan_api_v3_scan_model_version_id_get_serialize(
             scan_id=scan_id,
-            x_correlation_id=x_correlation_id,
-            x_tenant_id=x_tenant_id,
             has_detections=has_detections,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -284,8 +260,6 @@ class ModelSupplyChainApi:
     def _model_scan_api_v3_scan_model_version_id_get_serialize(
         self,
         scan_id,
-        x_correlation_id,
-        x_tenant_id,
         has_detections,
         _request_auth,
         _content_type,
@@ -314,10 +288,6 @@ class ModelSupplyChainApi:
             _query_params.append(('has_detections', has_detections))
             
         # process the header parameters
-        if x_correlation_id is not None:
-            _header_params['X-Correlation-Id'] = x_correlation_id
-        if x_tenant_id is not None:
-            _header_params['X-Tenant-Id'] = x_tenant_id
         # process the form parameters
         # process the body parameter
 
@@ -357,8 +327,6 @@ class ModelSupplyChainApi:
     def model_scan_api_v3_scan_model_version_id_patch(
         self,
         scan_id: StrictStr,
-        x_correlation_id: Annotated[StrictStr, Field(description="The unique identifier for the request.")],
-        x_tenant_id: Annotated[StrictStr, Field(description="The unique identifier for the tenant.")],
         scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for partial update")],
         has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
         _request_timeout: Union[
@@ -379,10 +347,6 @@ class ModelSupplyChainApi:
 
         :param scan_id: (required)
         :type scan_id: str
-        :param x_correlation_id: The unique identifier for the request. (required)
-        :type x_correlation_id: str
-        :param x_tenant_id: The unique identifier for the tenant. (required)
-        :type x_tenant_id: str
         :param scan_report_v3: Request body for partial update (required)
         :type scan_report_v3: ScanReportV3
         :param has_detections: Filter file_results to only those that have detections (and parents)
@@ -411,8 +375,6 @@ class ModelSupplyChainApi:
 
         _param = self._model_scan_api_v3_scan_model_version_id_patch_serialize(
             scan_id=scan_id,
-            x_correlation_id=x_correlation_id,
-            x_tenant_id=x_tenant_id,
             scan_report_v3=scan_report_v3,
             has_detections=has_detections,
             _request_auth=_request_auth,
@@ -441,8 +403,6 @@ class ModelSupplyChainApi:
     def model_scan_api_v3_scan_model_version_id_patch_with_http_info(
         self,
         scan_id: StrictStr,
-        x_correlation_id: Annotated[StrictStr, Field(description="The unique identifier for the request.")],
-        x_tenant_id: Annotated[StrictStr, Field(description="The unique identifier for the tenant.")],
         scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for partial update")],
         has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
         _request_timeout: Union[
@@ -463,10 +423,6 @@ class ModelSupplyChainApi:
 
         :param scan_id: (required)
         :type scan_id: str
-        :param x_correlation_id: The unique identifier for the request. (required)
-        :type x_correlation_id: str
-        :param x_tenant_id: The unique identifier for the tenant. (required)
-        :type x_tenant_id: str
         :param scan_report_v3: Request body for partial update (required)
         :type scan_report_v3: ScanReportV3
         :param has_detections: Filter file_results to only those that have detections (and parents)
@@ -495,8 +451,6 @@ class ModelSupplyChainApi:
 
         _param = self._model_scan_api_v3_scan_model_version_id_patch_serialize(
             scan_id=scan_id,
-            x_correlation_id=x_correlation_id,
-            x_tenant_id=x_tenant_id,
             scan_report_v3=scan_report_v3,
             has_detections=has_detections,
             _request_auth=_request_auth,
@@ -525,8 +479,6 @@ class ModelSupplyChainApi:
     def model_scan_api_v3_scan_model_version_id_patch_without_preload_content(
         self,
         scan_id: StrictStr,
-        x_correlation_id: Annotated[StrictStr, Field(description="The unique identifier for the request.")],
-        x_tenant_id: Annotated[StrictStr, Field(description="The unique identifier for the tenant.")],
         scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for partial update")],
         has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
         _request_timeout: Union[
@@ -547,10 +499,6 @@ class ModelSupplyChainApi:
 
         :param scan_id: (required)
         :type scan_id: str
-        :param x_correlation_id: The unique identifier for the request. (required)
-        :type x_correlation_id: str
-        :param x_tenant_id: The unique identifier for the tenant. (required)
-        :type x_tenant_id: str
         :param scan_report_v3: Request body for partial update (required)
         :type scan_report_v3: ScanReportV3
         :param has_detections: Filter file_results to only those that have detections (and parents)
@@ -579,8 +527,6 @@ class ModelSupplyChainApi:
 
         _param = self._model_scan_api_v3_scan_model_version_id_patch_serialize(
             scan_id=scan_id,
-            x_correlation_id=x_correlation_id,
-            x_tenant_id=x_tenant_id,
             scan_report_v3=scan_report_v3,
             has_detections=has_detections,
             _request_auth=_request_auth,
@@ -604,8 +550,6 @@ class ModelSupplyChainApi:
     def _model_scan_api_v3_scan_model_version_id_patch_serialize(
         self,
         scan_id,
-        x_correlation_id,
-        x_tenant_id,
         scan_report_v3,
         has_detections,
         _request_auth,
@@ -635,10 +579,6 @@ class ModelSupplyChainApi:
             _query_params.append(('has_detections', has_detections))
             
         # process the header parameters
-        if x_correlation_id is not None:
-            _header_params['X-Correlation-Id'] = x_correlation_id
-        if x_tenant_id is not None:
-            _header_params['X-Tenant-Id'] = x_tenant_id
         # process the form parameters
         # process the body parameter
         if scan_report_v3 is not None:
@@ -693,8 +633,6 @@ class ModelSupplyChainApi:
     def model_scan_api_v3_scan_model_version_id_post(
         self,
         scan_id: StrictStr,
-        x_correlation_id: Annotated[StrictStr, Field(description="The unique identifier for the request.")],
-        x_tenant_id: Annotated[StrictStr, Field(description="The unique identifier for the tenant.")],
         scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for create")],
         has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
         _request_timeout: Union[
@@ -715,10 +653,6 @@ class ModelSupplyChainApi:
 
         :param scan_id: (required)
         :type scan_id: str
-        :param x_correlation_id: The unique identifier for the request. (required)
-        :type x_correlation_id: str
-        :param x_tenant_id: The unique identifier for the tenant. (required)
-        :type x_tenant_id: str
         :param scan_report_v3: Request body for create (required)
         :type scan_report_v3: ScanReportV3
         :param has_detections: Filter file_results to only those that have detections (and parents)
@@ -747,8 +681,6 @@ class ModelSupplyChainApi:
 
         _param = self._model_scan_api_v3_scan_model_version_id_post_serialize(
             scan_id=scan_id,
-            x_correlation_id=x_correlation_id,
-            x_tenant_id=x_tenant_id,
             scan_report_v3=scan_report_v3,
             has_detections=has_detections,
             _request_auth=_request_auth,
@@ -777,8 +709,6 @@ class ModelSupplyChainApi:
     def model_scan_api_v3_scan_model_version_id_post_with_http_info(
         self,
         scan_id: StrictStr,
-        x_correlation_id: Annotated[StrictStr, Field(description="The unique identifier for the request.")],
-        x_tenant_id: Annotated[StrictStr, Field(description="The unique identifier for the tenant.")],
         scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for create")],
         has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
         _request_timeout: Union[
@@ -799,10 +729,6 @@ class ModelSupplyChainApi:
 
         :param scan_id: (required)
         :type scan_id: str
-        :param x_correlation_id: The unique identifier for the request. (required)
-        :type x_correlation_id: str
-        :param x_tenant_id: The unique identifier for the tenant. (required)
-        :type x_tenant_id: str
         :param scan_report_v3: Request body for create (required)
         :type scan_report_v3: ScanReportV3
         :param has_detections: Filter file_results to only those that have detections (and parents)
@@ -831,8 +757,6 @@ class ModelSupplyChainApi:
 
         _param = self._model_scan_api_v3_scan_model_version_id_post_serialize(
             scan_id=scan_id,
-            x_correlation_id=x_correlation_id,
-            x_tenant_id=x_tenant_id,
             scan_report_v3=scan_report_v3,
             has_detections=has_detections,
             _request_auth=_request_auth,
@@ -861,8 +785,6 @@ class ModelSupplyChainApi:
     def model_scan_api_v3_scan_model_version_id_post_without_preload_content(
         self,
         scan_id: StrictStr,
-        x_correlation_id: Annotated[StrictStr, Field(description="The unique identifier for the request.")],
-        x_tenant_id: Annotated[StrictStr, Field(description="The unique identifier for the tenant.")],
         scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for create")],
         has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
         _request_timeout: Union[
@@ -883,10 +805,6 @@ class ModelSupplyChainApi:
 
         :param scan_id: (required)
         :type scan_id: str
-        :param x_correlation_id: The unique identifier for the request. (required)
-        :type x_correlation_id: str
-        :param x_tenant_id: The unique identifier for the tenant. (required)
-        :type x_tenant_id: str
         :param scan_report_v3: Request body for create (required)
         :type scan_report_v3: ScanReportV3
         :param has_detections: Filter file_results to only those that have detections (and parents)
@@ -915,8 +833,6 @@ class ModelSupplyChainApi:
 
         _param = self._model_scan_api_v3_scan_model_version_id_post_serialize(
             scan_id=scan_id,
-            x_correlation_id=x_correlation_id,
-            x_tenant_id=x_tenant_id,
             scan_report_v3=scan_report_v3,
             has_detections=has_detections,
             _request_auth=_request_auth,
@@ -940,8 +856,6 @@ class ModelSupplyChainApi:
     def _model_scan_api_v3_scan_model_version_id_post_serialize(
         self,
         scan_id,
-        x_correlation_id,
-        x_tenant_id,
         scan_report_v3,
         has_detections,
         _request_auth,
@@ -971,10 +885,6 @@ class ModelSupplyChainApi:
             _query_params.append(('has_detections', has_detections))
             
         # process the header parameters
-        if x_correlation_id is not None:
-            _header_params['X-Correlation-Id'] = x_correlation_id
-        if x_tenant_id is not None:
-            _header_params['X-Tenant-Id'] = x_tenant_id
         # process the form parameters
         # process the body parameter
         if scan_report_v3 is not None:
@@ -1028,8 +938,6 @@ class ModelSupplyChainApi:
     @validate_call
     def model_scan_api_v3_scan_query(
         self,
-        x_correlation_id: Annotated[StrictStr, Field(description="The unique identifier for the request.")],
-        x_tenant_id: Annotated[StrictStr, Field(description="The unique identifier for the tenant.")],
         model_version_ids: Annotated[Optional[List[StrictStr]], Field(description="Model Version ID")] = None,
         model_ids: Annotated[Optional[List[StrictStr]], Field(description="Model ID")] = None,
         start_time: Annotated[Optional[datetime], Field(description="Start Time")] = None,
@@ -1056,10 +964,6 @@ class ModelSupplyChainApi:
         """Get condensed reports for a Model Scan
 
 
-        :param x_correlation_id: The unique identifier for the request. (required)
-        :type x_correlation_id: str
-        :param x_tenant_id: The unique identifier for the tenant. (required)
-        :type x_tenant_id: str
         :param model_version_ids: Model Version ID
         :type model_version_ids: List[str]
         :param model_ids: Model ID
@@ -1103,8 +1007,6 @@ class ModelSupplyChainApi:
         """ # noqa: E501
 
         _param = self._model_scan_api_v3_scan_query_serialize(
-            x_correlation_id=x_correlation_id,
-            x_tenant_id=x_tenant_id,
             model_version_ids=model_version_ids,
             model_ids=model_ids,
             start_time=start_time,
@@ -1140,8 +1042,6 @@ class ModelSupplyChainApi:
     @validate_call
     def model_scan_api_v3_scan_query_with_http_info(
         self,
-        x_correlation_id: Annotated[StrictStr, Field(description="The unique identifier for the request.")],
-        x_tenant_id: Annotated[StrictStr, Field(description="The unique identifier for the tenant.")],
         model_version_ids: Annotated[Optional[List[StrictStr]], Field(description="Model Version ID")] = None,
         model_ids: Annotated[Optional[List[StrictStr]], Field(description="Model ID")] = None,
         start_time: Annotated[Optional[datetime], Field(description="Start Time")] = None,
@@ -1168,10 +1068,6 @@ class ModelSupplyChainApi:
         """Get condensed reports for a Model Scan
 
 
-        :param x_correlation_id: The unique identifier for the request. (required)
-        :type x_correlation_id: str
-        :param x_tenant_id: The unique identifier for the tenant. (required)
-        :type x_tenant_id: str
         :param model_version_ids: Model Version ID
         :type model_version_ids: List[str]
         :param model_ids: Model ID
@@ -1215,8 +1111,6 @@ class ModelSupplyChainApi:
         """ # noqa: E501
 
         _param = self._model_scan_api_v3_scan_query_serialize(
-            x_correlation_id=x_correlation_id,
-            x_tenant_id=x_tenant_id,
             model_version_ids=model_version_ids,
             model_ids=model_ids,
             start_time=start_time,
@@ -1252,8 +1146,6 @@ class ModelSupplyChainApi:
     @validate_call
     def model_scan_api_v3_scan_query_without_preload_content(
         self,
-        x_correlation_id: Annotated[StrictStr, Field(description="The unique identifier for the request.")],
-        x_tenant_id: Annotated[StrictStr, Field(description="The unique identifier for the tenant.")],
         model_version_ids: Annotated[Optional[List[StrictStr]], Field(description="Model Version ID")] = None,
         model_ids: Annotated[Optional[List[StrictStr]], Field(description="Model ID")] = None,
         start_time: Annotated[Optional[datetime], Field(description="Start Time")] = None,
@@ -1280,10 +1172,6 @@ class ModelSupplyChainApi:
         """Get condensed reports for a Model Scan
 
 
-        :param x_correlation_id: The unique identifier for the request. (required)
-        :type x_correlation_id: str
-        :param x_tenant_id: The unique identifier for the tenant. (required)
-        :type x_tenant_id: str
         :param model_version_ids: Model Version ID
         :type model_version_ids: List[str]
         :param model_ids: Model ID
@@ -1327,8 +1215,6 @@ class ModelSupplyChainApi:
         """ # noqa: E501
 
         _param = self._model_scan_api_v3_scan_query_serialize(
-            x_correlation_id=x_correlation_id,
-            x_tenant_id=x_tenant_id,
             model_version_ids=model_version_ids,
             model_ids=model_ids,
             start_time=start_time,
@@ -1359,8 +1245,6 @@ class ModelSupplyChainApi:
 
     def _model_scan_api_v3_scan_query_serialize(
         self,
-        x_correlation_id,
-        x_tenant_id,
         model_version_ids,
         model_ids,
         start_time,
@@ -1454,10 +1338,6 @@ class ModelSupplyChainApi:
             _query_params.append(('latest_per_model_version_only', latest_per_model_version_only))
             
         # process the header parameters
-        if x_correlation_id is not None:
-            _header_params['X-Correlation-Id'] = x_correlation_id
-        if x_tenant_id is not None:
-            _header_params['X-Tenant-Id'] = x_tenant_id
         # process the form parameters
         # process the body parameter
 

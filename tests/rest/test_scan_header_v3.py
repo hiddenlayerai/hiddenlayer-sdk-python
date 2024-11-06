@@ -47,23 +47,18 @@ class TestScanHeaderV3(unittest.TestCase):
                 start_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 end_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 status = 'pending',
-                severity = 'low'
+                severity = ''
             )
         else:
             return ScanHeaderV3(
                 file_count = 56,
                 files_with_detections_count = 56,
                 detection_count = 56,
-                detection_categories = [
-                    ''
-                    ],
                 inventory = hiddenlayer.sdk.rest.models.model_inventory_info.Model Inventory Info(),
                 version = '',
                 scan_id = '',
                 start_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                end_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 status = 'pending',
-                severity = 'low',
         )
         """
 

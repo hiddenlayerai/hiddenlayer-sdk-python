@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 
 # **model_scan_api_v3_scan_model_version_id_get**
-> ScanReportV3 model_scan_api_v3_scan_model_version_id_get(scan_id, x_correlation_id, x_tenant_id, has_detections=has_detections)
+> ScanReportV3 model_scan_api_v3_scan_model_version_id_get(scan_id, has_detections=has_detections)
 
 Get Result of a Model Scan
 
@@ -52,13 +52,11 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = hiddenlayer.sdk.rest.ModelSupplyChainApi(api_client)
     scan_id = '00000000-0000-0000-0000-000000000000' # str | 
-    x_correlation_id = 'x_correlation_id_example' # str | The unique identifier for the request.
-    x_tenant_id = 'x_tenant_id_example' # str | The unique identifier for the tenant.
     has_detections = True # bool | Filter file_results to only those that have detections (and parents) (optional)
 
     try:
         # Get Result of a Model Scan
-        api_response = api_instance.model_scan_api_v3_scan_model_version_id_get(scan_id, x_correlation_id, x_tenant_id, has_detections=has_detections)
+        api_response = api_instance.model_scan_api_v3_scan_model_version_id_get(scan_id, has_detections=has_detections)
         print("The response of ModelSupplyChainApi->model_scan_api_v3_scan_model_version_id_get:\n")
         pprint(api_response)
     except Exception as e:
@@ -73,8 +71,6 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **scan_id** | **str**|  | 
- **x_correlation_id** | **str**| The unique identifier for the request. | 
- **x_tenant_id** | **str**| The unique identifier for the tenant. | 
  **has_detections** | **bool**| Filter file_results to only those that have detections (and parents) | [optional] 
 
 ### Return type
@@ -101,7 +97,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **model_scan_api_v3_scan_model_version_id_patch**
-> ModelScanApiV3ScanModelVersionIdPatch200Response model_scan_api_v3_scan_model_version_id_patch(scan_id, x_correlation_id, x_tenant_id, scan_report_v3, has_detections=has_detections)
+> ModelScanApiV3ScanModelVersionIdPatch200Response model_scan_api_v3_scan_model_version_id_patch(scan_id, scan_report_v3, has_detections=has_detections)
 
 Indicate part (file or files) of a model scan has completed
 
@@ -137,14 +133,12 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = hiddenlayer.sdk.rest.ModelSupplyChainApi(api_client)
     scan_id = '00000000-0000-0000-0000-000000000000' # str | 
-    x_correlation_id = 'x_correlation_id_example' # str | The unique identifier for the request.
-    x_tenant_id = 'x_tenant_id_example' # str | The unique identifier for the tenant.
     scan_report_v3 = hiddenlayer.sdk.rest.ScanReportV3() # ScanReportV3 | Request body for partial update
     has_detections = True # bool | Filter file_results to only those that have detections (and parents) (optional)
 
     try:
         # Indicate part (file or files) of a model scan has completed
-        api_response = api_instance.model_scan_api_v3_scan_model_version_id_patch(scan_id, x_correlation_id, x_tenant_id, scan_report_v3, has_detections=has_detections)
+        api_response = api_instance.model_scan_api_v3_scan_model_version_id_patch(scan_id, scan_report_v3, has_detections=has_detections)
         print("The response of ModelSupplyChainApi->model_scan_api_v3_scan_model_version_id_patch:\n")
         pprint(api_response)
     except Exception as e:
@@ -159,8 +153,6 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **scan_id** | **str**|  | 
- **x_correlation_id** | **str**| The unique identifier for the request. | 
- **x_tenant_id** | **str**| The unique identifier for the tenant. | 
  **scan_report_v3** | [**ScanReportV3**](ScanReportV3.md)| Request body for partial update | 
  **has_detections** | **bool**| Filter file_results to only those that have detections (and parents) | [optional] 
 
@@ -188,7 +180,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **model_scan_api_v3_scan_model_version_id_post**
-> model_scan_api_v3_scan_model_version_id_post(scan_id, x_correlation_id, x_tenant_id, scan_report_v3, has_detections=has_detections)
+> model_scan_api_v3_scan_model_version_id_post(scan_id, scan_report_v3, has_detections=has_detections)
 
 Indicate model scan has started
 
@@ -223,14 +215,12 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = hiddenlayer.sdk.rest.ModelSupplyChainApi(api_client)
     scan_id = '00000000-0000-0000-0000-000000000000' # str | 
-    x_correlation_id = 'x_correlation_id_example' # str | The unique identifier for the request.
-    x_tenant_id = 'x_tenant_id_example' # str | The unique identifier for the tenant.
     scan_report_v3 = hiddenlayer.sdk.rest.ScanReportV3() # ScanReportV3 | Request body for create
     has_detections = True # bool | Filter file_results to only those that have detections (and parents) (optional)
 
     try:
         # Indicate model scan has started
-        api_instance.model_scan_api_v3_scan_model_version_id_post(scan_id, x_correlation_id, x_tenant_id, scan_report_v3, has_detections=has_detections)
+        api_instance.model_scan_api_v3_scan_model_version_id_post(scan_id, scan_report_v3, has_detections=has_detections)
     except Exception as e:
         print("Exception when calling ModelSupplyChainApi->model_scan_api_v3_scan_model_version_id_post: %s\n" % e)
 ```
@@ -243,8 +233,6 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **scan_id** | **str**|  | 
- **x_correlation_id** | **str**| The unique identifier for the request. | 
- **x_tenant_id** | **str**| The unique identifier for the tenant. | 
  **scan_report_v3** | [**ScanReportV3**](ScanReportV3.md)| Request body for create | 
  **has_detections** | **bool**| Filter file_results to only those that have detections (and parents) | [optional] 
 
@@ -272,7 +260,7 @@ void (empty response body)
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **model_scan_api_v3_scan_query**
-> ModelScanApiV3ScanQuery200Response model_scan_api_v3_scan_query(x_correlation_id, x_tenant_id, model_version_ids=model_version_ids, model_ids=model_ids, start_time=start_time, end_time=end_time, severity=severity, status=status, limit=limit, offset=offset, sort=sort, latest_per_model_version_only=latest_per_model_version_only)
+> ModelScanApiV3ScanQuery200Response model_scan_api_v3_scan_query(model_version_ids=model_version_ids, model_ids=model_ids, start_time=start_time, end_time=end_time, severity=severity, status=status, limit=limit, offset=offset, sort=sort, latest_per_model_version_only=latest_per_model_version_only)
 
 Get condensed reports for a Model Scan
 
@@ -306,8 +294,6 @@ configuration = hiddenlayer.sdk.rest.Configuration(
 with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = hiddenlayer.sdk.rest.ModelSupplyChainApi(api_client)
-    x_correlation_id = 'x_correlation_id_example' # str | The unique identifier for the request.
-    x_tenant_id = 'x_tenant_id_example' # str | The unique identifier for the tenant.
     model_version_ids = ['00fb9505-b9ac-4703-91a7-9d4859315a4b,0278fa73-4b08-47ca-bc23-33bc244719be'] # List[str] | Model Version ID (optional)
     model_ids = ['00fb9505-b9ac-4703-91a7-9d4859315a4b,2df09dc6-a0eb-4f67-9fe9-139ac3b75d11'] # List[str] | Model ID (optional)
     start_time = '2025-05-27T00:00:00Z' # datetime | Start Time (optional)
@@ -321,7 +307,7 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
 
     try:
         # Get condensed reports for a Model Scan
-        api_response = api_instance.model_scan_api_v3_scan_query(x_correlation_id, x_tenant_id, model_version_ids=model_version_ids, model_ids=model_ids, start_time=start_time, end_time=end_time, severity=severity, status=status, limit=limit, offset=offset, sort=sort, latest_per_model_version_only=latest_per_model_version_only)
+        api_response = api_instance.model_scan_api_v3_scan_query(model_version_ids=model_version_ids, model_ids=model_ids, start_time=start_time, end_time=end_time, severity=severity, status=status, limit=limit, offset=offset, sort=sort, latest_per_model_version_only=latest_per_model_version_only)
         print("The response of ModelSupplyChainApi->model_scan_api_v3_scan_query:\n")
         pprint(api_response)
     except Exception as e:
@@ -335,8 +321,6 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **x_correlation_id** | **str**| The unique identifier for the request. | 
- **x_tenant_id** | **str**| The unique identifier for the tenant. | 
  **model_version_ids** | [**List[str]**](str.md)| Model Version ID | [optional] 
  **model_ids** | [**List[str]**](str.md)| Model ID | [optional] 
  **start_time** | **datetime**| Start Time | [optional] 

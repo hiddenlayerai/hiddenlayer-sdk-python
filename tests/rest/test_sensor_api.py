@@ -68,6 +68,13 @@ class TestSensorApi(unittest.TestCase):
         """
         pass
 
+    def test_sensor_sor_api_v3_model_cards_query_get(self) -> None:
+        """Test case for sensor_sor_api_v3_model_cards_query_get
+
+        List Model Cards
+        """
+        pass
+
     def test_upload_model_part(self) -> None:
         """Test case for upload_model_part
 

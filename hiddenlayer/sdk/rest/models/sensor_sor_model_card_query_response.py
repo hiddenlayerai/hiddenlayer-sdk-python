@@ -17,17 +17,21 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List
+from hiddenlayer.sdk.rest.models.sensor_sor_model_card_response import SensorSORModelCardResponse
 from typing import Optional, Set
 from typing_extensions import Self
 
-class GGUFFileAttributes(BaseModel):
+class SensorSORModelCardQueryResponse(BaseModel):
     """
-    GGUFFileAttributes
+    SensorSORModelCardQueryResponse
     """ # noqa: E501
-    subtype: List[StrictStr]
-    __properties: ClassVar[List[str]] = ["subtype"]
+    total_count: StrictInt
+    page_size: StrictInt
+    page_number: StrictInt
+    results: List[SensorSORModelCardResponse]
+    __properties: ClassVar[List[str]] = ["total_count", "page_size", "page_number", "results"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -47,7 +51,7 @@ class GGUFFileAttributes(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of GGUFFileAttributes from a JSON string"""
+        """Create an instance of SensorSORModelCardQueryResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -68,11 +72,18 @@ class GGUFFileAttributes(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in results (list)
+        _items = []
+        if self.results:
+            for _item in self.results:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict['results'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of GGUFFileAttributes from a dict"""
+        """Create an instance of SensorSORModelCardQueryResponse from a dict"""
         if obj is None:
             return None
 
@@ -80,7 +91,10 @@ class GGUFFileAttributes(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "subtype": obj.get("subtype")
+            "total_count": obj.get("total_count"),
+            "page_size": obj.get("page_size"),
+            "page_number": obj.get("page_number"),
+            "results": [SensorSORModelCardResponse.from_dict(_item) for _item in obj["results"]] if obj.get("results") is not None else None
         })
         return _obj
 

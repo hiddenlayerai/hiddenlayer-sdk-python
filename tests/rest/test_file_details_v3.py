@@ -42,7 +42,7 @@ class TestFileDetailsV3(unittest.TestCase):
                 file_size = '9 GB',
                 file_size_bytes = 9663676416,
                 file_type = 'safetensors',
-                file_type_details = hiddenlayer.sdk.rest.models.file_type_details.File Type Details()
+                file_type_details = { }
             )
         else:
             return FileDetailsV3(

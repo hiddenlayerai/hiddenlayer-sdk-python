@@ -2,21 +2,38 @@ from typing import Optional
 
 from typing_extensions import Self
 
-from hiddenlayer.sdk.rest.models import ScanResultsV2
+from datetime import datetime
+
+from hiddenlayer.sdk.constants import ScanStatus
+from hiddenlayer.sdk.rest.models import ScanReportV3, ModelInventoryInfo, FileScanReportV3
 
 
-class ScanResults(ScanResultsV2):
+class ScanResults(ScanReportV3):
     """This class exists because the ScanResults API doesn't return anything about the file name or path that was scanned."""
 
     file_name: Optional[str] = None
     file_path: Optional[str] = None
-    sensor_id: Optional[str] = None
+    model_id: Optional[str] = None
 
     @classmethod
-    def from_scanresultsv2(
-        cls, *, scan_results_v2: ScanResultsV2, sensor_id: Optional[str] = None
+    def from_scanreportv3(
+        cls, *, scan_report_v3: ScanReportV3, model_id: Optional[str] = None
     ) -> Self:
-        scan_results_dict = scan_results_v2.to_dict()
-        scan_results_dict["sensor_id"] = sensor_id
+        scan_results_dict = scan_report_v3.to_dict()
+        scan_results_dict["model_id"] = model_id
 
         return cls(**scan_results_dict)
+
+class EmptyScanResults(ScanResults):
+    status: str = ScanStatus.PENDING
+    file_count: int = 0
+    files_with_detections_count: int = 0
+    detection_count: int = 0
+    detection_categories: list[str] = []
+    inventory: ModelInventoryInfo = ModelInventoryInfo(model_name="", model_version="", model_source="", requested_scan_location="", requesting_entity="", model_id="", model_version_id="")
+    version: str = ""
+    scan_id: str = ""
+    start_time: datetime = datetime.now()
+    end_time: datetime = datetime.now()
+    severity: str = ""
+    file_results: list[FileScanReportV3] = []

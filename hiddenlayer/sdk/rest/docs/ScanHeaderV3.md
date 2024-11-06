@@ -8,14 +8,14 @@ Name | Type | Description | Notes
 **file_count** | **int** | number of files scanned | 
 **files_with_detections_count** | **int** | number of files with detections found | 
 **detection_count** | **int** | number of detections found | 
-**detection_categories** | **List[str]** | list of detection categories found | 
+**detection_categories** | **List[str]** | list of detection categories found | [optional] 
 **inventory** | [**ModelInventoryInfo**](ModelInventoryInfo.md) |  | 
 **version** | **str** | scanner version | 
 **scan_id** | **str** | unique identifier for the scan | 
 **start_time** | **datetime** | time the scan started | 
-**end_time** | **datetime** | time the scan ended | 
+**end_time** | **datetime** | time the scan ended | [optional] 
 **status** | **str** | status of the scan | 
-**severity** | **str** | detection severity | 
+**severity** | **str** | detection severity | [optional] 
 
 ## Example
 

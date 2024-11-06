@@ -64,8 +64,6 @@ class TestScanDetectionV3(unittest.TestCase):
                 risk = 'MALICIOUS',
                 severity = 'low',
                 detection_id = '00000000-0000-0000-0000-000000000000',
-                impact = 'critical',
-                likelihood = 'medium',
                 rule_id = 'PICKLE_0055_202408',
                 category = 'Arbitrary Code Execution',
                 mitre_atlas = [

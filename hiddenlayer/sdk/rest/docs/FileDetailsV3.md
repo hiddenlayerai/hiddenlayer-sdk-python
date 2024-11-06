@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **file_size** | **str** | size of the file in human readable format | [optional] 
 **file_size_bytes** | **int** | size of the file in bytes | [optional] 
 **file_type** | **str** | type of the file | 
-**file_type_details** | [**FileTypeDetails**](FileTypeDetails.md) |  | [optional] 
+**file_type_details** | **Dict[str, object]** |  | [optional] 
 
 ## Example
 

@@ -32,8 +32,8 @@ class ScanDetectionV3(BaseModel):
     risk: StrictStr = Field(description="detection risk")
     severity: StrictStr = Field(description="detection severity")
     detection_id: StrictStr = Field(description="unique identifier for the detection")
-    impact: StrictStr = Field(description="detection impact")
-    likelihood: StrictStr = Field(description="detection likelihood")
+    impact: Optional[StrictStr] = Field(default=None, description="detection impact")
+    likelihood: Optional[StrictStr] = Field(default=None, description="detection likelihood")
     rule_id: StrictStr = Field(description="unique identifier for the rule that sourced the detection")
     category: StrictStr = Field(description="Vulnerability category for the detection")
     mitre_atlas: List[MITREAtlasInner]

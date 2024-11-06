@@ -19,7 +19,7 @@ import json
 
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from hiddenlayer.sdk.rest.models.file_scan_report_v3 import FileScanReportV3
 from hiddenlayer.sdk.rest.models.model_inventory_info import ModelInventoryInfo
 from typing import Optional, Set
@@ -32,15 +32,15 @@ class ScanReportV3(BaseModel):
     file_count: StrictInt = Field(description="number of files scanned")
     files_with_detections_count: StrictInt = Field(description="number of files with detections found")
     detection_count: StrictInt = Field(description="number of detections found")
-    detection_categories: List[StrictStr] = Field(description="list of detection categories found")
+    detection_categories: Optional[List[StrictStr]] = Field(default=None, description="list of detection categories found")
     inventory: ModelInventoryInfo
     version: StrictStr = Field(description="scanner version")
     scan_id: StrictStr = Field(description="unique identifier for the scan")
     start_time: datetime = Field(description="time the scan started")
-    end_time: datetime = Field(description="time the scan ended")
+    end_time: Optional[datetime] = Field(default=None, description="time the scan ended")
     status: StrictStr = Field(description="status of the scan")
-    severity: StrictStr = Field(description="detection severity")
-    file_results: List[FileScanReportV3]
+    severity: Optional[StrictStr] = Field(default=None, description="detection severity")
+    file_results: Optional[List[FileScanReportV3]] = None
     __properties: ClassVar[List[str]] = ["file_count", "files_with_detections_count", "detection_count", "detection_categories", "inventory", "version", "scan_id", "start_time", "end_time", "status", "severity", "file_results"]
 
     @field_validator('status')
@@ -48,13 +48,6 @@ class ScanReportV3(BaseModel):
         """Validates the enum"""
         if value not in set(['pending', 'running', 'done', 'failed', 'canceled']):
             raise ValueError("must be one of enum values ('pending', 'running', 'done', 'failed', 'canceled')")
-        return value
-
-    @field_validator('severity')
-    def severity_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['low', 'medium', 'high', 'critical']):
-            raise ValueError("must be one of enum values ('low', 'medium', 'high', 'critical')")
         return value
 
     model_config = ConfigDict(

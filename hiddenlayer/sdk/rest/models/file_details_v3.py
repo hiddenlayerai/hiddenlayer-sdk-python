@@ -20,7 +20,6 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
-from hiddenlayer.sdk.rest.models.file_type_details import FileTypeDetails
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -35,7 +34,7 @@ class FileDetailsV3(BaseModel):
     file_size: Optional[Annotated[str, Field(strict=True)]] = Field(default=None, description="size of the file in human readable format")
     file_size_bytes: Optional[StrictInt] = Field(default=None, description="size of the file in bytes")
     file_type: StrictStr = Field(description="type of the file")
-    file_type_details: Optional[FileTypeDetails] = None
+    file_type_details: Optional[Dict[str, Any]] = None
     __properties: ClassVar[List[str]] = ["estimated_time", "md5", "sha256", "tlsh", "file_size", "file_size_bytes", "file_type", "file_type_details"]
 
     @field_validator('md5')
@@ -115,9 +114,6 @@ class FileDetailsV3(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of file_type_details
-        if self.file_type_details:
-            _dict['file_type_details'] = self.file_type_details.to_dict()
         return _dict
 
     @classmethod
@@ -137,7 +133,7 @@ class FileDetailsV3(BaseModel):
             "file_size": obj.get("file_size"),
             "file_size_bytes": obj.get("file_size_bytes"),
             "file_type": obj.get("file_type"),
-            "file_type_details": FileTypeDetails.from_dict(obj["file_type_details"]) if obj.get("file_type_details") is not None else None
+            "file_type_details": obj.get("file_type_details")
         })
         return _obj
 

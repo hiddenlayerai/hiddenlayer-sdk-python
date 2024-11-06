@@ -17,21 +17,18 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, StrictBool
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class RDSFileAttributes(BaseModel):
+class SecurityPosture(BaseModel):
     """
-    RDSFileAttributes
+    SecurityPosture
     """ # noqa: E501
-    subtype: List[StrictStr]
-    rds_encoding: StrictStr = Field(description="encoding of the RDS file")
-    rds_min_reader_version: StrictStr = Field(description="minimum reader version for the RDS file")
-    rds_version: StrictStr = Field(description="version of the RDS file")
-    rds_writer_version: StrictStr = Field(description="version of the RDS writer")
-    __properties: ClassVar[List[str]] = ["subtype", "rds_encoding", "rds_min_reader_version", "rds_version", "rds_writer_version"]
+    model_scan: Optional[StrictBool] = None
+    attack_monitoring: Optional[StrictBool] = None
+    __properties: ClassVar[List[str]] = ["model_scan", "attack_monitoring"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -51,7 +48,7 @@ class RDSFileAttributes(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of RDSFileAttributes from a JSON string"""
+        """Create an instance of SecurityPosture from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,7 +73,7 @@ class RDSFileAttributes(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of RDSFileAttributes from a dict"""
+        """Create an instance of SecurityPosture from a dict"""
         if obj is None:
             return None
 
@@ -84,11 +81,8 @@ class RDSFileAttributes(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "subtype": obj.get("subtype"),
-            "rds_encoding": obj.get("rds_encoding"),
-            "rds_min_reader_version": obj.get("rds_min_reader_version"),
-            "rds_version": obj.get("rds_version"),
-            "rds_writer_version": obj.get("rds_writer_version")
+            "model_scan": obj.get("model_scan"),
+            "attack_monitoring": obj.get("attack_monitoring")
         })
         return _obj
 

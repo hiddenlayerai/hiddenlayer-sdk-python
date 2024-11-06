@@ -47,7 +47,7 @@ class TestScanReportV3(unittest.TestCase):
                 start_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 end_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 status = 'pending',
-                severity = 'low',
+                severity = '',
                 file_results = [
                     hiddenlayer.sdk.rest.models.file_scan_report_v3.FileScanReportV3(
                         file_instance_id = '', 
@@ -62,7 +62,7 @@ class TestScanReportV3(unittest.TestCase):
                             file_size = '9 GB', 
                             file_size_bytes = 9663676416, 
                             file_type = 'safetensors', 
-                            file_type_details = hiddenlayer.sdk.rest.models.file_type_details.File Type Details(), ), 
+                            file_type_details = { }, ), 
                         status = 'skipped', 
                         seen = '2024-10-22T17:59:12.431Z', 
                         detections = [
@@ -97,59 +97,11 @@ class TestScanReportV3(unittest.TestCase):
                 file_count = 56,
                 files_with_detections_count = 56,
                 detection_count = 56,
-                detection_categories = [
-                    ''
-                    ],
                 inventory = hiddenlayer.sdk.rest.models.model_inventory_info.Model Inventory Info(),
                 version = '',
                 scan_id = '',
                 start_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                end_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 status = 'pending',
-                severity = 'low',
-                file_results = [
-                    hiddenlayer.sdk.rest.models.file_scan_report_v3.FileScanReportV3(
-                        file_instance_id = '', 
-                        file_location = '', 
-                        start_time = '2024-10-16T23:38:32.278Z', 
-                        end_time = '2024-10-16T23:38:32.354Z', 
-                        details = hiddenlayer.sdk.rest.models.file_details_v3.FileDetailsV3(
-                            estimated_time = '', 
-                            md5 = 'ce114e4501d2f4e2dcea3e17b546f339', 
-                            sha256 = 'a54d88e06612d820bc3be72877c74f257b561b19', 
-                            tlsh = 'T1C50757F93C74D00C05B70C0793A1D5A9DF3F6D3A2F7AD940F3BFBF07B3BDF5A1D293', 
-                            file_size = '9 GB', 
-                            file_size_bytes = 9663676416, 
-                            file_type = 'safetensors', 
-                            file_type_details = hiddenlayer.sdk.rest.models.file_type_details.File Type Details(), ), 
-                        status = 'skipped', 
-                        seen = '2024-10-22T17:59:12.431Z', 
-                        detections = [
-                            hiddenlayer.sdk.rest.models.scan_detection_v3.ScanDetectionV3(
-                                description = 'Found lambda embedded in keras model allowing custom layers that support  arbitrary expression execution', 
-                                risk = 'MALICIOUS', 
-                                severity = 'low', 
-                                detection_id = '00000000-0000-0000-0000-000000000000', 
-                                impact = 'critical', 
-                                likelihood = 'medium', 
-                                rule_id = 'PICKLE_0055_202408', 
-                                category = 'Arbitrary Code Execution', 
-                                mitre_atlas = [
-                                    hiddenlayer.sdk.rest.models.mitre_atlas_inner.MITRE_Atlas_inner(
-                                        technique = 'AML.T0480Z#UM/?R,Fp^l6$ARjbhJk C>i H'qT\\{<?'es#)#iK.YM{Rag2/!KB!k@5oXh.:Ts\";mGL,i&z5[', 
-                                        tactic = 'AML.TA4807', )
-                                    ], 
-                                owasp = [
-                                    'LLM8072'
-                                    ], 
-                                cve = [
-                                    'CVE-0480-288800152'
-                                    ], 
-                                cwe = 'CWE-480rZ#UM/?R,Fp^l6$ARjbhJk C>i', 
-                                cwe_href = '', 
-                                technical_blog_href = '', )
-                            ], )
-                    ],
         )
         """
 

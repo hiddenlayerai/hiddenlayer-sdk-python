@@ -1,5 +1,7 @@
 import os
 import random
+import shutil
+import tempfile
 import time
 import warnings
 from datetime import datetime
@@ -9,13 +11,15 @@ from uuid import uuid4
 
 from hiddenlayer.sdk.constants import ScanStatus
 from hiddenlayer.sdk.enterprise.enterprise_model_scan_api import EnterpriseModelScanApi
-from hiddenlayer.sdk.models import ScanResults
-from hiddenlayer.sdk.rest.api import ModelScanApi, SensorApi
+from hiddenlayer.sdk.models import ScanResults, EmptyScanResults
+from hiddenlayer.sdk.rest.api import ModelScanApi, SensorApi, ModelSupplyChainApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
 from hiddenlayer.sdk.rest.models import MultipartUploadPart
 from hiddenlayer.sdk.rest.models.model import Model
 from hiddenlayer.sdk.services.model import ModelAPI
 from hiddenlayer.sdk.utils import filter_path_objects, is_saas
+
+from pydantic_core import ValidationError
 
 EXCLUDE_FILE_TYPES = [
     "*.txt",
@@ -35,6 +39,7 @@ class ModelScanAPI:
         self._api_client = api_client
 
         if self.is_saas:
+            self._model_supply_chain_api = ModelSupplyChainApi(api_client=api_client)
             self._model_scan_api = ModelScanApi(api_client=api_client)
             self._model_api = ModelAPI(api_client=api_client)
             self._sensor_api = SensorApi(
@@ -132,10 +137,9 @@ class ModelScanAPI:
                 scan_results = self.get_scan_results(model_name=model_name)
                 print(f"{file_path.name} scan status: {scan_results.status}")
 
-        scan_results = ScanResults.from_scanresultsv2(scan_results_v2=scan_results)
         scan_results.file_name = file_path.name
         scan_results.file_path = str(file_path)
-        scan_results.sensor_id = sensor.sensor_id
+        scan_results.model_id = sensor.sensor_id
 
         return scan_results
 
@@ -292,12 +296,13 @@ class ModelScanAPI:
         threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
-    ) -> List[ScanResults]:
+    ) -> ScanResults:
         """
         Scans a model on HuggingFace.
 
         Note: Requires the `huggingface_hub` pip package to be installed.
 
+        :param repo_id: The HuggingFace repository id.
         :param revision: An optional Git revision id which can be a branch name, a tag, or a commit hash.
         :param local_dir: If provided, the downloaded files will be placed under this directory.
         :param allow_file_patterns: If provided, only files matching at least one pattern are scanned.
@@ -337,6 +342,7 @@ class ModelScanAPI:
         )
 
         return self.scan_folder(
+            model_name=repo_id,
             path=local_dir,
             allow_file_patterns=allow_file_patterns,
             ignore_file_patterns=ignore_file_patterns,
@@ -355,30 +361,40 @@ class ModelScanAPI:
         """
 
         if self.is_saas:
-            model = self._model_api.get(model_name=model_name)
-            sensor_id = model.sensor_id
+            print(model_name)
+            response = self._sensor_api.sensor_sor_api_v3_model_cards_query_get(model_name_eq=model_name, limit=1)
+            print(response)
+            model_id = response.results[0].model_id
         else:
-            sensor_id = model_name
+            model_id = model_name
 
-        scan_results_v2 = self._model_scan_api.scan_status(sensor_id)
 
-        return ScanResults.from_scanresultsv2(
-            scan_results_v2=scan_results_v2, sensor_id=sensor_id
+        scans = self._model_supply_chain_api.model_scan_api_v3_scan_query(model_ids=[model_id], latest_per_model_version_only=True)
+        print(scans)
+        if scans.total == 0:
+            return EmptyScanResults()
+        
+        scan_report = self._model_supply_chain_api.model_scan_api_v3_scan_model_version_id_get(scans.items[0].scan_id)
+
+        return ScanResults.from_scanreportv3(
+            scan_report_v3=scan_report, model_id=model_id
         )
 
     def scan_folder(
         self,
         *,
+        model_name: str,
         path: Union[str, os.PathLike],
         allow_file_patterns: Optional[List[str]] = None,
         ignore_file_patterns: Optional[List[str]] = None,
         threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
-    ) -> List[ScanResults]:
+    ) -> ScanResults:
         """
         Submits all files in a directory and its sub directories to be scanned.
 
+        :param model_name: Name of the model to be shown on the HiddenLayer UI.
         :param path: Path to the folder on disk to be scanned.
         :param allow_file_patterns: If provided, only files matching at least one pattern are scanned.
         :param ignore_file_patterns: If provided, files matching any of the patterns are not scanned.
@@ -390,6 +406,9 @@ class ModelScanAPI:
         """
 
         model_path = Path(path)
+        file = tempfile.NamedTemporaryFile().name
+        shutil.make_archive(file, 'zip', model_path)
+        
         ignore_file_patterns = (
             EXCLUDE_FILE_TYPES + ignore_file_patterns
             if ignore_file_patterns
@@ -402,13 +421,11 @@ class ModelScanAPI:
             ignore_patterns=ignore_file_patterns,
         )
 
-        return [
-            self.scan_file(
-                model_name=str(file),
-                model_path=file,
+        return self.scan_file(
+                model_name=model_name,
+                model_path=file + '.zip',
                 threads=threads,
                 chunk_size=chunk_size,
                 wait_for_results=wait_for_results,
             )
-            for file in files
-        ]
+        

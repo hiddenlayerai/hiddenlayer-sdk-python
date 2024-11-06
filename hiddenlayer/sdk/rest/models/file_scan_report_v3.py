@@ -20,6 +20,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List
+from hiddenlayer.sdk.rest.models.file_details_v3 import FileDetailsV3
 from hiddenlayer.sdk.rest.models.scan_detection_v3 import ScanDetectionV3
 from typing import Optional, Set
 from typing_extensions import Self
@@ -32,7 +33,7 @@ class FileScanReportV3(BaseModel):
     file_location: StrictStr = Field(description="full file path")
     start_time: datetime = Field(description="time the scan started")
     end_time: datetime = Field(description="time the scan ended")
-    details: Dict[str, Any]
+    details: FileDetailsV3
     status: StrictStr = Field(description="status of the scan")
     seen: datetime = Field(description="time the scan was seen at")
     detections: List[ScanDetectionV3]
