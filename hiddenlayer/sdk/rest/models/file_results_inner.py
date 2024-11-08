@@ -17,41 +17,33 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, field_validator
+from datetime import datetime
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from hiddenlayer.sdk.rest.models.detections import Detections
-from hiddenlayer.sdk.rest.models.scan_results import ScanResults
+from hiddenlayer.sdk.rest.models.file_details_v3 import FileDetailsV3
+from hiddenlayer.sdk.rest.models.scan_detection_v3 import ScanDetectionV3
 from typing import Optional, Set
 from typing_extensions import Self
 
-class ScanResultsV2(BaseModel):
+class FileResultsInner(BaseModel):
     """
-    ScanResultsV2
+    FileResultsInner
     """ # noqa: E501
-    scan_id: StrictStr
-    status: StrictStr
-    start_time: StrictInt
-    end_time: StrictInt
-    results: Optional[ScanResults] = None
-    severity: Optional[StrictStr] = None
-    detections: List[Detections]
-    __properties: ClassVar[List[str]] = ["scan_id", "status", "start_time", "end_time", "results", "severity", "detections"]
+    file_instance_id: StrictStr = Field(description="unique ID of the file")
+    file_location: StrictStr = Field(description="full file path")
+    start_time: datetime = Field(description="time the scan started")
+    end_time: datetime = Field(description="time the scan ended")
+    details: FileDetailsV3
+    status: StrictStr = Field(description="status of the scan")
+    seen: datetime = Field(description="time the scan was seen at")
+    detections: Optional[List[ScanDetectionV3]] = None
+    __properties: ClassVar[List[str]] = ["file_instance_id", "file_location", "start_time", "end_time", "details", "status", "seen", "detections"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['done', 'accepted', 'failed', 'pending', 'created', 'retry', 'unknown']):
-            raise ValueError("must be one of enum values ('done', 'accepted', 'failed', 'pending', 'created', 'retry', 'unknown')")
-        return value
-
-    @field_validator('severity')
-    def severity_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in set(['UNKNOWN', 'SAFE', 'SUSPICIOUS', 'MALICIOUS']):
-            raise ValueError("must be one of enum values ('UNKNOWN', 'SAFE', 'SUSPICIOUS', 'MALICIOUS')")
+        if value not in set(['skipped', 'pending', 'running', 'done', 'failed', 'canceled']):
+            raise ValueError("must be one of enum values ('skipped', 'pending', 'running', 'done', 'failed', 'canceled')")
         return value
 
     model_config = ConfigDict(
@@ -72,7 +64,7 @@ class ScanResultsV2(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of ScanResultsV2 from a JSON string"""
+        """Create an instance of FileResultsInner from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -93,9 +85,9 @@ class ScanResultsV2(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of results
-        if self.results:
-            _dict['results'] = self.results.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of details
+        if self.details:
+            _dict['details'] = self.details.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in detections (list)
         _items = []
         if self.detections:
@@ -107,7 +99,7 @@ class ScanResultsV2(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of ScanResultsV2 from a dict"""
+        """Create an instance of FileResultsInner from a dict"""
         if obj is None:
             return None
 
@@ -115,13 +107,14 @@ class ScanResultsV2(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "scan_id": obj.get("scan_id"),
-            "status": obj.get("status"),
+            "file_instance_id": obj.get("file_instance_id"),
+            "file_location": obj.get("file_location"),
             "start_time": obj.get("start_time"),
             "end_time": obj.get("end_time"),
-            "results": ScanResults.from_dict(obj["results"]) if obj.get("results") is not None else None,
-            "severity": obj.get("severity"),
-            "detections": [Detections.from_dict(_item) for _item in obj["detections"]] if obj.get("detections") is not None else None
+            "details": FileDetailsV3.from_dict(obj["details"]) if obj.get("details") is not None else None,
+            "status": obj.get("status"),
+            "seen": obj.get("seen"),
+            "detections": [ScanDetectionV3.from_dict(_item) for _item in obj["detections"]] if obj.get("detections") is not None else None
         })
         return _obj
 

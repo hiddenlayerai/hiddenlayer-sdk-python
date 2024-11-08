@@ -20,7 +20,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from hiddenlayer.sdk.rest.models.file_scan_report_v3 import FileScanReportV3
+from hiddenlayer.sdk.rest.models.file_results_inner import FileResultsInner
 from hiddenlayer.sdk.rest.models.model_inventory_info import ModelInventoryInfo
 from typing import Optional, Set
 from typing_extensions import Self
@@ -40,7 +40,7 @@ class ScanReportV3(BaseModel):
     end_time: Optional[datetime] = Field(default=None, description="time the scan ended")
     status: StrictStr = Field(description="status of the scan")
     severity: Optional[StrictStr] = Field(default=None, description="detection severity")
-    file_results: Optional[List[FileScanReportV3]] = None
+    file_results: Optional[List[FileResultsInner]] = None
     __properties: ClassVar[List[str]] = ["file_count", "files_with_detections_count", "detection_count", "detection_categories", "inventory", "version", "scan_id", "start_time", "end_time", "status", "severity", "file_results"]
 
     @field_validator('status')
@@ -48,6 +48,16 @@ class ScanReportV3(BaseModel):
         """Validates the enum"""
         if value not in set(['pending', 'running', 'done', 'failed', 'canceled']):
             raise ValueError("must be one of enum values ('pending', 'running', 'done', 'failed', 'canceled')")
+        return value
+
+    @field_validator('severity')
+    def severity_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['low', 'medium', 'high', 'critical', 'safe', 'unknown']):
+            raise ValueError("must be one of enum values ('low', 'medium', 'high', 'critical', 'safe', 'unknown')")
         return value
 
     model_config = ConfigDict(
@@ -122,7 +132,7 @@ class ScanReportV3(BaseModel):
             "end_time": obj.get("end_time"),
             "status": obj.get("status"),
             "severity": obj.get("severity"),
-            "file_results": [FileScanReportV3.from_dict(_item) for _item in obj["file_results"]] if obj.get("file_results") is not None else None
+            "file_results": [FileResultsInner.from_dict(_item) for _item in obj["file_results"]] if obj.get("file_results") is not None else None
         })
         return _obj
 

@@ -17,6 +17,7 @@
 from hiddenlayer.sdk.rest.models.create_sensor_request import CreateSensorRequest
 from hiddenlayer.sdk.rest.models.detections import Detections
 from hiddenlayer.sdk.rest.models.file_details_v3 import FileDetailsV3
+from hiddenlayer.sdk.rest.models.file_results_inner import FileResultsInner
 from hiddenlayer.sdk.rest.models.file_scan_report_v3 import FileScanReportV3
 from hiddenlayer.sdk.rest.models.get_multipart_upload_response import GetMultipartUploadResponse
 from hiddenlayer.sdk.rest.models.location_inner import LocationInner
@@ -28,6 +29,7 @@ from hiddenlayer.sdk.rest.models.model_scan_api_v3_scan_model_version_id_patch20
 from hiddenlayer.sdk.rest.models.model_scan_api_v3_scan_query200_response import ModelScanApiV3ScanQuery200Response
 from hiddenlayer.sdk.rest.models.multipart_upload_part import MultipartUploadPart
 from hiddenlayer.sdk.rest.models.paged_response_with_total import PagedResponseWithTotal
+from hiddenlayer.sdk.rest.models.rule_details_inner import RuleDetailsInner
 from hiddenlayer.sdk.rest.models.scan_create_request import ScanCreateRequest
 from hiddenlayer.sdk.rest.models.scan_detection_v3 import ScanDetectionV3
 from hiddenlayer.sdk.rest.models.scan_header_v3 import ScanHeaderV3

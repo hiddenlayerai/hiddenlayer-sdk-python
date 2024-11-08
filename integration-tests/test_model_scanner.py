@@ -83,18 +83,19 @@ def test_scan_folder(tmp_path, hl_client: HiddenlayerServiceClient):
         model_name=model_name,
         path=tmp_path
     )
-    print(results)
-    # This will be correct once the multi-file support is added in prod
-    # assert results.file_count == 2
-    assert results.files_with_detections_count == 1
+    assert results.file_count == 3
+    assert results.files_with_detections_count == 2
 
-    file_results = results.file_results[0]
-    
-    detections = file_results.detections
-
-    # This will be correct once the multi-file support is added in prod
-    # assert file_results.details.file_type_details["pickle_modules"] == ["callable: builtins.exec"]
-
-    assert detections
-    assert detections[0].severity == "high"
-    assert "This detection rule was triggered by the presence of a function or library that can be used to execute code" in str(detections[0].description)
+    for file_results in results.file_results:
+        if file_results.file_location == safe_model_path:
+            detections = file_results.detections
+            assert detections
+            assert detections[0].severity == "safe"
+            assert file_results.details.file_type_details["pickle_modules"] == ["callable: builtins.print"]
+        elif file_results.file_location == malicious_model_path:
+            detections = file_results.detections
+            assert file_results.details.file_type_details["pickle_modules"] == ["callable: builtins.exec"]
+            assert detections
+            assert detections[0].severity == "high"
+            assert "This detection rule was triggered by the presence of a function or library that can be used to execute code" in str(detections[0].description)
+            assert file_results.details.file_type_details["pickle_modules"] == ["callable: builtins.exec"]

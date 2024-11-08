@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 **end_time** | **datetime** | time the scan ended | [optional] 
 **status** | **str** | status of the scan | 
 **severity** | **str** | detection severity | [optional] 
-**file_results** | [**List[FileScanReportV3]**](FileScanReportV3.md) |  | [optional] 
+**file_results** | [**List[FileResultsInner]**](FileResultsInner.md) |  | [optional] 
 
 ## Example
 

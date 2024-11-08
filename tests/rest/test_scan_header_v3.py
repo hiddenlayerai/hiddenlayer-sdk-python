@@ -47,7 +47,7 @@ class TestScanHeaderV3(unittest.TestCase):
                 start_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 end_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 status = 'pending',
-                severity = ''
+                severity = 'low'
             )
         else:
             return ScanHeaderV3(

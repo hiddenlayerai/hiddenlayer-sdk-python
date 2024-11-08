@@ -1,9 +1,9 @@
 import os
 import random
-import shutil
 import tempfile
 import time
 import warnings
+import zipfile
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Union
@@ -38,13 +38,14 @@ class ModelScanAPI:
         self.is_saas = is_saas(api_client.configuration.host)
         self._api_client = api_client
 
+        self._model_supply_chain_api = ModelSupplyChainApi(api_client=api_client)
+        self._model_api = ModelAPI(api_client=api_client)
+        self._sensor_api = SensorApi(
+            api_client=api_client
+        )  # lower level api of ModelAPI
+
         if self.is_saas:
-            self._model_supply_chain_api = ModelSupplyChainApi(api_client=api_client)
             self._model_scan_api = ModelScanApi(api_client=api_client)
-            self._model_api = ModelAPI(api_client=api_client)
-            self._sensor_api = SensorApi(
-                api_client=api_client
-            )  # lower level api of ModelAPI
         else:
             self._model_scan_api = EnterpriseModelScanApi(api_client=api_client)
 
@@ -406,8 +407,7 @@ class ModelScanAPI:
         """
 
         model_path = Path(path)
-        file = tempfile.NamedTemporaryFile().name
-        shutil.make_archive(file, 'zip', model_path)
+        filename = tempfile.NamedTemporaryFile().name + '.zip'
         
         ignore_file_patterns = (
             EXCLUDE_FILE_TYPES + ignore_file_patterns
@@ -421,9 +421,13 @@ class ModelScanAPI:
             ignore_patterns=ignore_file_patterns,
         )
 
+        with zipfile.ZipFile(filename, 'a') as zipf:
+            for file in files:
+                zipf.write(file, os.path.relpath(file, model_path))
+
         return self.scan_file(
                 model_name=model_name,
-                model_path=file + '.zip',
+                model_path=filename,
                 threads=threads,
                 chunk_size=chunk_size,
                 wait_for_results=wait_for_results,

@@ -21,6 +21,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from hiddenlayer.sdk.rest.models.mitre_atlas_inner import MITREAtlasInner
+from hiddenlayer.sdk.rest.models.rule_details_inner import RuleDetailsInner
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -34,6 +35,7 @@ class ScanDetectionV3(BaseModel):
     detection_id: StrictStr = Field(description="unique identifier for the detection")
     impact: Optional[StrictStr] = Field(default=None, description="detection impact")
     likelihood: Optional[StrictStr] = Field(default=None, description="detection likelihood")
+    rule_details: Optional[List[RuleDetailsInner]] = None
     rule_id: StrictStr = Field(description="unique identifier for the rule that sourced the detection")
     category: StrictStr = Field(description="Vulnerability category for the detection")
     mitre_atlas: List[MITREAtlasInner]
@@ -42,7 +44,7 @@ class ScanDetectionV3(BaseModel):
     cwe: Optional[Annotated[str, Field(strict=True)]] = None
     cwe_href: Optional[StrictStr] = Field(default=None, description="CWE URL for the detection")
     technical_blog_href: Optional[StrictStr] = Field(default=None, description="Hiddenlayer Technical Blog URL for the detection")
-    __properties: ClassVar[List[str]] = ["description", "risk", "severity", "detection_id", "impact", "likelihood", "rule_id", "category", "mitre_atlas", "owasp", "cve", "cwe", "cwe_href", "technical_blog_href"]
+    __properties: ClassVar[List[str]] = ["description", "risk", "severity", "detection_id", "impact", "likelihood", "rule_details", "rule_id", "category", "mitre_atlas", "owasp", "cve", "cwe", "cwe_href", "technical_blog_href"]
 
     @field_validator('risk')
     def risk_validate_enum(cls, value):
@@ -107,6 +109,13 @@ class ScanDetectionV3(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in rule_details (list)
+        _items = []
+        if self.rule_details:
+            for _item in self.rule_details:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict['rule_details'] = _items
         # override the default output from pydantic by calling `to_dict()` of each item in mitre_atlas (list)
         _items = []
         if self.mitre_atlas:
@@ -132,6 +141,7 @@ class ScanDetectionV3(BaseModel):
             "detection_id": obj.get("detection_id"),
             "impact": obj.get("impact"),
             "likelihood": obj.get("likelihood"),
+            "rule_details": [RuleDetailsInner.from_dict(_item) for _item in obj["rule_details"]] if obj.get("rule_details") is not None else None,
             "rule_id": obj.get("rule_id"),
             "category": obj.get("category"),
             "mitre_atlas": [MITREAtlasInner.from_dict(_item) for _item in obj["mitre_atlas"]] if obj.get("mitre_atlas") is not None else None,

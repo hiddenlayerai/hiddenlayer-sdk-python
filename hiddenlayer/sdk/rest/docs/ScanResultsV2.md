@@ -9,8 +9,8 @@ Name | Type | Description | Notes
 **status** | **str** |  | 
 **start_time** | **int** |  | 
 **end_time** | **int** |  | 
-**results** | [**ScanResults**](ScanResults.md) |  | 
-**severity** | **str** |  | 
+**results** | [**ScanResults**](ScanResults.md) |  | [optional] 
+**severity** | **str** |  | [optional] 
 **detections** | [**List[Detections]**](Detections.md) |  | 
 
 ## Example

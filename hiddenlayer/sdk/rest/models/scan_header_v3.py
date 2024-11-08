@@ -48,6 +48,16 @@ class ScanHeaderV3(BaseModel):
             raise ValueError("must be one of enum values ('pending', 'running', 'done', 'failed', 'canceled')")
         return value
 
+    @field_validator('severity')
+    def severity_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['low', 'medium', 'high', 'critical', 'safe', 'unknown']):
+            raise ValueError("must be one of enum values ('low', 'medium', 'high', 'critical', 'safe', 'unknown')")
+        return value
+
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,

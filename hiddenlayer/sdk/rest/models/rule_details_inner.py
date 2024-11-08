@@ -17,18 +17,30 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from datetime import datetime
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from hiddenlayer.sdk.rest.models.file_results_inner import FileResultsInner
 from typing import Optional, Set
 from typing_extensions import Self
 
-class FileScanReportV3(BaseModel):
+class RuleDetailsInner(BaseModel):
     """
-    FileScanReportV3
+    RuleDetailsInner
     """ # noqa: E501
-    file_results: Optional[List[FileResultsInner]] = None
-    __properties: ClassVar[List[str]] = ["file_results"]
+    status: Optional[StrictStr] = Field(default=None, description="status")
+    status_at: Optional[datetime] = Field(default=None, description="date-time when the details entry was created")
+    description: Optional[StrictStr] = Field(default=None, description="description of the deprecation")
+    __properties: ClassVar[List[str]] = ["status", "status_at", "description"]
+
+    @field_validator('status')
+    def status_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['created', 'deprecated', 'updated', 'superseded']):
+            raise ValueError("must be one of enum values ('created', 'deprecated', 'updated', 'superseded')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +60,7 @@ class FileScanReportV3(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of FileScanReportV3 from a JSON string"""
+        """Create an instance of RuleDetailsInner from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,18 +81,11 @@ class FileScanReportV3(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in file_results (list)
-        _items = []
-        if self.file_results:
-            for _item in self.file_results:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict['file_results'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of FileScanReportV3 from a dict"""
+        """Create an instance of RuleDetailsInner from a dict"""
         if obj is None:
             return None
 
@@ -88,7 +93,9 @@ class FileScanReportV3(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "file_results": [FileResultsInner.from_dict(_item) for _item in obj["file_results"]] if obj.get("file_results") is not None else None
+            "status": obj.get("status"),
+            "status_at": obj.get("status_at"),
+            "description": obj.get("description")
         })
         return _obj
 

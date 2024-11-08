@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **detection_id** | **str** | unique identifier for the detection | 
 **impact** | **str** | detection impact | [optional] 
 **likelihood** | **str** | detection likelihood | [optional] 
+**rule_details** | [**List[RuleDetailsInner]**](RuleDetailsInner.md) |  | [optional] 
 **rule_id** | **str** | unique identifier for the rule that sourced the detection | 
 **category** | **str** | Vulnerability category for the detection | 
 **mitre_atlas** | [**List[MITREAtlasInner]**](MITREAtlasInner.md) |  | 

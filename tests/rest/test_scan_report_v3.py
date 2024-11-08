@@ -47,9 +47,9 @@ class TestScanReportV3(unittest.TestCase):
                 start_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 end_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 status = 'pending',
-                severity = '',
+                severity = 'low',
                 file_results = [
-                    hiddenlayer.sdk.rest.models.file_scan_report_v3.FileScanReportV3(
+                    hiddenlayer.sdk.rest.models.file_results_inner.File_Results_inner(
                         file_instance_id = '', 
                         file_location = '', 
                         start_time = '2024-10-16T23:38:32.278Z', 
@@ -73,6 +73,12 @@ class TestScanReportV3(unittest.TestCase):
                                 detection_id = '00000000-0000-0000-0000-000000000000', 
                                 impact = 'critical', 
                                 likelihood = 'medium', 
+                                rule_details = [
+                                    hiddenlayer.sdk.rest.models.rule_details_inner.Rule_Details_inner(
+                                        status = 'created', 
+                                        status_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                                        description = '', )
+                                    ], 
                                 rule_id = 'PICKLE_0055_202408', 
                                 category = 'Arbitrary Code Execution', 
                                 mitre_atlas = [

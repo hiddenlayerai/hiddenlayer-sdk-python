@@ -41,6 +41,12 @@ class TestScanDetectionV3(unittest.TestCase):
                 detection_id = '00000000-0000-0000-0000-000000000000',
                 impact = 'critical',
                 likelihood = 'medium',
+                rule_details = [
+                    hiddenlayer.sdk.rest.models.rule_details_inner.Rule_Details_inner(
+                        status = 'created', 
+                        status_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                        description = '', )
+                    ],
                 rule_id = 'PICKLE_0055_202408',
                 category = 'Arbitrary Code Execution',
                 mitre_atlas = [
