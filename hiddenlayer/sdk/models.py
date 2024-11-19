@@ -1,12 +1,11 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import StrictStr
 from typing_extensions import Self
 
 from hiddenlayer.sdk.constants import ScanStatus
 from hiddenlayer.sdk.rest.models import (
-    FileScanReportV3,
     ModelInventoryInfo,
     ScanReportV3,
 )
@@ -35,7 +34,7 @@ class EmptyScanResults(ScanResults):
     file_count: int = 0
     files_with_detections_count: int = 0
     detection_count: int = 0
-    detection_categories: list[StrictStr] | None = []
+    detection_categories: Optional[List[StrictStr]] = []
     inventory: ModelInventoryInfo = ModelInventoryInfo(
         model_name="",
         model_version="",
@@ -48,6 +47,6 @@ class EmptyScanResults(ScanResults):
     version: str = ""
     scan_id: str = ""
     start_time: datetime = datetime.now()
-    end_time: datetime | None = datetime.now()
-    severity: StrictStr | None = ""
-    file_results: list[FileResultsInner] | None = []
+    end_time: Optional[datetime] = datetime.now()
+    severity: Optional[StrictStr] = ""
+    file_results: Optional[List[FileResultsInner]]= []
