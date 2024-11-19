@@ -49,4 +49,4 @@ class EmptyScanResults(ScanResults):
     start_time: datetime = datetime.now()
     end_time: Optional[datetime] = datetime.now()
     severity: Optional[StrictStr] = ""
-    file_results: Optional[List[FileResultsInner]]= []
+    file_results: Optional[List[FileResultsInner]] = []
