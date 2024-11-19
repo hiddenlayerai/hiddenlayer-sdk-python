@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -30,7 +30,7 @@ class ScanModelDetailsV3(BaseModel):
     model_version: StrictStr = Field(description="version of the model")
     model_source: StrictStr = Field(description="source (provider) info")
     requested_scan_location: StrictStr = Field(description="Location to be scanned")
-    requesting_entity: StrictStr = Field(description="Entity that requested the scan")
+    requesting_entity: Optional[StrictStr] = Field(default=None, description="Entity that requested the scan")
     __properties: ClassVar[List[str]] = ["model_name", "model_version", "model_source", "requested_scan_location", "requesting_entity"]
 
     model_config = ConfigDict(

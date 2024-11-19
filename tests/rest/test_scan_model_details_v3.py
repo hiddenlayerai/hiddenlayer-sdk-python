@@ -47,7 +47,6 @@ class TestScanModelDetailsV3(unittest.TestCase):
                 model_version = '1.0.0',
                 model_source = 'adhoc',
                 requested_scan_location = '/files-to-scan',
-                requesting_entity = '',
         )
         """
 

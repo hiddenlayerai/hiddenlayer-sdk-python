@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **model_version** | **str** | version of the model | 
 **model_source** | **str** | source (provider) info | 
 **requested_scan_location** | **str** | Location to be scanned | 
-**requesting_entity** | **str** | Entity that requested the scan | 
+**requesting_entity** | **str** | Entity that requested the scan | [optional] 
 
 ## Example
 

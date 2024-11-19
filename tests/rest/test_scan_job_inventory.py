@@ -48,7 +48,6 @@ class TestScanJobInventory(unittest.TestCase):
                 model_name = 'keras-tf-2025-05-27',
                 model_version = '1.0.0',
                 model_source = 'adhoc',
-                requesting_entity = '',
                 model_id = '00000000-0000-0000-0000-000000000000',
                 model_version_id = '00000000-0000-0000-0000-000000000000',
         )

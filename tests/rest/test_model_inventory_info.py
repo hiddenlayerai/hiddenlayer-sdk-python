@@ -49,7 +49,6 @@ class TestModelInventoryInfo(unittest.TestCase):
                 model_version = '1.0.0',
                 model_source = 'adhoc',
                 requested_scan_location = '/files-to-scan',
-                requesting_entity = '',
                 model_id = '00000000-0000-0000-0000-000000000000',
                 model_version_id = '00000000-0000-0000-0000-000000000000',
         )
