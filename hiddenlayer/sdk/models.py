@@ -1,11 +1,14 @@
+from datetime import datetime
 from typing import Optional
 
 from typing_extensions import Self
 
-from datetime import datetime
-
 from hiddenlayer.sdk.constants import ScanStatus
-from hiddenlayer.sdk.rest.models import ScanReportV3, ModelInventoryInfo, FileScanReportV3
+from hiddenlayer.sdk.rest.models import (
+    FileScanReportV3,
+    ModelInventoryInfo,
+    ScanReportV3,
+)
 
 
 class ScanResults(ScanReportV3):
@@ -24,13 +27,22 @@ class ScanResults(ScanReportV3):
 
         return cls(**scan_results_dict)
 
+
 class EmptyScanResults(ScanResults):
     status: str = ScanStatus.PENDING
     file_count: int = 0
     files_with_detections_count: int = 0
     detection_count: int = 0
     detection_categories: list[str] = []
-    inventory: ModelInventoryInfo = ModelInventoryInfo(model_name="", model_version="", model_source="", requested_scan_location="", requesting_entity="", model_id="", model_version_id="")
+    inventory: ModelInventoryInfo = ModelInventoryInfo(
+        model_name="",
+        model_version="",
+        model_source="",
+        requested_scan_location="",
+        requesting_entity="",
+        model_id="",
+        model_version_id="",
+    )
     version: str = ""
     scan_id: str = ""
     start_time: datetime = datetime.now()

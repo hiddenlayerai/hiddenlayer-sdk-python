@@ -9,17 +9,17 @@ from pathlib import Path
 from typing import List, Optional, Union
 from uuid import uuid4
 
+from pydantic_core import ValidationError
+
 from hiddenlayer.sdk.constants import ScanStatus
 from hiddenlayer.sdk.enterprise.enterprise_model_scan_api import EnterpriseModelScanApi
-from hiddenlayer.sdk.models import ScanResults, EmptyScanResults
-from hiddenlayer.sdk.rest.api import ModelScanApi, SensorApi, ModelSupplyChainApi
+from hiddenlayer.sdk.models import EmptyScanResults, ScanResults
+from hiddenlayer.sdk.rest.api import ModelScanApi, ModelSupplyChainApi, SensorApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
 from hiddenlayer.sdk.rest.models import MultipartUploadPart
 from hiddenlayer.sdk.rest.models.model import Model
 from hiddenlayer.sdk.services.model import ModelAPI
 from hiddenlayer.sdk.utils import filter_path_objects, is_saas
-
-from pydantic_core import ValidationError
 
 EXCLUDE_FILE_TYPES = [
     "*.txt",
@@ -363,19 +363,26 @@ class ModelScanAPI:
 
         if self.is_saas:
             print(model_name)
-            response = self._sensor_api.sensor_sor_api_v3_model_cards_query_get(model_name_eq=model_name, limit=1)
+            response = self._sensor_api.sensor_sor_api_v3_model_cards_query_get(
+                model_name_eq=model_name, limit=1
+            )
             print(response)
             model_id = response.results[0].model_id
         else:
             model_id = model_name
 
-
-        scans = self._model_supply_chain_api.model_scan_api_v3_scan_query(model_ids=[model_id], latest_per_model_version_only=True)
+        scans = self._model_supply_chain_api.model_scan_api_v3_scan_query(
+            model_ids=[model_id], latest_per_model_version_only=True
+        )
         print(scans)
         if scans.total == 0:
             return EmptyScanResults()
-        
-        scan_report = self._model_supply_chain_api.model_scan_api_v3_scan_model_version_id_get(scans.items[0].scan_id)
+
+        scan_report = (
+            self._model_supply_chain_api.model_scan_api_v3_scan_model_version_id_get(
+                scans.items[0].scan_id
+            )
+        )
 
         return ScanResults.from_scanreportv3(
             scan_report_v3=scan_report, model_id=model_id
@@ -407,8 +414,8 @@ class ModelScanAPI:
         """
 
         model_path = Path(path)
-        filename = tempfile.NamedTemporaryFile().name + '.zip'
-        
+        filename = tempfile.NamedTemporaryFile().name + ".zip"
+
         ignore_file_patterns = (
             EXCLUDE_FILE_TYPES + ignore_file_patterns
             if ignore_file_patterns
@@ -421,15 +428,14 @@ class ModelScanAPI:
             ignore_patterns=ignore_file_patterns,
         )
 
-        with zipfile.ZipFile(filename, 'a') as zipf:
+        with zipfile.ZipFile(filename, "a") as zipf:
             for file in files:
                 zipf.write(file, os.path.relpath(file, model_path))
 
         return self.scan_file(
-                model_name=model_name,
-                model_path=filename,
-                threads=threads,
-                chunk_size=chunk_size,
-                wait_for_results=wait_for_results,
-            )
-        
+            model_name=model_name,
+            model_path=filename,
+            threads=threads,
+            chunk_size=chunk_size,
+            wait_for_results=wait_for_results,
+        )

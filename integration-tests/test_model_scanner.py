@@ -15,10 +15,12 @@ params = [
 class MaliciousPickle:
     def __reduce__(self):
         return exec, ("import os; os.system('env')",)
-    
+
+
 class SafePickle:
     def __reduce__(self):
         return print, ("Hello, World!",)
+
 
 @pytest.fixture(params=params)
 def hl_client(request) -> HiddenlayerServiceClient:
@@ -54,17 +56,23 @@ def test_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
     assert results.files_with_detections_count == 1
 
     file_results = results.file_results[0]
-    
+
     detections = file_results.detections
 
-    assert file_results.details.file_type_details["pickle_modules"] == ["callable: builtins.exec"]
+    assert file_results.details.file_type_details["pickle_modules"] == [
+        "callable: builtins.exec"
+    ]
 
     assert detections
     assert detections[0].severity == "high"
-    assert "This detection rule was triggered by the presence of a function or library that can be used to execute code" in str(detections[0].description)
+    assert (
+        "This detection rule was triggered by the presence of a function or library that can be used to execute code"
+        in str(detections[0].description)
+    )
 
     if hl_client.is_saas:
         hl_client.model.delete(model_name=model_name)
+
 
 def test_scan_folder(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to scan a folder"""
@@ -75,14 +83,11 @@ def test_scan_folder(tmp_path, hl_client: HiddenlayerServiceClient):
 
     with open(safe_model_path, "wb") as f:
         pickle.dump(SafePickle(), f)
-    
+
     with open(malicious_model_path, "wb") as f:
         pickle.dump(MaliciousPickle(), f)
 
-    results = hl_client.model_scanner.scan_folder(
-        model_name=model_name,
-        path=tmp_path
-    )
+    results = hl_client.model_scanner.scan_folder(model_name=model_name, path=tmp_path)
     assert results.file_count == 3
     assert results.files_with_detections_count == 2
 
@@ -91,11 +96,20 @@ def test_scan_folder(tmp_path, hl_client: HiddenlayerServiceClient):
             detections = file_results.detections
             assert detections
             assert detections[0].severity == "safe"
-            assert file_results.details.file_type_details["pickle_modules"] == ["callable: builtins.print"]
+            assert file_results.details.file_type_details["pickle_modules"] == [
+                "callable: builtins.print"
+            ]
         elif file_results.file_location == malicious_model_path:
             detections = file_results.detections
-            assert file_results.details.file_type_details["pickle_modules"] == ["callable: builtins.exec"]
+            assert file_results.details.file_type_details["pickle_modules"] == [
+                "callable: builtins.exec"
+            ]
             assert detections
             assert detections[0].severity == "high"
-            assert "This detection rule was triggered by the presence of a function or library that can be used to execute code" in str(detections[0].description)
-            assert file_results.details.file_type_details["pickle_modules"] == ["callable: builtins.exec"]
+            assert (
+                "This detection rule was triggered by the presence of a function or library that can be used to execute code"
+                in str(detections[0].description)
+            )
+            assert file_results.details.file_type_details["pickle_modules"] == [
+                "callable: builtins.exec"
+            ]
