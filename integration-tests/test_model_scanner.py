@@ -8,9 +8,7 @@ import pytest
 from hiddenlayer import HiddenlayerServiceClient
 from hiddenlayer.sdk.models import ScanResults
 
-params = [
-    ("https://api.us.hiddenlayer.ai")
-]
+params = [("https://api.us.hiddenlayer.ai")]
 
 
 class MaliciousPickle:
@@ -99,6 +97,7 @@ def test_scan_folder_with_version(tmp_path, hl_client: HiddenlayerServiceClient)
     _validate_scan_folder(tmp_path, results)
 
     assert results.inventory.model_version == str(model_version)
+
 
 def test_scan_model_multiple_times(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to scan a model multiple times"""

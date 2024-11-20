@@ -99,9 +99,7 @@ class ModelScanAPI:
                         header_params={"Content-Type": "application/octet-binary"},
                     )
 
-        self._sensor_api.complete_multipart_upload(
-            sensor.sensor_id, upload.upload_id
-        )
+        self._sensor_api.complete_multipart_upload(sensor.sensor_id, upload.upload_id)
 
         self._model_scan_api.scan_model(sensor.sensor_id)
 
