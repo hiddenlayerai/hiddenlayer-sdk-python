@@ -375,7 +375,7 @@ class ModelScanAPI:
         Get results from a model scan.
 
         :param model_name: Name of the model.
-        :param model_version: Version of the model.
+        :param model_version: Version of the model. When the model version is not specified, the scan results for the latest version will be returned.
 
         :returns: Scan results.
         """

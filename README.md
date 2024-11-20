@@ -57,7 +57,7 @@ hl_client.model_scanner.scan_file(
 )
 ```
 
-If you would like to specify the version associated with the model, you can pass that in as well:
+If you would like to specify the version associated with the model, you can pass that in as well. Note that the model version must not already exist.
 
 ```python
 hl_client.model_scanner.scan_file(
@@ -76,7 +76,7 @@ hl_client.model_scanner.scan_folder(
 )
 ```
 
-If you would like to specify the version associated with the model, you can pass that in as well:
+If you would like to specify the version associated with the model, you can pass that in as well. Note that the model version must not already exist.
 
 ```python
 hl_client.model_scanner.scan_folder(

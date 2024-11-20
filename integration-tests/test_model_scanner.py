@@ -1,5 +1,6 @@
 import os
 import pickle
+from typing import Optional
 from uuid import uuid4
 
 import pytest
@@ -99,6 +100,26 @@ def test_scan_folder_with_version(tmp_path, hl_client: HiddenlayerServiceClient)
     _validate_scan_folder(tmp_path, results)
 
     assert results.inventory.model_version == str(model_version)
+
+def test_scan_model_multiple_times(tmp_path, hl_client: HiddenlayerServiceClient):
+    """Integration test to scan a model multiple times"""
+
+    model_path = _setup_scan_model(tmp_path)
+    model_name = f"sdk-integration-scan-model-{uuid4()}"
+
+    results: Optional[ScanResults] = None
+    for _ in range(3):
+        results = hl_client.model_scanner.scan_file(
+            model_name=model_name, model_path=model_path
+        )
+
+    assert results is not None
+
+    _validate_scan_model(results)
+    assert results.inventory.model_version == "3"
+
+    if hl_client.is_saas:
+        hl_client.model.delete(model_name=model_name)
 
 
 def _setup_scan_model(tmp_path):
