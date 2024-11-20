@@ -12,7 +12,6 @@ from uuid import uuid4
 from pydantic_core import ValidationError
 
 from hiddenlayer.sdk.constants import ScanStatus
-from hiddenlayer.sdk.enterprise.enterprise_model_scan_api import EnterpriseModelScanApi
 from hiddenlayer.sdk.models import EmptyScanResults, ScanResults
 from hiddenlayer.sdk.rest.api import ModelScanApi, ModelSupplyChainApi, SensorApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
@@ -44,16 +43,14 @@ class ModelScanAPI:
             api_client=api_client
         )  # lower level api of ModelAPI
 
-        if self.is_saas:
-            self._model_scan_api = ModelScanApi(api_client=api_client)
-        else:
-            self._model_scan_api = EnterpriseModelScanApi(api_client=api_client)
+        self._model_scan_api = ModelScanApi(api_client=api_client)
 
     def scan_file(
         self,
         *,
         model_name: str,
         model_path: Union[str, os.PathLike],
+        model_version: Optional[int] = None,
         threads: int = 1,
         chunk_size: int = 16,
         wait_for_results: bool = True,
@@ -63,6 +60,7 @@ class ModelScanAPI:
 
         :param model_name: Name of the model to be shown on the HiddenLayer UI
         :param model_path: Local path to the model file.
+        :param model_version: Version of the model to be shown on the HiddenLayer UI.
         :param threads: Number of threads used to upload the file, defaults to 1.
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
@@ -78,52 +76,36 @@ class ModelScanAPI:
 
         file_path = Path(model_path)
 
-        # Can combine the 2 paths when SaaS API and Enterprise APIs are in sync
-        if self.is_saas:
-            filesize = file_path.stat().st_size
-            sensor = self._model_api.create(model_name=model_name)
-            upload = self._sensor_api.begin_multipart_upload(sensor.sensor_id, filesize)
+        filesize = file_path.stat().st_size
+        sensor = self._model_api.create(
+            model_name=model_name, model_version=model_version
+        )
+        upload = self._sensor_api.begin_multipart_upload(sensor.sensor_id, filesize)
 
-            with open(file_path, "rb") as f:
-                for i in range(0, len(upload.parts), chunk_size):
-                    group: List[MultipartUploadPart] = upload.parts[i : i + chunk_size]
-                    for part in group:
-                        read_amount = part.end_offset - part.start_offset
-                        f.seek(int(part.start_offset))
-                        part_data = f.read(int(read_amount))
+        with open(file_path, "rb") as f:
+            for i in range(0, len(upload.parts), chunk_size):
+                group: List[MultipartUploadPart] = upload.parts[i : i + chunk_size]
+                for part in group:
+                    read_amount = part.end_offset - part.start_offset
+                    f.seek(int(part.start_offset))
+                    part_data = f.read(int(read_amount))
 
-                        # The SaaS multipart upload returns a upload url for each part
-                        # So there is no specified route
-                        self._api_client.call_api(
-                            "PUT",
-                            part.upload_url,
-                            body=part_data,
-                            header_params={"Content-Type": "application/octet-binary"},
-                        )
+                    # The SaaS multipart upload returns a upload url for each part
+                    # So there is no specified route
+                    self._api_client.call_api(
+                        "PUT",
+                        part.upload_url,
+                        body=part_data,
+                        header_params={"Content-Type": "application/octet-binary"},
+                    )
 
-            self._sensor_api.complete_multipart_upload(
-                sensor.sensor_id, upload.upload_id
-            )
+        self._sensor_api.complete_multipart_upload(sensor.sensor_id, upload.upload_id)
 
-            self._model_scan_api.scan_model(sensor.sensor_id)
-        else:
-            with open(file_path, "rb") as f:
-                data = f.read()
+        self._model_scan_api.scan_model(sensor.sensor_id)
 
-            sensor = Model(
-                sensor_id=str(uuid4()),
-                created_at=datetime.now(),
-                tenant_id="0000",
-                plaintext_name=model_name,
-                active=True,
-                version=1,
-            )
-
-            self._model_scan_api: EnterpriseModelScanApi
-            self._model_scan_api.scan_model(sensor.sensor_id, data)
-            model_name = sensor.sensor_id
-
-        scan_results = self.get_scan_results(model_name=model_name)
+        scan_results = self.get_scan_results(
+            model_name=model_name, model_version=model_version
+        )
 
         base_delay = 0.1  # seconds
         retries = 0
@@ -135,7 +117,9 @@ class ModelScanAPI:
                     0, 1
                 )  # exponential back off retry
                 time.sleep(delay)
-                scan_results = self.get_scan_results(model_name=model_name)
+                scan_results = self.get_scan_results(
+                    model_name=model_name, model_version=model_version
+                )
                 print(f"{file_path.name} scan status: {scan_results.status}")
 
         scan_results.file_name = file_path.name
@@ -149,6 +133,7 @@ class ModelScanAPI:
         model_name: str,
         bucket: str,
         key: str,
+        model_version: Optional[int] = None,
         s3_client: Optional[object] = None,
         threads: int = 1,
         chunk_size: int = 4,
@@ -160,6 +145,7 @@ class ModelScanAPI:
         :param model_name: Name of the model to be shown on the HiddenLayer UI.
         :param bucket: Name of the s3 bucket where the model file is stored.
         :param key: Path to the model file on s3.
+        :param model_version: Version of the model to be shown on the HiddenLayer UI.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
         :param s3_client: boto3 s3 client.
         :param threads: Number of threads used to upload the file, defaults to 1.
@@ -195,6 +181,7 @@ class ModelScanAPI:
         return self.scan_file(
             model_path=f"/tmp/{file_name}",
             model_name=model_name,
+            model_version=model_version,
             threads=threads,
             chunk_size=chunk_size,
             wait_for_results=wait_for_results,
@@ -207,6 +194,7 @@ class ModelScanAPI:
         account_url: str,
         container: str,
         blob: str,
+        model_version: Optional[int] = None,
         blob_service_client: Optional[object] = None,
         credential: Optional[object] = None,
         threads: int = 1,
@@ -220,6 +208,7 @@ class ModelScanAPI:
         :param account_url: Azure Blob url of where the file is stored.
         :param container: Azure Blob container containing the model file.
         :param blob: Path to the model file inside the Azure blob container.
+        :param model_version: Version of the model to be shown on the HiddenLayer UI.
         :param blob_service_client: BlobServiceClient object. Defaults to creating one using DefaultCredential().
         :param credential: Credential to be passed to the BlobServiceClient object, can be a credential object, SAS key, etc.
             Defaults to `DefaultCredential`
@@ -275,6 +264,7 @@ class ModelScanAPI:
         return self.scan_file(
             model_path=f"/tmp/{file_name}",
             model_name=model_name,
+            model_version=model_version,
             threads=threads,
             chunk_size=chunk_size,
             wait_for_results=wait_for_results,
@@ -351,11 +341,17 @@ class ModelScanAPI:
             wait_for_results=wait_for_results,
         )
 
-    def get_scan_results(self, *, model_name: str) -> ScanResults:
+    def get_scan_results(
+        self,
+        *,
+        model_name: str,
+        model_version: Optional[int] = None,
+    ) -> ScanResults:
         """
         Get results from a model scan.
 
         :param model_name: Name of the model.
+        :param model_version: Version of the model. When the model version is not specified, the scan results for the latest version will be returned.
 
         :returns: Scan results.
         """
@@ -377,9 +373,22 @@ class ModelScanAPI:
         if scans.total == 0:
             return EmptyScanResults()
 
+        scan = scans.items[0]
+        if model_version:
+            scan = next(
+                (
+                    s
+                    for s in scans.items
+                    if s.inventory.model_version == str(model_version)
+                ),
+                None,
+            )
+        if not scan:
+            return EmptyScanResults()
+
         scan_report = (
             self._model_supply_chain_api.model_scan_api_v3_scan_model_version_id_get(
-                scans.items[0].scan_id
+                scan.scan_id
             )
         )
 
@@ -392,6 +401,7 @@ class ModelScanAPI:
         *,
         model_name: str,
         path: Union[str, os.PathLike],
+        model_version: Optional[int] = None,
         allow_file_patterns: Optional[List[str]] = None,
         ignore_file_patterns: Optional[List[str]] = None,
         threads: int = 1,
@@ -403,6 +413,7 @@ class ModelScanAPI:
 
         :param model_name: Name of the model to be shown on the HiddenLayer UI.
         :param path: Path to the folder on disk to be scanned.
+        :param model_version: Version of the model to be shown on the HiddenLayer UI.
         :param allow_file_patterns: If provided, only files matching at least one pattern are scanned.
         :param ignore_file_patterns: If provided, files matching any of the patterns are not scanned.
         :param threads: Number of threads used to upload the file, defaults to 1.
@@ -433,6 +444,7 @@ class ModelScanAPI:
 
         return self.scan_file(
             model_name=model_name,
+            model_version=model_version,
             model_path=filename,
             threads=threads,
             chunk_size=chunk_size,

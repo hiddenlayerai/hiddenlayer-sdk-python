@@ -29,7 +29,7 @@ def test_model_create_delete(hl_client: HiddenlayerServiceClient):
 
     model_name = f"test_model_create_delete_{str(uuid4())}"
 
-    _ = hl_client.model.create(model_name=model_name)
+    _ = hl_client.model.create(model_name=model_name, model_version=None)
 
     hl_client.model.delete(model_name=model_name)
 

@@ -44,9 +44,6 @@ class TestPagedResponseWithTotal(unittest.TestCase):
             )
         else:
             return PagedResponseWithTotal(
-                items = [
-                    ''
-                    ],
                 total = 0,
                 limit = 50,
                 offset = 250,

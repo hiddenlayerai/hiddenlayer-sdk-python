@@ -38,22 +38,41 @@ hl_client = HiddenlayerServiceClient(
 )
 ```
 
-If you are using the Enterprise version of the production, you can instantiate the `HiddenlayerServiceClient` as follows:
-
-```python
-from hiddenlayer import HiddenlayerServiceClient
-
-hl_client = HiddenlayerServiceClient(
-  host="https://your.hiddenlayer.enterprise.url",
-)
-```
-
 ### Scanning Models
 
 ```python
 hl_client.model_scanner.scan_file(
   model_name="name_of_the_model",
   model_path="path/to/model/file.pkl"
+)
+```
+
+If you would like to specify the version associated with the model, you can pass that in as well. Note that the model version must not already exist.
+
+```python
+hl_client.model_scanner.scan_file(
+  model_name="name_of_the_model",
+  model_version=1,
+  model_path="path/to/model/file.pkl"
+)
+```
+
+### Scanning Folders
+
+```python
+hl_client.model_scanner.scan_folder(
+  model_name="name_of_the_model",
+  path="path/to/model/"
+)
+```
+
+If you would like to specify the version associated with the model, you can pass that in as well. Note that the model version must not already exist.
+
+```python
+hl_client.model_scanner.scan_folder(
+  model_name="name_of_the_model",
+  model_version=1,
+  path="path/to/model/"
 )
 ```
 

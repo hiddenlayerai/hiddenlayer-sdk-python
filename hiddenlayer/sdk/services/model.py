@@ -22,16 +22,19 @@ class ModelAPI:
     def __init__(self, api_client: ApiClient) -> None:
         self._sensor_api = SensorApi(api_client=api_client)
 
-    def create(self, *, model_name: str) -> Model:
+    def create(self, *, model_name: str, model_version: Optional[int]) -> Model:
         """
         Creates a model in the HiddenLayer Platform.
 
         :params model_name: Name of the model
+        :params model_version: Version of the model
 
         :returns: HiddenLayer ModelID
         """
         return self._sensor_api.create_sensor(
-            CreateSensorRequest(plaintext_name=model_name, adhoc=True)
+            CreateSensorRequest(
+                plaintext_name=model_name, version=model_version, adhoc=True
+            )
         )
 
     def get(self, *, model_name: str, version: Optional[int] = None) -> Model:

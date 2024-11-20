@@ -44,9 +44,6 @@ class TestModelScanApiV3ScanQuery200Response(unittest.TestCase):
             )
         else:
             return ModelScanApiV3ScanQuery200Response(
-                items = [
-                    hiddenlayer.sdk.rest.models.scan_report_v3.ScanReportV3()
-                    ],
                 total = 0,
                 limit = 50,
                 offset = 250,
