@@ -12,7 +12,6 @@ from uuid import uuid4
 from pydantic_core import ValidationError
 
 from hiddenlayer.sdk.constants import ScanStatus
-from hiddenlayer.sdk.enterprise.enterprise_model_scan_api import EnterpriseModelScanApi
 from hiddenlayer.sdk.models import EmptyScanResults, ScanResults
 from hiddenlayer.sdk.rest.api import ModelScanApi, ModelSupplyChainApi, SensorApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
@@ -44,10 +43,7 @@ class ModelScanAPI:
             api_client=api_client
         )  # lower level api of ModelAPI
 
-        if self.is_saas:
-            self._model_scan_api = ModelScanApi(api_client=api_client)
-        else:
-            self._model_scan_api = EnterpriseModelScanApi(api_client=api_client)
+        self._model_scan_api = ModelScanApi(api_client=api_client)
 
     def scan_file(
         self,
@@ -80,52 +76,34 @@ class ModelScanAPI:
 
         file_path = Path(model_path)
 
-        # Can combine the 2 paths when SaaS API and Enterprise APIs are in sync
-        if self.is_saas:
-            filesize = file_path.stat().st_size
-            sensor = self._model_api.create(
-                model_name=model_name, model_version=model_version
-            )
-            upload = self._sensor_api.begin_multipart_upload(sensor.sensor_id, filesize)
+        filesize = file_path.stat().st_size
+        sensor = self._model_api.create(
+            model_name=model_name, model_version=model_version
+        )
+        upload = self._sensor_api.begin_multipart_upload(sensor.sensor_id, filesize)
 
-            with open(file_path, "rb") as f:
-                for i in range(0, len(upload.parts), chunk_size):
-                    group: List[MultipartUploadPart] = upload.parts[i : i + chunk_size]
-                    for part in group:
-                        read_amount = part.end_offset - part.start_offset
-                        f.seek(int(part.start_offset))
-                        part_data = f.read(int(read_amount))
+        with open(file_path, "rb") as f:
+            for i in range(0, len(upload.parts), chunk_size):
+                group: List[MultipartUploadPart] = upload.parts[i : i + chunk_size]
+                for part in group:
+                    read_amount = part.end_offset - part.start_offset
+                    f.seek(int(part.start_offset))
+                    part_data = f.read(int(read_amount))
 
-                        # The SaaS multipart upload returns a upload url for each part
-                        # So there is no specified route
-                        self._api_client.call_api(
-                            "PUT",
-                            part.upload_url,
-                            body=part_data,
-                            header_params={"Content-Type": "application/octet-binary"},
-                        )
+                    # The SaaS multipart upload returns a upload url for each part
+                    # So there is no specified route
+                    self._api_client.call_api(
+                        "PUT",
+                        part.upload_url,
+                        body=part_data,
+                        header_params={"Content-Type": "application/octet-binary"},
+                    )
 
-            self._sensor_api.complete_multipart_upload(
-                sensor.sensor_id, upload.upload_id
-            )
+        self._sensor_api.complete_multipart_upload(
+            sensor.sensor_id, upload.upload_id
+        )
 
-            self._model_scan_api.scan_model(sensor.sensor_id)
-        else:
-            with open(file_path, "rb") as f:
-                data = f.read()
-
-            sensor = Model(
-                sensor_id=str(uuid4()),
-                created_at=datetime.now(),
-                tenant_id="0000",
-                plaintext_name=model_name,
-                active=True,
-                version=1,
-            )
-
-            self._model_scan_api: EnterpriseModelScanApi
-            self._model_scan_api.scan_model(sensor.sensor_id, data)
-            model_name = sensor.sensor_id
+        self._model_scan_api.scan_model(sensor.sensor_id)
 
         scan_results = self.get_scan_results(
             model_name=model_name, model_version=model_version

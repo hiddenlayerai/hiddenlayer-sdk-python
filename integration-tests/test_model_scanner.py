@@ -9,8 +9,7 @@ from hiddenlayer import HiddenlayerServiceClient
 from hiddenlayer.sdk.models import ScanResults
 
 params = [
-    ("https://api.us.hiddenlayer.ai"),
-    pytest.param("http://localhost:8000", marks=pytest.mark.xfail),
+    ("https://api.us.hiddenlayer.ai")
 ]
 
 
@@ -136,10 +135,12 @@ def _validate_scan_model(results: ScanResults):
     assert results.file_count == 1
     assert results.files_with_detections_count == 1
 
+    assert results.file_results is not None
     file_results = results.file_results[0]
 
     detections = file_results.detections
 
+    assert file_results.details.file_type_details is not None
     assert file_results.details.file_type_details["pickle_modules"] == [
         "callable: builtins.exec"
     ]
@@ -171,16 +172,19 @@ def _validate_scan_folder(tmp_path, results: ScanResults):
     assert results.file_count == 3
     assert results.files_with_detections_count == 2
 
+    assert results.file_results is not None
     for file_results in results.file_results:
         if file_results.file_location == safe_model_path:
             detections = file_results.detections
             assert detections
             assert detections[0].severity == "safe"
+            assert file_results.details.file_type_details is not None
             assert file_results.details.file_type_details["pickle_modules"] == [
                 "callable: builtins.print"
             ]
         elif file_results.file_location == malicious_model_path:
             detections = file_results.detections
+            assert file_results.details.file_type_details is not None
             assert file_results.details.file_type_details["pickle_modules"] == [
                 "callable: builtins.exec"
             ]
