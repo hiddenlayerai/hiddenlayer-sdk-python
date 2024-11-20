@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List, Union
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
@@ -27,7 +27,7 @@ class PagedResponseWithTotal(BaseModel):
     """
     PagedResponseWithTotal
     """ # noqa: E501
-    items: List[StrictStr] = Field(description="List of items. If no matching items are found, then `[]` will be returned.")
+    items: Optional[List[StrictStr]] = Field(default=None, description="List of items. If no matching items are found, then `[]` will be returned.")
     total: Union[Annotated[float, Field(strict=True, ge=0)], Annotated[int, Field(strict=True, ge=0)]] = Field(description="Total number of items available based on the query criteria.")
     limit: Annotated[int, Field(le=100, strict=True, ge=1)] = Field(description="Maximum number of items to return")
     offset: Annotated[int, Field(strict=True, ge=0)] = Field(description="Begin returning the results from this offset")
