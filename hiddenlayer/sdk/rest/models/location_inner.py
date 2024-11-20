@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    HiddenLayer ModelScan
+    HiddenLayer ModelScan V2
 
     HiddenLayer ModelScan API for scanning of models
 
@@ -23,11 +23,11 @@ from typing import Union, Any, List, Set, TYPE_CHECKING, Optional, Dict
 from typing_extensions import Literal, Self
 from pydantic import Field
 
-VALIDATIONERRORMODELLOCINNER_ANY_OF_SCHEMAS = ["int", "str"]
+LOCATIONINNER_ANY_OF_SCHEMAS = ["int", "str"]
 
-class ValidationErrorModelLocInner(BaseModel):
+class LocationInner(BaseModel):
     """
-    ValidationErrorModelLocInner
+    LocationInner
     """
 
     # data type: str
@@ -57,7 +57,7 @@ class ValidationErrorModelLocInner(BaseModel):
 
     @field_validator('actual_instance')
     def actual_instance_must_validate_anyof(cls, v):
-        instance = ValidationErrorModelLocInner.model_construct()
+        instance = LocationInner.model_construct()
         error_messages = []
         # validate data type: str
         try:
@@ -73,7 +73,7 @@ class ValidationErrorModelLocInner(BaseModel):
             error_messages.append(str(e))
         if error_messages:
             # no match
-            raise ValueError("No match found when setting the actual_instance in ValidationErrorModelLocInner with anyOf schemas: int, str. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when setting the actual_instance in LocationInner with anyOf schemas: int, str. Details: " + ", ".join(error_messages))
         else:
             return v
 
@@ -107,7 +107,7 @@ class ValidationErrorModelLocInner(BaseModel):
 
         if error_messages:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into ValidationErrorModelLocInner with anyOf schemas: int, str. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when deserializing the JSON string into LocationInner with anyOf schemas: int, str. Details: " + ", ".join(error_messages))
         else:
             return instance
 

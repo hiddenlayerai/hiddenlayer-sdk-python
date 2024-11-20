@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    HiddenLayer ModelScan
+    HiddenLayer ModelScan V2
 
     HiddenLayer ModelScan API for scanning of models
 
@@ -65,6 +65,13 @@ class TestSensorApi(unittest.TestCase):
         """Test case for query_sensor
 
         Query a Sensor
+        """
+        pass
+
+    def test_sensor_sor_api_v3_model_cards_query_get(self) -> None:
+        """Test case for sensor_sor_api_v3_model_cards_query_get
+
+        List Model Cards
         """
         pass
 

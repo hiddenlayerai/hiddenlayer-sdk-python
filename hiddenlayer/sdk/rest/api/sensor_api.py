@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    HiddenLayer ModelScan
+    HiddenLayer ModelScan V2
 
     HiddenLayer ModelScan API for scanning of models
 
@@ -16,13 +16,14 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictFloat, StrictInt, StrictStr
-from typing import Any, Optional, Union
+from pydantic import Field, StrictFloat, StrictInt, StrictStr, field_validator
+from typing import Any, Dict, Optional, Union
 from typing_extensions import Annotated
 from hiddenlayer.sdk.rest.models.create_sensor_request import CreateSensorRequest
 from hiddenlayer.sdk.rest.models.get_multipart_upload_response import GetMultipartUploadResponse
 from hiddenlayer.sdk.rest.models.model import Model
 from hiddenlayer.sdk.rest.models.model_query_response import ModelQueryResponse
+from hiddenlayer.sdk.rest.models.sensor_sor_model_card_query_response import SensorSORModelCardQueryResponse
 from hiddenlayer.sdk.rest.models.sensor_sor_query_request import SensorSORQueryRequest
 
 from hiddenlayer.sdk.rest.api_client import ApiClient, RequestSerialized
@@ -46,8 +47,8 @@ class SensorApi:
     @validate_call
     def begin_multipart_upload(
         self,
-        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
         sensor_id: StrictStr,
+        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -64,10 +65,10 @@ class SensorApi:
         """Begin Multipart Upload
 
 
-        :param x_content_length: The total size of multipart upload. (required)
-        :type x_content_length: float
         :param sensor_id: (required)
         :type sensor_id: str
+        :param x_content_length: The total size of multipart upload. (required)
+        :type x_content_length: float
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -91,8 +92,8 @@ class SensorApi:
         """ # noqa: E501
 
         _param = self._begin_multipart_upload_serialize(
-            x_content_length=x_content_length,
             sensor_id=sensor_id,
+            x_content_length=x_content_length,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -117,8 +118,8 @@ class SensorApi:
     @validate_call
     def begin_multipart_upload_with_http_info(
         self,
-        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
         sensor_id: StrictStr,
+        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -135,10 +136,10 @@ class SensorApi:
         """Begin Multipart Upload
 
 
-        :param x_content_length: The total size of multipart upload. (required)
-        :type x_content_length: float
         :param sensor_id: (required)
         :type sensor_id: str
+        :param x_content_length: The total size of multipart upload. (required)
+        :type x_content_length: float
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -162,8 +163,8 @@ class SensorApi:
         """ # noqa: E501
 
         _param = self._begin_multipart_upload_serialize(
-            x_content_length=x_content_length,
             sensor_id=sensor_id,
+            x_content_length=x_content_length,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -188,8 +189,8 @@ class SensorApi:
     @validate_call
     def begin_multipart_upload_without_preload_content(
         self,
-        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
         sensor_id: StrictStr,
+        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -206,10 +207,10 @@ class SensorApi:
         """Begin Multipart Upload
 
 
-        :param x_content_length: The total size of multipart upload. (required)
-        :type x_content_length: float
         :param sensor_id: (required)
         :type sensor_id: str
+        :param x_content_length: The total size of multipart upload. (required)
+        :type x_content_length: float
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -233,8 +234,8 @@ class SensorApi:
         """ # noqa: E501
 
         _param = self._begin_multipart_upload_serialize(
-            x_content_length=x_content_length,
             sensor_id=sensor_id,
+            x_content_length=x_content_length,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -254,8 +255,8 @@ class SensorApi:
 
     def _begin_multipart_upload_serialize(
         self,
-        x_content_length,
         sensor_id,
+        x_content_length,
         _request_auth,
         _content_type,
         _headers,
@@ -1635,6 +1636,334 @@ class SensorApi:
         return self.api_client.param_serialize(
             method='POST',
             resource_path='/api/v2/sensors/query',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def sensor_sor_api_v3_model_cards_query_get(
+        self,
+        model_name_eq: Annotated[Optional[StrictStr], Field(description="substring match on model name")] = None,
+        model_name_contains: Annotated[Optional[StrictStr], Field(description="substring match on model name")] = None,
+        limit: Optional[Annotated[int, Field(le=100, strict=True, ge=1)]] = None,
+        offset: Optional[Annotated[int, Field(strict=True, ge=0)]] = None,
+        sort: Annotated[Optional[Annotated[str, Field(strict=True)]], Field(description="allow sorting by model name or created at timestamp, ascending (+) or the default descending (-)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> SensorSORModelCardQueryResponse:
+        """List Model Cards
+
+
+        :param model_name_eq: substring match on model name
+        :type model_name_eq: str
+        :param model_name_contains: substring match on model name
+        :type model_name_contains: str
+        :param limit:
+        :type limit: int
+        :param offset:
+        :type offset: int
+        :param sort: allow sorting by model name or created at timestamp, ascending (+) or the default descending (-)
+        :type sort: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._sensor_sor_api_v3_model_cards_query_get_serialize(
+            model_name_eq=model_name_eq,
+            model_name_contains=model_name_contains,
+            limit=limit,
+            offset=offset,
+            sort=sort,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "SensorSORModelCardQueryResponse",
+            '400': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def sensor_sor_api_v3_model_cards_query_get_with_http_info(
+        self,
+        model_name_eq: Annotated[Optional[StrictStr], Field(description="substring match on model name")] = None,
+        model_name_contains: Annotated[Optional[StrictStr], Field(description="substring match on model name")] = None,
+        limit: Optional[Annotated[int, Field(le=100, strict=True, ge=1)]] = None,
+        offset: Optional[Annotated[int, Field(strict=True, ge=0)]] = None,
+        sort: Annotated[Optional[Annotated[str, Field(strict=True)]], Field(description="allow sorting by model name or created at timestamp, ascending (+) or the default descending (-)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[SensorSORModelCardQueryResponse]:
+        """List Model Cards
+
+
+        :param model_name_eq: substring match on model name
+        :type model_name_eq: str
+        :param model_name_contains: substring match on model name
+        :type model_name_contains: str
+        :param limit:
+        :type limit: int
+        :param offset:
+        :type offset: int
+        :param sort: allow sorting by model name or created at timestamp, ascending (+) or the default descending (-)
+        :type sort: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._sensor_sor_api_v3_model_cards_query_get_serialize(
+            model_name_eq=model_name_eq,
+            model_name_contains=model_name_contains,
+            limit=limit,
+            offset=offset,
+            sort=sort,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "SensorSORModelCardQueryResponse",
+            '400': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def sensor_sor_api_v3_model_cards_query_get_without_preload_content(
+        self,
+        model_name_eq: Annotated[Optional[StrictStr], Field(description="substring match on model name")] = None,
+        model_name_contains: Annotated[Optional[StrictStr], Field(description="substring match on model name")] = None,
+        limit: Optional[Annotated[int, Field(le=100, strict=True, ge=1)]] = None,
+        offset: Optional[Annotated[int, Field(strict=True, ge=0)]] = None,
+        sort: Annotated[Optional[Annotated[str, Field(strict=True)]], Field(description="allow sorting by model name or created at timestamp, ascending (+) or the default descending (-)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """List Model Cards
+
+
+        :param model_name_eq: substring match on model name
+        :type model_name_eq: str
+        :param model_name_contains: substring match on model name
+        :type model_name_contains: str
+        :param limit:
+        :type limit: int
+        :param offset:
+        :type offset: int
+        :param sort: allow sorting by model name or created at timestamp, ascending (+) or the default descending (-)
+        :type sort: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._sensor_sor_api_v3_model_cards_query_get_serialize(
+            model_name_eq=model_name_eq,
+            model_name_contains=model_name_contains,
+            limit=limit,
+            offset=offset,
+            sort=sort,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "SensorSORModelCardQueryResponse",
+            '400': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _sensor_sor_api_v3_model_cards_query_get_serialize(
+        self,
+        model_name_eq,
+        model_name_contains,
+        limit,
+        offset,
+        sort,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, Union[str, bytes]] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if model_name_eq is not None:
+            
+            _query_params.append(('model_name[eq]', model_name_eq))
+            
+        if model_name_contains is not None:
+            
+            _query_params.append(('model_name[contains]', model_name_contains))
+            
+        if limit is not None:
+            
+            _query_params.append(('limit', limit))
+            
+        if offset is not None:
+            
+            _query_params.append(('offset', offset))
+            
+        if sort is not None:
+            
+            _query_params.append(('sort', sort))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'BearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/models/v3/cards',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

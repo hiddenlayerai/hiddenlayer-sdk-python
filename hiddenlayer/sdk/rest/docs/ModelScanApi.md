@@ -1,6 +1,6 @@
 # hiddenlayer.sdk.rest.ModelScanApi
 
-All URIs are relative to *http://localhost*
+All URIs are relative to *https://api.hiddenlayer.ai*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -23,10 +23,10 @@ from hiddenlayer.sdk.rest.models.scan_model_request import ScanModelRequest
 from hiddenlayer.sdk.rest.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
 # See configuration.py for a list of all supported configuration parameters.
 configuration = hiddenlayer.sdk.rest.Configuration(
-    host = "http://localhost"
+    host = "https://api.hiddenlayer.ai"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -101,10 +101,10 @@ from hiddenlayer.sdk.rest.models.scan_results_v2 import ScanResultsV2
 from hiddenlayer.sdk.rest.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
 # See configuration.py for a list of all supported configuration parameters.
 configuration = hiddenlayer.sdk.rest.Configuration(
-    host = "http://localhost"
+    host = "https://api.hiddenlayer.ai"
 )
 
 # The client must configure the authentication and authorization parameters

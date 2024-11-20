@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    HiddenLayer ModelScan
+    HiddenLayer ModelScan V2
 
     HiddenLayer ModelScan API for scanning of models
 
@@ -17,23 +17,39 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
-class FileInfo(BaseModel):
+class MITREAtlasInner(BaseModel):
     """
-    FileInfo
+    MITREAtlasInner
     """ # noqa: E501
-    md5: Optional[StrictStr] = None
-    sha256: Optional[StrictStr] = None
-    type: Optional[StrictStr] = None
-    subtype: Optional[List[StrictStr]] = None
-    tlsh: Optional[StrictStr] = None
-    pickle_modules: Optional[List[StrictStr]] = None
-    additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["md5", "sha256", "type", "subtype", "tlsh", "pickle_modules"]
+    technique: Optional[Annotated[str, Field(strict=True)]] = Field(default=None, description="MITRE Atlas Technique")
+    tactic: Optional[Annotated[str, Field(strict=True)]] = Field(default=None, description="MITRE Atlas Tactic")
+    __properties: ClassVar[List[str]] = ["technique", "tactic"]
+
+    @field_validator('technique')
+    def technique_validate_regular_expression(cls, value):
+        """Validates the regular expression"""
+        if value is None:
+            return value
+
+        if not re.match(r"^AML\.T\d{4}(\.\d{3})?.*$", value):
+            raise ValueError(r"must validate the regular expression /^AML\.T\d{4}(\.\d{3})?.*$/")
+        return value
+
+    @field_validator('tactic')
+    def tactic_validate_regular_expression(cls, value):
+        """Validates the regular expression"""
+        if value is None:
+            return value
+
+        if not re.match(r"^AML\.T(A)?\d{4}(\.\d{3})?$", value):
+            raise ValueError(r"must validate the regular expression /^AML\.T(A)?\d{4}(\.\d{3})?$/")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -53,7 +69,7 @@ class FileInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of FileInfo from a JSON string"""
+        """Create an instance of MITREAtlasInner from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -65,10 +81,8 @@ class FileInfo(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
-        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
-            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -76,16 +90,11 @@ class FileInfo(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of FileInfo from a dict"""
+        """Create an instance of MITREAtlasInner from a dict"""
         if obj is None:
             return None
 
@@ -93,18 +102,9 @@ class FileInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "md5": obj.get("md5"),
-            "sha256": obj.get("sha256"),
-            "type": obj.get("type"),
-            "subtype": obj.get("subtype"),
-            "tlsh": obj.get("tlsh"),
-            "pickle_modules": obj.get("pickle_modules")
+            "technique": obj.get("technique"),
+            "tactic": obj.get("tactic")
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 
