@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **file_location** | **str** | full file path | 
 **start_time** | **datetime** | time the scan started | 
 **end_time** | **datetime** | time the scan ended | 
-**details** | [**FileDetailsV3**](.md) |  | 
+**details** | [**FileDetailsV3**](FileDetailsV3.md) |  | 
 **status** | **str** | status of the scan | 
 **seen** | **datetime** | time the scan was seen at | 
 **detections** | [**List[ScanDetectionV3]**](ScanDetectionV3.md) |  | [optional] 
