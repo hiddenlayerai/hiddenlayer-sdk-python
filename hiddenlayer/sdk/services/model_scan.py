@@ -140,7 +140,6 @@ class ModelScanAPI:
 
         scan_results.file_name = file_path.name
         scan_results.file_path = str(file_path)
-        scan_results.model_id = sensor.sensor_id
 
         return scan_results
 
