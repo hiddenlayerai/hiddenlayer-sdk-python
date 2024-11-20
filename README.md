@@ -57,6 +57,35 @@ hl_client.model_scanner.scan_file(
 )
 ```
 
+If you would like to specify the version associated with the model, you can pass that in as well:
+
+```python
+hl_client.model_scanner.scan_file(
+  model_name="name_of_the_model",
+  model_version=1,
+  model_path="path/to/model/file.pkl"
+)
+```
+
+### Scanning Folders
+
+```python
+hl_client.model_scanner.scan_folder(
+  model_name="name_of_the_model",
+  path="path/to/model/"
+)
+```
+
+If you would like to specify the version associated with the model, you can pass that in as well:
+
+```python
+hl_client.model_scanner.scan_folder(
+  model_name="name_of_the_model",
+  model_version=1,
+  path="path/to/model/"
+)
+```
+
 ### Using AIDR for Predictive Models
 
 > Note: This is only supported using the SaaS version of the platform.
