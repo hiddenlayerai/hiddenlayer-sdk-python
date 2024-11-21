@@ -36,7 +36,6 @@ EXCLUDE_FILE_TYPES = [
 
 class ModelScanAPI:
     def __init__(self, api_client: ApiClient) -> None:
-        self.is_saas = is_saas(api_client.configuration.host)
         self._api_client = api_client
 
         self._model_supply_chain_api = ModelSupplyChainApi(api_client=api_client)
@@ -53,7 +52,6 @@ class ModelScanAPI:
         model_name: str,
         model_path: Union[str, os.PathLike],
         model_version: Optional[int] = None,
-        threads: int = 1,
         chunk_size: int = 16,
         wait_for_results: bool = True,
     ) -> ScanResults:
@@ -63,18 +61,11 @@ class ModelScanAPI:
         :param model_name: Name of the model to be shown on the HiddenLayer UI
         :param model_path: Local path to the model file.
         :param model_version: Version of the model to be shown on the HiddenLayer UI.
-        :param threads: Number of threads used to upload the file, defaults to 1.
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
         :returns: Scan Results
         """
-
-        warnings.warn(
-            "Use of the threads parameter is deprecated and will be removed in version 0.2.0.",
-            category=DeprecationWarning,
-            stacklevel=2,
-        )
 
         file_path = Path(model_path)
 
@@ -137,7 +128,6 @@ class ModelScanAPI:
         key: str,
         model_version: Optional[int] = None,
         s3_client: Optional[object] = None,
-        threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> ScanResults:
@@ -150,7 +140,6 @@ class ModelScanAPI:
         :param model_version: Version of the model to be shown on the HiddenLayer UI.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
         :param s3_client: boto3 s3 client.
-        :param threads: Number of threads used to upload the file, defaults to 1.
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
@@ -184,7 +173,6 @@ class ModelScanAPI:
             model_path=f"/tmp/{file_name}",
             model_name=model_name,
             model_version=model_version,
-            threads=threads,
             chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )
@@ -199,7 +187,6 @@ class ModelScanAPI:
         model_version: Optional[int] = None,
         blob_service_client: Optional[object] = None,
         credential: Optional[object] = None,
-        threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> ScanResults:
@@ -214,7 +201,6 @@ class ModelScanAPI:
         :param blob_service_client: BlobServiceClient object. Defaults to creating one using DefaultCredential().
         :param credential: Credential to be passed to the BlobServiceClient object, can be a credential object, SAS key, etc.
             Defaults to `DefaultCredential`
-        :param threads: Number of threads used to upload the file, defaults to 1.
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
@@ -267,7 +253,6 @@ class ModelScanAPI:
             model_path=f"/tmp/{file_name}",
             model_name=model_name,
             model_version=model_version,
-            threads=threads,
             chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )
@@ -285,7 +270,6 @@ class ModelScanAPI:
         force_download: bool = False,
         hf_token: Optional[Union[str, bool]] = None,
         # HL parameters
-        threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> ScanResults:
@@ -303,7 +287,6 @@ class ModelScanAPI:
         :param hf_token: A token to be used for the download.
             If True, the token is read from the HuggingFace config folder.
             If a string, it’s used as the authentication token.
-        :param threads: Number of threads used to upload the file, defaults to 1.
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
@@ -338,7 +321,6 @@ class ModelScanAPI:
             path=local_dir,
             allow_file_patterns=allow_file_patterns,
             ignore_file_patterns=ignore_file_patterns,
-            threads=threads,
             chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )
@@ -454,7 +436,6 @@ class ModelScanAPI:
         model_version: Optional[int] = None,
         allow_file_patterns: Optional[List[str]] = None,
         ignore_file_patterns: Optional[List[str]] = None,
-        threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> ScanResults:
@@ -466,7 +447,6 @@ class ModelScanAPI:
         :param model_version: Version of the model to be shown on the HiddenLayer UI.
         :param allow_file_patterns: If provided, only files matching at least one pattern are scanned.
         :param ignore_file_patterns: If provided, files matching any of the patterns are not scanned.
-        :param threads: Number of threads used to upload the file, defaults to 1.
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
@@ -496,7 +476,6 @@ class ModelScanAPI:
             model_name=model_name,
             model_version=model_version,
             model_path=filename,
-            threads=threads,
             chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )

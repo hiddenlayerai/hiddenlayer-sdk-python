@@ -8,7 +8,10 @@ import pytest
 from hiddenlayer import HiddenlayerServiceClient
 from hiddenlayer.sdk.models import ScanResults
 
-params = [("https://api.us.hiddenlayer.ai")]
+params = [
+    ("https://api.us.hiddenlayer.ai"),
+    pytest.param("http://localhost:8000", marks=pytest.mark.xfail),
+    ]
 
 
 class MaliciousPickle:
