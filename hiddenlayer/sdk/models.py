@@ -10,6 +10,7 @@ from hiddenlayer.sdk.rest.models import (
     ScanReportV3,
 )
 from hiddenlayer.sdk.rest.models.file_results_inner import FileResultsInner
+from hiddenlayer.sdk.rest.models.sarif210 import Sarif210
 
 
 class ScanResults(ScanReportV3):
@@ -50,3 +51,8 @@ class EmptyScanResults(ScanResults):
     end_time: Optional[datetime] = datetime.now()
     severity: Optional[StrictStr] = ""
     file_results: Optional[List[FileResultsInner]] = []
+
+class Sarif(Sarif210):
+    """This class exists because the generated code for Sarif210 treats version as a Dictionary which it is not."""
+
+    version: str # type: ignore

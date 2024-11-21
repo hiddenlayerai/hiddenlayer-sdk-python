@@ -1,3 +1,4 @@
+import json
 import os
 import random
 import tempfile
@@ -12,11 +13,12 @@ from uuid import uuid4
 from pydantic_core import ValidationError
 
 from hiddenlayer.sdk.constants import ScanStatus
-from hiddenlayer.sdk.models import EmptyScanResults, ScanResults
+from hiddenlayer.sdk.models import EmptyScanResults, Sarif, ScanResults
 from hiddenlayer.sdk.rest.api import ModelScanApi, ModelSupplyChainApi, SensorApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
 from hiddenlayer.sdk.rest.models import MultipartUploadPart
 from hiddenlayer.sdk.rest.models.model import Model
+from hiddenlayer.sdk.rest.models.sarif210 import Sarif210
 from hiddenlayer.sdk.services.model import ModelAPI
 from hiddenlayer.sdk.utils import filter_path_objects, is_saas
 
@@ -356,21 +358,18 @@ class ModelScanAPI:
         :returns: Scan results.
         """
 
-        if self.is_saas:
-            print(model_name)
-            response = self._sensor_api.sensor_sor_api_v3_model_cards_query_get(
-                model_name_eq=model_name, limit=1
-            )
-            print(response)
-            model_id = response.results[0].model_id
-        else:
-            model_id = model_name
+        response = self._sensor_api.sensor_sor_api_v3_model_cards_query_get(
+            model_name_eq=model_name, limit=1
+        )
+        model_id = response.results[0].model_id
 
         scans = self._model_supply_chain_api.model_scan_api_v3_scan_query(
             model_ids=[model_id], latest_per_model_version_only=True
         )
-        print(scans)
         if scans.total == 0:
+            return EmptyScanResults()
+        
+        if scans.items is None:
             return EmptyScanResults()
 
         scan = scans.items[0]
@@ -395,6 +394,57 @@ class ModelScanAPI:
         return ScanResults.from_scanreportv3(
             scan_report_v3=scan_report, model_id=model_id
         )
+
+    def get_sarif_results(
+        self,
+        *,
+        model_name: str,
+        model_version: Optional[int] = None,
+    ) -> Optional[Sarif]:
+        """
+        Get sarif results from a model scan.
+
+        :param model_name: Name of the model.
+        :param model_version: Version of the model. When the model version is not specified, the scan results for the latest version will be returned.
+
+        :returns: Scan results.
+        """
+        response = self._sensor_api.sensor_sor_api_v3_model_cards_query_get(
+            model_name_eq=model_name, limit=1
+        )
+        model_id = response.results[0].model_id
+
+        scans = self._model_supply_chain_api.model_scan_api_v3_scan_query(
+            model_ids=[model_id], latest_per_model_version_only=True
+        )
+        print(scans)
+        if scans.total == 0:
+            return None
+        
+        if scans.items is None:
+            return None
+
+        scan = scans.items[0]
+        if model_version:
+            scan = next(
+                (
+                    s
+                    for s in scans.items
+                    if s.inventory.model_version == str(model_version)
+                ),
+                None,
+            )
+        if not scan:
+            return None
+
+        request = self._model_supply_chain_api._model_scan_api_v3_scan_model_version_id_get_serialize(scan.scan_id, None, None, None, None, 0)
+        print(request)
+        request[2]["Accept"] = "application/sarif+json"
+        response = self._api_client.call_api(*request)
+        response.read()
+        print(response.data)
+        return self._api_client.response_deserialize(response_data=response, response_types_map={'200': Sarif}).data
+ 
 
     def scan_folder(
         self,
