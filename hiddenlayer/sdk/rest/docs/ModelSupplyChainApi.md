@@ -84,7 +84,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json; charset=utf-8
+ - **Accept**: application/json; charset=utf-8, application/sarif+json
 
 ### HTTP response details
 

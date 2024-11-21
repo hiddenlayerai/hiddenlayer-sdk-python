@@ -8,7 +8,10 @@ import pytest
 from hiddenlayer import HiddenlayerServiceClient
 from hiddenlayer.sdk.models import ScanResults
 
-params = [("https://api.us.hiddenlayer.ai")]
+params = [
+    ("https://api.us.hiddenlayer.ai"),
+    pytest.param("http://localhost:8000", marks=pytest.mark.xfail),
+]
 
 
 class MaliciousPickle:
@@ -115,6 +118,35 @@ def test_scan_model_multiple_times(tmp_path, hl_client: HiddenlayerServiceClient
 
     _validate_scan_model(results)
     assert results.inventory.model_version == "3"
+
+    if hl_client.is_saas:
+        hl_client.model.delete(model_name=model_name)
+
+
+def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
+    """Integration test to get sarif results"""
+
+    model_path = _setup_scan_model(tmp_path)
+    model_name = f"sdk-integration-scan-model-{uuid4()}"
+
+    results = hl_client.model_scanner.scan_file(
+        model_name=model_name, model_path=model_path
+    )
+
+    _validate_scan_model(results)
+
+    sarif_results = hl_client.model_scanner.get_sarif_results(model_name=model_name)
+    print(sarif_results)
+
+    assert sarif_results is not None
+    assert sarif_results.version == "2.1.0"
+    assert sarif_results.runs is not None
+    run = sarif_results.runs[0]
+    assert run.tool.driver.name == "HiddenLayer Model Scanner"
+    assert run.results is not None
+    results = run.results[0]
+    assert results.level == "error"
+    assert results.rule_id == "PICKLE_0002_202408"
 
     if hl_client.is_saas:
         hl_client.model.delete(model_name=model_name)

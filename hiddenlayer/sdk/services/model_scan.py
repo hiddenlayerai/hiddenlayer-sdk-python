@@ -1,3 +1,4 @@
+import json
 import os
 import random
 import tempfile
@@ -12,11 +13,12 @@ from uuid import uuid4
 from pydantic_core import ValidationError
 
 from hiddenlayer.sdk.constants import ScanStatus
-from hiddenlayer.sdk.models import EmptyScanResults, ScanResults
+from hiddenlayer.sdk.models import EmptyScanResults, Sarif, ScanResults
 from hiddenlayer.sdk.rest.api import ModelScanApi, ModelSupplyChainApi, SensorApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
 from hiddenlayer.sdk.rest.models import MultipartUploadPart
 from hiddenlayer.sdk.rest.models.model import Model
+from hiddenlayer.sdk.rest.models.sarif210 import Sarif210
 from hiddenlayer.sdk.services.model import ModelAPI
 from hiddenlayer.sdk.utils import filter_path_objects, is_saas
 
@@ -34,7 +36,6 @@ EXCLUDE_FILE_TYPES = [
 
 class ModelScanAPI:
     def __init__(self, api_client: ApiClient) -> None:
-        self.is_saas = is_saas(api_client.configuration.host)
         self._api_client = api_client
 
         self._model_supply_chain_api = ModelSupplyChainApi(api_client=api_client)
@@ -51,7 +52,6 @@ class ModelScanAPI:
         model_name: str,
         model_path: Union[str, os.PathLike],
         model_version: Optional[int] = None,
-        threads: int = 1,
         chunk_size: int = 16,
         wait_for_results: bool = True,
     ) -> ScanResults:
@@ -61,18 +61,11 @@ class ModelScanAPI:
         :param model_name: Name of the model to be shown on the HiddenLayer UI
         :param model_path: Local path to the model file.
         :param model_version: Version of the model to be shown on the HiddenLayer UI.
-        :param threads: Number of threads used to upload the file, defaults to 1.
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
         :returns: Scan Results
         """
-
-        warnings.warn(
-            "Use of the threads parameter is deprecated and will be removed in version 0.2.0.",
-            category=DeprecationWarning,
-            stacklevel=2,
-        )
 
         file_path = Path(model_path)
 
@@ -135,7 +128,6 @@ class ModelScanAPI:
         key: str,
         model_version: Optional[int] = None,
         s3_client: Optional[object] = None,
-        threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> ScanResults:
@@ -148,7 +140,6 @@ class ModelScanAPI:
         :param model_version: Version of the model to be shown on the HiddenLayer UI.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
         :param s3_client: boto3 s3 client.
-        :param threads: Number of threads used to upload the file, defaults to 1.
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
@@ -164,7 +155,7 @@ class ModelScanAPI:
                 )
         """
         try:
-            import boto3
+            import boto3  # type: ignore
         except ImportError:
             raise ImportError("Python package boto3 is not installed.")
 
@@ -174,7 +165,7 @@ class ModelScanAPI:
         file_name = key.split("/")[-1]
 
         try:
-            s3_client.download_file(bucket, key, f"/tmp/{file_name}")
+            s3_client.download_file(bucket, key, f"/tmp/{file_name}")  # type: ignore
         except Exception as e:
             raise RuntimeError(f"Couldn't download model s3://{bucket}/{key}: {e}")
 
@@ -182,7 +173,6 @@ class ModelScanAPI:
             model_path=f"/tmp/{file_name}",
             model_name=model_name,
             model_version=model_version,
-            threads=threads,
             chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )
@@ -197,7 +187,6 @@ class ModelScanAPI:
         model_version: Optional[int] = None,
         blob_service_client: Optional[object] = None,
         credential: Optional[object] = None,
-        threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> ScanResults:
@@ -212,7 +201,6 @@ class ModelScanAPI:
         :param blob_service_client: BlobServiceClient object. Defaults to creating one using DefaultCredential().
         :param credential: Credential to be passed to the BlobServiceClient object, can be a credential object, SAS key, etc.
             Defaults to `DefaultCredential`
-        :param threads: Number of threads used to upload the file, defaults to 1.
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
@@ -243,11 +231,11 @@ class ModelScanAPI:
             credential = DefaultAzureCredential()
 
         if not blob_service_client:
-            blob_service_client = BlobServiceClient(account_url, credential=credential)
+            blob_service_client = BlobServiceClient(account_url, credential=credential)  # type: ignore
 
         file_name = blob.split("/")[-1]
 
-        blob_client = blob_service_client.get_blob_client(
+        blob_client = blob_service_client.get_blob_client(  # type: ignore
             container=container, blob=blob
         )
 
@@ -265,7 +253,6 @@ class ModelScanAPI:
             model_path=f"/tmp/{file_name}",
             model_name=model_name,
             model_version=model_version,
-            threads=threads,
             chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )
@@ -283,7 +270,6 @@ class ModelScanAPI:
         force_download: bool = False,
         hf_token: Optional[Union[str, bool]] = None,
         # HL parameters
-        threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> ScanResults:
@@ -301,7 +287,6 @@ class ModelScanAPI:
         :param hf_token: A token to be used for the download.
             If True, the token is read from the HuggingFace config folder.
             If a string, it’s used as the authentication token.
-        :param threads: Number of threads used to upload the file, defaults to 1.
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
@@ -336,7 +321,6 @@ class ModelScanAPI:
             path=local_dir,
             allow_file_patterns=allow_file_patterns,
             ignore_file_patterns=ignore_file_patterns,
-            threads=threads,
             chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )
@@ -356,21 +340,18 @@ class ModelScanAPI:
         :returns: Scan results.
         """
 
-        if self.is_saas:
-            print(model_name)
-            response = self._sensor_api.sensor_sor_api_v3_model_cards_query_get(
-                model_name_eq=model_name, limit=1
-            )
-            print(response)
-            model_id = response.results[0].model_id
-        else:
-            model_id = model_name
+        response = self._sensor_api.sensor_sor_api_v3_model_cards_query_get(
+            model_name_eq=model_name, limit=1
+        )
+        model_id = response.results[0].model_id
 
         scans = self._model_supply_chain_api.model_scan_api_v3_scan_query(
             model_ids=[model_id], latest_per_model_version_only=True
         )
-        print(scans)
         if scans.total == 0:
+            return EmptyScanResults()
+
+        if scans.items is None:
             return EmptyScanResults()
 
         scan = scans.items[0]
@@ -396,6 +377,38 @@ class ModelScanAPI:
             scan_report_v3=scan_report, model_id=model_id
         )
 
+    def get_sarif_results(
+        self,
+        *,
+        model_name: str,
+        model_version: Optional[int] = None,
+    ) -> Optional[Sarif]:
+        """
+        Get sarif results from a model scan.
+
+        :param model_name: Name of the model.
+        :param model_version: Version of the model. When the model version is not specified, the scan results for the latest version will be returned.
+
+        :returns: Scan results.
+        """
+        scan = self.get_scan_results(model_name=model_name, model_version=model_version)
+        if scan.scan_id == "":
+            return None
+
+        # Unfortunately, the generated code for the API doesn't directly support modifying the Accept header
+        # in order to enable us to get the Sarif results
+        # Here we will reach in to the request serialization process. The 2nd element in the tuple is the headers
+        # where we will modify the Accept header to application/sarif+json
+        request = self._model_supply_chain_api._model_scan_api_v3_scan_model_version_id_get_serialize(
+            scan.scan_id, None, None, None, None, 0
+        )
+        request[2]["Accept"] = "application/sarif+json"
+        response = self._api_client.call_api(*request)
+        response.read()
+        return self._api_client.response_deserialize(
+            response_data=response, response_types_map={"200": Sarif}
+        ).data  # type: ignore
+
     def scan_folder(
         self,
         *,
@@ -404,7 +417,6 @@ class ModelScanAPI:
         model_version: Optional[int] = None,
         allow_file_patterns: Optional[List[str]] = None,
         ignore_file_patterns: Optional[List[str]] = None,
-        threads: int = 1,
         chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> ScanResults:
@@ -416,7 +428,6 @@ class ModelScanAPI:
         :param model_version: Version of the model to be shown on the HiddenLayer UI.
         :param allow_file_patterns: If provided, only files matching at least one pattern are scanned.
         :param ignore_file_patterns: If provided, files matching any of the patterns are not scanned.
-        :param threads: Number of threads used to upload the file, defaults to 1.
         :param chunk_size: Number of chunks of the file to upload at once, defaults to 4.
         :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
 
@@ -446,7 +457,6 @@ class ModelScanAPI:
             model_name=model_name,
             model_version=model_version,
             model_path=filename,
-            threads=threads,
             chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )
