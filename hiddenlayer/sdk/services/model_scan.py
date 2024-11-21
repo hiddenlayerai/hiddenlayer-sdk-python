@@ -155,7 +155,7 @@ class ModelScanAPI:
                 )
         """
         try:
-            import boto3
+            import boto3  # type: ignore
         except ImportError:
             raise ImportError("Python package boto3 is not installed.")
 
@@ -165,7 +165,7 @@ class ModelScanAPI:
         file_name = key.split("/")[-1]
 
         try:
-            s3_client.download_file(bucket, key, f"/tmp/{file_name}")
+            s3_client.download_file(bucket, key, f"/tmp/{file_name}")  # type: ignore
         except Exception as e:
             raise RuntimeError(f"Couldn't download model s3://{bucket}/{key}: {e}")
 
@@ -231,11 +231,11 @@ class ModelScanAPI:
             credential = DefaultAzureCredential()
 
         if not blob_service_client:
-            blob_service_client = BlobServiceClient(account_url, credential=credential)
+            blob_service_client = BlobServiceClient(account_url, credential=credential)  # type: ignore
 
         file_name = blob.split("/")[-1]
 
-        blob_client = blob_service_client.get_blob_client(
+        blob_client = blob_service_client.get_blob_client(  # type: ignore
             container=container, blob=blob
         )
 
@@ -350,7 +350,7 @@ class ModelScanAPI:
         )
         if scans.total == 0:
             return EmptyScanResults()
-        
+
         if scans.items is None:
             return EmptyScanResults()
 
@@ -391,42 +391,23 @@ class ModelScanAPI:
 
         :returns: Scan results.
         """
-        response = self._sensor_api.sensor_sor_api_v3_model_cards_query_get(
-            model_name_eq=model_name, limit=1
+        scan = self.get_scan_results(model_name=model_name, model_version=model_version)
+        if scan.scan_id == "":
+            return None
+
+        # Unfortunately, the generated code for the API doesn't directly support modifying the Accept header
+        # in order to enable us to get the Sarif results
+        # Here we will reach in to the request serialization process. The 2nd element in the tuple is the headers
+        # where we will modify the Accept header to application/sarif+json
+        request = self._model_supply_chain_api._model_scan_api_v3_scan_model_version_id_get_serialize(
+            scan.scan_id, None, None, None, None, 0
         )
-        model_id = response.results[0].model_id
-
-        scans = self._model_supply_chain_api.model_scan_api_v3_scan_query(
-            model_ids=[model_id], latest_per_model_version_only=True
-        )
-        print(scans)
-        if scans.total == 0:
-            return None
-        
-        if scans.items is None:
-            return None
-
-        scan = scans.items[0]
-        if model_version:
-            scan = next(
-                (
-                    s
-                    for s in scans.items
-                    if s.inventory.model_version == str(model_version)
-                ),
-                None,
-            )
-        if not scan:
-            return None
-
-        request = self._model_supply_chain_api._model_scan_api_v3_scan_model_version_id_get_serialize(scan.scan_id, None, None, None, None, 0)
-        print(request)
         request[2]["Accept"] = "application/sarif+json"
         response = self._api_client.call_api(*request)
         response.read()
-        print(response.data)
-        return self._api_client.response_deserialize(response_data=response, response_types_map={'200': Sarif}).data
- 
+        return self._api_client.response_deserialize(
+            response_data=response, response_types_map={"200": Sarif}
+        ).data  # type: ignore
 
     def scan_folder(
         self,

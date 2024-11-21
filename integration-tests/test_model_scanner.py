@@ -11,7 +11,7 @@ from hiddenlayer.sdk.models import ScanResults
 params = [
     ("https://api.us.hiddenlayer.ai"),
     pytest.param("http://localhost:8000", marks=pytest.mark.xfail),
-    ]
+]
 
 
 class MaliciousPickle:
@@ -150,6 +150,7 @@ def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
 
     if hl_client.is_saas:
         hl_client.model.delete(model_name=model_name)
+
 
 def _setup_scan_model(tmp_path):
     model_path = tmp_path / "model.pkl"

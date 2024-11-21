@@ -52,7 +52,8 @@ class EmptyScanResults(ScanResults):
     severity: Optional[StrictStr] = ""
     file_results: Optional[List[FileResultsInner]] = []
 
+
 class Sarif(Sarif210):
     """This class exists because the generated code for Sarif210 treats version as a Dictionary which it is not."""
 
-    version: str # type: ignore
+    version: str  # type: ignore
