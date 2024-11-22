@@ -197,23 +197,22 @@ def _setup_scan_folder(tmp_path):
 
 
 def _validate_scan_folder(tmp_path, results: ScanResults):
-    safe_model_path = tmp_path / "safe_model.pkl"
-    malicious_model_path = tmp_path / "malicious_model.pkl"
+    safe_model = "safe_model.pkl"
+    malicious_model = "malicious_model.pkl"
 
     assert results.file_count == 3
     assert results.files_with_detections_count == 2
 
     assert results.file_results is not None
     for file_results in results.file_results:
-        if file_results.file_location == safe_model_path:
+        if file_results.file_location.endswith(safe_model):
             detections = file_results.detections
-            assert detections
-            assert detections[0].severity == "safe"
+            assert detections is None
             assert file_results.details.file_type_details is not None
             assert file_results.details.file_type_details["pickle_modules"] == [
                 "callable: builtins.print"
             ]
-        elif file_results.file_location == malicious_model_path:
+        elif file_results.file_location.endswith(malicious_model):
             detections = file_results.detections
             assert file_results.details.file_type_details is not None
             assert file_results.details.file_type_details["pickle_modules"] == [
