@@ -17,35 +17,18 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict
 from typing import Any, ClassVar, Dict, List, Optional
-from hiddenlayer.sdk.rest.models.file_details_v3 import FileDetailsV3
-from hiddenlayer.sdk.rest.models.scan_detection_v3 import ScanDetectionV3
+from hiddenlayer.sdk.rest.models.file_scan_report_v3 import FileScanReportV3
 from typing import Optional, Set
 from typing_extensions import Self
 
-class FileScanReportV3(BaseModel):
+class FileScanReportsV3(BaseModel):
     """
-    FileScanReportV3
+    FileScanReportsV3
     """ # noqa: E501
-    file_instance_id: StrictStr = Field(description="unique ID of the file")
-    file_location: StrictStr = Field(description="full file path")
-    start_time: datetime = Field(description="time the scan started")
-    end_time: datetime = Field(description="time the scan ended")
-    details: FileDetailsV3
-    status: StrictStr = Field(description="status of the scan")
-    seen: datetime = Field(description="time the scan was seen at")
-    detections: Optional[List[ScanDetectionV3]] = None
     file_results: Optional[List[FileScanReportV3]] = None
-    __properties: ClassVar[List[str]] = ["file_instance_id", "file_location", "start_time", "end_time", "details", "status", "seen", "detections", "file_results"]
-
-    @field_validator('status')
-    def status_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['skipped', 'pending', 'running', 'done', 'failed', 'canceled']):
-            raise ValueError("must be one of enum values ('skipped', 'pending', 'running', 'done', 'failed', 'canceled')")
-        return value
+    __properties: ClassVar[List[str]] = ["file_results"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -65,7 +48,7 @@ class FileScanReportV3(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of FileScanReportV3 from a JSON string"""
+        """Create an instance of FileScanReportsV3 from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -86,16 +69,6 @@ class FileScanReportV3(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of details
-        if self.details:
-            _dict['details'] = self.details.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of each item in detections (list)
-        _items = []
-        if self.detections:
-            for _item in self.detections:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict['detections'] = _items
         # override the default output from pydantic by calling `to_dict()` of each item in file_results (list)
         _items = []
         if self.file_results:
@@ -107,7 +80,7 @@ class FileScanReportV3(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of FileScanReportV3 from a dict"""
+        """Create an instance of FileScanReportsV3 from a dict"""
         if obj is None:
             return None
 
@@ -115,18 +88,8 @@ class FileScanReportV3(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "file_instance_id": obj.get("file_instance_id"),
-            "file_location": obj.get("file_location"),
-            "start_time": obj.get("start_time"),
-            "end_time": obj.get("end_time"),
-            "details": FileDetailsV3.from_dict(obj["details"]) if obj.get("details") is not None else None,
-            "status": obj.get("status"),
-            "seen": obj.get("seen"),
-            "detections": [ScanDetectionV3.from_dict(_item) for _item in obj["detections"]] if obj.get("detections") is not None else None,
             "file_results": [FileScanReportV3.from_dict(_item) for _item in obj["file_results"]] if obj.get("file_results") is not None else None
         })
         return _obj
 
-# TODO: Rewrite to not use raise_errors
-FileScanReportV3.model_rebuild(raise_errors=False)
 

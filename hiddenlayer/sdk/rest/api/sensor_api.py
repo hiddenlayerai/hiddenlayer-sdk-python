@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from pydantic import Field, StrictFloat, StrictInt, StrictStr, field_validator
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional, Union
 from typing_extensions import Annotated
 from hiddenlayer.sdk.rest.models.create_sensor_request import CreateSensorRequest
 from hiddenlayer.sdk.rest.models.get_multipart_upload_response import GetMultipartUploadResponse
@@ -334,7 +334,7 @@ class SensorApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> object:
+    ) -> None:
         """Complete Multipart Upload
 
 
@@ -374,7 +374,7 @@ class SensorApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "object",
+            '200': None,
             '400': None,
         }
         response_data = self.api_client.call_api(
@@ -405,7 +405,7 @@ class SensorApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[object]:
+    ) -> ApiResponse[None]:
         """Complete Multipart Upload
 
 
@@ -445,7 +445,7 @@ class SensorApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "object",
+            '200': None,
             '400': None,
         }
         response_data = self.api_client.call_api(
@@ -516,7 +516,7 @@ class SensorApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "object",
+            '200': None,
             '400': None,
         }
         response_data = self.api_client.call_api(
@@ -559,12 +559,6 @@ class SensorApi:
         # process the body parameter
 
 
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json'
-            ]
-        )
 
 
         # authentication setting
@@ -1998,7 +1992,7 @@ class SensorApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> object:
+    ) -> None:
         """Upload part
 
 
@@ -2044,7 +2038,7 @@ class SensorApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "object",
+            '200': None,
             '400': None,
         }
         response_data = self.api_client.call_api(
@@ -2077,7 +2071,7 @@ class SensorApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[object]:
+    ) -> ApiResponse[None]:
         """Upload part
 
 
@@ -2123,7 +2117,7 @@ class SensorApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "object",
+            '200': None,
             '400': None,
         }
         response_data = self.api_client.call_api(
@@ -2202,7 +2196,7 @@ class SensorApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "object",
+            '200': None,
             '400': None,
         }
         response_data = self.api_client.call_api(
@@ -2251,12 +2245,6 @@ class SensorApi:
             _body_params = body
 
 
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json'
-            ]
-        )
 
         # set the HTTP header `Content-Type`
         if _content_type:

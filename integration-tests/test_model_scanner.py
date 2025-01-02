@@ -1,5 +1,6 @@
 import os
 import pickle
+import sys
 from typing import Optional
 from uuid import uuid4
 
@@ -12,6 +13,8 @@ params = [
     ("https://api.us.hiddenlayer.ai"),
     pytest.param("http://localhost:8000", marks=pytest.mark.xfail),
 ]
+
+sys.path = [os.path.join(os.pardir, 'hiddenlayer', 'sdk')] + sys.path
 
 
 class MaliciousPickle:
@@ -146,7 +149,7 @@ def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
     assert run.results is not None
     results = run.results[0]
     assert results.level == "error"
-    assert results.rule_id == "PICKLE_0002_202408"
+    assert results.rule_id == "PICKLE_0017_202408"
 
     if hl_client.is_saas:
         hl_client.model.delete(model_name=model_name)
@@ -204,26 +207,33 @@ def _validate_scan_folder(tmp_path, results: ScanResults):
     assert results.files_with_detections_count == 2
 
     assert results.file_results is not None
-    for file_results in results.file_results:
-        if file_results.file_location.endswith(safe_model):
-            detections = file_results.detections
-            assert detections is None
-            assert file_results.details.file_type_details is not None
-            assert file_results.details.file_type_details["pickle_modules"] == [
-                "callable: builtins.print"
-            ]
-        elif file_results.file_location.endswith(malicious_model):
-            detections = file_results.detections
-            assert file_results.details.file_type_details is not None
-            assert file_results.details.file_type_details["pickle_modules"] == [
-                "callable: builtins.exec"
-            ]
-            assert detections
-            assert detections[0].severity == "high"
-            assert (
-                "This detection rule was triggered by the presence of a function or library that can be used to execute code"
-                in str(detections[0].description)
-            )
-            assert file_results.details.file_type_details["pickle_modules"] == [
-                "callable: builtins.exec"
-            ]
+    safe_model_found = False
+    malicious_model_found = False
+    for top_file_results in results.file_results:
+        for file_results in top_file_results.file_results:
+            if file_results.file_location.endswith(safe_model):
+                detections = file_results.detections
+                assert detections is None
+                assert file_results.details.file_type_details is not None
+                assert file_results.details.file_type_details["pickle_modules"] == [
+                    "callable: builtins.print"
+                ]
+                safe_model_found = True
+            elif file_results.file_location.endswith(malicious_model):
+                detections = file_results.detections
+                assert file_results.details.file_type_details is not None
+                assert file_results.details.file_type_details["pickle_modules"] == [
+                    "callable: builtins.exec"
+                ]
+                assert detections
+                assert detections[0].severity == "high"
+                assert (
+                    "This detection rule was triggered by the presence of a function or library that can be used to execute code"
+                    in str(detections[0].description)
+                )
+                assert file_results.details.file_type_details["pickle_modules"] == [
+                    "callable: builtins.exec"
+                ]
+                malicious_model_found = True
+    assert safe_model_found
+    assert malicious_model_found

@@ -34,14 +34,13 @@ def test_model_create_delete(hl_client: HiddenlayerServiceClient):
     hl_client.model.delete(model_name=model_name)
 
 
-def test_deleting_non_adhoc_model_fails(hl_client: HiddenlayerServiceClient):
-    """Test deleting non adhoc models fails gracefully."""
+def test_deleting_non_adhoc_model(hl_client: HiddenlayerServiceClient):
+    """Test deleting non adhoc models succeeds."""
 
-    model_name = "undeletable_model"
+    model_name = "deletable_model"
 
     _ = hl_client.model._sensor_api.create_sensor(
         CreateSensorRequest(plaintext_name=model_name, adhoc=False)
     )
 
-    with pytest.raises(IncompatibleModelError):
-        hl_client.model.delete(model_name=model_name)
+    hl_client.model.delete(model_name=model_name)

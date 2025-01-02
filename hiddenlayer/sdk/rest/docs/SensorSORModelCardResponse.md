@@ -6,9 +6,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **model_id** | **str** |  | 
-**created_at** | **int** | Unix timestamp | 
+**created_at** | **datetime** |  | 
 **plaintext_name** | **str** |  | 
-**active_versions** | **List[int]** |  | 
+**active_versions** | **List[str]** |  | 
 **source** | **str** |  | 
 **tags** | **Dict[str, object]** |  | [optional] 
 **model_scan_threat_level** | **str** |  | [optional] 
