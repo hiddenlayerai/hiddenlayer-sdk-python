@@ -14,7 +14,7 @@ params = [
     pytest.param("http://localhost:8000", marks=pytest.mark.xfail),
 ]
 
-sys.path = [os.path.join(os.pardir, 'hiddenlayer', 'sdk')] + sys.path
+sys.path = [os.path.join(os.pardir, "hiddenlayer", "sdk")] + sys.path
 
 
 class MaliciousPickle:
