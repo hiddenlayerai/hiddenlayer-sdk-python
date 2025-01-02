@@ -6,9 +6,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **model_id** | **str** |  | 
-**created_at** | **datetime** |  | 
+**created_at** | **int** | Unix Nano Epoch | 
 **plaintext_name** | **str** |  | 
-**active_versions** | **List[str]** |  | 
+**active_versions** | **List[int]** |  | 
 **source** | **str** |  | 
 **tags** | **Dict[str, object]** |  | [optional] 
 **model_scan_threat_level** | **str** |  | [optional] 

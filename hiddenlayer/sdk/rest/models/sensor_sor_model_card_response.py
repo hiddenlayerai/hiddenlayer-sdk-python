@@ -28,7 +28,7 @@ class SensorSORModelCardResponse(BaseModel):
     SensorSORModelCardResponse
     """ # noqa: E501
     model_id: StrictStr
-    created_at: StrictInt = Field(description="Unix timestamp")
+    created_at: StrictInt = Field(description="Unix Nano Epoch")
     plaintext_name: StrictStr
     active_versions: List[StrictInt]
     source: StrictStr
