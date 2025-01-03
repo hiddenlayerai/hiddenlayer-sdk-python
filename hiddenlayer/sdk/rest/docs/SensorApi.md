@@ -94,7 +94,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **complete_multipart_upload**
-> object complete_multipart_upload(sensor_id, upload_id)
+> complete_multipart_upload(sensor_id, upload_id)
 
 Complete Multipart Upload
 
@@ -132,9 +132,7 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
 
     try:
         # Complete Multipart Upload
-        api_response = api_instance.complete_multipart_upload(sensor_id, upload_id)
-        print("The response of SensorApi->complete_multipart_upload:\n")
-        pprint(api_response)
+        api_instance.complete_multipart_upload(sensor_id, upload_id)
     except Exception as e:
         print("Exception when calling SensorApi->complete_multipart_upload: %s\n" % e)
 ```
@@ -151,7 +149,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**object**
+void (empty response body)
 
 ### Authorization
 
@@ -160,7 +158,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 ### HTTP response details
 
@@ -567,7 +565,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **upload_model_part**
-> object upload_model_part(sensor_id, upload_id, part, body)
+> upload_model_part(sensor_id, upload_id, part, body)
 
 Upload part
 
@@ -607,9 +605,7 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
 
     try:
         # Upload part
-        api_response = api_instance.upload_model_part(sensor_id, upload_id, part, body)
-        print("The response of SensorApi->upload_model_part:\n")
-        pprint(api_response)
+        api_instance.upload_model_part(sensor_id, upload_id, part, body)
     except Exception as e:
         print("Exception when calling SensorApi->upload_model_part: %s\n" % e)
 ```
@@ -628,7 +624,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**object**
+void (empty response body)
 
 ### Authorization
 
@@ -637,7 +633,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/octet-stream
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 ### HTTP response details
 

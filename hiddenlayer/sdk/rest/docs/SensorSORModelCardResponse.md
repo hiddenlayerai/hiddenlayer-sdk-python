@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **model_id** | **str** |  | 
-**created_at** | **int** | Unix timestamp | 
+**created_at** | **int** | Unix Nano Epoch | 
 **plaintext_name** | **str** |  | 
 **active_versions** | **List[int]** |  | 
 **source** | **str** |  | 

@@ -32,8 +32,8 @@ from hiddenlayer.sdk.rest.models.external_properties import ExternalProperties
 from hiddenlayer.sdk.rest.models.external_property_file_reference import ExternalPropertyFileReference
 from hiddenlayer.sdk.rest.models.external_property_file_references import ExternalPropertyFileReferences
 from hiddenlayer.sdk.rest.models.file_details_v3 import FileDetailsV3
-from hiddenlayer.sdk.rest.models.file_results_inner import FileResultsInner
 from hiddenlayer.sdk.rest.models.file_scan_report_v3 import FileScanReportV3
+from hiddenlayer.sdk.rest.models.file_scan_reports_v3 import FileScanReportsV3
 from hiddenlayer.sdk.rest.models.fix import Fix
 from hiddenlayer.sdk.rest.models.get_multipart_upload_response import GetMultipartUploadResponse
 from hiddenlayer.sdk.rest.models.graph import Graph

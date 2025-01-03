@@ -9,7 +9,7 @@ from hiddenlayer.sdk.rest.models import (
     ModelInventoryInfo,
     ScanReportV3,
 )
-from hiddenlayer.sdk.rest.models.file_results_inner import FileResultsInner
+from hiddenlayer.sdk.rest.models.file_scan_report_v3 import FileScanReportV3
 from hiddenlayer.sdk.rest.models.sarif210 import Sarif210
 
 
@@ -50,7 +50,7 @@ class EmptyScanResults(ScanResults):
     start_time: datetime = datetime.now()
     end_time: Optional[datetime] = datetime.now()
     severity: Optional[StrictStr] = ""
-    file_results: Optional[List[FileResultsInner]] = []
+    file_results: Optional[List[FileScanReportV3]] = []
 
 
 class Sarif(Sarif210):
