@@ -36,7 +36,7 @@ class ModelAPI:
                 plaintext_name=model_name, version=model_version, adhoc=True
             )
         )
-    
+
     def create_or_get(self, *, model_name: str, model_version: Optional[int]) -> Model:
         """
         Creates a model in the HiddenLayer Platform if it does not exist.
