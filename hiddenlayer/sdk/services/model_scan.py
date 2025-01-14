@@ -70,7 +70,7 @@ class ModelScanAPI:
         file_path = Path(model_path)
 
         filesize = file_path.stat().st_size
-        sensor = self._model_api.create(
+        sensor = self._model_api.create_or_get(
             model_name=model_name, model_version=model_version
         )
         upload = self._sensor_api.begin_multipart_upload(sensor.sensor_id, filesize)
