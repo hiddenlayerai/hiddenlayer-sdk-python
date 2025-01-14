@@ -1,4 +1,6 @@
 import json
+import random
+import time
 from typing import Optional
 
 from hiddenlayer.sdk.constants import ApiErrors
@@ -51,9 +53,34 @@ class ModelAPI:
             return self.create(model_name=model_name, model_version=model_version)
         except ApiException as e:
             if e.status == 400 and str(e.body).find(ApiErrors.SENSOR_EXISTS) != -1:
-                return self.get(model_name=model_name, version=model_version)
+                return self.get_with_retry(
+                    model_name=model_name, version=model_version, retry=3
+                )
             else:
                 raise e
+
+    def get_with_retry(
+        self, *, model_name: str, version: Optional[int], retry: int
+    ) -> Model:
+        """
+        Gets a HiddenLayer model object. If not version is supplied, the latest model is returned.
+        Retries if the model is not found.
+
+        :param model_name: Name of the model.
+        :param version: Version of the model to get.
+        :param retry: Number of retries
+
+        :returns: HiddenLayer Model object
+        """
+
+        base_delay = 0.1  # seconds
+        for retryCount in range(retry):
+            try:
+                return self.get(model_name=model_name, version=version)
+            except ModelDoesNotExistError:
+                time.sleep(base_delay * 2**retryCount + random.uniform(0, 1))
+                pass
+        raise ModelDoesNotExistError(f"Model {model_name} does not exist")
 
     def get(self, *, model_name: str, version: Optional[int] = None) -> Model:
         """
@@ -108,7 +135,7 @@ class ModelAPI:
             )
         )
 
-        if not models.results:
+        if not models.results or len(models.results) == 0:
             msg = f"Model {model_name} does not exist"
 
             if version:
