@@ -125,6 +125,27 @@ def test_scan_model_multiple_times(tmp_path, hl_client: HiddenlayerServiceClient
     if hl_client.is_saas:
         hl_client.model.delete(model_name=model_name)
 
+def test_rescan_model_with_same_version(tmp_path, hl_client: HiddenlayerServiceClient):
+    """Integration test to rescan a model multiple times with the same verison"""
+
+    model_path = _setup_scan_model(tmp_path)
+    model_name = f"sdk-integration-scan-model-{uuid4()}"
+    model_version = 123
+
+    results: Optional[ScanResults] = None
+    for _ in range(3):
+        results = hl_client.model_scanner.scan_file(
+            model_name=model_name, model_path=model_path, model_version=model_version
+        )
+
+    assert results is not None
+
+    _validate_scan_model(results)
+
+    assert results.inventory.model_version == "123"
+
+    if hl_client.is_saas:
+        hl_client.model.delete(model_name=model_name)
 
 def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to get sarif results"""
@@ -153,7 +174,6 @@ def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
 
     if hl_client.is_saas:
         hl_client.model.delete(model_name=model_name)
-
 
 def _setup_scan_model(tmp_path):
     model_path = tmp_path / "model.pkl"
