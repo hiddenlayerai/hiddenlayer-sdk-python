@@ -36,6 +36,24 @@ class ModelAPI:
                 plaintext_name=model_name, version=model_version, adhoc=True
             )
         )
+    
+    def create_or_get(self, *, model_name: str, model_version: Optional[int]) -> Model:
+        """
+        Creates a model in the HiddenLayer Platform if it does not exist.
+        If the model and version already exists, returns the existing model.
+
+        :params model_name: Name of the model
+        :params model_version: Version of the model
+
+        :returns: HiddenLayer ModelID
+        """
+        try:
+            return self.create(model_name=model_name, model_version=model_version)
+        except ApiException as e:
+            if e.status == 400 and str(e.body).find(ApiErrors.SENSOR_EXISTS) != -1:
+                return self.get(model_name=model_name, version=model_version)
+            else:
+                raise e
 
     def get(self, *, model_name: str, version: Optional[int] = None) -> Model:
         """

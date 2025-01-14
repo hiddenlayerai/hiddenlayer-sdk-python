@@ -12,3 +12,4 @@ class ScanStatus(str, Enum):
 
 class ApiErrors(str, Enum):
     NON_ADHOC_SENSOR_DELETE = "only adhoc sensors may be deleted"
+    SENSOR_EXISTS = "already exists"
