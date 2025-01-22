@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **items** | **List[str]** | List of items. If no matching items are found, then &#x60;[]&#x60; will be returned. | [optional] 
-**total** | **float** | Total number of items available based on the query criteria. | 
+**total** | **int** | Total number of items available based on the query criteria. | 
 **limit** | **int** | Maximum number of items to return | [default to 25]
 **offset** | **int** | Begin returning the results from this offset | [default to 0]
 

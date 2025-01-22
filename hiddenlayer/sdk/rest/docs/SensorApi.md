@@ -50,7 +50,7 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = hiddenlayer.sdk.rest.SensorApi(api_client)
     sensor_id = 'sensor_id_example' # str | 
-    x_content_length = 3.4 # float | The total size of multipart upload.
+    x_content_length = 56 # int | The total size of multipart upload.
 
     try:
         # Begin Multipart Upload
@@ -69,7 +69,7 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **sensor_id** | **str**|  | 
- **x_content_length** | **float**| The total size of multipart upload. | 
+ **x_content_length** | **int**| The total size of multipart upload. | 
 
 ### Return type
 
@@ -600,7 +600,7 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
     api_instance = hiddenlayer.sdk.rest.SensorApi(api_client)
     sensor_id = 'sensor_id_example' # str | 
     upload_id = 'upload_id_example' # str | 
-    part = 3.4 # float | 
+    part = 56 # int | 
     body = None # object | 
 
     try:
@@ -619,7 +619,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **sensor_id** | **str**|  | 
  **upload_id** | **str**|  | 
- **part** | **float**|  | 
+ **part** | **int**|  | 
  **body** | **object**|  | 
 
 ### Return type

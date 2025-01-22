@@ -60,7 +60,7 @@ class TestScanDetectionV3(unittest.TestCase):
                 cve = [
                     'CVE-0480-288800152'
                     ],
-                cwe = 'CWE-480rZ#UM/?R,Fp^l6$ARjbhJk C>i',
+                cwe = '',
                 cwe_href = '',
                 technical_blog_href = ''
             )

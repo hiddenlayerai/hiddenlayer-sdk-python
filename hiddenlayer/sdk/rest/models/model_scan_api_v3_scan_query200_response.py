@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List, Optional, Union
+from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from hiddenlayer.sdk.rest.models.scan_report_v3 import ScanReportV3
 from typing import Optional, Set
@@ -29,7 +29,7 @@ class ModelScanApiV3ScanQuery200Response(BaseModel):
     ModelScanApiV3ScanQuery200Response
     """ # noqa: E501
     items: Optional[List[ScanReportV3]] = None
-    total: Union[Annotated[float, Field(strict=True, ge=0)], Annotated[int, Field(strict=True, ge=0)]] = Field(description="Total number of items available based on the query criteria.")
+    total: Annotated[int, Field(strict=True, ge=0)] = Field(description="Total number of items available based on the query criteria.")
     limit: Annotated[int, Field(le=100, strict=True, ge=1)] = Field(description="Maximum number of items to return")
     offset: Annotated[int, Field(strict=True, ge=0)] = Field(description="Begin returning the results from this offset")
     __properties: ClassVar[List[str]] = ["items", "total", "limit", "offset"]

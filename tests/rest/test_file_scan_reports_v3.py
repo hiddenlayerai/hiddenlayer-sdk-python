@@ -14,10 +14,10 @@
 
 import unittest
 
-from hiddenlayer.sdk.rest.models.scan_report_v3 import ScanReportV3
+from hiddenlayer.sdk.rest.models.file_scan_reports_v3 import FileScanReportsV3
 
-class TestScanReportV3(unittest.TestCase):
-    """ScanReportV3 unit test stubs"""
+class TestFileScanReportsV3(unittest.TestCase):
+    """FileScanReportsV3 unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,29 +25,16 @@ class TestScanReportV3(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> ScanReportV3:
-        """Test ScanReportV3
+    def make_instance(self, include_optional) -> FileScanReportsV3:
+        """Test FileScanReportsV3
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `ScanReportV3`
+        # uncomment below to create an instance of `FileScanReportsV3`
         """
-        model = ScanReportV3()
+        model = FileScanReportsV3()
         if include_optional:
-            return ScanReportV3(
-                file_count = 56,
-                files_with_detections_count = 56,
-                detection_count = 56,
-                detection_categories = [
-                    ''
-                    ],
-                inventory = hiddenlayer.sdk.rest.models.model_inventory_info.Model Inventory Info(),
-                version = '',
-                scan_id = '',
-                start_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                end_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                status = 'pending',
-                severity = 'low',
+            return FileScanReportsV3(
                 file_results = [
                     hiddenlayer.sdk.rest.models.file_scan_report_v3.FileScanReportV3(
                         file_instance_id = '', 
@@ -149,20 +136,12 @@ class TestScanReportV3(unittest.TestCase):
                     ]
             )
         else:
-            return ScanReportV3(
-                file_count = 56,
-                files_with_detections_count = 56,
-                detection_count = 56,
-                inventory = hiddenlayer.sdk.rest.models.model_inventory_info.Model Inventory Info(),
-                version = '',
-                scan_id = '',
-                start_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                status = 'pending',
+            return FileScanReportsV3(
         )
         """
 
-    def testScanReportV3(self):
-        """Test ScanReportV3"""
+    def testFileScanReportsV3(self):
+        """Test FileScanReportsV3"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

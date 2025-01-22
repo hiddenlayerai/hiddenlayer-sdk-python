@@ -35,16 +35,16 @@ class TestMultipartUploadPart(unittest.TestCase):
         model = MultipartUploadPart()
         if include_optional:
             return MultipartUploadPart(
-                part_number = 1.337,
-                start_offset = 1.337,
-                end_offset = 1.337,
+                part_number = 56,
+                start_offset = 56,
+                end_offset = 56,
                 upload_url = ''
             )
         else:
             return MultipartUploadPart(
-                part_number = 1.337,
-                start_offset = 1.337,
-                end_offset = 1.337,
+                part_number = 56,
+                start_offset = 56,
+                end_offset = 56,
         )
         """
 
