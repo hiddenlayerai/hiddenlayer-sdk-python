@@ -16,8 +16,8 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictFloat, StrictInt, StrictStr, field_validator
-from typing import Any, Optional, Union
+from pydantic import Field, StrictInt, StrictStr, field_validator
+from typing import Any, Optional
 from typing_extensions import Annotated
 from hiddenlayer.sdk.rest.models.create_sensor_request import CreateSensorRequest
 from hiddenlayer.sdk.rest.models.get_multipart_upload_response import GetMultipartUploadResponse
@@ -48,7 +48,7 @@ class SensorApi:
     def begin_multipart_upload(
         self,
         sensor_id: StrictStr,
-        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
+        x_content_length: Annotated[StrictInt, Field(description="The total size of multipart upload.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -68,7 +68,7 @@ class SensorApi:
         :param sensor_id: (required)
         :type sensor_id: str
         :param x_content_length: The total size of multipart upload. (required)
-        :type x_content_length: float
+        :type x_content_length: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -119,7 +119,7 @@ class SensorApi:
     def begin_multipart_upload_with_http_info(
         self,
         sensor_id: StrictStr,
-        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
+        x_content_length: Annotated[StrictInt, Field(description="The total size of multipart upload.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -139,7 +139,7 @@ class SensorApi:
         :param sensor_id: (required)
         :type sensor_id: str
         :param x_content_length: The total size of multipart upload. (required)
-        :type x_content_length: float
+        :type x_content_length: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -190,7 +190,7 @@ class SensorApi:
     def begin_multipart_upload_without_preload_content(
         self,
         sensor_id: StrictStr,
-        x_content_length: Annotated[Union[StrictFloat, StrictInt], Field(description="The total size of multipart upload.")],
+        x_content_length: Annotated[StrictInt, Field(description="The total size of multipart upload.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -210,7 +210,7 @@ class SensorApi:
         :param sensor_id: (required)
         :type sensor_id: str
         :param x_content_length: The total size of multipart upload. (required)
-        :type x_content_length: float
+        :type x_content_length: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1978,7 +1978,7 @@ class SensorApi:
         self,
         sensor_id: StrictStr,
         upload_id: StrictStr,
-        part: Union[StrictFloat, StrictInt],
+        part: StrictInt,
         body: Optional[Any],
         _request_timeout: Union[
             None,
@@ -2001,7 +2001,7 @@ class SensorApi:
         :param upload_id: (required)
         :type upload_id: str
         :param part: (required)
-        :type part: float
+        :type part: int
         :param body: (required)
         :type body: object
         :param _request_timeout: timeout setting for this request. If one
@@ -2057,7 +2057,7 @@ class SensorApi:
         self,
         sensor_id: StrictStr,
         upload_id: StrictStr,
-        part: Union[StrictFloat, StrictInt],
+        part: StrictInt,
         body: Optional[Any],
         _request_timeout: Union[
             None,
@@ -2080,7 +2080,7 @@ class SensorApi:
         :param upload_id: (required)
         :type upload_id: str
         :param part: (required)
-        :type part: float
+        :type part: int
         :param body: (required)
         :type body: object
         :param _request_timeout: timeout setting for this request. If one
@@ -2136,7 +2136,7 @@ class SensorApi:
         self,
         sensor_id: StrictStr,
         upload_id: StrictStr,
-        part: Union[StrictFloat, StrictInt],
+        part: StrictInt,
         body: Optional[Any],
         _request_timeout: Union[
             None,
@@ -2159,7 +2159,7 @@ class SensorApi:
         :param upload_id: (required)
         :type upload_id: str
         :param part: (required)
-        :type part: float
+        :type part: int
         :param body: (required)
         :type body: object
         :param _request_timeout: timeout setting for this request. If one

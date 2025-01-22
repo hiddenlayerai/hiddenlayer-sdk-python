@@ -17,8 +17,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional, Union
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -26,9 +26,9 @@ class MultipartUploadPart(BaseModel):
     """
     MultipartUploadPart
     """ # noqa: E501
-    part_number: Union[StrictFloat, StrictInt]
-    start_offset: Union[StrictFloat, StrictInt]
-    end_offset: Union[StrictFloat, StrictInt]
+    part_number: StrictInt
+    start_offset: StrictInt
+    end_offset: StrictInt
     upload_url: Optional[StrictStr] = Field(default=None, description="only provided when part is to be directly uploaded to a cloud provider (adhoc)")
     __properties: ClassVar[List[str]] = ["part_number", "start_offset", "end_offset", "upload_url"]
 

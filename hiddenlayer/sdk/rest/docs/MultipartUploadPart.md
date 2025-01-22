@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**part_number** | **float** |  | 
-**start_offset** | **float** |  | 
-**end_offset** | **float** |  | 
+**part_number** | **int** |  | 
+**start_offset** | **int** |  | 
+**end_offset** | **int** |  | 
 **upload_url** | **str** | only provided when part is to be directly uploaded to a cloud provider (adhoc) | [optional] 
 
 ## Example

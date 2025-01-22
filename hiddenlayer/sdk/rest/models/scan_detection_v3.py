@@ -66,8 +66,8 @@ class ScanDetectionV3(BaseModel):
         if value is None:
             return value
 
-        if not re.match(r"^CWE-\d{1,4}.*$", value):
-            raise ValueError(r"must validate the regular expression /^CWE-\d{1,4}.*$/")
+        if not re.match(r"^CWE-\d{1,4}.*$|^$", value):
+            raise ValueError(r"must validate the regular expression /^CWE-\d{1,4}.*$|^$/")
         return value
 
     model_config = ConfigDict(
