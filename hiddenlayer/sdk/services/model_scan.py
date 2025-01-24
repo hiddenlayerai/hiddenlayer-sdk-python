@@ -261,6 +261,7 @@ class ModelScanAPI:
         self,
         *,
         repo_id: str,
+        model_name: Optional[str] = None,
         # model_id: str,
         # HF parameters
         revision: Optional[str] = None,
@@ -317,7 +318,7 @@ class ModelScanAPI:
         )
 
         return self.scan_folder(
-            model_name=repo_id,
+            model_name=model_name or repo_id,
             path=local_dir,
             allow_file_patterns=allow_file_patterns,
             ignore_file_patterns=ignore_file_patterns,
