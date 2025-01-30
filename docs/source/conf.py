@@ -9,8 +9,8 @@ project = "HiddenLayer Python SDK"
 copyright = "2024"
 author = "HiddenLayer Integrations Team"
 
-release = "1.1"
-version = "1.1.1"
+release = "1.2"
+version = "1.2.1"
 
 # -- General configuration
 
