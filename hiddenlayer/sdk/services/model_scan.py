@@ -407,7 +407,7 @@ class ModelScanAPI:
         response = self._api_client.call_api(*request)
         response.read()
 
-        return response.data # type: ignore
+        return response.data  # type: ignore
 
     def scan_folder(
         self,
