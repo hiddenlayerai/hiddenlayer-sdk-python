@@ -7,7 +7,7 @@ from uuid import uuid4
 import pytest
 
 from hiddenlayer import HiddenlayerServiceClient
-from hiddenlayer.sdk.models import ScanResults
+from hiddenlayer.sdk.models import Sarif, ScanResults
 
 params = [
     ("https://api.us.hiddenlayer.ai"),
@@ -161,19 +161,37 @@ def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
 
     _validate_scan_model(results)
 
-    sarif_results = hl_client.model_scanner.get_sarif_results(model_name=model_name)
-    print(sarif_results)
+    sarif_results_str = hl_client.model_scanner.get_sarif_results(model_name=model_name)
+    print(sarif_results_str)
 
-    # TODO: Loop back to think about adding asserts
-    # assert sarif_results is not None
-    # assert sarif_results.version == "2.1.0"
-    # assert sarif_results.runs is not None
-    # run = sarif_results.runs[0]
-    # assert run.tool.driver.name == "HiddenLayer Model Scanner"
-    # assert run.results is not None
-    # results = run.results[0]
-    # assert results.level == "error"
-    # assert results.rule_id == "PICKLE_0017_202408"
+    assert sarif_results_str is not None
+    assert isinstance(sarif_results_str, str)
+
+    # Note: The generated code is not fully able to handle the Sarif model. Not all properties are deserialized
+    sarif_results = Sarif.from_json(sarif_results_str)
+    assert sarif_results is not None
+
+    assert sarif_results.version == "2.1.0"
+    assert sarif_results.runs is not None
+    run = sarif_results.runs[0]
+    assert run.tool.driver.name == "HiddenLayer Model Scanner"
+    assert run.results is not None
+    results = run.results[0]
+    assert results.level == "error"
+    assert results.rule_id == "PICKLE_0017_202408"
+    assert results.message is not None
+    # results.message.text does not deserialize correctly due to anyOf
+    # assert results.message.text == "This detection rule was triggered by the presence of a function or library that can be used to execute code. Offending module / function:eval / exec / system."
+    assert results.locations is not None
+    assert results.locations[0].physical_location is not None
+
+    # results.locations[0].physical_location does not deserialize correctly due to anyOf
+    # assert results.locations[0].physical_location.artifact_location is not None
+    # assert results.locations[0].physical_location.artifact_location.uri == "Local%20Model%20Upload/malicious_model.pkl"
+
+    # test roundtrip
+    sarif_results_str = sarif_results.model_dump_json(indent=4, exclude_none=True)
+    print(sarif_results_str)
 
     if hl_client.is_saas:
         hl_client.model.delete(model_name=model_name)
