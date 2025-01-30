@@ -10,7 +10,7 @@ copyright = "2024"
 author = "HiddenLayer Integrations Team"
 
 release = "1.2"
-version = "1.2.1"
+version = "1.2.2"
 
 # -- General configuration
 
