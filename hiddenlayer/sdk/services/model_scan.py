@@ -383,7 +383,7 @@ class ModelScanAPI:
         *,
         model_name: str,
         model_version: Optional[int] = None,
-    ) -> Optional[Sarif]:
+    ) -> Optional[str]:
         """
         Get sarif results from a model scan.
 
@@ -406,8 +406,9 @@ class ModelScanAPI:
         request[2]["Accept"] = "application/sarif+json"
         response = self._api_client.call_api(*request)
         response.read()
+
         return self._api_client.response_deserialize(
-            response_data=response, response_types_map={"200": Sarif}
+            response_data=response, response_types_map={"200": str}
         ).data  # type: ignore
 
     def scan_folder(
