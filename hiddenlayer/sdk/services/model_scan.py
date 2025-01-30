@@ -409,10 +409,6 @@ class ModelScanAPI:
 
         return response.data # type: ignore
 
-        return self._api_client.response_deserialize(
-            response_data=response, response_types_map={"200": str}
-        ).data  # type: ignore
-
     def scan_folder(
         self,
         *,
