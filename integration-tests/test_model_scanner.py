@@ -165,6 +165,7 @@ def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
     print(sarif_results_str)
 
     assert sarif_results_str is not None
+    assert isinstance(sarif_results_str, str)
 
     # Note: The generated code is not fully able to handle the Sarif model. Not all properties are deserialized
     sarif_results = Sarif.from_json(sarif_results_str)

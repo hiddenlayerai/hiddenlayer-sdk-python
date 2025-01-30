@@ -407,7 +407,10 @@ class ModelScanAPI:
         response = self._api_client.call_api(*request)
         response.read()
 
-        return response.data  # type: ignore
+        if response.data is None:
+            return None
+
+        return response.data.decode()
 
     def scan_folder(
         self,
