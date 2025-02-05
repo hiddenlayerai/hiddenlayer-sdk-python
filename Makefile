@@ -18,7 +18,7 @@ setup-enterprise-modscan:
 	--set modelscanner-v3.orchestrator.license=${HL_LICENSE} \
 	--wait --wait-for-jobs && \
 	kubectl -n hl-aisec-platform logs -f job/hl-aisec-platform --pod-running-timeout=20s && \
-	kubectl port-forward svc/modelscanner-orchestrator 8000 -n hl-modelscanner &>/dev/null
+	kubectl port-forward svc/modelscanner-orchestrator 8000 -n hl-modelscanner &>/dev/null &
 
 teardown-enterprise-modscan:
 	helm uninstall modelscanner-orchestrator --namespace=hl-modelscanner && \
