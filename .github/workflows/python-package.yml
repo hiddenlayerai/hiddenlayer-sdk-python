@@ -39,6 +39,8 @@ jobs:
     - name: Set up Enterprise Model Scanner
       run: |
         make setup-enterprise-modscan
+        sleep 5
+        kubectl get pods --namespace=hl-modelscanner
         make port-forward-service
         sleep 5
         curl http://localhost:8000/health
