@@ -26,6 +26,17 @@ jobs:
         egress-policy: audit
 
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    - name: Set up K8s kind cluster
+      uses: helm/kind-action@a1b0e391336a6ee6713a0583f8c6240d70863de3 # v1.12.0
+      with:
+        config: integration-tests/enterprise-modscan/kind.yaml
+    - name: Set up Enterprise Model Scanner
+      run: |
+        make setup-enterprise-modscan
+      env:
+        QUAY_USERNAME: ${{ vars.QUAY_USERNAME }}
+        QUAY_PASSWORD: ${{ secrets.QUAY_TOKEN }}
+        HL_LICENSE: ${{ secrets.HL_LICENSE }}
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
       with:
