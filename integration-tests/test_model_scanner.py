@@ -11,7 +11,7 @@ from hiddenlayer.sdk.models import Sarif, ScanResults
 
 params = [
     ("https://api.us.hiddenlayer.ai"),
-    pytest.param("http://localhost:8000", marks=pytest.mark.xfail),
+    ("http://localhost:8000"),
 ]
 
 sys.path = [os.path.join(os.pardir, "hiddenlayer", "sdk")] + sys.path
