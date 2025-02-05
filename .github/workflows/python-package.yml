@@ -39,6 +39,8 @@ jobs:
     - name: Set up Enterprise Model Scanner
       run: |
         make setup-enterprise-modscan
+        make port-forward-service
+        curl http://localhost:8000/health
       env:
         QUAY_USERNAME: ${{ vars.QUAY_USERNAME }}
         QUAY_PASSWORD: ${{ secrets.QUAY_TOKEN }}
