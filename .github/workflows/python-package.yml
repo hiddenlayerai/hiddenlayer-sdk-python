@@ -26,6 +26,19 @@ jobs:
         egress-policy: audit
 
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install pytest
+        pip install -e '.[dev]'
+    - name: Lint with ruff
+      run: |
+        ruff check .
+        ruff format --check .
     - name: Login to Quay
       uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
       with:
@@ -59,19 +72,6 @@ jobs:
         QUAY_USERNAME: ${{ vars.QUAY_USERNAME }}
         QUAY_PASSWORD: ${{ secrets.QUAY_TOKEN }}
         HL_LICENSE: ${{ secrets.HL_LICENSE }}
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install pytest
-        pip install -e '.[dev]'
-    - name: Lint with ruff
-      run: |
-        ruff check .
-        ruff format --check .
     - name: Test with pytest
       run: |
         pytest
