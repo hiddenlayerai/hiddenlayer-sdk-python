@@ -10,7 +10,8 @@ from hiddenlayer import HiddenlayerServiceClient
 from hiddenlayer.sdk.models import Sarif, ScanResults
 
 params = [
-    ("https://api.us.hiddenlayer.ai"),
+    # commented out for now as the V3 upload endpoints have not been released to prod yet
+#    ("https://api.us.hiddenlayer.ai"),
     ("http://localhost:8000"),
 ]
 
