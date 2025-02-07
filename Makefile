@@ -29,9 +29,9 @@ port-forward-service:
 ensure-mc-installed:
 	mc --version >/dev/null || \
 	brew install minio/stable/mc || \
-	(wget https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x mc && alias mc='./mc')
+	(wget https://dl.min.io/client/mc/release/linux-amd64/mc -P /tmp/mc && chmod +x mc && export PATH="$PATH" alias mc='./mc')
 
-add-minio-bucket: ensure-mc-installed
+add-minio-bucket:
 	$(eval MINIO_ROOT_USER := $(shell kubectl get secret -n hl-modelscanner modelscanner-minio -o json | jq -r .data.rootUser | base64 --decode))
 	$(eval MINIO_ROOT_PASSWORD := $(shell kubectl get secret -n hl-modelscanner modelscanner-minio -o json | jq -r .data.rootPassword | base64 --decode))
 	mc alias set myminio http://127.0.0.1:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} && \

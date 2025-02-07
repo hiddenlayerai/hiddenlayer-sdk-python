@@ -43,6 +43,9 @@ jobs:
         kubectl get pods --namespace=hl-modelscanner
         make port-forward-service
         make setup-s3-dns
+        wget https://dl.min.io/client/mc/release/linux-amd64/mc
+        chmod +x ./mc
+        alias mc='./mc'
         make add-minio-bucket
         sleep 5
         curl http://localhost:8000/health
