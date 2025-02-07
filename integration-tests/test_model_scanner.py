@@ -11,7 +11,7 @@ from hiddenlayer.sdk.models import Sarif, ScanResults
 
 params = [
     # commented out for now as the V3 upload endpoints have not been released to prod yet
-#    ("https://api.us.hiddenlayer.ai"),
+    #    ("https://api.us.hiddenlayer.ai"),
     ("http://localhost:8000"),
 ]
 
@@ -164,7 +164,9 @@ def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
 
     _validate_scan_model(results)
 
-    sarif_results_str = hl_client.model_scanner.get_sarif_results(scan_id=results.scan_id)
+    sarif_results_str = hl_client.model_scanner.get_sarif_results(
+        scan_id=results.scan_id
+    )
     print(sarif_results_str)
 
     assert sarif_results_str is not None

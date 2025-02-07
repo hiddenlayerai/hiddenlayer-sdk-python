@@ -16,7 +16,7 @@ from hiddenlayer.sdk.constants import ScanStatus
 from hiddenlayer.sdk.models import EmptyScanResults, Sarif, ScanResults
 from hiddenlayer.sdk.rest.api import ModelScanApi, ModelSupplyChainApi, SensorApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
-from hiddenlayer.sdk.rest.models import MultipartUploadPart, MultiFileUploadRequestV3
+from hiddenlayer.sdk.rest.models import MultiFileUploadRequestV3, MultipartUploadPart
 from hiddenlayer.sdk.rest.models.model import Model
 from hiddenlayer.sdk.rest.models.sarif210 import Sarif210
 from hiddenlayer.sdk.services.model import ModelAPI
@@ -82,7 +82,9 @@ class ModelScanAPI:
         if scan_id is None:
             raise Exception("scan_id must have a value")
         # upload = self._sensor_api.begin_multipart_upload(sensor.sensor_id, filesize)
-        upload = self._model_supply_chain_api.model_scan_api_v3_upload_model_add_file_scan_id_post(scan_id=str(scan_id), file_name=str(file_path), file_content_length=filesize)
+        upload = self._model_supply_chain_api.model_scan_api_v3_upload_model_add_file_scan_id_post(
+            scan_id=str(scan_id), file_name=str(file_path), file_content_length=filesize
+        )
 
         with open(file_path, "rb") as f:
             for part in upload.parts:
@@ -97,7 +99,7 @@ class ModelScanAPI:
                 self._api_client.call_api(
                     "PUT",
                     part.upload_url,
-                    body = part_data,
+                    body=part_data,
                     header_params={"Content-Type": "application/octet-binary"},
                 )
 
@@ -107,13 +109,13 @@ class ModelScanAPI:
 
         # self._sensor_api.complete_multipart_upload(sensor.sensor_id, upload.upload_id)
 
-        self._model_supply_chain_api.model_scan_api_v3_upload_model_scan_id_patch(scan_id=scan_id)
+        self._model_supply_chain_api.model_scan_api_v3_upload_model_scan_id_patch(
+            scan_id=scan_id
+        )
 
         # self._model_scan_api.scan_model(sensor.sensor_id)
 
-        scan_results = self.get_scan_results(
-            scan_id=scan_id
-        )
+        scan_results = self.get_scan_results(scan_id=scan_id)
 
         base_delay = 0.1  # seconds
         retries = 0
@@ -125,9 +127,7 @@ class ModelScanAPI:
                     0, 1
                 )  # exponential back off retry
                 time.sleep(delay)
-                scan_results = self.get_scan_results(
-                    scan_id=scan_id
-                )
+                scan_results = self.get_scan_results(scan_id=scan_id)
                 print(f"{file_path.name} scan status: {scan_results.status}")
 
         scan_results.file_name = file_path.name
@@ -365,9 +365,7 @@ class ModelScanAPI:
             )
         )
 
-        return ScanResults.from_scanreportv3(
-            scan_report_v3=scan_report
-        )
+        return ScanResults.from_scanreportv3(scan_report_v3=scan_report)
 
     def get_sarif_results(
         self,

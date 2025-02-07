@@ -24,11 +24,17 @@ class ScanResults(ScanReportV3):
         cls, *, scan_report_v3: ScanReportV3, model_id: Optional[str] = None
     ) -> Self:
         scan_results_dict = scan_report_v3.to_dict()
-        result =  cls(**scan_results_dict)
+        result = cls(**scan_results_dict)
         # Calculate counts: TODO: remove when orchestrator API returns these counts
         if result.file_results is not None:
             result.file_count = len(result.file_results)
-            result.files_with_detections_count = len([f for f in result.file_results if f.detections is not None and len(f.detections) > 0])
+            result.files_with_detections_count = len(
+                [
+                    f
+                    for f in result.file_results
+                    if f.detections is not None and len(f.detections) > 0
+                ]
+            )
 
         return result
 

@@ -19,7 +19,11 @@ def hl_client() -> HiddenlayerServiceClient:
     if not hl_client_secret:
         raise RuntimeError("HL_CLIENT_SECRET env var not set.")
 
-    return HiddenlayerServiceClient(api_id=hl_client_id, api_key=hl_client_secret, host="https://api.stage.us.hiddenlayer.ai")
+    return HiddenlayerServiceClient(
+        api_id=hl_client_id,
+        api_key=hl_client_secret,
+        host="https://api.stage.us.hiddenlayer.ai",
+    )
 
 
 def test_model_create_delete(hl_client: HiddenlayerServiceClient):
