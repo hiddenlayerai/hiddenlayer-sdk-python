@@ -43,17 +43,13 @@ jobs:
         kubectl get pods --namespace=hl-modelscanner
         make port-forward-service
         make setup-s3-dns
+        make add-minio-bucket
         sleep 5
         curl http://localhost:8000/health
       env:
         QUAY_USERNAME: ${{ vars.QUAY_USERNAME }}
         QUAY_PASSWORD: ${{ secrets.QUAY_TOKEN }}
         HL_LICENSE: ${{ secrets.HL_LICENSE }}
-    - name: Add bucket to Minio
-      run: |
-        wget https://dl.min.io/client/mc/release/linux-amd64/mc
-        chmod +x ./mc
-        make add-minio-bucket
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
       with:
