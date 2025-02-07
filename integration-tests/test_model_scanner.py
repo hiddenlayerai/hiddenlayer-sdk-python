@@ -151,6 +151,7 @@ def test_rescan_model_with_same_version(tmp_path, hl_client: HiddenlayerServiceC
     if hl_client.is_saas:
         hl_client.model.delete(model_name=model_name)
 
+
 @pytest.mark.xfail(reason="ModelScanner Orchestrator does not support sarif yet")
 def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to get sarif results"""
