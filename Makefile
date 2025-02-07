@@ -26,11 +26,6 @@ port-forward-service:
 	kubectl port-forward svc/modelscanner-minio 9000:9000 -n hl-modelscanner &>/dev/null & \
 	kubectl port-forward svc/modelscanner-orchestrator 8000 -n hl-modelscanner &>/dev/null &
 
-ensure-mc-installed:
-	mc --version >/dev/null || \
-	brew install minio/stable/mc || \
-	(wget https://dl.min.io/client/mc/release/linux-amd64/mc -P /tmp/mc && chmod +x mc && export PATH="$PATH" alias mc='./mc')
-
 add-minio-bucket:
 	$(eval MINIO_ROOT_USER := $(shell kubectl get secret -n hl-modelscanner modelscanner-minio -o json | jq -r .data.rootUser | base64 --decode))
 	$(eval MINIO_ROOT_PASSWORD := $(shell kubectl get secret -n hl-modelscanner modelscanner-minio -o json | jq -r .data.rootPassword | base64 --decode))

@@ -36,7 +36,7 @@ jobs:
       uses: helm/kind-action@a1b0e391336a6ee6713a0583f8c6240d70863de3 # v1.12.0
       with:
         config: integration-tests/enterprise-modscan/kind.yaml
-    - name: Install Minio Client
+    - name: Set up Enterprise Model Scanner
       run: |
         curl https://dl.min.io/client/mc/release/linux-amd64/mc \
           --create-dirs \
@@ -47,8 +47,6 @@ jobs:
 
         mc --help
 
-    - name: Set up Enterprise Model Scanner
-      run: |
         make setup-enterprise-modscan
         sleep 60
         kubectl get pods --namespace=hl-modelscanner
