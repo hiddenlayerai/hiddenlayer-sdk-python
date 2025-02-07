@@ -28,7 +28,7 @@ class ScanModelDetailsV3(BaseModel):
     """ # noqa: E501
     model_name: StrictStr = Field(description="name of the model")
     model_version: StrictStr = Field(description="version of the model")
-    model_source: StrictStr = Field(description="source (provider) info")
+    model_source: Optional[StrictStr] = Field(default=None, description="source (provider) info")
     requested_scan_location: StrictStr = Field(description="Location to be scanned")
     requesting_entity: Optional[StrictStr] = Field(default=None, description="Entity that requested the scan")
     __properties: ClassVar[List[str]] = ["model_name", "model_version", "model_source", "requested_scan_location", "requesting_entity"]

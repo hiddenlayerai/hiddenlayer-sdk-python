@@ -75,7 +75,7 @@ def test_scan_model_with_version(tmp_path, hl_client: HiddenlayerServiceClient):
 
     model_path = _setup_scan_model(tmp_path)
     model_name = f"sdk-integration-scan-model-{uuid4()}"
-    model_version = 123
+    model_version = "123"
 
     results = hl_client.model_scanner.scan_file(
         model_name=model_name, model_version=model_version, model_path=model_path
@@ -94,7 +94,7 @@ def test_scan_folder_with_version(tmp_path, hl_client: HiddenlayerServiceClient)
 
     _setup_scan_folder(tmp_path)
     model_name = f"sdk-integration-scan-model-folder-{uuid4()}"
-    model_version = 123
+    model_version = "123"
 
     results = hl_client.model_scanner.scan_folder(
         model_name=model_name, model_version=model_version, path=tmp_path
@@ -112,9 +112,9 @@ def test_scan_model_multiple_times(tmp_path, hl_client: HiddenlayerServiceClient
     model_name = f"sdk-integration-scan-model-{uuid4()}"
 
     results: Optional[ScanResults] = None
-    for _ in range(3):
+    for i in range(1, 4):
         results = hl_client.model_scanner.scan_file(
-            model_name=model_name, model_path=model_path
+            model_name=model_name, model_path=model_path, model_version=str(i)
         )
 
     assert results is not None
@@ -131,7 +131,7 @@ def test_rescan_model_with_same_version(tmp_path, hl_client: HiddenlayerServiceC
 
     model_path = _setup_scan_model(tmp_path)
     model_name = f"sdk-integration-scan-model-{uuid4()}"
-    model_version = 123
+    model_version = "123"
 
     results: Optional[ScanResults] = None
     for _ in range(3):
@@ -253,6 +253,7 @@ def _validate_scan_folder(tmp_path, results: ScanResults):
     safe_model_found = False
     malicious_model_found = False
     for top_file_results in results.file_results:
+        assert top_file_results.file_results is not None
         for file_results in top_file_results.file_results:
             if file_results.file_location.endswith(safe_model):
                 detections = file_results.detections

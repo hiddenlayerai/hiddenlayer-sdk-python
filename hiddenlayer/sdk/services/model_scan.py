@@ -16,7 +16,7 @@ from hiddenlayer.sdk.constants import ScanStatus
 from hiddenlayer.sdk.models import EmptyScanResults, Sarif, ScanResults
 from hiddenlayer.sdk.rest.api import ModelScanApi, ModelSupplyChainApi, SensorApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
-from hiddenlayer.sdk.rest.models import MultipartUploadPart
+from hiddenlayer.sdk.rest.models import MultipartUploadPart, MultiFileUploadRequestV3
 from hiddenlayer.sdk.rest.models.model import Model
 from hiddenlayer.sdk.rest.models.sarif210 import Sarif210
 from hiddenlayer.sdk.services.model import ModelAPI
@@ -51,7 +51,7 @@ class ModelScanAPI:
         *,
         model_name: str,
         model_path: Union[str, os.PathLike],
-        model_version: Optional[int] = None,
+        model_version: str = "1",
         chunk_size: int = 16,
         wait_for_results: bool = True,
     ) -> ScanResults:
@@ -70,31 +70,46 @@ class ModelScanAPI:
         file_path = Path(model_path)
 
         filesize = file_path.stat().st_size
-        sensor = self._model_api.create_or_get(
-            model_name=model_name, model_version=model_version
+        request = MultiFileUploadRequestV3(
+            model_name=model_name,
+            model_version=model_version,
+            requesting_entity="hiddenlayer-python-sdk",
         )
-        upload = self._sensor_api.begin_multipart_upload(sensor.sensor_id, filesize)
+        response = self._model_supply_chain_api.model_scan_api_v3_upload_model_post(
+            multi_file_upload_request_v3=request
+        )
+        scan_id = response.scan_id
+        if scan_id is None:
+            raise Exception("scan_id must have a value")
+        # upload = self._sensor_api.begin_multipart_upload(sensor.sensor_id, filesize)
+        upload = self._model_supply_chain_api.model_scan_api_v3_upload_model_add_file_scan_id_post(scan_id=str(scan_id), file_name=str(file_path), file_content_length=filesize)
 
         with open(file_path, "rb") as f:
-            for i in range(0, len(upload.parts), chunk_size):
-                group: List[MultipartUploadPart] = upload.parts[i : i + chunk_size]
-                for part in group:
-                    read_amount = part.end_offset - part.start_offset
-                    f.seek(int(part.start_offset))
-                    part_data = f.read(int(read_amount))
+            for part in upload.parts:
+                if part.start_offset is None:
+                    raise Exception("part must have a start_offset")
+                if part.stop_offset is not None:
+                    read_amount = part.stop_offset - part.start_offset
+                else:
+                    read_amount = None
+                f.seek(part.start_offset)
+                part_data = f.read(read_amount)
+                self._api_client.call_api(
+                    "PUT",
+                    part.upload_url,
+                    body = part_data,
+                    header_params={"Content-Type": "application/octet-binary"},
+                )
 
-                    # The SaaS multipart upload returns a upload url for each part
-                    # So there is no specified route
-                    self._api_client.call_api(
-                        "PUT",
-                        part.upload_url,
-                        body=part_data,
-                        header_params={"Content-Type": "application/octet-binary"},
-                    )
+            self._model_supply_chain_api.model_scan_api_v3_upload_model_scan_id_file_file_id_post(
+                scan_id=scan_id, file_id=upload.upload_id
+            )
 
-        self._sensor_api.complete_multipart_upload(sensor.sensor_id, upload.upload_id)
+        # self._sensor_api.complete_multipart_upload(sensor.sensor_id, upload.upload_id)
 
-        self._model_scan_api.scan_model(sensor.sensor_id)
+        self._model_supply_chain_api.model_scan_api_v3_upload_model_scan_id_patch(scan_id=scan_id)
+
+        # self._model_scan_api.scan_model(sensor.sensor_id)
 
         scan_results = self.get_scan_results(
             model_name=model_name, model_version=model_version
@@ -126,7 +141,7 @@ class ModelScanAPI:
         model_name: str,
         bucket: str,
         key: str,
-        model_version: Optional[int] = None,
+        model_version: str = "1",
         s3_client: Optional[object] = None,
         chunk_size: int = 4,
         wait_for_results: bool = True,
@@ -184,7 +199,7 @@ class ModelScanAPI:
         account_url: str,
         container: str,
         blob: str,
-        model_version: Optional[int] = None,
+        model_version: str = "1",
         blob_service_client: Optional[object] = None,
         credential: Optional[object] = None,
         chunk_size: int = 4,
@@ -317,8 +332,12 @@ class ModelScanAPI:
             token=hf_token,
         )
 
+        if revision is None:
+            revision = "1"
+
         return self.scan_folder(
             model_name=model_name or repo_id,
+            model_version=revision,
             path=local_dir,
             allow_file_patterns=allow_file_patterns,
             ignore_file_patterns=ignore_file_patterns,
@@ -330,7 +349,7 @@ class ModelScanAPI:
         self,
         *,
         model_name: str,
-        model_version: Optional[int] = None,
+        model_version: Optional[str] = None,
     ) -> ScanResults:
         """
         Get results from a model scan.
@@ -382,7 +401,7 @@ class ModelScanAPI:
         self,
         *,
         model_name: str,
-        model_version: Optional[int] = None,
+        model_version: Optional[str] = None,
     ) -> Optional[str]:
         """
         Get sarif results from a model scan.
@@ -417,7 +436,7 @@ class ModelScanAPI:
         *,
         model_name: str,
         path: Union[str, os.PathLike],
-        model_version: Optional[int] = None,
+        model_version: str = "1",
         allow_file_patterns: Optional[List[str]] = None,
         ignore_file_patterns: Optional[List[str]] = None,
         chunk_size: int = 4,

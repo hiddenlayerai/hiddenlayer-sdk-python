@@ -19,21 +19,20 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from hiddenlayer.sdk.rest.models.errors_inner import ErrorsInner
 from typing import Optional, Set
 from typing_extensions import Self
 
-class ModelInventoryInfo(BaseModel):
+class ProblemDetails(BaseModel):
     """
-    information about model and version that this scan relates to
+    ProblemDetails
     """ # noqa: E501
-    model_name: StrictStr = Field(description="name of the model")
-    model_version: StrictStr = Field(description="version of the model")
-    model_source: Optional[StrictStr] = Field(default=None, description="source (provider) info")
-    requested_scan_location: StrictStr = Field(description="Location to be scanned")
-    requesting_entity: Optional[StrictStr] = Field(default=None, description="Entity that requested the scan")
-    model_id: StrictStr = Field(description="Unique identifier for the model")
-    model_version_id: StrictStr = Field(description="unique identifier for the model version")
-    __properties: ClassVar[List[str]] = ["model_name", "model_version", "model_source", "requested_scan_location", "requesting_entity", "model_id", "model_version_id"]
+    type: Optional[StrictStr] = Field(default=None, description="https://www.rfc-editor.org/rfc/rfc9457.html#name-type")
+    title: Optional[StrictStr] = Field(default=None, description="https://www.rfc-editor.org/rfc/rfc9457.html#name-title")
+    detail: Optional[StrictStr] = Field(default=None, description="https://www.rfc-editor.org/rfc/rfc9457.html#name-detail")
+    instance: Optional[StrictStr] = Field(default=None, description="https://www.rfc-editor.org/rfc/rfc9457.html#name-instance")
+    errors: List[ErrorsInner] = Field(description="Error details")
+    __properties: ClassVar[List[str]] = ["type", "title", "detail", "instance", "errors"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -53,7 +52,7 @@ class ModelInventoryInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of ModelInventoryInfo from a JSON string"""
+        """Create an instance of ProblemDetails from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,11 +73,18 @@ class ModelInventoryInfo(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in errors (list)
+        _items = []
+        if self.errors:
+            for _item in self.errors:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict['errors'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of ModelInventoryInfo from a dict"""
+        """Create an instance of ProblemDetails from a dict"""
         if obj is None:
             return None
 
@@ -86,13 +92,11 @@ class ModelInventoryInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "model_name": obj.get("model_name"),
-            "model_version": obj.get("model_version"),
-            "model_source": obj.get("model_source"),
-            "requested_scan_location": obj.get("requested_scan_location"),
-            "requesting_entity": obj.get("requesting_entity"),
-            "model_id": obj.get("model_id"),
-            "model_version_id": obj.get("model_version_id")
+            "type": obj.get("type"),
+            "title": obj.get("title"),
+            "detail": obj.get("detail"),
+            "instance": obj.get("instance"),
+            "errors": [ErrorsInner.from_dict(_item) for _item in obj["errors"]] if obj.get("errors") is not None else None
         })
         return _obj
 

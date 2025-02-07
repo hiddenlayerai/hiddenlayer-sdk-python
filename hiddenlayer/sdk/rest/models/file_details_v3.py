@@ -28,9 +28,9 @@ class FileDetailsV3(BaseModel):
     FileDetailsV3
     """ # noqa: E501
     estimated_time: StrictStr = Field(description="estimated time to scan the file")
-    md5: Annotated[str, Field(strict=True)] = Field(description="hexadecimal md5 hash of file")
+    md5: Optional[Annotated[str, Field(strict=True)]] = Field(default=None, description="hexadecimal md5 hash of file")
     sha256: Annotated[str, Field(strict=True)] = Field(description="hexadecimal sha256 hash of file")
-    tlsh: Annotated[str, Field(strict=True)] = Field(description="TLSH hash of file")
+    tlsh: Optional[Annotated[str, Field(strict=True)]] = Field(default=None, description="TLSH hash of file")
     file_size: Optional[Annotated[str, Field(strict=True)]] = Field(default=None, description="size of the file in human readable format")
     file_size_bytes: Optional[StrictInt] = Field(default=None, description="size of the file in bytes")
     file_type: StrictStr = Field(description="type of the file")
@@ -40,6 +40,9 @@ class FileDetailsV3(BaseModel):
     @field_validator('md5')
     def md5_validate_regular_expression(cls, value):
         """Validates the regular expression"""
+        if value is None:
+            return value
+
         if not re.match(r"^[a-fA-F0-9]{32}$", value):
             raise ValueError(r"must validate the regular expression /^[a-fA-F0-9]{32}$/")
         return value
@@ -54,6 +57,9 @@ class FileDetailsV3(BaseModel):
     @field_validator('tlsh')
     def tlsh_validate_regular_expression(cls, value):
         """Validates the regular expression"""
+        if value is None:
+            return value
+
         if not re.match(r"^[a-fA-F0-9]{70}$", value):
             raise ValueError(r"must validate the regular expression /^[a-fA-F0-9]{70}$/")
         return value

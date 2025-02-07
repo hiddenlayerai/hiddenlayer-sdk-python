@@ -54,6 +54,34 @@ class TestModelSupplyChainApi(unittest.TestCase):
         """
         pass
 
+    def test_model_scan_api_v3_upload_model_add_file_scan_id_post(self) -> None:
+        """Test case for model_scan_api_v3_upload_model_add_file_scan_id_post
+
+        Add file to V3 Upload
+        """
+        pass
+
+    def test_model_scan_api_v3_upload_model_post(self) -> None:
+        """Test case for model_scan_api_v3_upload_model_post
+
+        Start V3 Upload
+        """
+        pass
+
+    def test_model_scan_api_v3_upload_model_scan_id_file_file_id_post(self) -> None:
+        """Test case for model_scan_api_v3_upload_model_scan_id_file_file_id_post
+
+        Indicate that upload is completed for {file_id}
+        """
+        pass
+
+    def test_model_scan_api_v3_upload_model_scan_id_patch(self) -> None:
+        """Test case for model_scan_api_v3_upload_model_scan_id_patch
+
+        Indicate All files are uploaded and start the scan
+        """
+        pass
+
     def test_modelscan_api_v3_get_scan_results(self) -> None:
         """Test case for modelscan_api_v3_get_scan_results
 

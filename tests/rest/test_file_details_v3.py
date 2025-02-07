@@ -47,9 +47,7 @@ class TestFileDetailsV3(unittest.TestCase):
         else:
             return FileDetailsV3(
                 estimated_time = '',
-                md5 = 'ce114e4501d2f4e2dcea3e17b546f339',
                 sha256 = 'a54d88e06612d820bc3be72877c74f257b561b19',
-                tlsh = 'T1C50757F93C74D00C05B70C0793A1D5A9DF3F6D3A2F7AD940F3BFBF07B3BDF5A1D293',
                 file_type = 'safetensors',
         )
         """

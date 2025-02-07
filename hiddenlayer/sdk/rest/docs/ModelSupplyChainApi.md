@@ -8,6 +8,10 @@ Method | HTTP request | Description
 [**model_scan_api_v3_scan_model_version_id_patch**](ModelSupplyChainApi.md#model_scan_api_v3_scan_model_version_id_patch) | **PATCH** /scan/v3/results/{scan_id} | Indicate part (file or files) of a model scan has completed
 [**model_scan_api_v3_scan_model_version_id_post**](ModelSupplyChainApi.md#model_scan_api_v3_scan_model_version_id_post) | **POST** /scan/v3/results/{scan_id} | Indicate model scan has started
 [**model_scan_api_v3_scan_query**](ModelSupplyChainApi.md#model_scan_api_v3_scan_query) | **GET** /scan/v3/results | Get condensed reports for a Model Scan
+[**model_scan_api_v3_upload_model_add_file_scan_id_post**](ModelSupplyChainApi.md#model_scan_api_v3_upload_model_add_file_scan_id_post) | **POST** /scan/v3/upload/{scan_id}/file | Add file to V3 Upload
+[**model_scan_api_v3_upload_model_post**](ModelSupplyChainApi.md#model_scan_api_v3_upload_model_post) | **POST** /scan/v3/upload | Start V3 Upload
+[**model_scan_api_v3_upload_model_scan_id_file_file_id_post**](ModelSupplyChainApi.md#model_scan_api_v3_upload_model_scan_id_file_file_id_post) | **PATCH** /scan/v3/upload/{scan_id}/file/{file_id} | Indicate that upload is completed for {file_id}
+[**model_scan_api_v3_upload_model_scan_id_patch**](ModelSupplyChainApi.md#model_scan_api_v3_upload_model_scan_id_patch) | **PATCH** /scan/v3/upload/{scan_id} | Indicate All files are uploaded and start the scan
 [**modelscan_api_v3_get_scan_results**](ModelSupplyChainApi.md#modelscan_api_v3_get_scan_results) | **GET** /scans/v3/results/{scan_id} | Retrieve Model Scan Results
 [**modelscan_api_v3_post_scan_results**](ModelSupplyChainApi.md#modelscan_api_v3_post_scan_results) | **POST** /scans/v3/reports/{scan_id} | Engine Report Endpoint of Model Scan Results
 [**modelscanner_api_v3_get_jobs**](ModelSupplyChainApi.md#modelscanner_api_v3_get_jobs) | **GET** /scans/v3/jobs | List all Model Scan Jobs
@@ -355,8 +359,327 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **model_scan_api_v3_upload_model_add_file_scan_id_post**
+> ModelScanApiV3UploadModelAddFileScanIdPost200Response model_scan_api_v3_upload_model_add_file_scan_id_post(file_content_length, file_name, scan_id)
+
+Add file to V3 Upload
+
+### Example
+
+* Bearer (JWT) Authentication (BearerAuth):
+
+```python
+import hiddenlayer.sdk.rest
+from hiddenlayer.sdk.rest.models.model_scan_api_v3_upload_model_add_file_scan_id_post200_response import ModelScanApiV3UploadModelAddFileScanIdPost200Response
+from hiddenlayer.sdk.rest.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
+# See configuration.py for a list of all supported configuration parameters.
+configuration = hiddenlayer.sdk.rest.Configuration(
+    host = "https://api.hiddenlayer.ai"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): BearerAuth
+configuration = hiddenlayer.sdk.rest.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = hiddenlayer.sdk.rest.ModelSupplyChainApi(api_client)
+    file_content_length = 12345 # int | Added file size in bytes
+    file_name = 'exampleFile.txt' # str | Added file name
+    scan_id = 'scan_id_example' # str | 
+
+    try:
+        # Add file to V3 Upload
+        api_response = api_instance.model_scan_api_v3_upload_model_add_file_scan_id_post(file_content_length, file_name, scan_id)
+        print("The response of ModelSupplyChainApi->model_scan_api_v3_upload_model_add_file_scan_id_post:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ModelSupplyChainApi->model_scan_api_v3_upload_model_add_file_scan_id_post: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **file_content_length** | **int**| Added file size in bytes | 
+ **file_name** | **str**| Added file name | 
+ **scan_id** | **str**|  | 
+
+### Return type
+
+[**ModelScanApiV3UploadModelAddFileScanIdPost200Response**](ModelScanApiV3UploadModelAddFileScanIdPost200Response.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful Response |  -  |
+**400** | The request failed due to a client error, with one or more of the following possible causes: 1. The request required a tenant_id field, which was missing. 2. The request was malformed syntactically or semantically. |  -  |
+**422** | Validation Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **model_scan_api_v3_upload_model_post**
+> ModelScanApiV3UploadModelPost200Response model_scan_api_v3_upload_model_post(multi_file_upload_request_v3)
+
+Start V3 Upload
+
+### Example
+
+* Bearer (JWT) Authentication (BearerAuth):
+
+```python
+import hiddenlayer.sdk.rest
+from hiddenlayer.sdk.rest.models.model_scan_api_v3_upload_model_post200_response import ModelScanApiV3UploadModelPost200Response
+from hiddenlayer.sdk.rest.models.multi_file_upload_request_v3 import MultiFileUploadRequestV3
+from hiddenlayer.sdk.rest.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
+# See configuration.py for a list of all supported configuration parameters.
+configuration = hiddenlayer.sdk.rest.Configuration(
+    host = "https://api.hiddenlayer.ai"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): BearerAuth
+configuration = hiddenlayer.sdk.rest.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = hiddenlayer.sdk.rest.ModelSupplyChainApi(api_client)
+    multi_file_upload_request_v3 = hiddenlayer.sdk.rest.MultiFileUploadRequestV3() # MultiFileUploadRequestV3 | Request body for create
+
+    try:
+        # Start V3 Upload
+        api_response = api_instance.model_scan_api_v3_upload_model_post(multi_file_upload_request_v3)
+        print("The response of ModelSupplyChainApi->model_scan_api_v3_upload_model_post:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ModelSupplyChainApi->model_scan_api_v3_upload_model_post: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **multi_file_upload_request_v3** | [**MultiFileUploadRequestV3**](MultiFileUploadRequestV3.md)| Request body for create | 
+
+### Return type
+
+[**ModelScanApiV3UploadModelPost200Response**](ModelScanApiV3UploadModelPost200Response.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful Response |  -  |
+**400** | The request failed due to a client error, with one or more of the following possible causes: 1. The request required a tenant_id field, which was missing. 2. The request was malformed syntactically or semantically. |  -  |
+**422** | Validation Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **model_scan_api_v3_upload_model_scan_id_file_file_id_post**
+> ModelScanApiV3UploadModelPost200Response model_scan_api_v3_upload_model_scan_id_file_file_id_post(scan_id, file_id)
+
+Indicate that upload is completed for {file_id}
+
+### Example
+
+* Bearer (JWT) Authentication (BearerAuth):
+
+```python
+import hiddenlayer.sdk.rest
+from hiddenlayer.sdk.rest.models.model_scan_api_v3_upload_model_post200_response import ModelScanApiV3UploadModelPost200Response
+from hiddenlayer.sdk.rest.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
+# See configuration.py for a list of all supported configuration parameters.
+configuration = hiddenlayer.sdk.rest.Configuration(
+    host = "https://api.hiddenlayer.ai"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): BearerAuth
+configuration = hiddenlayer.sdk.rest.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = hiddenlayer.sdk.rest.ModelSupplyChainApi(api_client)
+    scan_id = 'scan_id_example' # str | 
+    file_id = 'file_id_example' # str | 
+
+    try:
+        # Indicate that upload is completed for {file_id}
+        api_response = api_instance.model_scan_api_v3_upload_model_scan_id_file_file_id_post(scan_id, file_id)
+        print("The response of ModelSupplyChainApi->model_scan_api_v3_upload_model_scan_id_file_file_id_post:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ModelSupplyChainApi->model_scan_api_v3_upload_model_scan_id_file_file_id_post: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **scan_id** | **str**|  | 
+ **file_id** | **str**|  | 
+
+### Return type
+
+[**ModelScanApiV3UploadModelPost200Response**](ModelScanApiV3UploadModelPost200Response.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful Response |  -  |
+**400** | The request failed due to a client error, with one or more of the following possible causes: 1. The request required a tenant_id field, which was missing. 2. The request was malformed syntactically or semantically. |  -  |
+**422** | Validation Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **model_scan_api_v3_upload_model_scan_id_patch**
+> ModelScanApiV3UploadModelPost200Response model_scan_api_v3_upload_model_scan_id_patch(scan_id)
+
+Indicate All files are uploaded and start the scan
+
+### Example
+
+* Bearer (JWT) Authentication (BearerAuth):
+
+```python
+import hiddenlayer.sdk.rest
+from hiddenlayer.sdk.rest.models.model_scan_api_v3_upload_model_post200_response import ModelScanApiV3UploadModelPost200Response
+from hiddenlayer.sdk.rest.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.hiddenlayer.ai
+# See configuration.py for a list of all supported configuration parameters.
+configuration = hiddenlayer.sdk.rest.Configuration(
+    host = "https://api.hiddenlayer.ai"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): BearerAuth
+configuration = hiddenlayer.sdk.rest.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = hiddenlayer.sdk.rest.ModelSupplyChainApi(api_client)
+    scan_id = 'scan_id_example' # str | 
+
+    try:
+        # Indicate All files are uploaded and start the scan
+        api_response = api_instance.model_scan_api_v3_upload_model_scan_id_patch(scan_id)
+        print("The response of ModelSupplyChainApi->model_scan_api_v3_upload_model_scan_id_patch:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ModelSupplyChainApi->model_scan_api_v3_upload_model_scan_id_patch: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **scan_id** | **str**|  | 
+
+### Return type
+
+[**ModelScanApiV3UploadModelPost200Response**](ModelScanApiV3UploadModelPost200Response.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful Response |  -  |
+**400** | The request failed due to a client error, with one or more of the following possible causes: 1. The request required a tenant_id field, which was missing. 2. The request was malformed syntactically or semantically. |  -  |
+**422** | Validation Error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **modelscan_api_v3_get_scan_results**
-> List[ScanResultsV2] modelscan_api_v3_get_scan_results(scan_id=scan_id)
+> List[ScanResultsMapV3] modelscan_api_v3_get_scan_results(scan_id=scan_id, cursor=cursor, page_size=page_size)
 
 Retrieve Model Scan Results
 
@@ -366,7 +689,7 @@ Retrieve Model Scan Results
 
 ```python
 import hiddenlayer.sdk.rest
-from hiddenlayer.sdk.rest.models.scan_results_v2 import ScanResultsV2
+from hiddenlayer.sdk.rest.models.scan_results_map_v3 import ScanResultsMapV3
 from hiddenlayer.sdk.rest.rest import ApiException
 from pprint import pprint
 
@@ -391,10 +714,12 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = hiddenlayer.sdk.rest.ModelSupplyChainApi(api_client)
     scan_id = 'scan_id_example' # str |  (optional)
+    cursor = 'cursor_example' # str |  (optional)
+    page_size = 25 # int |  (optional) (default to 25)
 
     try:
         # Retrieve Model Scan Results
-        api_response = api_instance.modelscan_api_v3_get_scan_results(scan_id=scan_id)
+        api_response = api_instance.modelscan_api_v3_get_scan_results(scan_id=scan_id, cursor=cursor, page_size=page_size)
         print("The response of ModelSupplyChainApi->modelscan_api_v3_get_scan_results:\n")
         pprint(api_response)
     except Exception as e:
@@ -409,10 +734,12 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **scan_id** | **str**|  | [optional] 
+ **cursor** | **str**|  | [optional] 
+ **page_size** | **int**|  | [optional] [default to 25]
 
 ### Return type
 
-[**List[ScanResultsV2]**](ScanResultsV2.md)
+[**List[ScanResultsMapV3]**](ScanResultsMapV3.md)
 
 ### Authorization
 
@@ -421,17 +748,16 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json; charset=utf-8, application/json
+ - **Accept**: application/json; charset=utf-8
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Scan finished. Full results returned. |  -  |
-**202** | Scan still in progress. Partial results returned. |  -  |
 **400** | The request failed due to a client error, with one or more of the following possible causes: 1. The request required a tenant_id field, which was missing. 2. The request was malformed syntactically or semantically. |  -  |
 **404** | The specified resource was not found. |  -  |
-**422** | Validation Error |  -  |
+**405** | The specified method is not allowed. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -692,7 +1018,7 @@ configuration = hiddenlayer.sdk.rest.Configuration(
 with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = hiddenlayer.sdk.rest.ModelSupplyChainApi(api_client)
-    scan_job = hiddenlayer.sdk.rest.ScanJob() # ScanJob | Request body for create scan request
+    scan_job = {"access":{"source":"HUGGING_FACE"},"inventory":{"model_name":"some-model","model_version":"main","requested_scan_location":"owner/repo","requesting_entity":"some-user@example.com"}} # ScanJob | Request body for create scan request
 
     try:
         # Request a Model Scan Job

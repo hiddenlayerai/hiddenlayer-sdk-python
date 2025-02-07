@@ -11,6 +11,9 @@ install-dev:
 install-uv:
 	brew install uv
 
+create-kind-cluster:
+	kind create cluster --config integration-tests/enterprise-modscan/kind.yaml
+
 setup-enterprise-modscan:
 	helm install -f integration-tests/enterprise-modscan/config.yaml hl-installer oci://quay.io/hiddenlayer/distro-enterprise-platform-installer \
 	--set installer.authentication.hl_username=${QUAY_USERNAME} \
@@ -20,13 +23,24 @@ setup-enterprise-modscan:
 	kubectl -n hl-aisec-platform logs -f job/hl-aisec-platform --pod-running-timeout=20s
 
 port-forward-service:
+	kubectl port-forward svc/modelscanner-minio 9000:9000 -n hl-modelscanner &>/dev/null && \
 	kubectl port-forward svc/modelscanner-orchestrator 8000 -n hl-modelscanner &>/dev/null &
+
+MINIO_ROOT_USER := $(shell kubectl get secret -n hl-modelscanner modelscanner-minio -o json | jq -r .data.rootUser | base64 --decode)
+MINIO_ROOT_PASSWORD := $(shell kubectl get secret -n hl-modelscanner modelscanner-minio -o json | jq -r .data.rootPassword | base64 --decode)
+add-minio-bucket:
+	mc alias set myminio http://127.0.0.1:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} && \
+	mc mb myminio/hl-adhoc-model-stage
+	mc mb myminio/hl-sensor-pointers
 
 teardown-enterprise-modscan:
 	helm uninstall modelscanner-orchestrator --namespace=hl-modelscanner && \
 	helm uninstall modelscanner-redis --namespace=hl-modelscanner && \
 	helm uninstall modelscanner-minio --namespace=hl-modelscanner && \
 	helm uninstall hl-installer
+
+teardown-kind-cluster:
+	kind delete cluster test-cluster
 
 tests:
 	pytest -sv tests/

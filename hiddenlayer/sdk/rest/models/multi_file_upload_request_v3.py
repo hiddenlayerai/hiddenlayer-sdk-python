@@ -22,18 +22,15 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class ModelInventoryInfo(BaseModel):
+class MultiFileUploadRequestV3(BaseModel):
     """
-    information about model and version that this scan relates to
+    MultiFileUploadRequestV3
     """ # noqa: E501
-    model_name: StrictStr = Field(description="name of the model")
-    model_version: StrictStr = Field(description="version of the model")
-    model_source: Optional[StrictStr] = Field(default=None, description="source (provider) info")
-    requested_scan_location: StrictStr = Field(description="Location to be scanned")
-    requesting_entity: Optional[StrictStr] = Field(default=None, description="Entity that requested the scan")
-    model_id: StrictStr = Field(description="Unique identifier for the model")
-    model_version_id: StrictStr = Field(description="unique identifier for the model version")
-    __properties: ClassVar[List[str]] = ["model_name", "model_version", "model_source", "requested_scan_location", "requesting_entity", "model_id", "model_version_id"]
+    model_version: StrictStr = Field(description="Model version")
+    model_name: StrictStr = Field(description="Model name")
+    requesting_entity: StrictStr = Field(description="Requesting entity")
+    location_alias: Optional[StrictStr] = Field(default=None, description="Requested location alias")
+    __properties: ClassVar[List[str]] = ["model_version", "model_name", "requesting_entity", "location_alias"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -53,7 +50,7 @@ class ModelInventoryInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of ModelInventoryInfo from a JSON string"""
+        """Create an instance of MultiFileUploadRequestV3 from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -78,7 +75,7 @@ class ModelInventoryInfo(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of ModelInventoryInfo from a dict"""
+        """Create an instance of MultiFileUploadRequestV3 from a dict"""
         if obj is None:
             return None
 
@@ -86,13 +83,10 @@ class ModelInventoryInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "model_name": obj.get("model_name"),
             "model_version": obj.get("model_version"),
-            "model_source": obj.get("model_source"),
-            "requested_scan_location": obj.get("requested_scan_location"),
+            "model_name": obj.get("model_name"),
             "requesting_entity": obj.get("requesting_entity"),
-            "model_id": obj.get("model_id"),
-            "model_version_id": obj.get("model_version_id")
+            "location_alias": obj.get("location_alias")
         })
         return _obj
 
