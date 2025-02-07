@@ -112,7 +112,7 @@ class ModelScanAPI:
         # self._model_scan_api.scan_model(sensor.sensor_id)
 
         scan_results = self.get_scan_results(
-            model_name=model_name, model_version=model_version
+            scan_id=scan_id
         )
 
         base_delay = 0.1  # seconds
@@ -126,7 +126,7 @@ class ModelScanAPI:
                 )  # exponential back off retry
                 time.sleep(delay)
                 scan_results = self.get_scan_results(
-                    model_name=model_name, model_version=model_version
+                    scan_id=scan_id
                 )
                 print(f"{file_path.name} scan status: {scan_results.status}")
 
@@ -348,8 +348,7 @@ class ModelScanAPI:
     def get_scan_results(
         self,
         *,
-        model_name: str,
-        model_version: Optional[str] = None,
+        scan_id: str,
     ) -> ScanResults:
         """
         Get results from a model scan.
@@ -360,48 +359,20 @@ class ModelScanAPI:
         :returns: Scan results.
         """
 
-        response = self._sensor_api.sensor_sor_api_v3_model_cards_query_get(
-            model_name_eq=model_name, limit=1
-        )
-        model_id = response.results[0].model_id
-
-        scans = self._model_supply_chain_api.model_scan_api_v3_scan_query(
-            model_ids=[model_id], latest_per_model_version_only=True
-        )
-        if scans.total == 0:
-            return EmptyScanResults()
-
-        if scans.items is None:
-            return EmptyScanResults()
-
-        scan = scans.items[0]
-        if model_version:
-            scan = next(
-                (
-                    s
-                    for s in scans.items
-                    if s.inventory.model_version == str(model_version)
-                ),
-                None,
-            )
-        if not scan:
-            return EmptyScanResults()
-
         scan_report = (
             self._model_supply_chain_api.model_scan_api_v3_scan_model_version_id_get(
-                scan.scan_id
+                scan_id
             )
         )
 
         return ScanResults.from_scanreportv3(
-            scan_report_v3=scan_report, model_id=model_id
+            scan_report_v3=scan_report
         )
 
     def get_sarif_results(
         self,
         *,
-        model_name: str,
-        model_version: Optional[str] = None,
+        scan_id: str,
     ) -> Optional[str]:
         """
         Get sarif results from a model scan.
@@ -411,16 +382,13 @@ class ModelScanAPI:
 
         :returns: Scan results.
         """
-        scan = self.get_scan_results(model_name=model_name, model_version=model_version)
-        if scan.scan_id == "":
-            return None
 
         # Unfortunately, the generated code for the API doesn't directly support modifying the Accept header
         # in order to enable us to get the Sarif results
         # Here we will reach in to the request serialization process. The 2nd element in the tuple is the headers
         # where we will modify the Accept header to application/sarif+json
         request = self._model_supply_chain_api._model_scan_api_v3_scan_model_version_id_get_serialize(
-            scan.scan_id, None, None, None, None, 0
+            scan_id, None, None, None, None, 0
         )
         request[2]["Accept"] = "application/sarif+json"
         response = self._api_client.call_api(*request)

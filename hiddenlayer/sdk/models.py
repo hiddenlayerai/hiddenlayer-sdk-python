@@ -18,16 +18,19 @@ class ScanResults(ScanReportV3):
 
     file_name: Optional[str] = None
     file_path: Optional[str] = None
-    model_id: Optional[str] = None
 
     @classmethod
     def from_scanreportv3(
         cls, *, scan_report_v3: ScanReportV3, model_id: Optional[str] = None
     ) -> Self:
         scan_results_dict = scan_report_v3.to_dict()
-        scan_results_dict["model_id"] = model_id
+        result =  cls(**scan_results_dict)
+        # Calculate counts: TODO: remove when orchestrator API returns these counts
+        if result.file_results is not None:
+            result.file_count = len(result.file_results)
+            result.files_with_detections_count = len([f for f in result.file_results if f.detections is not None and len(f.detections) > 0])
 
-        return cls(**scan_results_dict)
+        return result
 
 
 class EmptyScanResults(ScanResults):

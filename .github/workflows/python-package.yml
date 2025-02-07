@@ -42,6 +42,8 @@ jobs:
         sleep 60
         kubectl get pods --namespace=hl-modelscanner
         make port-forward-service
+        make add-minio-bucket
+        make setup-s3-dns
         sleep 5
         curl http://localhost:8000/health
       env:

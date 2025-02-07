@@ -16,7 +16,9 @@ modelscanner-v3:
   minio:
     enable: true
   engine:
+    aws:
+      bucket: hl-adhoc-model-stage
     k8s:
       resources:
         requests:
-          memory: 16Gi
+          memory: 1Gi
