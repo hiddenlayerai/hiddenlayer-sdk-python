@@ -91,9 +91,7 @@ class AIDRPredictive:
         :returns: HiddenLayer Sensor
         """
         return self._sensor_api.create_sensor(
-            CreateSensorRequest(
-                plaintext_name=sensor_name
-            )
+            CreateSensorRequest(plaintext_name=sensor_name)
         )
 
     def get_sensor(self, *, sensor_name: str) -> Sensor:
@@ -107,9 +105,7 @@ class AIDRPredictive:
 
         return self._get_sensor_by_name(sensor_name=sensor_name)
 
-    def _get_sensor_by_name(
-        self, *, sensor_name: str
-    ) -> Sensor:
+    def _get_sensor_by_name(self, *, sensor_name: str) -> Sensor:
         """
         Gets a model sensor by name.
 

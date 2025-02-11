@@ -90,9 +90,7 @@ class ModelScanAPI:
                 scan_id=scan_id, file_id=upload.upload_id
             )
 
-        self._model_supply_chain_api.complete_multi_file_upload(
-            scan_id=scan_id
-        )
+        self._model_supply_chain_api.complete_multi_file_upload(scan_id=scan_id)
         scan_results = self.get_scan_results(scan_id=scan_id)
 
         base_delay = 0.1  # seconds
@@ -331,11 +329,7 @@ class ModelScanAPI:
         """
 
         try:
-            scan_report = (
-                self._model_supply_chain_api.get_scan_results(
-                    scan_id
-                )
-            )
+            scan_report = self._model_supply_chain_api.get_scan_results(scan_id)
         except NotFoundException:
             return EmptyScanResults()
 
