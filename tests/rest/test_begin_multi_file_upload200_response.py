@@ -14,10 +14,10 @@
 
 import unittest
 
-from hiddenlayer.sdk.rest.models.multipart_upload_part import MultipartUploadPart
+from hiddenlayer.sdk.rest.models.begin_multi_file_upload200_response import BeginMultiFileUpload200Response
 
-class TestMultipartUploadPart(unittest.TestCase):
-    """MultipartUploadPart unit test stubs"""
+class TestBeginMultiFileUpload200Response(unittest.TestCase):
+    """BeginMultiFileUpload200Response unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,31 +25,25 @@ class TestMultipartUploadPart(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> MultipartUploadPart:
-        """Test MultipartUploadPart
+    def make_instance(self, include_optional) -> BeginMultiFileUpload200Response:
+        """Test BeginMultiFileUpload200Response
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `MultipartUploadPart`
+        # uncomment below to create an instance of `BeginMultiFileUpload200Response`
         """
-        model = MultipartUploadPart()
+        model = BeginMultiFileUpload200Response()
         if include_optional:
-            return MultipartUploadPart(
-                part_number = 56,
-                start_offset = 56,
-                end_offset = 56,
-                upload_url = ''
+            return BeginMultiFileUpload200Response(
+                scan_id = ''
             )
         else:
-            return MultipartUploadPart(
-                part_number = 56,
-                start_offset = 56,
-                end_offset = 56,
+            return BeginMultiFileUpload200Response(
         )
         """
 
-    def testMultipartUploadPart(self):
-        """Test MultipartUploadPart"""
+    def testBeginMultiFileUpload200Response(self):
+        """Test BeginMultiFileUpload200Response"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

@@ -14,10 +14,10 @@
 
 import unittest
 
-from hiddenlayer.sdk.rest.models.model_scan_api_v3_scan_query200_response import ModelScanApiV3ScanQuery200Response
+from hiddenlayer.sdk.rest.models.get_condensed_model_scan_reports200_response import GetCondensedModelScanReports200Response
 
-class TestModelScanApiV3ScanQuery200Response(unittest.TestCase):
-    """ModelScanApiV3ScanQuery200Response unit test stubs"""
+class TestGetCondensedModelScanReports200Response(unittest.TestCase):
+    """GetCondensedModelScanReports200Response unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,16 +25,16 @@ class TestModelScanApiV3ScanQuery200Response(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> ModelScanApiV3ScanQuery200Response:
-        """Test ModelScanApiV3ScanQuery200Response
+    def make_instance(self, include_optional) -> GetCondensedModelScanReports200Response:
+        """Test GetCondensedModelScanReports200Response
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `ModelScanApiV3ScanQuery200Response`
+        # uncomment below to create an instance of `GetCondensedModelScanReports200Response`
         """
-        model = ModelScanApiV3ScanQuery200Response()
+        model = GetCondensedModelScanReports200Response()
         if include_optional:
-            return ModelScanApiV3ScanQuery200Response(
+            return GetCondensedModelScanReports200Response(
                 items = [
                     hiddenlayer.sdk.rest.models.scan_report_v3.ScanReportV3()
                     ],
@@ -43,15 +43,15 @@ class TestModelScanApiV3ScanQuery200Response(unittest.TestCase):
                 offset = 250
             )
         else:
-            return ModelScanApiV3ScanQuery200Response(
+            return GetCondensedModelScanReports200Response(
                 total = 0,
                 limit = 50,
                 offset = 250,
         )
         """
 
-    def testModelScanApiV3ScanQuery200Response(self):
-        """Test ModelScanApiV3ScanQuery200Response"""
+    def testGetCondensedModelScanReports200Response(self):
+        """Test GetCondensedModelScanReports200Response"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

@@ -17,27 +17,21 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
-class ScanResults(BaseModel):
+class BeginMultipartFileUpload200ResponsePartsInner(BaseModel):
     """
-    ScanResults
+    BeginMultipartFileUpload200ResponsePartsInner
     """ # noqa: E501
-    md5: Optional[StrictStr] = None
-    rds_encoding: Optional[StrictStr] = None
-    rds_min_reader_version: Optional[StrictStr] = None
-    rds_version: Optional[StrictStr] = None
-    rds_writer_version: Optional[StrictStr] = None
-    sha256: Optional[StrictStr] = None
-    type: Optional[StrictStr] = None
-    subtype: Optional[List[StrictStr]] = None
-    tlsh: Optional[StrictStr] = None
-    pickle_modules: Optional[List[StrictStr]] = None
-    additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["md5", "rds_encoding", "rds_min_reader_version", "rds_version", "rds_writer_version", "sha256", "type", "subtype", "tlsh", "pickle_modules"]
+    part_number: Optional[Annotated[int, Field(strict=True, ge=0)]] = None
+    start_offset: Optional[StrictInt] = None
+    stop_offset: Optional[StrictInt] = None
+    upload_url: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["part_number", "start_offset", "stop_offset", "upload_url"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -57,7 +51,7 @@ class ScanResults(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of ScanResults from a JSON string"""
+        """Create an instance of BeginMultipartFileUpload200ResponsePartsInner from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,10 +63,8 @@ class ScanResults(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
-        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
-            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -80,16 +72,11 @@ class ScanResults(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of ScanResults from a dict"""
+        """Create an instance of BeginMultipartFileUpload200ResponsePartsInner from a dict"""
         if obj is None:
             return None
 
@@ -97,22 +84,11 @@ class ScanResults(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "md5": obj.get("md5"),
-            "rds_encoding": obj.get("rds_encoding"),
-            "rds_min_reader_version": obj.get("rds_min_reader_version"),
-            "rds_version": obj.get("rds_version"),
-            "rds_writer_version": obj.get("rds_writer_version"),
-            "sha256": obj.get("sha256"),
-            "type": obj.get("type"),
-            "subtype": obj.get("subtype"),
-            "tlsh": obj.get("tlsh"),
-            "pickle_modules": obj.get("pickle_modules")
+            "part_number": obj.get("part_number"),
+            "start_offset": obj.get("start_offset"),
+            "stop_offset": obj.get("stop_offset"),
+            "upload_url": obj.get("upload_url")
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

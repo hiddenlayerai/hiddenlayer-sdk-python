@@ -17,21 +17,22 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictInt
-from typing import Any, ClassVar, Dict, List
-from hiddenlayer.sdk.rest.models.model import Model
+from pydantic import BaseModel, ConfigDict, Field
+from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
+from hiddenlayer.sdk.rest.models.scan_report_v3 import ScanReportV3
 from typing import Optional, Set
 from typing_extensions import Self
 
-class ModelQueryResponse(BaseModel):
+class GetCondensedModelScanReports200Response(BaseModel):
     """
-    ModelQueryResponse
+    GetCondensedModelScanReports200Response
     """ # noqa: E501
-    total_count: StrictInt
-    page_size: StrictInt
-    page_number: StrictInt
-    results: List[Model]
-    __properties: ClassVar[List[str]] = ["total_count", "page_size", "page_number", "results"]
+    items: Optional[List[ScanReportV3]] = None
+    total: Annotated[int, Field(strict=True, ge=0)] = Field(description="Total number of items available based on the query criteria.")
+    limit: Annotated[int, Field(le=100, strict=True, ge=1)] = Field(description="Maximum number of items to return")
+    offset: Annotated[int, Field(strict=True, ge=0)] = Field(description="Begin returning the results from this offset")
+    __properties: ClassVar[List[str]] = ["items", "total", "limit", "offset"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -51,7 +52,7 @@ class ModelQueryResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of ModelQueryResponse from a JSON string"""
+        """Create an instance of GetCondensedModelScanReports200Response from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -72,18 +73,18 @@ class ModelQueryResponse(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in results (list)
+        # override the default output from pydantic by calling `to_dict()` of each item in items (list)
         _items = []
-        if self.results:
-            for _item in self.results:
+        if self.items:
+            for _item in self.items:
                 if _item:
                     _items.append(_item.to_dict())
-            _dict['results'] = _items
+            _dict['items'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of ModelQueryResponse from a dict"""
+        """Create an instance of GetCondensedModelScanReports200Response from a dict"""
         if obj is None:
             return None
 
@@ -91,10 +92,10 @@ class ModelQueryResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "total_count": obj.get("total_count"),
-            "page_size": obj.get("page_size"),
-            "page_number": obj.get("page_number"),
-            "results": [Model.from_dict(_item) for _item in obj["results"]] if obj.get("results") is not None else None
+            "items": [ScanReportV3.from_dict(_item) for _item in obj["items"]] if obj.get("items") is not None else None,
+            "total": obj.get("total"),
+            "limit": obj.get("limit") if obj.get("limit") is not None else 25,
+            "offset": obj.get("offset") if obj.get("offset") is not None else 0
         })
         return _obj
 

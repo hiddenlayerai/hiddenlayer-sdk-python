@@ -17,17 +17,21 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List
+from hiddenlayer.sdk.rest.models.sensor import Sensor
 from typing import Optional, Set
 from typing_extensions import Self
 
-class ModelScanApiV3ScanModelVersionIdPatch200Response(BaseModel):
+class SensorQueryResponse(BaseModel):
     """
-    ModelScanApiV3ScanModelVersionIdPatch200Response
+    SensorQueryResponse
     """ # noqa: E501
-    message: StrictStr = Field(description="Request to resource is successful")
-    __properties: ClassVar[List[str]] = ["message"]
+    total_count: StrictInt
+    page_size: StrictInt
+    page_number: StrictInt
+    results: List[Sensor]
+    __properties: ClassVar[List[str]] = ["total_count", "page_size", "page_number", "results"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -47,7 +51,7 @@ class ModelScanApiV3ScanModelVersionIdPatch200Response(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of ModelScanApiV3ScanModelVersionIdPatch200Response from a JSON string"""
+        """Create an instance of SensorQueryResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -68,11 +72,18 @@ class ModelScanApiV3ScanModelVersionIdPatch200Response(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in results (list)
+        _items = []
+        if self.results:
+            for _item in self.results:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict['results'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of ModelScanApiV3ScanModelVersionIdPatch200Response from a dict"""
+        """Create an instance of SensorQueryResponse from a dict"""
         if obj is None:
             return None
 
@@ -80,7 +91,10 @@ class ModelScanApiV3ScanModelVersionIdPatch200Response(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "message": obj.get("message")
+            "total_count": obj.get("total_count"),
+            "page_size": obj.get("page_size"),
+            "page_number": obj.get("page_number"),
+            "results": [Sensor.from_dict(_item) for _item in obj["results"]] if obj.get("results") is not None else None
         })
         return _obj
 

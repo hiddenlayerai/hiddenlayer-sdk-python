@@ -10,8 +10,7 @@ from hiddenlayer import HiddenlayerServiceClient
 from hiddenlayer.sdk.models import Sarif, ScanResults
 
 params = [
-    # commented out for now as the V3 upload endpoints have not been released to prod yet
-    #    ("https://api.us.hiddenlayer.ai"),
+    ("https://api.us.hiddenlayer.ai"),
     ("http://localhost:8000"),
 ]
 
@@ -56,9 +55,6 @@ def test_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
 
     _validate_scan_model(results)
 
-    if hl_client.is_saas:
-        hl_client.model.delete(model_name=model_name)
-
 
 def test_scan_folder(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to scan a folder"""
@@ -87,9 +83,6 @@ def test_scan_model_with_version(tmp_path, hl_client: HiddenlayerServiceClient):
     _validate_scan_model(results)
 
     assert results.inventory.model_version == str(model_version)
-
-    if hl_client.is_saas:
-        hl_client.model.delete(model_name=model_name)
 
 
 def test_scan_folder_with_version(tmp_path, hl_client: HiddenlayerServiceClient):
@@ -125,9 +118,6 @@ def test_scan_model_multiple_times(tmp_path, hl_client: HiddenlayerServiceClient
     _validate_scan_model(results)
     assert results.inventory.model_version == "3"
 
-    if hl_client.is_saas:
-        hl_client.model.delete(model_name=model_name)
-
 
 def test_rescan_model_with_same_version(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to rescan a model multiple times with the same version"""
@@ -148,11 +138,7 @@ def test_rescan_model_with_same_version(tmp_path, hl_client: HiddenlayerServiceC
 
     assert results.inventory.model_version == "123"
 
-    if hl_client.is_saas:
-        hl_client.model.delete(model_name=model_name)
 
-
-@pytest.mark.xfail(reason="ModelScanner Orchestrator does not support sarif yet")
 def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to get sarif results"""
 
@@ -198,9 +184,6 @@ def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
     # test roundtrip
     sarif_results_str = sarif_results.model_dump_json(indent=4, exclude_none=True)
     print(sarif_results_str)
-
-    if hl_client.is_saas:
-        hl_client.model.delete(model_name=model_name)
 
 
 def _setup_scan_model(tmp_path):
@@ -258,11 +241,17 @@ def _validate_scan_folder(tmp_path, results: ScanResults):
     assert results.file_results is not None
     safe_model_found = False
     malicious_model_found = False
+    flattened_file_results = []
     for file_results in results.file_results:
+        flattened_file_results.append(file_results)
+        if file_results.file_results:
+            for inner_file_results in file_results.file_results:
+                flattened_file_results.append(inner_file_results)
+
+    for file_results in flattened_file_results:
         if file_results.file_location.endswith(safe_model):
             detections = file_results.detections
-            assert detections is not None
-            assert len(detections) == 0
+            assert detections is None or len(detections) == 0
             assert file_results.details.file_type_details is not None
             assert file_results.details.file_type_details["pickle_modules"] == [
                 "callable: builtins.print"

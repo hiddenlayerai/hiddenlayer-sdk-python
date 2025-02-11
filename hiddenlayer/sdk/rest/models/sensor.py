@@ -17,17 +17,24 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from datetime import datetime
+from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class ModelScanApiV3UploadModelPost200Response(BaseModel):
+class Sensor(BaseModel):
     """
-    ModelScanApiV3UploadModelPost200Response
+    Sensor
     """ # noqa: E501
-    scan_id: Optional[StrictStr] = Field(default=None, description="Request to resource is successful")
-    __properties: ClassVar[List[str]] = ["scan_id"]
+    sensor_id: StrictStr
+    created_at: datetime
+    tenant_id: StrictStr
+    plaintext_name: StrictStr
+    active: StrictBool
+    version: StrictInt
+    tags: Optional[Dict[str, Any]] = None
+    __properties: ClassVar[List[str]] = ["sensor_id", "created_at", "tenant_id", "plaintext_name", "active", "version", "tags"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -47,7 +54,7 @@ class ModelScanApiV3UploadModelPost200Response(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of ModelScanApiV3UploadModelPost200Response from a JSON string"""
+        """Create an instance of Sensor from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -72,7 +79,7 @@ class ModelScanApiV3UploadModelPost200Response(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of ModelScanApiV3UploadModelPost200Response from a dict"""
+        """Create an instance of Sensor from a dict"""
         if obj is None:
             return None
 
@@ -80,7 +87,13 @@ class ModelScanApiV3UploadModelPost200Response(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "scan_id": obj.get("scan_id")
+            "sensor_id": obj.get("sensor_id"),
+            "created_at": obj.get("created_at"),
+            "tenant_id": obj.get("tenant_id"),
+            "plaintext_name": obj.get("plaintext_name"),
+            "active": obj.get("active"),
+            "version": obj.get("version"),
+            "tags": obj.get("tags")
         })
         return _obj
 

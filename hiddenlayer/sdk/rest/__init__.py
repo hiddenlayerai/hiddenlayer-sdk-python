@@ -21,7 +21,6 @@ from hiddenlayer.sdk.rest.api.health_api import HealthApi
 from hiddenlayer.sdk.rest.api.model_supply_chain_api import ModelSupplyChainApi
 from hiddenlayer.sdk.rest.api.readiness_api import ReadinessApi
 from hiddenlayer.sdk.rest.api.aidr_predictive_api import AidrPredictiveApi
-from hiddenlayer.sdk.rest.api.model_scan_api import ModelScanApi
 from hiddenlayer.sdk.rest.api.sensor_api import SensorApi
 
 # import ApiClient
@@ -42,11 +41,13 @@ from hiddenlayer.sdk.rest.models.artifact_change import ArtifactChange
 from hiddenlayer.sdk.rest.models.artifact_content import ArtifactContent
 from hiddenlayer.sdk.rest.models.artifact_location import ArtifactLocation
 from hiddenlayer.sdk.rest.models.attachment import Attachment
+from hiddenlayer.sdk.rest.models.begin_multi_file_upload200_response import BeginMultiFileUpload200Response
+from hiddenlayer.sdk.rest.models.begin_multipart_file_upload200_response import BeginMultipartFileUpload200Response
+from hiddenlayer.sdk.rest.models.begin_multipart_file_upload200_response_parts_inner import BeginMultipartFileUpload200ResponsePartsInner
 from hiddenlayer.sdk.rest.models.code_flow import CodeFlow
 from hiddenlayer.sdk.rest.models.configuration_override import ConfigurationOverride
 from hiddenlayer.sdk.rest.models.conversion import Conversion
 from hiddenlayer.sdk.rest.models.create_sensor_request import CreateSensorRequest
-from hiddenlayer.sdk.rest.models.detections import Detections
 from hiddenlayer.sdk.rest.models.edge import Edge
 from hiddenlayer.sdk.rest.models.edge_traversal import EdgeTraversal
 from hiddenlayer.sdk.rest.models.errors_inner import ErrorsInner
@@ -59,7 +60,7 @@ from hiddenlayer.sdk.rest.models.file_result_v3 import FileResultV3
 from hiddenlayer.sdk.rest.models.file_scan_report_v3 import FileScanReportV3
 from hiddenlayer.sdk.rest.models.file_scan_reports_v3 import FileScanReportsV3
 from hiddenlayer.sdk.rest.models.fix import Fix
-from hiddenlayer.sdk.rest.models.get_multipart_upload_response import GetMultipartUploadResponse
+from hiddenlayer.sdk.rest.models.get_condensed_model_scan_reports200_response import GetCondensedModelScanReports200Response
 from hiddenlayer.sdk.rest.models.graph import Graph
 from hiddenlayer.sdk.rest.models.graph_traversal import GraphTraversal
 from hiddenlayer.sdk.rest.models.inventory_v3 import InventoryV3
@@ -70,19 +71,12 @@ from hiddenlayer.sdk.rest.models.location_relationship import LocationRelationsh
 from hiddenlayer.sdk.rest.models.logical_location import LogicalLocation
 from hiddenlayer.sdk.rest.models.mitre_atlas_inner import MITREAtlasInner
 from hiddenlayer.sdk.rest.models.message import Message
-from hiddenlayer.sdk.rest.models.model import Model
 from hiddenlayer.sdk.rest.models.model_inventory_info import ModelInventoryInfo
-from hiddenlayer.sdk.rest.models.model_query_response import ModelQueryResponse
-from hiddenlayer.sdk.rest.models.model_scan_api_v3_scan_model_version_id_patch200_response import ModelScanApiV3ScanModelVersionIdPatch200Response
-from hiddenlayer.sdk.rest.models.model_scan_api_v3_scan_query200_response import ModelScanApiV3ScanQuery200Response
-from hiddenlayer.sdk.rest.models.model_scan_api_v3_upload_model_add_file_scan_id_post200_response import ModelScanApiV3UploadModelAddFileScanIdPost200Response
-from hiddenlayer.sdk.rest.models.model_scan_api_v3_upload_model_add_file_scan_id_post200_response_parts_inner import ModelScanApiV3UploadModelAddFileScanIdPost200ResponsePartsInner
-from hiddenlayer.sdk.rest.models.model_scan_api_v3_upload_model_post200_response import ModelScanApiV3UploadModelPost200Response
 from hiddenlayer.sdk.rest.models.multi_file_upload_request_v3 import MultiFileUploadRequestV3
 from hiddenlayer.sdk.rest.models.multiformat_message_string import MultiformatMessageString
-from hiddenlayer.sdk.rest.models.multipart_upload_part import MultipartUploadPart
 from hiddenlayer.sdk.rest.models.node import Node
 from hiddenlayer.sdk.rest.models.notification import Notification
+from hiddenlayer.sdk.rest.models.notify_model_scan_completed200_response import NotifyModelScanCompleted200Response
 from hiddenlayer.sdk.rest.models.paged_response_with_total import PagedResponseWithTotal
 from hiddenlayer.sdk.rest.models.pagination_v3 import PaginationV3
 from hiddenlayer.sdk.rest.models.physical_location import PhysicalLocation
@@ -109,13 +103,12 @@ from hiddenlayer.sdk.rest.models.scan_job import ScanJob
 from hiddenlayer.sdk.rest.models.scan_job_inventory import ScanJobInventory
 from hiddenlayer.sdk.rest.models.scan_model_details_v3 import ScanModelDetailsV3
 from hiddenlayer.sdk.rest.models.scan_model_ids_v3 import ScanModelIdsV3
-from hiddenlayer.sdk.rest.models.scan_model_request import ScanModelRequest
 from hiddenlayer.sdk.rest.models.scan_report_v3 import ScanReportV3
-from hiddenlayer.sdk.rest.models.scan_results import ScanResults
 from hiddenlayer.sdk.rest.models.scan_results_map_v3 import ScanResultsMapV3
-from hiddenlayer.sdk.rest.models.scan_results_v2 import ScanResultsV2
 from hiddenlayer.sdk.rest.models.scan_results_v3 import ScanResultsV3
 from hiddenlayer.sdk.rest.models.security_posture import SecurityPosture
+from hiddenlayer.sdk.rest.models.sensor import Sensor
+from hiddenlayer.sdk.rest.models.sensor_query_response import SensorQueryResponse
 from hiddenlayer.sdk.rest.models.sensor_sor_model_card_query_response import SensorSORModelCardQueryResponse
 from hiddenlayer.sdk.rest.models.sensor_sor_model_card_response import SensorSORModelCardResponse
 from hiddenlayer.sdk.rest.models.sensor_sor_query_filter import SensorSORQueryFilter

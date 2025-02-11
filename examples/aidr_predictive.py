@@ -16,15 +16,15 @@ X = np.random.rand(100, 5)
 y = np.random.rand(100, 1)
 
 # First you have to create a model
-model = hl_client.model.create(model_name="example_model")
+sensor = hl_client.aidr_predictive.create_sensor(sensor_name="example_model")
 
 # If you already have a model you can get the model id from the HiddenLayer model object
-model = hl_client.model.get(model_name="example_model")
+sensor = hl_client.aidr_predictive.get_sensor(sensor_name="example_model")
 
 
 # Submit vectors to AIDR for Predictive Models
 hl_client.aidr_predictive.submit_vectors(
-    model_id=model.sensor_id,
+    sensor_id=sensor.sensor_id,
     requester_id="example_script_user",
     input_vectors=X,
     output=y,

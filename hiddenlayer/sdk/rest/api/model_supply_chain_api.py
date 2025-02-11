@@ -20,11 +20,11 @@ from datetime import datetime
 from pydantic import Field, StrictBool, StrictInt, StrictStr, field_validator
 from typing import List, Optional
 from typing_extensions import Annotated
-from hiddenlayer.sdk.rest.models.model_scan_api_v3_scan_model_version_id_patch200_response import ModelScanApiV3ScanModelVersionIdPatch200Response
-from hiddenlayer.sdk.rest.models.model_scan_api_v3_scan_query200_response import ModelScanApiV3ScanQuery200Response
-from hiddenlayer.sdk.rest.models.model_scan_api_v3_upload_model_add_file_scan_id_post200_response import ModelScanApiV3UploadModelAddFileScanIdPost200Response
-from hiddenlayer.sdk.rest.models.model_scan_api_v3_upload_model_post200_response import ModelScanApiV3UploadModelPost200Response
+from hiddenlayer.sdk.rest.models.begin_multi_file_upload200_response import BeginMultiFileUpload200Response
+from hiddenlayer.sdk.rest.models.begin_multipart_file_upload200_response import BeginMultipartFileUpload200Response
+from hiddenlayer.sdk.rest.models.get_condensed_model_scan_reports200_response import GetCondensedModelScanReports200Response
 from hiddenlayer.sdk.rest.models.multi_file_upload_request_v3 import MultiFileUploadRequestV3
+from hiddenlayer.sdk.rest.models.notify_model_scan_completed200_response import NotifyModelScanCompleted200Response
 from hiddenlayer.sdk.rest.models.scan_create_request import ScanCreateRequest
 from hiddenlayer.sdk.rest.models.scan_job import ScanJob
 from hiddenlayer.sdk.rest.models.scan_report_v3 import ScanReportV3
@@ -49,10 +49,9 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def model_scan_api_v3_scan_model_version_id_get(
+    def begin_multi_file_upload(
         self,
-        scan_id: StrictStr,
-        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
+        multi_file_upload_request_v3: Annotated[MultiFileUploadRequestV3, Field(description="Request body for create")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -65,14 +64,12 @@ class ModelSupplyChainApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ScanReportV3:
-        """Get Result of a Model Scan
+    ) -> BeginMultiFileUpload200Response:
+        """Start V3 Upload
 
 
-        :param scan_id: (required)
-        :type scan_id: str
-        :param has_detections: Filter file_results to only those that have detections (and parents)
-        :type has_detections: bool
+        :param multi_file_upload_request_v3: Request body for create (required)
+        :type multi_file_upload_request_v3: MultiFileUploadRequestV3
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -95,9 +92,8 @@ class ModelSupplyChainApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._model_scan_api_v3_scan_model_version_id_get_serialize(
-            scan_id=scan_id,
-            has_detections=has_detections,
+        _param = self._begin_multi_file_upload_serialize(
+            multi_file_upload_request_v3=multi_file_upload_request_v3,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -105,9 +101,9 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ScanReportV3",
+            '200': "BeginMultiFileUpload200Response",
             '400': None,
-            '404': None,
+            '422': "ValidationErrorModel",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -121,10 +117,9 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def model_scan_api_v3_scan_model_version_id_get_with_http_info(
+    def begin_multi_file_upload_with_http_info(
         self,
-        scan_id: StrictStr,
-        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
+        multi_file_upload_request_v3: Annotated[MultiFileUploadRequestV3, Field(description="Request body for create")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -137,14 +132,12 @@ class ModelSupplyChainApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[ScanReportV3]:
-        """Get Result of a Model Scan
+    ) -> ApiResponse[BeginMultiFileUpload200Response]:
+        """Start V3 Upload
 
 
-        :param scan_id: (required)
-        :type scan_id: str
-        :param has_detections: Filter file_results to only those that have detections (and parents)
-        :type has_detections: bool
+        :param multi_file_upload_request_v3: Request body for create (required)
+        :type multi_file_upload_request_v3: MultiFileUploadRequestV3
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -167,9 +160,8 @@ class ModelSupplyChainApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._model_scan_api_v3_scan_model_version_id_get_serialize(
-            scan_id=scan_id,
-            has_detections=has_detections,
+        _param = self._begin_multi_file_upload_serialize(
+            multi_file_upload_request_v3=multi_file_upload_request_v3,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -177,9 +169,9 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ScanReportV3",
+            '200': "BeginMultiFileUpload200Response",
             '400': None,
-            '404': None,
+            '422': "ValidationErrorModel",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -193,10 +185,9 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def model_scan_api_v3_scan_model_version_id_get_without_preload_content(
+    def begin_multi_file_upload_without_preload_content(
         self,
-        scan_id: StrictStr,
-        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
+        multi_file_upload_request_v3: Annotated[MultiFileUploadRequestV3, Field(description="Request body for create")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -210,13 +201,11 @@ class ModelSupplyChainApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Get Result of a Model Scan
+        """Start V3 Upload
 
 
-        :param scan_id: (required)
-        :type scan_id: str
-        :param has_detections: Filter file_results to only those that have detections (and parents)
-        :type has_detections: bool
+        :param multi_file_upload_request_v3: Request body for create (required)
+        :type multi_file_upload_request_v3: MultiFileUploadRequestV3
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -239,9 +228,8 @@ class ModelSupplyChainApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._model_scan_api_v3_scan_model_version_id_get_serialize(
-            scan_id=scan_id,
-            has_detections=has_detections,
+        _param = self._begin_multi_file_upload_serialize(
+            multi_file_upload_request_v3=multi_file_upload_request_v3,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -249,9 +237,9 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ScanReportV3",
+            '200': "BeginMultiFileUpload200Response",
             '400': None,
-            '404': None,
+            '422': "ValidationErrorModel",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -260,10 +248,9 @@ class ModelSupplyChainApi:
         return response_data.response
 
 
-    def _model_scan_api_v3_scan_model_version_id_get_serialize(
+    def _begin_multi_file_upload_serialize(
         self,
-        scan_id,
-        has_detections,
+        multi_file_upload_request_v3,
         _request_auth,
         _content_type,
         _headers,
@@ -283,616 +270,12 @@ class ModelSupplyChainApi:
         _body_params: Optional[bytes] = None
 
         # process the path parameters
-        if scan_id is not None:
-            _path_params['scan_id'] = scan_id
         # process the query parameters
-        if has_detections is not None:
-            
-            _query_params.append(('has_detections', has_detections))
-            
         # process the header parameters
         # process the form parameters
         # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json; charset=utf-8', 
-                'application/sarif+json'
-            ]
-        )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'BearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/scan/v3/results/{scan_id}',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def model_scan_api_v3_scan_model_version_id_patch(
-        self,
-        scan_id: StrictStr,
-        scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for partial update")],
-        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ModelScanApiV3ScanModelVersionIdPatch200Response:
-        """Indicate part (file or files) of a model scan has completed
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param scan_report_v3: Request body for partial update (required)
-        :type scan_report_v3: ScanReportV3
-        :param has_detections: Filter file_results to only those that have detections (and parents)
-        :type has_detections: bool
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_scan_model_version_id_patch_serialize(
-            scan_id=scan_id,
-            scan_report_v3=scan_report_v3,
-            has_detections=has_detections,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3ScanModelVersionIdPatch200Response",
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def model_scan_api_v3_scan_model_version_id_patch_with_http_info(
-        self,
-        scan_id: StrictStr,
-        scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for partial update")],
-        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[ModelScanApiV3ScanModelVersionIdPatch200Response]:
-        """Indicate part (file or files) of a model scan has completed
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param scan_report_v3: Request body for partial update (required)
-        :type scan_report_v3: ScanReportV3
-        :param has_detections: Filter file_results to only those that have detections (and parents)
-        :type has_detections: bool
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_scan_model_version_id_patch_serialize(
-            scan_id=scan_id,
-            scan_report_v3=scan_report_v3,
-            has_detections=has_detections,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3ScanModelVersionIdPatch200Response",
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def model_scan_api_v3_scan_model_version_id_patch_without_preload_content(
-        self,
-        scan_id: StrictStr,
-        scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for partial update")],
-        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Indicate part (file or files) of a model scan has completed
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param scan_report_v3: Request body for partial update (required)
-        :type scan_report_v3: ScanReportV3
-        :param has_detections: Filter file_results to only those that have detections (and parents)
-        :type has_detections: bool
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_scan_model_version_id_patch_serialize(
-            scan_id=scan_id,
-            scan_report_v3=scan_report_v3,
-            has_detections=has_detections,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3ScanModelVersionIdPatch200Response",
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _model_scan_api_v3_scan_model_version_id_patch_serialize(
-        self,
-        scan_id,
-        scan_report_v3,
-        has_detections,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if scan_id is not None:
-            _path_params['scan_id'] = scan_id
-        # process the query parameters
-        if has_detections is not None:
-            
-            _query_params.append(('has_detections', has_detections))
-            
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-        if scan_report_v3 is not None:
-            _body_params = scan_report_v3
-
-
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json'
-            ]
-        )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'BearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='PATCH',
-            resource_path='/scan/v3/results/{scan_id}',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def model_scan_api_v3_scan_model_version_id_post(
-        self,
-        scan_id: StrictStr,
-        scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for create")],
-        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> None:
-        """Indicate model scan has started
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param scan_report_v3: Request body for create (required)
-        :type scan_report_v3: ScanReportV3
-        :param has_detections: Filter file_results to only those that have detections (and parents)
-        :type has_detections: bool
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_scan_model_version_id_post_serialize(
-            scan_id=scan_id,
-            scan_report_v3=scan_report_v3,
-            has_detections=has_detections,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '201': None,
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def model_scan_api_v3_scan_model_version_id_post_with_http_info(
-        self,
-        scan_id: StrictStr,
-        scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for create")],
-        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[None]:
-        """Indicate model scan has started
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param scan_report_v3: Request body for create (required)
-        :type scan_report_v3: ScanReportV3
-        :param has_detections: Filter file_results to only those that have detections (and parents)
-        :type has_detections: bool
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_scan_model_version_id_post_serialize(
-            scan_id=scan_id,
-            scan_report_v3=scan_report_v3,
-            has_detections=has_detections,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '201': None,
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def model_scan_api_v3_scan_model_version_id_post_without_preload_content(
-        self,
-        scan_id: StrictStr,
-        scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for create")],
-        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Indicate model scan has started
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param scan_report_v3: Request body for create (required)
-        :type scan_report_v3: ScanReportV3
-        :param has_detections: Filter file_results to only those that have detections (and parents)
-        :type has_detections: bool
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_scan_model_version_id_post_serialize(
-            scan_id=scan_id,
-            scan_report_v3=scan_report_v3,
-            has_detections=has_detections,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '201': None,
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _model_scan_api_v3_scan_model_version_id_post_serialize(
-        self,
-        scan_id,
-        scan_report_v3,
-        has_detections,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if scan_id is not None:
-            _path_params['scan_id'] = scan_id
-        # process the query parameters
-        if has_detections is not None:
-            
-            _query_params.append(('has_detections', has_detections))
-            
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-        if scan_report_v3 is not None:
-            _body_params = scan_report_v3
+        if multi_file_upload_request_v3 is not None:
+            _body_params = multi_file_upload_request_v3
 
 
         # set the HTTP header `Accept`
@@ -923,7 +306,7 @@ class ModelSupplyChainApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/scan/v3/results/{scan_id}',
+            resource_path='/scan/v3/upload',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -940,7 +323,1110 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def model_scan_api_v3_scan_query(
+    def begin_multipart_file_upload(
+        self,
+        file_content_length: Annotated[StrictInt, Field(description="Added file size in bytes")],
+        file_name: Annotated[StrictStr, Field(description="Added file name")],
+        scan_id: StrictStr,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> BeginMultipartFileUpload200Response:
+        """Add file to V3 Upload
+
+
+        :param file_content_length: Added file size in bytes (required)
+        :type file_content_length: int
+        :param file_name: Added file name (required)
+        :type file_name: str
+        :param scan_id: (required)
+        :type scan_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._begin_multipart_file_upload_serialize(
+            file_content_length=file_content_length,
+            file_name=file_name,
+            scan_id=scan_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "BeginMultipartFileUpload200Response",
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def begin_multipart_file_upload_with_http_info(
+        self,
+        file_content_length: Annotated[StrictInt, Field(description="Added file size in bytes")],
+        file_name: Annotated[StrictStr, Field(description="Added file name")],
+        scan_id: StrictStr,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[BeginMultipartFileUpload200Response]:
+        """Add file to V3 Upload
+
+
+        :param file_content_length: Added file size in bytes (required)
+        :type file_content_length: int
+        :param file_name: Added file name (required)
+        :type file_name: str
+        :param scan_id: (required)
+        :type scan_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._begin_multipart_file_upload_serialize(
+            file_content_length=file_content_length,
+            file_name=file_name,
+            scan_id=scan_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "BeginMultipartFileUpload200Response",
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def begin_multipart_file_upload_without_preload_content(
+        self,
+        file_content_length: Annotated[StrictInt, Field(description="Added file size in bytes")],
+        file_name: Annotated[StrictStr, Field(description="Added file name")],
+        scan_id: StrictStr,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Add file to V3 Upload
+
+
+        :param file_content_length: Added file size in bytes (required)
+        :type file_content_length: int
+        :param file_name: Added file name (required)
+        :type file_name: str
+        :param scan_id: (required)
+        :type scan_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._begin_multipart_file_upload_serialize(
+            file_content_length=file_content_length,
+            file_name=file_name,
+            scan_id=scan_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "BeginMultipartFileUpload200Response",
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _begin_multipart_file_upload_serialize(
+        self,
+        file_content_length,
+        file_name,
+        scan_id,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, Union[str, bytes]] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if scan_id is not None:
+            _path_params['scan_id'] = scan_id
+        # process the query parameters
+        # process the header parameters
+        if file_content_length is not None:
+            _header_params['file-content-length'] = file_content_length
+        if file_name is not None:
+            _header_params['file-name'] = file_name
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'BearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/scan/v3/upload/{scan_id}/file',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def complete_multi_file_upload(
+        self,
+        scan_id: StrictStr,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> BeginMultiFileUpload200Response:
+        """Indicate All files are uploaded and start the scan
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._complete_multi_file_upload_serialize(
+            scan_id=scan_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "BeginMultiFileUpload200Response",
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def complete_multi_file_upload_with_http_info(
+        self,
+        scan_id: StrictStr,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[BeginMultiFileUpload200Response]:
+        """Indicate All files are uploaded and start the scan
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._complete_multi_file_upload_serialize(
+            scan_id=scan_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "BeginMultiFileUpload200Response",
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def complete_multi_file_upload_without_preload_content(
+        self,
+        scan_id: StrictStr,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Indicate All files are uploaded and start the scan
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._complete_multi_file_upload_serialize(
+            scan_id=scan_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "BeginMultiFileUpload200Response",
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _complete_multi_file_upload_serialize(
+        self,
+        scan_id,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, Union[str, bytes]] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if scan_id is not None:
+            _path_params['scan_id'] = scan_id
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'BearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='PATCH',
+            resource_path='/scan/v3/upload/{scan_id}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def complete_multipart_file_upload(
+        self,
+        scan_id: StrictStr,
+        file_id: StrictStr,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> BeginMultiFileUpload200Response:
+        """Indicate that upload is completed for {file_id}
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param file_id: (required)
+        :type file_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._complete_multipart_file_upload_serialize(
+            scan_id=scan_id,
+            file_id=file_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "BeginMultiFileUpload200Response",
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def complete_multipart_file_upload_with_http_info(
+        self,
+        scan_id: StrictStr,
+        file_id: StrictStr,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[BeginMultiFileUpload200Response]:
+        """Indicate that upload is completed for {file_id}
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param file_id: (required)
+        :type file_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._complete_multipart_file_upload_serialize(
+            scan_id=scan_id,
+            file_id=file_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "BeginMultiFileUpload200Response",
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def complete_multipart_file_upload_without_preload_content(
+        self,
+        scan_id: StrictStr,
+        file_id: StrictStr,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Indicate that upload is completed for {file_id}
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param file_id: (required)
+        :type file_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._complete_multipart_file_upload_serialize(
+            scan_id=scan_id,
+            file_id=file_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "BeginMultiFileUpload200Response",
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _complete_multipart_file_upload_serialize(
+        self,
+        scan_id,
+        file_id,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, Union[str, bytes]] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if scan_id is not None:
+            _path_params['scan_id'] = scan_id
+        if file_id is not None:
+            _path_params['file_id'] = file_id
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'BearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='PATCH',
+            resource_path='/scan/v3/upload/{scan_id}/file/{file_id}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def create_scan_job(
+        self,
+        scan_job: Annotated[ScanJob, Field(description="Request body for create scan request")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> None:
+        """Request a Model Scan Job
+
+
+        :param scan_job: Request body for create scan request (required)
+        :type scan_job: ScanJob
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_scan_job_serialize(
+            scan_job=scan_job,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '201': None,
+            '400': None,
+            '422': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def create_scan_job_with_http_info(
+        self,
+        scan_job: Annotated[ScanJob, Field(description="Request body for create scan request")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Request a Model Scan Job
+
+
+        :param scan_job: Request body for create scan request (required)
+        :type scan_job: ScanJob
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_scan_job_serialize(
+            scan_job=scan_job,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '201': None,
+            '400': None,
+            '422': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def create_scan_job_without_preload_content(
+        self,
+        scan_job: Annotated[ScanJob, Field(description="Request body for create scan request")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Request a Model Scan Job
+
+
+        :param scan_job: Request body for create scan request (required)
+        :type scan_job: ScanJob
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_scan_job_serialize(
+            scan_job=scan_job,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '201': None,
+            '400': None,
+            '422': "ProblemDetails",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _create_scan_job_serialize(
+        self,
+        scan_job,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, Union[str, bytes]] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if scan_job is not None:
+            _body_params = scan_job
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json'
+            ]
+        )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json; charset=utf-8', 
+                        'application/octet-stream'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'BearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/scans/v3/jobs',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def get_condensed_model_scan_reports(
         self,
         model_version_ids: Annotated[Optional[List[StrictStr]], Field(description="Model Version ID")] = None,
         model_ids: Annotated[Optional[List[StrictStr]], Field(description="Model ID")] = None,
@@ -964,7 +1450,7 @@ class ModelSupplyChainApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ModelScanApiV3ScanQuery200Response:
+    ) -> GetCondensedModelScanReports200Response:
         """Get condensed reports for a Model Scan
 
 
@@ -1010,7 +1496,7 @@ class ModelSupplyChainApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._model_scan_api_v3_scan_query_serialize(
+        _param = self._get_condensed_model_scan_reports_serialize(
             model_version_ids=model_version_ids,
             model_ids=model_ids,
             start_time=start_time,
@@ -1028,7 +1514,7 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3ScanQuery200Response",
+            '200': "GetCondensedModelScanReports200Response",
             '400': None,
             '404': None,
         }
@@ -1044,7 +1530,7 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def model_scan_api_v3_scan_query_with_http_info(
+    def get_condensed_model_scan_reports_with_http_info(
         self,
         model_version_ids: Annotated[Optional[List[StrictStr]], Field(description="Model Version ID")] = None,
         model_ids: Annotated[Optional[List[StrictStr]], Field(description="Model ID")] = None,
@@ -1068,7 +1554,7 @@ class ModelSupplyChainApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[ModelScanApiV3ScanQuery200Response]:
+    ) -> ApiResponse[GetCondensedModelScanReports200Response]:
         """Get condensed reports for a Model Scan
 
 
@@ -1114,7 +1600,7 @@ class ModelSupplyChainApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._model_scan_api_v3_scan_query_serialize(
+        _param = self._get_condensed_model_scan_reports_serialize(
             model_version_ids=model_version_ids,
             model_ids=model_ids,
             start_time=start_time,
@@ -1132,7 +1618,7 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3ScanQuery200Response",
+            '200': "GetCondensedModelScanReports200Response",
             '400': None,
             '404': None,
         }
@@ -1148,7 +1634,7 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def model_scan_api_v3_scan_query_without_preload_content(
+    def get_condensed_model_scan_reports_without_preload_content(
         self,
         model_version_ids: Annotated[Optional[List[StrictStr]], Field(description="Model Version ID")] = None,
         model_ids: Annotated[Optional[List[StrictStr]], Field(description="Model ID")] = None,
@@ -1218,7 +1704,7 @@ class ModelSupplyChainApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._model_scan_api_v3_scan_query_serialize(
+        _param = self._get_condensed_model_scan_reports_serialize(
             model_version_ids=model_version_ids,
             model_ids=model_ids,
             start_time=start_time,
@@ -1236,7 +1722,7 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3ScanQuery200Response",
+            '200': "GetCondensedModelScanReports200Response",
             '400': None,
             '404': None,
         }
@@ -1247,7 +1733,7 @@ class ModelSupplyChainApi:
         return response_data.response
 
 
-    def _model_scan_api_v3_scan_query_serialize(
+    def _get_condensed_model_scan_reports_serialize(
         self,
         model_version_ids,
         model_ids,
@@ -1378,11 +1864,8 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def model_scan_api_v3_upload_model_add_file_scan_id_post(
+    def get_scan_jobs(
         self,
-        file_content_length: Annotated[StrictInt, Field(description="Added file size in bytes")],
-        file_name: Annotated[StrictStr, Field(description="Added file name")],
-        scan_id: StrictStr,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1395,16 +1878,10 @@ class ModelSupplyChainApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ModelScanApiV3UploadModelAddFileScanIdPost200Response:
-        """Add file to V3 Upload
+    ) -> List[ScanJob]:
+        """List all Model Scan Jobs
 
 
-        :param file_content_length: Added file size in bytes (required)
-        :type file_content_length: int
-        :param file_name: Added file name (required)
-        :type file_name: str
-        :param scan_id: (required)
-        :type scan_id: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1427,10 +1904,7 @@ class ModelSupplyChainApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._model_scan_api_v3_upload_model_add_file_scan_id_post_serialize(
-            file_content_length=file_content_length,
-            file_name=file_name,
-            scan_id=scan_id,
+        _param = self._get_scan_jobs_serialize(
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1438,9 +1912,9 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3UploadModelAddFileScanIdPost200Response",
+            '200': "List[ScanJob]",
             '400': None,
-            '422': "ValidationErrorModel",
+            '404': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -1454,11 +1928,8 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def model_scan_api_v3_upload_model_add_file_scan_id_post_with_http_info(
+    def get_scan_jobs_with_http_info(
         self,
-        file_content_length: Annotated[StrictInt, Field(description="Added file size in bytes")],
-        file_name: Annotated[StrictStr, Field(description="Added file name")],
-        scan_id: StrictStr,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1471,16 +1942,10 @@ class ModelSupplyChainApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[ModelScanApiV3UploadModelAddFileScanIdPost200Response]:
-        """Add file to V3 Upload
+    ) -> ApiResponse[List[ScanJob]]:
+        """List all Model Scan Jobs
 
 
-        :param file_content_length: Added file size in bytes (required)
-        :type file_content_length: int
-        :param file_name: Added file name (required)
-        :type file_name: str
-        :param scan_id: (required)
-        :type scan_id: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1503,10 +1968,7 @@ class ModelSupplyChainApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._model_scan_api_v3_upload_model_add_file_scan_id_post_serialize(
-            file_content_length=file_content_length,
-            file_name=file_name,
-            scan_id=scan_id,
+        _param = self._get_scan_jobs_serialize(
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1514,9 +1976,9 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3UploadModelAddFileScanIdPost200Response",
+            '200': "List[ScanJob]",
             '400': None,
-            '422': "ValidationErrorModel",
+            '404': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -1530,11 +1992,8 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def model_scan_api_v3_upload_model_add_file_scan_id_post_without_preload_content(
+    def get_scan_jobs_without_preload_content(
         self,
-        file_content_length: Annotated[StrictInt, Field(description="Added file size in bytes")],
-        file_name: Annotated[StrictStr, Field(description="Added file name")],
-        scan_id: StrictStr,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1548,15 +2007,9 @@ class ModelSupplyChainApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Add file to V3 Upload
+        """List all Model Scan Jobs
 
 
-        :param file_content_length: Added file size in bytes (required)
-        :type file_content_length: int
-        :param file_name: Added file name (required)
-        :type file_name: str
-        :param scan_id: (required)
-        :type scan_id: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1579,10 +2032,7 @@ class ModelSupplyChainApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._model_scan_api_v3_upload_model_add_file_scan_id_post_serialize(
-            file_content_length=file_content_length,
-            file_name=file_name,
-            scan_id=scan_id,
+        _param = self._get_scan_jobs_serialize(
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1590,9 +2040,9 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3UploadModelAddFileScanIdPost200Response",
+            '200': "List[ScanJob]",
             '400': None,
-            '422': "ValidationErrorModel",
+            '404': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -1601,11 +2051,280 @@ class ModelSupplyChainApi:
         return response_data.response
 
 
-    def _model_scan_api_v3_upload_model_add_file_scan_id_post_serialize(
+    def _get_scan_jobs_serialize(
         self,
-        file_content_length,
-        file_name,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, Union[str, bytes]] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json; charset=utf-8'
+            ]
+        )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'BearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/scans/v3/jobs',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def get_scan_results(
+        self,
+        scan_id: StrictStr,
+        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ScanReportV3:
+        """Get Result of a Model Scan
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param has_detections: Filter file_results to only those that have detections (and parents)
+        :type has_detections: bool
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_scan_results_serialize(
+            scan_id=scan_id,
+            has_detections=has_detections,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "ScanReportV3",
+            '400': None,
+            '404': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def get_scan_results_with_http_info(
+        self,
+        scan_id: StrictStr,
+        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[ScanReportV3]:
+        """Get Result of a Model Scan
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param has_detections: Filter file_results to only those that have detections (and parents)
+        :type has_detections: bool
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_scan_results_serialize(
+            scan_id=scan_id,
+            has_detections=has_detections,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "ScanReportV3",
+            '400': None,
+            '404': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def get_scan_results_without_preload_content(
+        self,
+        scan_id: StrictStr,
+        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get Result of a Model Scan
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param has_detections: Filter file_results to only those that have detections (and parents)
+        :type has_detections: bool
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_scan_results_serialize(
+            scan_id=scan_id,
+            has_detections=has_detections,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "ScanReportV3",
+            '400': None,
+            '404': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_scan_results_serialize(
+        self,
         scan_id,
+        has_detections,
         _request_auth,
         _content_type,
         _headers,
@@ -1628,11 +2347,11 @@ class ModelSupplyChainApi:
         if scan_id is not None:
             _path_params['scan_id'] = scan_id
         # process the query parameters
+        if has_detections is not None:
+            
+            _query_params.append(('has_detections', has_detections))
+            
         # process the header parameters
-        if file_content_length is not None:
-            _header_params['file-content-length'] = file_content_length
-        if file_name is not None:
-            _header_params['file-name'] = file_name
         # process the form parameters
         # process the body parameter
 
@@ -1640,7 +2359,8 @@ class ModelSupplyChainApi:
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
             [
-                'application/json'
+                'application/json; charset=utf-8', 
+                'application/sarif+json'
             ]
         )
 
@@ -1651,8 +2371,8 @@ class ModelSupplyChainApi:
         ]
 
         return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/scan/v3/upload/{scan_id}/file',
+            method='GET',
+            resource_path='/scan/v3/results/{scan_id}',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -1669,818 +2389,7 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def model_scan_api_v3_upload_model_post(
-        self,
-        multi_file_upload_request_v3: Annotated[MultiFileUploadRequestV3, Field(description="Request body for create")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ModelScanApiV3UploadModelPost200Response:
-        """Start V3 Upload
-
-
-        :param multi_file_upload_request_v3: Request body for create (required)
-        :type multi_file_upload_request_v3: MultiFileUploadRequestV3
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_upload_model_post_serialize(
-            multi_file_upload_request_v3=multi_file_upload_request_v3,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3UploadModelPost200Response",
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def model_scan_api_v3_upload_model_post_with_http_info(
-        self,
-        multi_file_upload_request_v3: Annotated[MultiFileUploadRequestV3, Field(description="Request body for create")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[ModelScanApiV3UploadModelPost200Response]:
-        """Start V3 Upload
-
-
-        :param multi_file_upload_request_v3: Request body for create (required)
-        :type multi_file_upload_request_v3: MultiFileUploadRequestV3
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_upload_model_post_serialize(
-            multi_file_upload_request_v3=multi_file_upload_request_v3,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3UploadModelPost200Response",
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def model_scan_api_v3_upload_model_post_without_preload_content(
-        self,
-        multi_file_upload_request_v3: Annotated[MultiFileUploadRequestV3, Field(description="Request body for create")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Start V3 Upload
-
-
-        :param multi_file_upload_request_v3: Request body for create (required)
-        :type multi_file_upload_request_v3: MultiFileUploadRequestV3
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_upload_model_post_serialize(
-            multi_file_upload_request_v3=multi_file_upload_request_v3,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3UploadModelPost200Response",
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _model_scan_api_v3_upload_model_post_serialize(
-        self,
-        multi_file_upload_request_v3,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-        if multi_file_upload_request_v3 is not None:
-            _body_params = multi_file_upload_request_v3
-
-
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json'
-            ]
-        )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'BearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/scan/v3/upload',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def model_scan_api_v3_upload_model_scan_id_file_file_id_post(
-        self,
-        scan_id: StrictStr,
-        file_id: StrictStr,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ModelScanApiV3UploadModelPost200Response:
-        """Indicate that upload is completed for {file_id}
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param file_id: (required)
-        :type file_id: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_upload_model_scan_id_file_file_id_post_serialize(
-            scan_id=scan_id,
-            file_id=file_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3UploadModelPost200Response",
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def model_scan_api_v3_upload_model_scan_id_file_file_id_post_with_http_info(
-        self,
-        scan_id: StrictStr,
-        file_id: StrictStr,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[ModelScanApiV3UploadModelPost200Response]:
-        """Indicate that upload is completed for {file_id}
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param file_id: (required)
-        :type file_id: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_upload_model_scan_id_file_file_id_post_serialize(
-            scan_id=scan_id,
-            file_id=file_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3UploadModelPost200Response",
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def model_scan_api_v3_upload_model_scan_id_file_file_id_post_without_preload_content(
-        self,
-        scan_id: StrictStr,
-        file_id: StrictStr,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Indicate that upload is completed for {file_id}
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param file_id: (required)
-        :type file_id: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_upload_model_scan_id_file_file_id_post_serialize(
-            scan_id=scan_id,
-            file_id=file_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3UploadModelPost200Response",
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _model_scan_api_v3_upload_model_scan_id_file_file_id_post_serialize(
-        self,
-        scan_id,
-        file_id,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if scan_id is not None:
-            _path_params['scan_id'] = scan_id
-        if file_id is not None:
-            _path_params['file_id'] = file_id
-        # process the query parameters
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json'
-            ]
-        )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'BearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='PATCH',
-            resource_path='/scan/v3/upload/{scan_id}/file/{file_id}',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def model_scan_api_v3_upload_model_scan_id_patch(
-        self,
-        scan_id: StrictStr,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ModelScanApiV3UploadModelPost200Response:
-        """Indicate All files are uploaded and start the scan
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_upload_model_scan_id_patch_serialize(
-            scan_id=scan_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3UploadModelPost200Response",
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def model_scan_api_v3_upload_model_scan_id_patch_with_http_info(
-        self,
-        scan_id: StrictStr,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[ModelScanApiV3UploadModelPost200Response]:
-        """Indicate All files are uploaded and start the scan
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_upload_model_scan_id_patch_serialize(
-            scan_id=scan_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3UploadModelPost200Response",
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def model_scan_api_v3_upload_model_scan_id_patch_without_preload_content(
-        self,
-        scan_id: StrictStr,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Indicate All files are uploaded and start the scan
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._model_scan_api_v3_upload_model_scan_id_patch_serialize(
-            scan_id=scan_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ModelScanApiV3UploadModelPost200Response",
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _model_scan_api_v3_upload_model_scan_id_patch_serialize(
-        self,
-        scan_id,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if scan_id is not None:
-            _path_params['scan_id'] = scan_id
-        # process the query parameters
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json'
-            ]
-        )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'BearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='PATCH',
-            resource_path='/scan/v3/upload/{scan_id}',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def modelscan_api_v3_get_scan_results(
+    def get_scan_results1(
         self,
         scan_id: Optional[StrictStr] = None,
         cursor: Optional[StrictStr] = None,
@@ -2529,7 +2438,7 @@ class ModelSupplyChainApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._modelscan_api_v3_get_scan_results_serialize(
+        _param = self._get_scan_results1_serialize(
             scan_id=scan_id,
             cursor=cursor,
             page_size=page_size,
@@ -2557,7 +2466,7 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def modelscan_api_v3_get_scan_results_with_http_info(
+    def get_scan_results1_with_http_info(
         self,
         scan_id: Optional[StrictStr] = None,
         cursor: Optional[StrictStr] = None,
@@ -2606,7 +2515,7 @@ class ModelSupplyChainApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._modelscan_api_v3_get_scan_results_serialize(
+        _param = self._get_scan_results1_serialize(
             scan_id=scan_id,
             cursor=cursor,
             page_size=page_size,
@@ -2634,7 +2543,7 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def modelscan_api_v3_get_scan_results_without_preload_content(
+    def get_scan_results1_without_preload_content(
         self,
         scan_id: Optional[StrictStr] = None,
         cursor: Optional[StrictStr] = None,
@@ -2683,7 +2592,7 @@ class ModelSupplyChainApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._modelscan_api_v3_get_scan_results_serialize(
+        _param = self._get_scan_results1_serialize(
             scan_id=scan_id,
             cursor=cursor,
             page_size=page_size,
@@ -2706,7 +2615,7 @@ class ModelSupplyChainApi:
         return response_data.response
 
 
-    def _modelscan_api_v3_get_scan_results_serialize(
+    def _get_scan_results1_serialize(
         self,
         scan_id,
         cursor,
@@ -2762,542 +2671,6 @@ class ModelSupplyChainApi:
         return self.api_client.param_serialize(
             method='GET',
             resource_path='/scans/v3/results/{scan_id}',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def modelscan_api_v3_post_scan_results(
-        self,
-        scan_id: StrictStr,
-        scan_create_request: Annotated[ScanCreateRequest, Field(description="Request body for reporting a scan of one or more file results")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> None:
-        """Engine Report Endpoint of Model Scan Results
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param scan_create_request: Request body for reporting a scan of one or more file results (required)
-        :type scan_create_request: ScanCreateRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._modelscan_api_v3_post_scan_results_serialize(
-            scan_id=scan_id,
-            scan_create_request=scan_create_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '204': None,
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def modelscan_api_v3_post_scan_results_with_http_info(
-        self,
-        scan_id: StrictStr,
-        scan_create_request: Annotated[ScanCreateRequest, Field(description="Request body for reporting a scan of one or more file results")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[None]:
-        """Engine Report Endpoint of Model Scan Results
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param scan_create_request: Request body for reporting a scan of one or more file results (required)
-        :type scan_create_request: ScanCreateRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._modelscan_api_v3_post_scan_results_serialize(
-            scan_id=scan_id,
-            scan_create_request=scan_create_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '204': None,
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def modelscan_api_v3_post_scan_results_without_preload_content(
-        self,
-        scan_id: StrictStr,
-        scan_create_request: Annotated[ScanCreateRequest, Field(description="Request body for reporting a scan of one or more file results")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Engine Report Endpoint of Model Scan Results
-
-
-        :param scan_id: (required)
-        :type scan_id: str
-        :param scan_create_request: Request body for reporting a scan of one or more file results (required)
-        :type scan_create_request: ScanCreateRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._modelscan_api_v3_post_scan_results_serialize(
-            scan_id=scan_id,
-            scan_create_request=scan_create_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '204': None,
-            '400': None,
-            '422': "ValidationErrorModel",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _modelscan_api_v3_post_scan_results_serialize(
-        self,
-        scan_id,
-        scan_create_request,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if scan_id is not None:
-            _path_params['scan_id'] = scan_id
-        # process the query parameters
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-        if scan_create_request is not None:
-            _body_params = scan_create_request
-
-
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json'
-            ]
-        )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json', 
-                        'application/octet-stream'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'BearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/scans/v3/reports/{scan_id}',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def modelscanner_api_v3_get_jobs(
-        self,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[ScanJob]:
-        """List all Model Scan Jobs
-
-
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._modelscanner_api_v3_get_jobs_serialize(
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ScanJob]",
-            '400': None,
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def modelscanner_api_v3_get_jobs_with_http_info(
-        self,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[ScanJob]]:
-        """List all Model Scan Jobs
-
-
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._modelscanner_api_v3_get_jobs_serialize(
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ScanJob]",
-            '400': None,
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def modelscanner_api_v3_get_jobs_without_preload_content(
-        self,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """List all Model Scan Jobs
-
-
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._modelscanner_api_v3_get_jobs_serialize(
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ScanJob]",
-            '400': None,
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _modelscanner_api_v3_get_jobs_serialize(
-        self,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json; charset=utf-8'
-            ]
-        )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'BearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/scans/v3/jobs',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -3551,281 +2924,6 @@ class ModelSupplyChainApi:
 
 
     @validate_call
-    def modelscanner_api_v3_post_request(
-        self,
-        scan_job: Annotated[ScanJob, Field(description="Request body for create scan request")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> None:
-        """Request a Model Scan Job
-
-
-        :param scan_job: Request body for create scan request (required)
-        :type scan_job: ScanJob
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._modelscanner_api_v3_post_request_serialize(
-            scan_job=scan_job,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '201': None,
-            '400': None,
-            '422': "ProblemDetails",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def modelscanner_api_v3_post_request_with_http_info(
-        self,
-        scan_job: Annotated[ScanJob, Field(description="Request body for create scan request")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[None]:
-        """Request a Model Scan Job
-
-
-        :param scan_job: Request body for create scan request (required)
-        :type scan_job: ScanJob
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._modelscanner_api_v3_post_request_serialize(
-            scan_job=scan_job,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '201': None,
-            '400': None,
-            '422': "ProblemDetails",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def modelscanner_api_v3_post_request_without_preload_content(
-        self,
-        scan_job: Annotated[ScanJob, Field(description="Request body for create scan request")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Request a Model Scan Job
-
-
-        :param scan_job: Request body for create scan request (required)
-        :type scan_job: ScanJob
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._modelscanner_api_v3_post_request_serialize(
-            scan_job=scan_job,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '201': None,
-            '400': None,
-            '422': "ProblemDetails",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _modelscanner_api_v3_post_request_serialize(
-        self,
-        scan_job,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-        if scan_job is not None:
-            _body_params = scan_job
-
-
-        # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json'
-            ]
-        )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json; charset=utf-8', 
-                        'application/octet-stream'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'BearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/scans/v3/jobs',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
     def modelscanner_api_v3_readiness_check(
         self,
         _request_timeout: Union[
@@ -4047,6 +3145,908 @@ class ModelSupplyChainApi:
         return self.api_client.param_serialize(
             method='GET',
             resource_path='/scans/v3/readiness',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def notify_model_scan_completed(
+        self,
+        scan_id: StrictStr,
+        scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for partial update")],
+        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> NotifyModelScanCompleted200Response:
+        """Indicate part (file or files) of a model scan has completed
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param scan_report_v3: Request body for partial update (required)
+        :type scan_report_v3: ScanReportV3
+        :param has_detections: Filter file_results to only those that have detections (and parents)
+        :type has_detections: bool
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._notify_model_scan_completed_serialize(
+            scan_id=scan_id,
+            scan_report_v3=scan_report_v3,
+            has_detections=has_detections,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "NotifyModelScanCompleted200Response",
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def notify_model_scan_completed_with_http_info(
+        self,
+        scan_id: StrictStr,
+        scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for partial update")],
+        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[NotifyModelScanCompleted200Response]:
+        """Indicate part (file or files) of a model scan has completed
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param scan_report_v3: Request body for partial update (required)
+        :type scan_report_v3: ScanReportV3
+        :param has_detections: Filter file_results to only those that have detections (and parents)
+        :type has_detections: bool
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._notify_model_scan_completed_serialize(
+            scan_id=scan_id,
+            scan_report_v3=scan_report_v3,
+            has_detections=has_detections,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "NotifyModelScanCompleted200Response",
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def notify_model_scan_completed_without_preload_content(
+        self,
+        scan_id: StrictStr,
+        scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for partial update")],
+        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Indicate part (file or files) of a model scan has completed
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param scan_report_v3: Request body for partial update (required)
+        :type scan_report_v3: ScanReportV3
+        :param has_detections: Filter file_results to only those that have detections (and parents)
+        :type has_detections: bool
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._notify_model_scan_completed_serialize(
+            scan_id=scan_id,
+            scan_report_v3=scan_report_v3,
+            has_detections=has_detections,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "NotifyModelScanCompleted200Response",
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _notify_model_scan_completed_serialize(
+        self,
+        scan_id,
+        scan_report_v3,
+        has_detections,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, Union[str, bytes]] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if scan_id is not None:
+            _path_params['scan_id'] = scan_id
+        # process the query parameters
+        if has_detections is not None:
+            
+            _query_params.append(('has_detections', has_detections))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if scan_report_v3 is not None:
+            _body_params = scan_report_v3
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json'
+            ]
+        )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'BearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='PATCH',
+            resource_path='/scan/v3/results/{scan_id}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def notify_model_scan_started(
+        self,
+        scan_id: StrictStr,
+        scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for create")],
+        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> None:
+        """Indicate model scan has started
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param scan_report_v3: Request body for create (required)
+        :type scan_report_v3: ScanReportV3
+        :param has_detections: Filter file_results to only those that have detections (and parents)
+        :type has_detections: bool
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._notify_model_scan_started_serialize(
+            scan_id=scan_id,
+            scan_report_v3=scan_report_v3,
+            has_detections=has_detections,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '201': None,
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def notify_model_scan_started_with_http_info(
+        self,
+        scan_id: StrictStr,
+        scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for create")],
+        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Indicate model scan has started
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param scan_report_v3: Request body for create (required)
+        :type scan_report_v3: ScanReportV3
+        :param has_detections: Filter file_results to only those that have detections (and parents)
+        :type has_detections: bool
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._notify_model_scan_started_serialize(
+            scan_id=scan_id,
+            scan_report_v3=scan_report_v3,
+            has_detections=has_detections,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '201': None,
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def notify_model_scan_started_without_preload_content(
+        self,
+        scan_id: StrictStr,
+        scan_report_v3: Annotated[ScanReportV3, Field(description="Request body for create")],
+        has_detections: Annotated[Optional[StrictBool], Field(description="Filter file_results to only those that have detections (and parents)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Indicate model scan has started
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param scan_report_v3: Request body for create (required)
+        :type scan_report_v3: ScanReportV3
+        :param has_detections: Filter file_results to only those that have detections (and parents)
+        :type has_detections: bool
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._notify_model_scan_started_serialize(
+            scan_id=scan_id,
+            scan_report_v3=scan_report_v3,
+            has_detections=has_detections,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '201': None,
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _notify_model_scan_started_serialize(
+        self,
+        scan_id,
+        scan_report_v3,
+        has_detections,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, Union[str, bytes]] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if scan_id is not None:
+            _path_params['scan_id'] = scan_id
+        # process the query parameters
+        if has_detections is not None:
+            
+            _query_params.append(('has_detections', has_detections))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if scan_report_v3 is not None:
+            _body_params = scan_report_v3
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json'
+            ]
+        )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'BearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/scan/v3/results/{scan_id}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def report_scan_results(
+        self,
+        scan_id: StrictStr,
+        scan_create_request: Annotated[ScanCreateRequest, Field(description="Request body for reporting a scan of one or more file results")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> None:
+        """Engine Report Endpoint of Model Scan Results
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param scan_create_request: Request body for reporting a scan of one or more file results (required)
+        :type scan_create_request: ScanCreateRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._report_scan_results_serialize(
+            scan_id=scan_id,
+            scan_create_request=scan_create_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def report_scan_results_with_http_info(
+        self,
+        scan_id: StrictStr,
+        scan_create_request: Annotated[ScanCreateRequest, Field(description="Request body for reporting a scan of one or more file results")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Engine Report Endpoint of Model Scan Results
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param scan_create_request: Request body for reporting a scan of one or more file results (required)
+        :type scan_create_request: ScanCreateRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._report_scan_results_serialize(
+            scan_id=scan_id,
+            scan_create_request=scan_create_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def report_scan_results_without_preload_content(
+        self,
+        scan_id: StrictStr,
+        scan_create_request: Annotated[ScanCreateRequest, Field(description="Request body for reporting a scan of one or more file results")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Engine Report Endpoint of Model Scan Results
+
+
+        :param scan_id: (required)
+        :type scan_id: str
+        :param scan_create_request: Request body for reporting a scan of one or more file results (required)
+        :type scan_create_request: ScanCreateRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._report_scan_results_serialize(
+            scan_id=scan_id,
+            scan_create_request=scan_create_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': None,
+            '422': "ValidationErrorModel",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _report_scan_results_serialize(
+        self,
+        scan_id,
+        scan_create_request,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, Union[str, bytes]] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if scan_id is not None:
+            _path_params['scan_id'] = scan_id
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if scan_create_request is not None:
+            _body_params = scan_create_request
+
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            [
+                'application/json'
+            ]
+        )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json', 
+                        'application/octet-stream'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'BearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/scans/v3/reports/{scan_id}',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

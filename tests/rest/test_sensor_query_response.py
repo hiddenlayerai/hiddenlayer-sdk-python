@@ -14,10 +14,10 @@
 
 import unittest
 
-from hiddenlayer.sdk.rest.models.model_query_response import ModelQueryResponse
+from hiddenlayer.sdk.rest.models.sensor_query_response import SensorQueryResponse
 
-class TestModelQueryResponse(unittest.TestCase):
-    """ModelQueryResponse unit test stubs"""
+class TestSensorQueryResponse(unittest.TestCase):
+    """SensorQueryResponse unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,16 +25,16 @@ class TestModelQueryResponse(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> ModelQueryResponse:
-        """Test ModelQueryResponse
+    def make_instance(self, include_optional) -> SensorQueryResponse:
+        """Test SensorQueryResponse
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `ModelQueryResponse`
+        # uncomment below to create an instance of `SensorQueryResponse`
         """
-        model = ModelQueryResponse()
+        model = SensorQueryResponse()
         if include_optional:
-            return ModelQueryResponse(
+            return SensorQueryResponse(
                 total_count = 56,
                 page_size = 56,
                 page_number = 56,
@@ -43,7 +43,7 @@ class TestModelQueryResponse(unittest.TestCase):
                     ]
             )
         else:
-            return ModelQueryResponse(
+            return SensorQueryResponse(
                 total_count = 56,
                 page_size = 56,
                 page_number = 56,
@@ -53,8 +53,8 @@ class TestModelQueryResponse(unittest.TestCase):
         )
         """
 
-    def testModelQueryResponse(self):
-        """Test ModelQueryResponse"""
+    def testSensorQueryResponse(self):
+        """Test SensorQueryResponse"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

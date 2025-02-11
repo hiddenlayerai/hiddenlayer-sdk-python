@@ -81,7 +81,7 @@ hl_client.model_scanner.scan_folder(
 > Note: This is only supported using the SaaS version of the platform.
 
 ```python
-model = hl_client.model.create_model(model_name="example_model")
+sensor = hl_client.aidr_predicive.create_sensor(sensor_name="example_model")
 
 hl_client.aidr_predictive.submit_vectors(
   model_id=model.sensor_id,

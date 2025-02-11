@@ -14,10 +14,10 @@
 
 import unittest
 
-from hiddenlayer.sdk.rest.models.detections import Detections
+from hiddenlayer.sdk.rest.models.notify_model_scan_completed200_response import NotifyModelScanCompleted200Response
 
-class TestDetections(unittest.TestCase):
-    """Detections unit test stubs"""
+class TestNotifyModelScanCompleted200Response(unittest.TestCase):
+    """NotifyModelScanCompleted200Response unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,27 +25,26 @@ class TestDetections(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> Detections:
-        """Test Detections
+    def make_instance(self, include_optional) -> NotifyModelScanCompleted200Response:
+        """Test NotifyModelScanCompleted200Response
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `Detections`
+        # uncomment below to create an instance of `NotifyModelScanCompleted200Response`
         """
-        model = Detections()
+        model = NotifyModelScanCompleted200Response()
         if include_optional:
-            return Detections(
-                description = '',
-                message = '',
-                severity = 'MISS'
+            return NotifyModelScanCompleted200Response(
+                message = ''
             )
         else:
-            return Detections(
+            return NotifyModelScanCompleted200Response(
+                message = '',
         )
         """
 
-    def testDetections(self):
-        """Test Detections"""
+    def testNotifyModelScanCompleted200Response(self):
+        """Test NotifyModelScanCompleted200Response"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

@@ -17,17 +17,17 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class ScanModelRequest(BaseModel):
+class BeginMultiFileUpload200Response(BaseModel):
     """
-    ScanModelRequest
+    BeginMultiFileUpload200Response
     """ # noqa: E501
-    location: StrictStr
-    __properties: ClassVar[List[str]] = ["location"]
+    scan_id: Optional[StrictStr] = Field(default=None, description="Request to resource is successful")
+    __properties: ClassVar[List[str]] = ["scan_id"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -47,7 +47,7 @@ class ScanModelRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of ScanModelRequest from a JSON string"""
+        """Create an instance of BeginMultiFileUpload200Response from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -72,7 +72,7 @@ class ScanModelRequest(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of ScanModelRequest from a dict"""
+        """Create an instance of BeginMultiFileUpload200Response from a dict"""
         if obj is None:
             return None
 
@@ -80,7 +80,7 @@ class ScanModelRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "location": obj.get("location")
+            "scan_id": obj.get("scan_id")
         })
         return _obj
 

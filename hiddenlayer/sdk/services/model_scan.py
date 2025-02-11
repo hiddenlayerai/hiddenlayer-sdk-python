@@ -1,26 +1,18 @@
-import json
 import os
 import random
 import tempfile
 import time
-import warnings
 import zipfile
-from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Union
-from uuid import uuid4
-
-from pydantic_core import ValidationError
 
 from hiddenlayer.sdk.constants import ScanStatus
-from hiddenlayer.sdk.models import EmptyScanResults, Sarif, ScanResults
-from hiddenlayer.sdk.rest.api import ModelScanApi, ModelSupplyChainApi, SensorApi
+from hiddenlayer.sdk.models import EmptyScanResults, ScanResults
+from hiddenlayer.sdk.rest.api import ModelSupplyChainApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
-from hiddenlayer.sdk.rest.models import MultiFileUploadRequestV3, MultipartUploadPart
-from hiddenlayer.sdk.rest.models.model import Model
-from hiddenlayer.sdk.rest.models.sarif210 import Sarif210
-from hiddenlayer.sdk.services.model import ModelAPI
-from hiddenlayer.sdk.utils import filter_path_objects, is_saas
+from hiddenlayer.sdk.rest.exceptions import NotFoundException
+from hiddenlayer.sdk.rest.models import MultiFileUploadRequestV3
+from hiddenlayer.sdk.utils import filter_path_objects
 
 EXCLUDE_FILE_TYPES = [
     "*.txt",
@@ -37,14 +29,7 @@ EXCLUDE_FILE_TYPES = [
 class ModelScanAPI:
     def __init__(self, api_client: ApiClient) -> None:
         self._api_client = api_client
-
         self._model_supply_chain_api = ModelSupplyChainApi(api_client=api_client)
-        self._model_api = ModelAPI(api_client=api_client)
-        self._sensor_api = SensorApi(
-            api_client=api_client
-        )  # lower level api of ModelAPI
-
-        self._model_scan_api = ModelScanApi(api_client=api_client)
 
     def scan_file(
         self,
@@ -52,7 +37,6 @@ class ModelScanAPI:
         model_name: str,
         model_path: Union[str, os.PathLike],
         model_version: str = "1",
-        chunk_size: int = 16,
         wait_for_results: bool = True,
     ) -> ScanResults:
         """
@@ -75,14 +59,13 @@ class ModelScanAPI:
             model_version=model_version,
             requesting_entity="hiddenlayer-python-sdk",
         )
-        response = self._model_supply_chain_api.model_scan_api_v3_upload_model_post(
+        response = self._model_supply_chain_api.begin_multi_file_upload(
             multi_file_upload_request_v3=request
         )
         scan_id = response.scan_id
         if scan_id is None:
             raise Exception("scan_id must have a value")
-        # upload = self._sensor_api.begin_multipart_upload(sensor.sensor_id, filesize)
-        upload = self._model_supply_chain_api.model_scan_api_v3_upload_model_add_file_scan_id_post(
+        upload = self._model_supply_chain_api.begin_multipart_file_upload(
             scan_id=str(scan_id), file_name=str(file_path), file_content_length=filesize
         )
 
@@ -103,18 +86,13 @@ class ModelScanAPI:
                     header_params={"Content-Type": "application/octet-binary"},
                 )
 
-            self._model_supply_chain_api.model_scan_api_v3_upload_model_scan_id_file_file_id_post(
+            self._model_supply_chain_api.complete_multipart_file_upload(
                 scan_id=scan_id, file_id=upload.upload_id
             )
 
-        # self._sensor_api.complete_multipart_upload(sensor.sensor_id, upload.upload_id)
-
-        self._model_supply_chain_api.model_scan_api_v3_upload_model_scan_id_patch(
+        self._model_supply_chain_api.complete_multi_file_upload(
             scan_id=scan_id
         )
-
-        # self._model_scan_api.scan_model(sensor.sensor_id)
-
         scan_results = self.get_scan_results(scan_id=scan_id)
 
         base_delay = 0.1  # seconds
@@ -143,7 +121,6 @@ class ModelScanAPI:
         key: str,
         model_version: str = "1",
         s3_client: Optional[object] = None,
-        chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> ScanResults:
         """
@@ -188,7 +165,6 @@ class ModelScanAPI:
             model_path=f"/tmp/{file_name}",
             model_name=model_name,
             model_version=model_version,
-            chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )
 
@@ -202,7 +178,6 @@ class ModelScanAPI:
         model_version: str = "1",
         blob_service_client: Optional[object] = None,
         credential: Optional[object] = None,
-        chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> ScanResults:
         """
@@ -268,7 +243,6 @@ class ModelScanAPI:
             model_path=f"/tmp/{file_name}",
             model_name=model_name,
             model_version=model_version,
-            chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )
 
@@ -285,8 +259,6 @@ class ModelScanAPI:
         ignore_file_patterns: Optional[List[str]] = None,
         force_download: bool = False,
         hf_token: Optional[Union[str, bool]] = None,
-        # HL parameters
-        chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> ScanResults:
         """
@@ -341,7 +313,6 @@ class ModelScanAPI:
             path=local_dir,
             allow_file_patterns=allow_file_patterns,
             ignore_file_patterns=ignore_file_patterns,
-            chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )
 
@@ -359,11 +330,14 @@ class ModelScanAPI:
         :returns: Scan results.
         """
 
-        scan_report = (
-            self._model_supply_chain_api.model_scan_api_v3_scan_model_version_id_get(
-                scan_id
+        try:
+            scan_report = (
+                self._model_supply_chain_api.get_scan_results(
+                    scan_id
+                )
             )
-        )
+        except NotFoundException:
+            return EmptyScanResults()
 
         return ScanResults.from_scanreportv3(scan_report_v3=scan_report)
 
@@ -385,7 +359,7 @@ class ModelScanAPI:
         # in order to enable us to get the Sarif results
         # Here we will reach in to the request serialization process. The 2nd element in the tuple is the headers
         # where we will modify the Accept header to application/sarif+json
-        request = self._model_supply_chain_api._model_scan_api_v3_scan_model_version_id_get_serialize(
+        request = self._model_supply_chain_api._get_scan_results_serialize(
             scan_id, None, None, None, None, 0
         )
         request[2]["Accept"] = "application/sarif+json"
@@ -405,7 +379,6 @@ class ModelScanAPI:
         model_version: str = "1",
         allow_file_patterns: Optional[List[str]] = None,
         ignore_file_patterns: Optional[List[str]] = None,
-        chunk_size: int = 4,
         wait_for_results: bool = True,
     ) -> ScanResults:
         """
@@ -445,6 +418,5 @@ class ModelScanAPI:
             model_name=model_name,
             model_version=model_version,
             model_path=filename,
-            chunk_size=chunk_size,
             wait_for_results=wait_for_results,
         )

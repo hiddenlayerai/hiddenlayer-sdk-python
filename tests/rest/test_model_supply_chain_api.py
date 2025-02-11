@@ -26,80 +26,66 @@ class TestModelSupplyChainApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
-    def test_model_scan_api_v3_scan_model_version_id_get(self) -> None:
-        """Test case for model_scan_api_v3_scan_model_version_id_get
-
-        Get Result of a Model Scan
-        """
-        pass
-
-    def test_model_scan_api_v3_scan_model_version_id_patch(self) -> None:
-        """Test case for model_scan_api_v3_scan_model_version_id_patch
-
-        Indicate part (file or files) of a model scan has completed
-        """
-        pass
-
-    def test_model_scan_api_v3_scan_model_version_id_post(self) -> None:
-        """Test case for model_scan_api_v3_scan_model_version_id_post
-
-        Indicate model scan has started
-        """
-        pass
-
-    def test_model_scan_api_v3_scan_query(self) -> None:
-        """Test case for model_scan_api_v3_scan_query
-
-        Get condensed reports for a Model Scan
-        """
-        pass
-
-    def test_model_scan_api_v3_upload_model_add_file_scan_id_post(self) -> None:
-        """Test case for model_scan_api_v3_upload_model_add_file_scan_id_post
-
-        Add file to V3 Upload
-        """
-        pass
-
-    def test_model_scan_api_v3_upload_model_post(self) -> None:
-        """Test case for model_scan_api_v3_upload_model_post
+    def test_begin_multi_file_upload(self) -> None:
+        """Test case for begin_multi_file_upload
 
         Start V3 Upload
         """
         pass
 
-    def test_model_scan_api_v3_upload_model_scan_id_file_file_id_post(self) -> None:
-        """Test case for model_scan_api_v3_upload_model_scan_id_file_file_id_post
+    def test_begin_multipart_file_upload(self) -> None:
+        """Test case for begin_multipart_file_upload
 
-        Indicate that upload is completed for {file_id}
+        Add file to V3 Upload
         """
         pass
 
-    def test_model_scan_api_v3_upload_model_scan_id_patch(self) -> None:
-        """Test case for model_scan_api_v3_upload_model_scan_id_patch
+    def test_complete_multi_file_upload(self) -> None:
+        """Test case for complete_multi_file_upload
 
         Indicate All files are uploaded and start the scan
         """
         pass
 
-    def test_modelscan_api_v3_get_scan_results(self) -> None:
-        """Test case for modelscan_api_v3_get_scan_results
+    def test_complete_multipart_file_upload(self) -> None:
+        """Test case for complete_multipart_file_upload
 
-        Retrieve Model Scan Results
+        Indicate that upload is completed for {file_id}
         """
         pass
 
-    def test_modelscan_api_v3_post_scan_results(self) -> None:
-        """Test case for modelscan_api_v3_post_scan_results
+    def test_create_scan_job(self) -> None:
+        """Test case for create_scan_job
 
-        Engine Report Endpoint of Model Scan Results
+        Request a Model Scan Job
         """
         pass
 
-    def test_modelscanner_api_v3_get_jobs(self) -> None:
-        """Test case for modelscanner_api_v3_get_jobs
+    def test_get_condensed_model_scan_reports(self) -> None:
+        """Test case for get_condensed_model_scan_reports
+
+        Get condensed reports for a Model Scan
+        """
+        pass
+
+    def test_get_scan_jobs(self) -> None:
+        """Test case for get_scan_jobs
 
         List all Model Scan Jobs
+        """
+        pass
+
+    def test_get_scan_results(self) -> None:
+        """Test case for get_scan_results
+
+        Get Result of a Model Scan
+        """
+        pass
+
+    def test_get_scan_results1(self) -> None:
+        """Test case for get_scan_results1
+
+        Retrieve Model Scan Results
         """
         pass
 
@@ -110,17 +96,31 @@ class TestModelSupplyChainApi(unittest.TestCase):
         """
         pass
 
-    def test_modelscanner_api_v3_post_request(self) -> None:
-        """Test case for modelscanner_api_v3_post_request
-
-        Request a Model Scan Job
-        """
-        pass
-
     def test_modelscanner_api_v3_readiness_check(self) -> None:
         """Test case for modelscanner_api_v3_readiness_check
 
         Readiness check endpoint for Model Supply Chain Services
+        """
+        pass
+
+    def test_notify_model_scan_completed(self) -> None:
+        """Test case for notify_model_scan_completed
+
+        Indicate part (file or files) of a model scan has completed
+        """
+        pass
+
+    def test_notify_model_scan_started(self) -> None:
+        """Test case for notify_model_scan_started
+
+        Indicate model scan has started
+        """
+        pass
+
+    def test_report_scan_results(self) -> None:
+        """Test case for report_scan_results
+
+        Engine Report Endpoint of Model Scan Results
         """
         pass
 
