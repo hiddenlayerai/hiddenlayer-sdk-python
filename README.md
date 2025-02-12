@@ -38,6 +38,16 @@ hl_client = HiddenlayerServiceClient(
 )
 ```
 
+If you are using the on-prem Enterprise version of the model scanner, you can instantiate the `HiddenlayerServiceClient` as follows:
+
+```python
+from hiddenlayer import HiddenlayerServiceClient
+
+hl_client = HiddenlayerServiceClient(
+  host="https://your.hiddenlayer.enterprise.example",
+)
+```
+
 ### Scanning Models
 
 ```python

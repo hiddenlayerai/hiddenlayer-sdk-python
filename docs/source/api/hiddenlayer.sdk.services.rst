@@ -12,14 +12,6 @@ hiddenlayer.sdk.services.aidr\_predictive module
    :undoc-members:
    :show-inheritance:
 
-hiddenlayer.sdk.services.model module
--------------------------------------
-
-.. automodule:: hiddenlayer.sdk.services.model
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 hiddenlayer.sdk.services.model\_scan module
 -------------------------------------------
 
