@@ -12,10 +12,26 @@ hiddenlayer.sdk.rest.api.aidr\_predictive\_api module
    :undoc-members:
    :show-inheritance:
 
-hiddenlayer.sdk.rest.api.model\_scan\_api module
-------------------------------------------------
+hiddenlayer.sdk.rest.api.health\_api module
+-------------------------------------------
 
-.. automodule:: hiddenlayer.sdk.rest.api.model_scan_api
+.. automodule:: hiddenlayer.sdk.rest.api.health_api
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+hiddenlayer.sdk.rest.api.model\_supply\_chain\_api module
+---------------------------------------------------------
+
+.. automodule:: hiddenlayer.sdk.rest.api.model_supply_chain_api
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+hiddenlayer.sdk.rest.api.readiness\_api module
+----------------------------------------------
+
+.. automodule:: hiddenlayer.sdk.rest.api.readiness_api
    :members:
    :undoc-members:
    :show-inheritance:

@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **model_name** | **str** | name of the model | 
 **model_version** | **str** | version of the model | 
-**model_source** | **str** | source (provider) info | 
+**model_source** | **str** | source (provider) info | [optional] 
 **requested_scan_location** | **str** | Location to be scanned | 
 **requesting_entity** | **str** | Entity that requested the scan | [optional] 
 **model_id** | **str** | Unique identifier for the model | 

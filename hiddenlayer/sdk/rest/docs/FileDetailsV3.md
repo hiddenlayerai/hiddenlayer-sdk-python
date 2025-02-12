@@ -6,9 +6,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **estimated_time** | **str** | estimated time to scan the file | 
-**md5** | **str** | hexadecimal md5 hash of file | 
+**md5** | **str** | hexadecimal md5 hash of file | [optional] 
 **sha256** | **str** | hexadecimal sha256 hash of file | 
-**tlsh** | **str** | TLSH hash of file | 
+**tlsh** | **str** | TLSH hash of file | [optional] 
 **file_size** | **str** | size of the file in human readable format | [optional] 
 **file_size_bytes** | **int** | size of the file in bytes | [optional] 
 **file_type** | **str** | type of the file | 

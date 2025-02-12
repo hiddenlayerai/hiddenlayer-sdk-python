@@ -11,7 +11,7 @@ from hiddenlayer.sdk.models import Sarif, ScanResults
 
 params = [
     ("https://api.us.hiddenlayer.ai"),
-    pytest.param("http://localhost:8000", marks=pytest.mark.xfail),
+    ("http://localhost:8000"),
 ]
 
 sys.path = [os.path.join(os.pardir, "hiddenlayer", "sdk")] + sys.path
@@ -55,9 +55,6 @@ def test_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
 
     _validate_scan_model(results)
 
-    if hl_client.is_saas:
-        hl_client.model.delete(model_name=model_name)
-
 
 def test_scan_folder(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to scan a folder"""
@@ -67,6 +64,8 @@ def test_scan_folder(tmp_path, hl_client: HiddenlayerServiceClient):
 
     results = hl_client.model_scanner.scan_folder(model_name=model_name, path=tmp_path)
 
+    print(results)
+
     _validate_scan_folder(tmp_path, results)
 
 
@@ -75,7 +74,7 @@ def test_scan_model_with_version(tmp_path, hl_client: HiddenlayerServiceClient):
 
     model_path = _setup_scan_model(tmp_path)
     model_name = f"sdk-integration-scan-model-{uuid4()}"
-    model_version = 123
+    model_version = "123"
 
     results = hl_client.model_scanner.scan_file(
         model_name=model_name, model_version=model_version, model_path=model_path
@@ -85,16 +84,13 @@ def test_scan_model_with_version(tmp_path, hl_client: HiddenlayerServiceClient):
 
     assert results.inventory.model_version == str(model_version)
 
-    if hl_client.is_saas:
-        hl_client.model.delete(model_name=model_name)
-
 
 def test_scan_folder_with_version(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to scan a folder with a specified version"""
 
     _setup_scan_folder(tmp_path)
     model_name = f"sdk-integration-scan-model-folder-{uuid4()}"
-    model_version = 123
+    model_version = "123"
 
     results = hl_client.model_scanner.scan_folder(
         model_name=model_name, model_version=model_version, path=tmp_path
@@ -112,9 +108,9 @@ def test_scan_model_multiple_times(tmp_path, hl_client: HiddenlayerServiceClient
     model_name = f"sdk-integration-scan-model-{uuid4()}"
 
     results: Optional[ScanResults] = None
-    for _ in range(3):
+    for i in range(1, 4):
         results = hl_client.model_scanner.scan_file(
-            model_name=model_name, model_path=model_path
+            model_name=model_name, model_path=model_path, model_version=str(i)
         )
 
     assert results is not None
@@ -122,16 +118,13 @@ def test_scan_model_multiple_times(tmp_path, hl_client: HiddenlayerServiceClient
     _validate_scan_model(results)
     assert results.inventory.model_version == "3"
 
-    if hl_client.is_saas:
-        hl_client.model.delete(model_name=model_name)
-
 
 def test_rescan_model_with_same_version(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to rescan a model multiple times with the same version"""
 
     model_path = _setup_scan_model(tmp_path)
     model_name = f"sdk-integration-scan-model-{uuid4()}"
-    model_version = 123
+    model_version = "123"
 
     results: Optional[ScanResults] = None
     for _ in range(3):
@@ -144,9 +137,6 @@ def test_rescan_model_with_same_version(tmp_path, hl_client: HiddenlayerServiceC
     _validate_scan_model(results)
 
     assert results.inventory.model_version == "123"
-
-    if hl_client.is_saas:
-        hl_client.model.delete(model_name=model_name)
 
 
 def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
@@ -161,7 +151,9 @@ def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
 
     _validate_scan_model(results)
 
-    sarif_results_str = hl_client.model_scanner.get_sarif_results(model_name=model_name)
+    sarif_results_str = hl_client.model_scanner.get_sarif_results(
+        scan_id=results.scan_id
+    )
     print(sarif_results_str)
 
     assert sarif_results_str is not None
@@ -192,9 +184,6 @@ def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
     # test roundtrip
     sarif_results_str = sarif_results.model_dump_json(indent=4, exclude_none=True)
     print(sarif_results_str)
-
-    if hl_client.is_saas:
-        hl_client.model.delete(model_name=model_name)
 
 
 def _setup_scan_model(tmp_path):
@@ -252,31 +241,37 @@ def _validate_scan_folder(tmp_path, results: ScanResults):
     assert results.file_results is not None
     safe_model_found = False
     malicious_model_found = False
-    for top_file_results in results.file_results:
-        for file_results in top_file_results.file_results:
-            if file_results.file_location.endswith(safe_model):
-                detections = file_results.detections
-                assert detections is None
-                assert file_results.details.file_type_details is not None
-                assert file_results.details.file_type_details["pickle_modules"] == [
-                    "callable: builtins.print"
-                ]
-                safe_model_found = True
-            elif file_results.file_location.endswith(malicious_model):
-                detections = file_results.detections
-                assert file_results.details.file_type_details is not None
-                assert file_results.details.file_type_details["pickle_modules"] == [
-                    "callable: builtins.exec"
-                ]
-                assert detections
-                assert detections[0].severity == "high"
-                assert (
-                    "This detection rule was triggered by the presence of a function or library that can be used to execute code"
-                    in str(detections[0].description)
-                )
-                assert file_results.details.file_type_details["pickle_modules"] == [
-                    "callable: builtins.exec"
-                ]
-                malicious_model_found = True
+    flattened_file_results = []
+    for file_results in results.file_results:
+        flattened_file_results.append(file_results)
+        if file_results.file_results:
+            for inner_file_results in file_results.file_results:
+                flattened_file_results.append(inner_file_results)
+
+    for file_results in flattened_file_results:
+        if file_results.file_location.endswith(safe_model):
+            detections = file_results.detections
+            assert detections is None or len(detections) == 0
+            assert file_results.details.file_type_details is not None
+            assert file_results.details.file_type_details["pickle_modules"] == [
+                "callable: builtins.print"
+            ]
+            safe_model_found = True
+        elif file_results.file_location.endswith(malicious_model):
+            detections = file_results.detections
+            assert file_results.details.file_type_details is not None
+            assert file_results.details.file_type_details["pickle_modules"] == [
+                "callable: builtins.exec"
+            ]
+            assert detections
+            assert detections[0].severity == "high"
+            assert (
+                "This detection rule was triggered by the presence of a function or library that can be used to execute code"
+                in str(detections[0].description)
+            )
+            assert file_results.details.file_type_details["pickle_modules"] == [
+                "callable: builtins.exec"
+            ]
+            malicious_model_found = True
     assert safe_model_found
     assert malicious_model_found

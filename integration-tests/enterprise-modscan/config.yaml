@@ -1,0 +1,24 @@
+installer:
+  namespace: hl-aisec-platform
+  registry: quay.io/hiddenlayer
+  ttlSecondsAfterFinished: 120
+  helmfile:
+    mode: apply
+  authentication:
+    hl_username: ${QUAY_USERNAME}
+    hl_password: ${QUAY_PASSWORD}
+
+modelscanner-v3:
+  enable: true
+  orchestrator:
+    version: latest
+    license: ${HL_LICENSE}
+  minio:
+    enable: true
+  engine:
+    aws:
+      bucket: hl-adhoc-model-stage
+    k8s:
+      resources:
+        requests:
+          memory: 1Gi

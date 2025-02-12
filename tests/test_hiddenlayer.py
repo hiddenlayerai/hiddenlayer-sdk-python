@@ -24,12 +24,3 @@ def test_fail_access_aidr_predictive():
 
     with pytest.raises(HiddenlayerUnsupportedPlatformError):
         hl_client.aidr_predictive.submit_vectors
-
-
-def test_fail_access_model():
-    """Test failing accessing model management for non SaaS deployments."""
-
-    hl_client = HiddenlayerServiceClient(host="http://localhost:8000")
-
-    with pytest.raises(HiddenlayerUnsupportedPlatformError):
-        hl_client.model.get

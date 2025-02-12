@@ -4,7 +4,7 @@ class HiddenlayerConflictError(Exception):
     pass
 
 
-class ModelDoesNotExistError(Exception):
+class SensorDoesNotExistError(Exception):
     pass
 
 
