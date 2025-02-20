@@ -53,7 +53,6 @@ class ModelScanAPI:
 
         file_path = Path(model_path)
 
-        filesize = file_path.stat().st_size
         request = MultiFileUploadRequestV3(
             model_name=model_name,
             model_version=model_version,
@@ -65,47 +64,11 @@ class ModelScanAPI:
         scan_id = response.scan_id
         if scan_id is None:
             raise Exception("scan_id must have a value")
-        upload = self._model_supply_chain_api.begin_multipart_file_upload(
-            scan_id=str(scan_id), file_name=str(file_path), file_content_length=filesize
-        )
 
-        with open(file_path, "rb") as f:
-            for part in upload.parts:
-                if part.start_offset is None:
-                    raise Exception("part must have a start_offset")
-                if part.stop_offset is not None:
-                    read_amount = part.stop_offset - part.start_offset
-                else:
-                    read_amount = None
-                f.seek(part.start_offset)
-                part_data = f.read(read_amount)
-                self._api_client.call_api(
-                    "PUT",
-                    part.upload_url,
-                    body=part_data,
-                    header_params={"Content-Type": "application/octet-binary"},
-                )
-
-            self._model_supply_chain_api.complete_multipart_file_upload(
-                scan_id=scan_id, file_id=upload.upload_id
-            )
+        self._scan_file(scan_id=scan_id, file_path=file_path)
 
         self._model_supply_chain_api.complete_multi_file_upload(scan_id=scan_id)
-        scan_results = self.get_scan_results(scan_id=scan_id)
-
-        base_delay = 0.1  # seconds
-        retries = 0
-        if wait_for_results:
-            print(f"{file_path.name} scan status: {scan_results.status}")
-            while scan_results.status not in [ScanStatus.DONE, ScanStatus.FAILED]:
-                retries += 1
-                delay = base_delay * 2**retries + random.uniform(
-                    0, 1
-                )  # exponential back off retry
-                time.sleep(delay)
-                scan_results = self.get_scan_results(scan_id=scan_id)
-                print(f"{file_path.name} scan status: {scan_results.status}")
-
+        scan_results = self._wait_for_scan_results(scan_id=scan_id)
         scan_results.file_name = file_path.name
         scan_results.file_path = str(file_path)
 
@@ -314,11 +277,7 @@ class ModelScanAPI:
             wait_for_results=wait_for_results,
         )
 
-    def get_scan_results(
-        self,
-        *,
-        scan_id: str,
-    ) -> ScanResults:
+    def get_scan_results(self, *, scan_id: str) -> ScanResults:
         """
         Get results from a model scan.
 
@@ -390,7 +349,18 @@ class ModelScanAPI:
         """
 
         model_path = Path(path)
-        filename = tempfile.NamedTemporaryFile().name + ".zip"
+
+        request = MultiFileUploadRequestV3(
+            model_name=model_name,
+            model_version=model_version,
+            requesting_entity="hiddenlayer-python-sdk",
+        )
+        response = self._model_supply_chain_api.begin_multi_file_upload(
+            multi_file_upload_request_v3=request
+        )
+        scan_id = response.scan_id
+        if scan_id is None:
+            raise Exception("scan_id must have a value")
 
         ignore_file_patterns = (
             EXCLUDE_FILE_TYPES + ignore_file_patterns
@@ -404,13 +374,54 @@ class ModelScanAPI:
             ignore_patterns=ignore_file_patterns,
         )
 
-        with zipfile.ZipFile(filename, "a") as zipf:
-            for file in files:
-                zipf.write(file, os.path.relpath(file, model_path))
+        for file in files:
+            self._scan_file(scan_id=scan_id, file_path=Path(file))
 
-        return self.scan_file(
-            model_name=model_name,
-            model_version=model_version,
-            model_path=filename,
-            wait_for_results=wait_for_results,
+        self._model_supply_chain_api.complete_multi_file_upload(scan_id=scan_id)
+        scan_results = self._wait_for_scan_results(scan_id=scan_id)
+
+        return scan_results
+
+    def _scan_file(self, *, scan_id: str, file_path: Path):
+        filesize = file_path.stat().st_size
+        upload = self._model_supply_chain_api.begin_multipart_file_upload(
+            scan_id=str(scan_id), file_name=str(file_path), file_content_length=filesize
         )
+
+        with open(file_path, "rb") as f:
+            for part in upload.parts:
+                if part.start_offset is None:
+                    raise Exception("part must have a start_offset")
+                if part.stop_offset is not None:
+                    read_amount = part.stop_offset - part.start_offset
+                else:
+                    read_amount = None
+                f.seek(part.start_offset)
+                part_data = f.read(read_amount)
+                self._api_client.call_api(
+                    "PUT",
+                    part.upload_url,
+                    body=part_data,
+                    header_params={"Content-Type": "application/octet-binary"},
+                )
+
+            self._model_supply_chain_api.complete_multipart_file_upload(
+                scan_id=scan_id, file_id=upload.upload_id
+            )
+
+    def _wait_for_scan_results(self, *, scan_id: str):
+        scan_results = self.get_scan_results(scan_id=scan_id)
+
+        base_delay = 0.1  # seconds
+        retries = 0
+        print(f"scan status: {scan_results.status}")
+        while scan_results.status not in [ScanStatus.DONE, ScanStatus.FAILED]:
+            retries += 1
+            delay = base_delay * 2**retries + random.uniform(
+                0, 1
+            )  # exponential back off retry
+            time.sleep(delay)
+            scan_results = self.get_scan_results(scan_id=scan_id)
+            print(f"scan status: {scan_results.status}")
+
+        return scan_results
