@@ -277,11 +277,7 @@ class ModelScanAPI:
             wait_for_results=wait_for_results,
         )
 
-    def get_scan_results(
-        self,
-        *,
-        scan_id: str
-    ) -> ScanResults:
+    def get_scan_results(self, *, scan_id: str) -> ScanResults:
         """
         Get results from a model scan.
 
