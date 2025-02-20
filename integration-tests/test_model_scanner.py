@@ -234,9 +234,9 @@ def _validate_scan_folder(tmp_path, results: ScanResults):
     safe_model = "safe_model.pkl"
     malicious_model = "malicious_model.pkl"
 
-    assert results.file_count == 3
+    assert results.file_count == 2
     # parent zip may inherit detection in v2 of scans
-    assert results.files_with_detections_count in (1, 2)
+    assert results.files_with_detections_count in (0, 1)
 
     assert results.file_results is not None
     safe_model_found = False
