@@ -18,16 +18,15 @@ class ScanResults(ScanReportV3):
 
     file_name: Optional[str] = None
     file_path: Optional[str] = None
-    model_id: Optional[str] = None
 
     @classmethod
     def from_scanreportv3(
         cls, *, scan_report_v3: ScanReportV3, model_id: Optional[str] = None
     ) -> Self:
         scan_results_dict = scan_report_v3.to_dict()
-        scan_results_dict["model_id"] = model_id
+        result = cls(**scan_results_dict)
 
-        return cls(**scan_results_dict)
+        return result
 
 
 class EmptyScanResults(ScanResults):

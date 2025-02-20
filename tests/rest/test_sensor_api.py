@@ -26,20 +26,6 @@ class TestSensorApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
-    def test_begin_multipart_upload(self) -> None:
-        """Test case for begin_multipart_upload
-
-        Begin Multipart Upload
-        """
-        pass
-
-    def test_complete_multipart_upload(self) -> None:
-        """Test case for complete_multipart_upload
-
-        Complete Multipart Upload
-        """
-        pass
-
     def test_create_sensor(self) -> None:
         """Test case for create_sensor
 
@@ -47,17 +33,10 @@ class TestSensorApi(unittest.TestCase):
         """
         pass
 
-    def test_delete_model(self) -> None:
-        """Test case for delete_model
+    def test_get_sensor(self) -> None:
+        """Test case for get_sensor
 
-        Remove an Adhoc Sensor
-        """
-        pass
-
-    def test_get_model(self) -> None:
-        """Test case for get_model
-
-        Get Model
+        Get Sensor
         """
         pass
 
@@ -72,13 +51,6 @@ class TestSensorApi(unittest.TestCase):
         """Test case for sensor_sor_api_v3_model_cards_query_get
 
         List Model Cards
-        """
-        pass
-
-    def test_upload_model_part(self) -> None:
-        """Test case for upload_model_part
-
-        Upload part
         """
         pass
 

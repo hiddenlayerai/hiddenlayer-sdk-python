@@ -28,8 +28,7 @@ huggingface_scan_results = hl_client.model_scanner.scan_huggingface_model(
 
 # See if there were any detections
 for result in huggingface_scan_results:
-    if result.detections:
-        print(result)
+    print(result)
 # [docs_scan_hf_model_end]
 
 # [docs_scan_azure_blob_model]

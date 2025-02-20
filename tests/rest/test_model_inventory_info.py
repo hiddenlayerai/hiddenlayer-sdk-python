@@ -47,7 +47,6 @@ class TestModelInventoryInfo(unittest.TestCase):
             return ModelInventoryInfo(
                 model_name = 'keras-tf-2025-05-27',
                 model_version = '1.0.0',
-                model_source = 'adhoc',
                 requested_scan_location = '/files-to-scan',
                 model_id = '00000000-0000-0000-0000-000000000000',
                 model_version_id = '00000000-0000-0000-0000-000000000000',

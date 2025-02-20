@@ -28,7 +28,7 @@ class ModelInventoryInfo(BaseModel):
     """ # noqa: E501
     model_name: StrictStr = Field(description="name of the model")
     model_version: StrictStr = Field(description="version of the model")
-    model_source: StrictStr = Field(description="source (provider) info")
+    model_source: Optional[StrictStr] = Field(default=None, description="source (provider) info")
     requested_scan_location: StrictStr = Field(description="Location to be scanned")
     requesting_entity: Optional[StrictStr] = Field(default=None, description="Entity that requested the scan")
     model_id: StrictStr = Field(description="Unique identifier for the model")

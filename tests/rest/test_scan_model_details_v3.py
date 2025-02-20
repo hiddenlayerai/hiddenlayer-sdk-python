@@ -45,7 +45,6 @@ class TestScanModelDetailsV3(unittest.TestCase):
             return ScanModelDetailsV3(
                 model_name = 'keras-tf-2025-05-27',
                 model_version = '1.0.0',
-                model_source = 'adhoc',
                 requested_scan_location = '/files-to-scan',
         )
         """
