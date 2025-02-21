@@ -74,13 +74,6 @@ class FileDetailsV3(BaseModel):
             raise ValueError(r"must validate the regular expression /^\d+(\.\d+)?\s?(B|KB|MB|GB|TB)$/")
         return value
 
-    @field_validator('file_type')
-    def file_type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['safetensors', 'RDS', 'onnx', 'tensorflow', 'keras', 'pytorch', 'pickle', 'NEMO', 'numpy', 'unknown', 'ZIP', 'TAR', 'gguf']):
-            raise ValueError("must be one of enum values ('safetensors', 'RDS', 'onnx', 'tensorflow', 'keras', 'pytorch', 'pickle', 'NEMO', 'numpy', 'unknown', 'ZIP', 'TAR', 'gguf')")
-        return value
-
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
