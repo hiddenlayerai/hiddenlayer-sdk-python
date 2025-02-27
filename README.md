@@ -26,6 +26,12 @@ pip install hiddenlayer-sdk[hf]
 
 ## Getting Started
 
+If you are using the EU region, you will need to set the `HL_AUTH_URL` environment variable to the following:
+
+```bash
+export HL_AUTH_URL=https://api.eu.hiddenlayer.ai
+```
+
 Once you've installed the hiddenlayer package, you can instantiate the `HiddenlayerServiceClient` for the SaaS platform as follows:
 
 ```python
