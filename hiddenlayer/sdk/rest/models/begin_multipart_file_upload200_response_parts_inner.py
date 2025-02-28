@@ -29,9 +29,9 @@ class BeginMultipartFileUpload200ResponsePartsInner(BaseModel):
     """ # noqa: E501
     part_number: Optional[Annotated[int, Field(strict=True, ge=0)]] = None
     start_offset: Optional[StrictInt] = None
-    stop_offset: Optional[StrictInt] = None
+    end_offset: Optional[StrictInt] = None
     upload_url: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["part_number", "start_offset", "stop_offset", "upload_url"]
+    __properties: ClassVar[List[str]] = ["part_number", "start_offset", "end_offset", "upload_url"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -86,7 +86,7 @@ class BeginMultipartFileUpload200ResponsePartsInner(BaseModel):
         _obj = cls.model_validate({
             "part_number": obj.get("part_number"),
             "start_offset": obj.get("start_offset"),
-            "stop_offset": obj.get("stop_offset"),
+            "end_offset": obj.get("end_offset"),
             "upload_url": obj.get("upload_url")
         })
         return _obj

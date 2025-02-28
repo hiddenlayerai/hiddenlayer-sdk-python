@@ -392,8 +392,8 @@ class ModelScanAPI:
             for part in upload.parts:
                 if part.start_offset is None:
                     raise Exception("part must have a start_offset")
-                if part.stop_offset is not None:
-                    read_amount = part.stop_offset - part.start_offset
+                if part.end_offset is not None:
+                    read_amount = part.end_offset - part.start_offset
                 else:
                     read_amount = None
                 f.seek(part.start_offset)
@@ -404,7 +404,6 @@ class ModelScanAPI:
                     body=part_data,
                     header_params={"Content-Type": "application/octet-binary"},
                 )
-
             self._model_supply_chain_api.complete_multipart_file_upload(
                 scan_id=scan_id, file_id=upload.upload_id
             )

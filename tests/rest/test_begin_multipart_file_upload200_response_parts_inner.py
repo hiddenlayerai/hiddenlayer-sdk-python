@@ -37,7 +37,7 @@ class TestBeginMultipartFileUpload200ResponsePartsInner(unittest.TestCase):
             return BeginMultipartFileUpload200ResponsePartsInner(
                 part_number = 0,
                 start_offset = 56,
-                stop_offset = 56,
+                end_offset = 56,
                 upload_url = ''
             )
         else:

@@ -40,7 +40,7 @@ class TestBeginMultipartFileUpload200Response(unittest.TestCase):
                     hiddenlayer.sdk.rest.models.begin_multipart_file_upload_200_response_parts_inner.begin_multipart_file_upload_200_response_parts_inner(
                         part_number = 0, 
                         start_offset = 56, 
-                        stop_offset = 56, 
+                        end_offset = 56, 
                         upload_url = '', )
                     ]
             )
@@ -51,7 +51,7 @@ class TestBeginMultipartFileUpload200Response(unittest.TestCase):
                     hiddenlayer.sdk.rest.models.begin_multipart_file_upload_200_response_parts_inner.begin_multipart_file_upload_200_response_parts_inner(
                         part_number = 0, 
                         start_offset = 56, 
-                        stop_offset = 56, 
+                        end_offset = 56, 
                         upload_url = '', )
                     ],
         )
