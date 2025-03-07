@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **part_number** | **int** |  | [optional] 
 **start_offset** | **int** |  | [optional] 
-**stop_offset** | **int** |  | [optional] 
+**end_offset** | **int** |  | [optional] 
 **upload_url** | **str** |  | [optional] 
 
 ## Example
