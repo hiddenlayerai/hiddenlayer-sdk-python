@@ -48,6 +48,24 @@ hl_client = HiddenlayerServiceClient(
 )
 ```
 
+If you are using the EU region, you will need to set the `HL_AUTH_URL` environment variable to the following:
+
+```bash
+export HL_AUTH_URL=https://auth.eu.hiddenlayer.ai
+```
+
+Then you will instantiate the `HiddenlayerServiceClient` as follows:
+
+```python
+from hiddenlayer import HiddenlayerServiceClient
+
+hl_client = HiddenlayerServiceClient(
+  host="https://api.eu.hiddenlayer.ai",
+  api_id=..., # Your Hiddenlayer API Client ID
+  api_key=... # Your Hiddenalyer API Secret Key
+)
+```
+
 ### Scanning Models
 
 ```python
