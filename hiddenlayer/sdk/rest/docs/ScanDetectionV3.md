@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **description** | **str** | detection description | 
-**risk** | **str** | detection risk | 
+**risk** | **str** | detection risk | [optional] 
 **severity** | **str** | detection severity | 
 **detection_id** | **str** | unique identifier for the detection | 
 **impact** | **str** | detection impact | [optional] 

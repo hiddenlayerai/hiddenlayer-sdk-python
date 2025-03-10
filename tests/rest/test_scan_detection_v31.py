@@ -71,7 +71,6 @@ class TestScanDetectionV31(unittest.TestCase):
             return ScanDetectionV31(
                 detection_id = '00000000-0000-0000-0000-000000000000',
                 rule_id = 'PICKLE_0055_202408',
-                risk = 'MALICIOUS',
                 category = 'Arbitrary Code Execution',
                 description = 'Found lambda embedded in keras model allowing custom layers that support  arbitrary expression execution',
                 likelihood = 'medium',

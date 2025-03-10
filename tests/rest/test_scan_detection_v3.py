@@ -67,7 +67,6 @@ class TestScanDetectionV3(unittest.TestCase):
         else:
             return ScanDetectionV3(
                 description = 'Found lambda embedded in keras model allowing custom layers that support  arbitrary expression execution',
-                risk = 'MALICIOUS',
                 severity = 'low',
                 detection_id = '00000000-0000-0000-0000-000000000000',
                 rule_id = 'PICKLE_0055_202408',

@@ -30,7 +30,7 @@ class ScanDetectionV3(BaseModel):
     ScanDetectionV3
     """ # noqa: E501
     description: StrictStr = Field(description="detection description")
-    risk: StrictStr = Field(description="detection risk")
+    risk: Optional[StrictStr] = Field(default=None, description="detection risk")
     severity: StrictStr = Field(description="detection severity")
     detection_id: StrictStr = Field(description="unique identifier for the detection")
     impact: Optional[StrictStr] = Field(default=None, description="detection impact")
@@ -49,6 +49,9 @@ class ScanDetectionV3(BaseModel):
     @field_validator('risk')
     def risk_validate_enum(cls, value):
         """Validates the enum"""
+        if value is None:
+            return value
+
         if value not in set(['MALICIOUS', 'SUSPICIOUS', 'BENIGN']):
             raise ValueError("must be one of enum values ('MALICIOUS', 'SUSPICIOUS', 'BENIGN')")
         return value
