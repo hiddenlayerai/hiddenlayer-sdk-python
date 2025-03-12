@@ -31,7 +31,7 @@ class ScanDetectionV31(BaseModel):
     """ # noqa: E501
     detection_id: StrictStr = Field(description="unique identifier for the detection")
     rule_id: StrictStr = Field(description="unique identifier for the rule that sourced the detection")
-    risk: StrictStr = Field(description="detection risk")
+    risk: Optional[StrictStr] = Field(default=None, description="detection risk")
     category: StrictStr = Field(description="Vulnerability category for the detection")
     description: StrictStr = Field(description="detection description")
     likelihood: StrictStr = Field(description="detection likelihood")
@@ -50,6 +50,9 @@ class ScanDetectionV31(BaseModel):
     @field_validator('risk')
     def risk_validate_enum(cls, value):
         """Validates the enum"""
+        if value is None:
+            return value
+
         if value not in set(['MALICIOUS', 'SUSPICIOUS']):
             raise ValueError("must be one of enum values ('MALICIOUS', 'SUSPICIOUS')")
         return value

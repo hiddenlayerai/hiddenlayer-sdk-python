@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **detection_id** | **str** | unique identifier for the detection | 
 **rule_id** | **str** | unique identifier for the rule that sourced the detection | 
-**risk** | **str** | detection risk | 
+**risk** | **str** | detection risk | [optional] 
 **category** | **str** | Vulnerability category for the detection | 
 **description** | **str** | detection description | 
 **likelihood** | **str** | detection likelihood | 
