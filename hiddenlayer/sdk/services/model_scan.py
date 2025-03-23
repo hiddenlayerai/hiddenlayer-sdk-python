@@ -3,11 +3,10 @@ import random
 import tempfile
 import time
 import zipfile
-from enum import StrEnum, auto
 from pathlib import Path
 from typing import List, Optional, Union
 
-from hiddenlayer.sdk.constants import ScanStatus
+from hiddenlayer.sdk.constants import CommunityScanSource, ScanStatus
 from hiddenlayer.sdk.models import EmptyScanResults, ScanResults
 from hiddenlayer.sdk.rest.api import ModelSupplyChainApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
@@ -25,16 +24,6 @@ EXCLUDE_FILE_TYPES = [
     "*/.git",
     "**/.git/**",
 ]
-
-class CommunityScanSource(StrEnum):
-    LOCAL = "LOCAL"
-    AWS_PRESIGNED = "AWS_PRESIGNED"
-    AWS_IAM_ROLE = "AWS_IAM_ROLE"
-    AZURE_BLOB_SAS = "AZURE_BLOB_SAS"
-    AZURE_BLOB_AD = "AZURE_BLOB_AD"
-    GOOGLE_SIGNED = "GOOGLE_SIGNED"
-    GOOGLE_OAUTH = "GOOGLE_OAUTH"
-    HUGGING_FACE = "HUGGING_FACE"
 
 class ModelScanAPI:
     def __init__(self, api_client: ApiClient) -> None:
