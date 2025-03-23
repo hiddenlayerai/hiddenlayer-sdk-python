@@ -3,6 +3,7 @@ import random
 import tempfile
 import time
 import zipfile
+from enum import StrEnum, auto
 from pathlib import Path
 from typing import List, Optional, Union
 
@@ -11,7 +12,7 @@ from hiddenlayer.sdk.models import EmptyScanResults, ScanResults
 from hiddenlayer.sdk.rest.api import ModelSupplyChainApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
 from hiddenlayer.sdk.rest.exceptions import NotFoundException
-from hiddenlayer.sdk.rest.models import MultiFileUploadRequestV3
+from hiddenlayer.sdk.rest.models import MultiFileUploadRequestV3, ScanJob, ScanJobAccess, ScanModelDetailsV31
 from hiddenlayer.sdk.utils import filter_path_objects
 
 EXCLUDE_FILE_TYPES = [
@@ -25,11 +26,58 @@ EXCLUDE_FILE_TYPES = [
     "**/.git/**",
 ]
 
+class CommunityScanSource(StrEnum):
+    LOCAL = "LOCAL"
+    AWS_PRESIGNED = "AWS_PRESIGNED"
+    AWS_IAM_ROLE = "AWS_IAM_ROLE"
+    AZURE_BLOB_SAS = "AZURE_BLOB_SAS"
+    AZURE_BLOB_AD = "AZURE_BLOB_AD"
+    GOOGLE_SIGNED = "GOOGLE_SIGNED"
+    GOOGLE_OAUTH = "GOOGLE_OAUTH"
+    HUGGING_FACE = "HUGGING_FACE"
 
 class ModelScanAPI:
     def __init__(self, api_client: ApiClient) -> None:
         self._api_client = api_client
         self._model_supply_chain_api = ModelSupplyChainApi(api_client=api_client)
+
+    def community_scan(
+        self,
+        model_name: str,
+        model_path: str,
+        model_source: CommunityScanSource,
+        model_version: str = "1",
+        wait_for_results: bool = True,
+    ) -> ScanResults:
+        """
+        Scan a model available at a remote location using the HiddenLayer Model Scanner.
+        
+        :param model_name: Name of the model to be shown on the HiddenLayer UI.
+        :param model_path: Path to the model file in the remote location, e.g. a presigned S3 URL
+        :param model_source: type of remote location where the model is stored.
+        :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
+        :param model_version: Version of the model to be shown on the HiddenLayer UI.
+          
+        :returns: Scan Results
+        """
+        scan_job = ScanJob(
+            access=ScanJobAccess(source=model_source),
+            inventory=ScanModelDetailsV31(
+                model_name=model_name, 
+                model_version=model_version,
+                requested_scan_location=model_path,
+                requesting_entity="hiddenlayer-python-sdk",
+            )
+        )
+        result = self._model_supply_chain_api.create_scan_job(scan_job)
+        scan_id = result.scan_id
+        if scan_id is None:
+            raise Exception("scan_id must have a value")
+        if wait_for_results:
+            return self._wait_for_scan_results(scan_id=scan_id)
+        else:
+            return ScanResults.from_scanreportv3(scan_report_v3=result)
+        
 
     def scan_file(
         self,
