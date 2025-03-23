@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class CommunityScanSource(str, Enum):
     LOCAL = "LOCAL"
     AWS_PRESIGNED = "AWS_PRESIGNED"
@@ -9,6 +10,7 @@ class CommunityScanSource(str, Enum):
     GOOGLE_SIGNED = "GOOGLE_SIGNED"
     GOOGLE_OAUTH = "GOOGLE_OAUTH"
     HUGGING_FACE = "HUGGING_FACE"
+
 
 class ScanStatus(str, Enum):
     DONE = "done"
