@@ -8,9 +8,9 @@ Method | HTTP request | Description
 [**begin_multipart_file_upload**](ModelSupplyChainApi.md#begin_multipart_file_upload) | **POST** /scan/v3/upload/{scan_id}/file | Add file to V3 Upload
 [**complete_multi_file_upload**](ModelSupplyChainApi.md#complete_multi_file_upload) | **PATCH** /scan/v3/upload/{scan_id} | Indicate All files are uploaded and start the scan
 [**complete_multipart_file_upload**](ModelSupplyChainApi.md#complete_multipart_file_upload) | **PATCH** /scan/v3/upload/{scan_id}/file/{file_id} | Indicate that upload is completed for {file_id}
-[**create_scan_job**](ModelSupplyChainApi.md#create_scan_job) | **POST** /scans/v3/jobs | Request a Model Scan Job
+[**create_scan_job**](ModelSupplyChainApi.md#create_scan_job) | **POST** /scan/v3/jobs | Request a Model Scan Job
 [**get_condensed_model_scan_reports**](ModelSupplyChainApi.md#get_condensed_model_scan_reports) | **GET** /scan/v3/results | Get condensed reports for a Model Scan
-[**get_scan_jobs**](ModelSupplyChainApi.md#get_scan_jobs) | **GET** /scans/v3/jobs | List all Model Scan Jobs
+[**get_scan_jobs**](ModelSupplyChainApi.md#get_scan_jobs) | **GET** /scan/v3/jobs | List all Model Scan Jobs
 [**get_scan_results**](ModelSupplyChainApi.md#get_scan_results) | **GET** /scan/v3/results/{scan_id} | Get Result of a Model Scan
 [**get_scan_results1**](ModelSupplyChainApi.md#get_scan_results1) | **GET** /scans/v3/results/{scan_id} | Retrieve Model Scan Results
 [**modelscanner_api_v3_health_check**](ModelSupplyChainApi.md#modelscanner_api_v3_health_check) | **GET** /scans/v3/health | Health check endpoint for Model Supply Chain Services
