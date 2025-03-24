@@ -198,6 +198,9 @@ def test_community_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
         model_version="main",
     )
     assert results is not None
+    # These asserts are a little brittle as detections can be added and removed from modscan capabilities
+    assert results.file_count == 12
+    assert results.files_with_detections_count == 6
 
 
 def _setup_scan_model(tmp_path):
