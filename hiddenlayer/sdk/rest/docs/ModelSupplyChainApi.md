@@ -8,9 +8,9 @@ Method | HTTP request | Description
 [**begin_multipart_file_upload**](ModelSupplyChainApi.md#begin_multipart_file_upload) | **POST** /scan/v3/upload/{scan_id}/file | Add file to V3 Upload
 [**complete_multi_file_upload**](ModelSupplyChainApi.md#complete_multi_file_upload) | **PATCH** /scan/v3/upload/{scan_id} | Indicate All files are uploaded and start the scan
 [**complete_multipart_file_upload**](ModelSupplyChainApi.md#complete_multipart_file_upload) | **PATCH** /scan/v3/upload/{scan_id}/file/{file_id} | Indicate that upload is completed for {file_id}
-[**create_scan_job**](ModelSupplyChainApi.md#create_scan_job) | **POST** /scans/v3/jobs | Request a Model Scan Job
+[**create_scan_job**](ModelSupplyChainApi.md#create_scan_job) | **POST** /scan/v3/jobs | Request a Model Scan Job
 [**get_condensed_model_scan_reports**](ModelSupplyChainApi.md#get_condensed_model_scan_reports) | **GET** /scan/v3/results | Get condensed reports for a Model Scan
-[**get_scan_jobs**](ModelSupplyChainApi.md#get_scan_jobs) | **GET** /scans/v3/jobs | List all Model Scan Jobs
+[**get_scan_jobs**](ModelSupplyChainApi.md#get_scan_jobs) | **GET** /scan/v3/jobs | List all Model Scan Jobs
 [**get_scan_results**](ModelSupplyChainApi.md#get_scan_results) | **GET** /scan/v3/results/{scan_id} | Get Result of a Model Scan
 [**get_scan_results1**](ModelSupplyChainApi.md#get_scan_results1) | **GET** /scans/v3/results/{scan_id} | Retrieve Model Scan Results
 [**modelscanner_api_v3_health_check**](ModelSupplyChainApi.md#modelscanner_api_v3_health_check) | **GET** /scans/v3/health | Health check endpoint for Model Supply Chain Services
@@ -340,7 +340,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_scan_job**
-> create_scan_job(scan_job)
+> ScanReportV3 create_scan_job(scan_job)
 
 Request a Model Scan Job
 
@@ -351,6 +351,7 @@ Request a Model Scan Job
 ```python
 import hiddenlayer.sdk.rest
 from hiddenlayer.sdk.rest.models.scan_job import ScanJob
+from hiddenlayer.sdk.rest.models.scan_report_v3 import ScanReportV3
 from hiddenlayer.sdk.rest.rest import ApiException
 from pprint import pprint
 
@@ -378,7 +379,9 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
 
     try:
         # Request a Model Scan Job
-        api_instance.create_scan_job(scan_job)
+        api_response = api_instance.create_scan_job(scan_job)
+        print("The response of ModelSupplyChainApi->create_scan_job:\n")
+        pprint(api_response)
     except Exception as e:
         print("Exception when calling ModelSupplyChainApi->create_scan_job: %s\n" % e)
 ```
@@ -394,7 +397,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**ScanReportV3**](ScanReportV3.md)
 
 ### Authorization
 
@@ -403,13 +406,13 @@ void (empty response body)
 ### HTTP request headers
 
  - **Content-Type**: application/json; charset=utf-8, application/octet-stream
- - **Accept**: application/json
+ - **Accept**: application/json; charset=utf-8, application/json
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**201** | The resource was successfully created. |  -  |
+**201** | Scan Job Created |  -  |
 **400** | The request failed due to a client error, with one or more of the following possible causes: 1. The request required a tenant_id field, which was missing. 2. The request was malformed syntactically or semantically. |  -  |
 **422** | Validation Error |  -  |
 
@@ -512,7 +515,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_scan_jobs**
-> List[ScanJob] get_scan_jobs()
+> ScanJob get_scan_jobs()
 
 List all Model Scan Jobs
 
@@ -564,7 +567,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**List[ScanJob]**](ScanJob.md)
+[**ScanJob**](ScanJob.md)
 
 ### Authorization
 

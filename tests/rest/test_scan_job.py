@@ -35,10 +35,15 @@ class TestScanJob(unittest.TestCase):
         model = ScanJob()
         if include_optional:
             return ScanJob(
+                access = hiddenlayer.sdk.rest.models.scan_job_access.ScanJob_access(
+                    source = 'LOCAL', ),
+                inventory = hiddenlayer.sdk.rest.models.scan_model_details.ScanModelDetails(
+                    model_name = 'keras-tf-2025-05-27', 
+                    model_version = '1.0.0', 
+                    requested_scan_location = '/files-to-scan', 
+                    requesting_entity = '', ),
                 scan_id = '00000000-0000-0000-0000-000000000000',
-                status = 'pending',
-                inventory = hiddenlayer.sdk.rest.models.scan_job_inventory.ScanJob_inventory(
-                    requested_scan_location = 's3://bucket-name/folder-name/file-name.ext', )
+                status = 'pending'
             )
         else:
             return ScanJob(

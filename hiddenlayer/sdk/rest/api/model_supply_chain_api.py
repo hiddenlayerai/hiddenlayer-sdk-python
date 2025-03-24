@@ -1166,7 +1166,7 @@ class ModelSupplyChainApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> None:
+    ) -> ScanReportV3:
         """Request a Model Scan Job
 
 
@@ -1203,7 +1203,7 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '201': None,
+            '201': "ScanReportV3",
             '400': None,
             '422': "ProblemDetails",
         }
@@ -1234,7 +1234,7 @@ class ModelSupplyChainApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[None]:
+    ) -> ApiResponse[ScanReportV3]:
         """Request a Model Scan Job
 
 
@@ -1271,7 +1271,7 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '201': None,
+            '201': "ScanReportV3",
             '400': None,
             '422': "ProblemDetails",
         }
@@ -1339,7 +1339,7 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '201': None,
+            '201': "ScanReportV3",
             '400': None,
             '422': "ProblemDetails",
         }
@@ -1383,6 +1383,7 @@ class ModelSupplyChainApi:
         # set the HTTP header `Accept`
         _header_params['Accept'] = self.api_client.select_header_accept(
             [
+                'application/json; charset=utf-8', 
                 'application/json'
             ]
         )
@@ -1409,7 +1410,7 @@ class ModelSupplyChainApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/scans/v3/jobs',
+            resource_path='/scan/v3/jobs',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -1878,7 +1879,7 @@ class ModelSupplyChainApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[ScanJob]:
+    ) -> ScanJob:
         """List all Model Scan Jobs
 
 
@@ -1912,7 +1913,7 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ScanJob]",
+            '200': "ScanJob",
             '400': None,
             '404': None,
         }
@@ -1942,7 +1943,7 @@ class ModelSupplyChainApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[ScanJob]]:
+    ) -> ApiResponse[ScanJob]:
         """List all Model Scan Jobs
 
 
@@ -1976,7 +1977,7 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ScanJob]",
+            '200': "ScanJob",
             '400': None,
             '404': None,
         }
@@ -2040,7 +2041,7 @@ class ModelSupplyChainApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ScanJob]",
+            '200': "ScanJob",
             '400': None,
             '404': None,
         }
@@ -2093,7 +2094,7 @@ class ModelSupplyChainApi:
 
         return self.api_client.param_serialize(
             method='GET',
-            resource_path='/scans/v3/jobs',
+            resource_path='/scan/v3/jobs',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

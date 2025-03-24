@@ -17,31 +17,26 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from hiddenlayer.sdk.rest.models.scan_job_access import ScanJobAccess
-from hiddenlayer.sdk.rest.models.scan_model_details_v31 import ScanModelDetailsV31
 from typing import Optional, Set
 from typing_extensions import Self
 
-class ScanJob(BaseModel):
+class ScanJobAccess(BaseModel):
     """
-    ScanJob
+    ScanJobAccess
     """ # noqa: E501
-    access: Optional[ScanJobAccess] = None
-    inventory: Optional[ScanModelDetailsV31] = None
-    scan_id: Optional[StrictStr] = Field(default=None, description="unique identifier for the scan")
-    status: Optional[StrictStr] = Field(default=None, description="Status of the scan")
-    __properties: ClassVar[List[str]] = ["access", "inventory", "scan_id", "status"]
+    source: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["source"]
 
-    @field_validator('status')
-    def status_validate_enum(cls, value):
+    @field_validator('source')
+    def source_validate_enum(cls, value):
         """Validates the enum"""
         if value is None:
             return value
 
-        if value not in set(['pending', 'running', 'done', 'failed', 'canceled']):
-            raise ValueError("must be one of enum values ('pending', 'running', 'done', 'failed', 'canceled')")
+        if value not in set(['LOCAL', 'AWS_PRESIGNED', 'AWS_IAM_ROLE', 'AZURE_BLOB_SAS', 'AZURE_BLOB_AD', 'GOOGLE_SIGNED', 'GOOGLE_OAUTH', 'HUGGING_FACE']):
+            raise ValueError("must be one of enum values ('LOCAL', 'AWS_PRESIGNED', 'AWS_IAM_ROLE', 'AZURE_BLOB_SAS', 'AZURE_BLOB_AD', 'GOOGLE_SIGNED', 'GOOGLE_OAUTH', 'HUGGING_FACE')")
         return value
 
     model_config = ConfigDict(
@@ -62,7 +57,7 @@ class ScanJob(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of ScanJob from a JSON string"""
+        """Create an instance of ScanJobAccess from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,12 +69,8 @@ class ScanJob(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
-        * OpenAPI `readOnly` fields are excluded.
-        * OpenAPI `readOnly` fields are excluded.
         """
         excluded_fields: Set[str] = set([
-            "scan_id",
-            "status",
         ])
 
         _dict = self.model_dump(
@@ -87,17 +78,11 @@ class ScanJob(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of access
-        if self.access:
-            _dict['access'] = self.access.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of inventory
-        if self.inventory:
-            _dict['inventory'] = self.inventory.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of ScanJob from a dict"""
+        """Create an instance of ScanJobAccess from a dict"""
         if obj is None:
             return None
 
@@ -105,10 +90,7 @@ class ScanJob(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "access": ScanJobAccess.from_dict(obj["access"]) if obj.get("access") is not None else None,
-            "inventory": ScanModelDetailsV31.from_dict(obj["inventory"]) if obj.get("inventory") is not None else None,
-            "scan_id": obj.get("scan_id"),
-            "status": obj.get("status")
+            "source": obj.get("source")
         })
         return _obj
 

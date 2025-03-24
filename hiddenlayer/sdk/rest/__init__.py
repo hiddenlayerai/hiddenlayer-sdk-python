@@ -103,8 +103,9 @@ from hiddenlayer.sdk.rest.models.scan_detection_v3 import ScanDetectionV3
 from hiddenlayer.sdk.rest.models.scan_detection_v31 import ScanDetectionV31
 from hiddenlayer.sdk.rest.models.scan_header_v3 import ScanHeaderV3
 from hiddenlayer.sdk.rest.models.scan_job import ScanJob
-from hiddenlayer.sdk.rest.models.scan_job_inventory import ScanJobInventory
+from hiddenlayer.sdk.rest.models.scan_job_access import ScanJobAccess
 from hiddenlayer.sdk.rest.models.scan_model_details_v3 import ScanModelDetailsV3
+from hiddenlayer.sdk.rest.models.scan_model_details_v31 import ScanModelDetailsV31
 from hiddenlayer.sdk.rest.models.scan_model_ids_v3 import ScanModelIdsV3
 from hiddenlayer.sdk.rest.models.scan_report_v3 import ScanReportV3
 from hiddenlayer.sdk.rest.models.scan_results_map_v3 import ScanResultsMapV3
