@@ -41,7 +41,7 @@ class ModelScanAPI:
         model_name: str,
         model_path: str,
         model_source: CommunityScanSource,
-        model_version: str = "1",
+        model_version: str = "main",
         wait_for_results: bool = True,
     ) -> ScanResults:
         """

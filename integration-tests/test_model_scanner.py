@@ -195,6 +195,7 @@ def test_community_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
         model_name=model_name,
         model_path=community_model,
         model_source=CommunityScanSource.HUGGING_FACE,
+        model_version="main",
     )
     assert results is not None
 
