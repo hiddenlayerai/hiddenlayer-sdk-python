@@ -1,6 +1,7 @@
 import os
 import pickle
 import sys
+import time
 from typing import Optional
 from uuid import uuid4
 
@@ -83,6 +84,34 @@ def test_scan_model_with_version(tmp_path, hl_client: HiddenlayerServiceClient):
 
     _validate_scan_model(results)
 
+    assert results.inventory.model_version == str(model_version)
+
+
+def test_long_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
+    """Integration test to scan a model with a specified version and wait a long time before pulling results"""
+
+    model_path = _setup_scan_model(tmp_path)
+    model_name = f"sdk-integration-scan-model-{uuid4()}"
+    model_version = "123"
+
+    results = hl_client.model_scanner.scan_file(
+        model_name=model_name,
+        model_version=model_version,
+        model_path=model_path,
+        wait_for_results=False,
+    )
+
+    # 95 minutes, well past the 90 minute timeout
+    time.sleep(5700)
+
+    results = hl_client.model_scanner.get_scan_results(scan_id=results.scan_id)
+
+    _validate_scan_model(results)
+
+    assert results.inventory.model_version == str(model_version)
+
+    results = hl_client.model_scanner.get_scan_results(scan_id=results.scan_id)
+    assert results is not None
     assert results.inventory.model_version == str(model_version)
 
 
@@ -228,7 +257,7 @@ def _validate_scan_model(results: ScanResults):
     ]
 
     assert detections
-    assert detections[0].severity == "high"
+    assert detections[0].severity == "critical"
     assert (
         "This detection rule was triggered by the presence of a function or library that can be used to execute code"
         in str(detections[0].description)
