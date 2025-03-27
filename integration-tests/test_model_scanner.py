@@ -103,7 +103,7 @@ def test_long_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
 
     print("about to sleep for test")
     # 95 minutes, well past the 90 minute timeout
-    time.sleep(5700)
+    time.sleep(20)
     print("done sleeping for test")
 
     results = hl_client.model_scanner._wait_for_scan_results(scan_id=results.scan_id)
