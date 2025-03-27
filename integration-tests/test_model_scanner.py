@@ -281,7 +281,7 @@ def _validate_scan_folder(tmp_path, results: ScanResults):
                 "callable: builtins.exec"
             ]
             assert detections
-            assert detections[0].severity == "high"
+            assert detections[0].severity == "critical"
             assert (
                 "This detection rule was triggered by the presence of a function or library that can be used to execute code"
                 in str(detections[0].description)
