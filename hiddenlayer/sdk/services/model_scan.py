@@ -474,7 +474,9 @@ class ModelScanAPI:
                 scan_results = self.get_scan_results(scan_id=scan_id)
                 print(f"scan status: {scan_results.status}")
             except UnauthorizedException as e:
+                print("Unauthorized exception")
                 if unauthorized_count < 5 and self._refresh_token_func:
+                    print("Refreshing token")
                     new_token = self._refresh_token_func()
                     self._api_client.configuration.access_token = new_token
                     self._api_client = ApiClient(self._api_client.configuration)

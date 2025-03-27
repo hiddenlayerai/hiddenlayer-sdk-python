@@ -101,17 +101,15 @@ def test_long_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
         wait_for_results=False,
     )
 
+    print("about to sleep for test")
     # 95 minutes, well past the 90 minute timeout
     time.sleep(5700)
+    print("done sleeping for test")
 
-    results = hl_client.model_scanner.get_scan_results(scan_id=results.scan_id)
+    results = hl_client.model_scanner._wait_for_scan_results(scan_id=results.scan_id)
 
     _validate_scan_model(results)
 
-    assert results.inventory.model_version == str(model_version)
-
-    results = hl_client.model_scanner.get_scan_results(scan_id=results.scan_id)
-    assert results is not None
     assert results.inventory.model_version == str(model_version)
 
 
