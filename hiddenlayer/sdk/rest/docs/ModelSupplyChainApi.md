@@ -669,7 +669,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_scan_results1**
-> List[ScanResultsMapV3] get_scan_results1(scan_id=scan_id, cursor=cursor, page_size=page_size)
+> List[ScanResultsMapV3] get_scan_results1(scan_id, cursor=cursor, page_size=page_size)
 
 Retrieve Model Scan Results
 
@@ -703,13 +703,13 @@ configuration = hiddenlayer.sdk.rest.Configuration(
 with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = hiddenlayer.sdk.rest.ModelSupplyChainApi(api_client)
-    scan_id = 'scan_id_example' # str |  (optional)
+    scan_id = 'scan_id_example' # str | 
     cursor = 'cursor_example' # str |  (optional)
     page_size = 25 # int |  (optional) (default to 25)
 
     try:
         # Retrieve Model Scan Results
-        api_response = api_instance.get_scan_results1(scan_id=scan_id, cursor=cursor, page_size=page_size)
+        api_response = api_instance.get_scan_results1(scan_id, cursor=cursor, page_size=page_size)
         print("The response of ModelSupplyChainApi->get_scan_results1:\n")
         pprint(api_response)
     except Exception as e:
@@ -723,7 +723,7 @@ with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **scan_id** | **str**|  | [optional] 
+ **scan_id** | **str**|  | 
  **cursor** | **str**|  | [optional] 
  **page_size** | **int**|  | [optional] [default to 25]
 

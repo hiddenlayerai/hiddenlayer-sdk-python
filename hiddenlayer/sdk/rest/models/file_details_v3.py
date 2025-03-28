@@ -50,8 +50,8 @@ class FileDetailsV3(BaseModel):
     @field_validator('sha256')
     def sha256_validate_regular_expression(cls, value):
         """Validates the regular expression"""
-        if not re.match(r"^[a-fA-F0-9]{64}$", value):
-            raise ValueError(r"must validate the regular expression /^[a-fA-F0-9]{64}$/")
+        if not re.match(r"^$|^[a-fA-F0-9]{64}$", value):
+            raise ValueError(r"must validate the regular expression /^$|^[a-fA-F0-9]{64}$/")
         return value
 
     @field_validator('tlsh')

@@ -2392,7 +2392,7 @@ class ModelSupplyChainApi:
     @validate_call
     def get_scan_results1(
         self,
-        scan_id: Optional[StrictStr] = None,
+        scan_id: StrictStr,
         cursor: Optional[StrictStr] = None,
         page_size: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
         _request_timeout: Union[
@@ -2411,7 +2411,7 @@ class ModelSupplyChainApi:
         """Retrieve Model Scan Results
 
 
-        :param scan_id:
+        :param scan_id: (required)
         :type scan_id: str
         :param cursor:
         :type cursor: str
@@ -2469,7 +2469,7 @@ class ModelSupplyChainApi:
     @validate_call
     def get_scan_results1_with_http_info(
         self,
-        scan_id: Optional[StrictStr] = None,
+        scan_id: StrictStr,
         cursor: Optional[StrictStr] = None,
         page_size: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
         _request_timeout: Union[
@@ -2488,7 +2488,7 @@ class ModelSupplyChainApi:
         """Retrieve Model Scan Results
 
 
-        :param scan_id:
+        :param scan_id: (required)
         :type scan_id: str
         :param cursor:
         :type cursor: str
@@ -2546,7 +2546,7 @@ class ModelSupplyChainApi:
     @validate_call
     def get_scan_results1_without_preload_content(
         self,
-        scan_id: Optional[StrictStr] = None,
+        scan_id: StrictStr,
         cursor: Optional[StrictStr] = None,
         page_size: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
         _request_timeout: Union[
@@ -2565,7 +2565,7 @@ class ModelSupplyChainApi:
         """Retrieve Model Scan Results
 
 
-        :param scan_id:
+        :param scan_id: (required)
         :type scan_id: str
         :param cursor:
         :type cursor: str
