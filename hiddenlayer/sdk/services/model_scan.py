@@ -333,11 +333,21 @@ class ModelScanAPI:
 
         :returns: Scan results.
         """
-
-        try:
-            scan_report = self._model_supply_chain_api.get_scan_results(scan_id)
-        except NotFoundException:
-            return EmptyScanResults()
+        retry = False
+        while True:
+            try:
+                scan_report = self._model_supply_chain_api.get_scan_results(scan_id)
+                break
+            except NotFoundException:
+                return EmptyScanResults()
+            except UnauthorizedException as e:
+                if not retry and self._refresh_token_func:
+                    new_token = self._refresh_token_func()
+                    self._api_client.configuration.access_token = new_token
+                    self._api_client = ApiClient(self._api_client.configuration)
+                    retry = True
+                else:
+                    raise e
 
         return ScanResults.from_scanreportv3(scan_report_v3=scan_report)
 
@@ -461,27 +471,14 @@ class ModelScanAPI:
         base_delay = 0.1  # seconds
         retries = 0
         print(f"scan status: {scan_results.status}")
-        unauthorized_count = 0
         while scan_results.status not in [ScanStatus.DONE, ScanStatus.FAILED]:
             retries += 1
             delay = base_delay * 2**retries + random.uniform(
                 0, 1
             )  # exponential back off retry
-            # for large models that may take a long time to scan don't start waiting ridiculously long times
             delay = min(delay, 30)
             time.sleep(delay)
-            try:
-                scan_results = self.get_scan_results(scan_id=scan_id)
-                print(f"scan status: {scan_results.status}")
-            except UnauthorizedException as e:
-                print("Unauthorized exception")
-                if unauthorized_count < 5 and self._refresh_token_func:
-                    print("Refreshing token")
-                    new_token = self._refresh_token_func()
-                    self._api_client.configuration.access_token = new_token
-                    self._api_client = ApiClient(self._api_client.configuration)
-                    unauthorized_count += 1
-                else:
-                    raise e
+            scan_results = self.get_scan_results(scan_id=scan_id)
+            print(f"scan status: {scan_results.status}")
 
         return scan_results
