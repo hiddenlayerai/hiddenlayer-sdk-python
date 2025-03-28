@@ -1,5 +1,5 @@
 import os
-from typing import Optional
+from typing import Callable, Optional
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -36,6 +36,7 @@ class HiddenlayerServiceClient:
     ):
         self.host = host.strip()
         self.is_saas = is_saas(host)
+        refresh_jwt_func: Optional[Callable[[], str]] = None
 
         if self.is_saas:
             if not api_id:
@@ -50,13 +51,16 @@ class HiddenlayerServiceClient:
 
             jwt_token = self._get_jwt(api_id=api_id, api_key=api_key)
             self._config = Configuration(host=self.host, access_token=jwt_token)
+            refresh_jwt_func = lambda: self._get_jwt(api_id=api_id, api_key=api_key)
 
         else:
             self._config = Configuration(host=self.host)
 
         self._api_client = ApiClient(configuration=self._config)
         self._aidr_predictive = AIDRPredictive(self._api_client)
-        self._model_scan = ModelScanAPI(self._api_client)
+        self._model_scan = ModelScanAPI(
+            self._api_client, refresh_token_func=refresh_jwt_func
+        )
 
     def _get_jwt(self, *, api_id: str, api_key: str) -> str:
         "Get the JWT token to auth to the Hiddenlayer API."

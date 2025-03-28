@@ -4,13 +4,13 @@ import tempfile
 import time
 import zipfile
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import Callable, List, Optional, Union
 
 from hiddenlayer.sdk.constants import CommunityScanSource, ScanStatus
 from hiddenlayer.sdk.models import EmptyScanResults, ScanResults
 from hiddenlayer.sdk.rest.api import ModelSupplyChainApi
 from hiddenlayer.sdk.rest.api_client import ApiClient
-from hiddenlayer.sdk.rest.exceptions import NotFoundException
+from hiddenlayer.sdk.rest.exceptions import NotFoundException, UnauthorizedException
 from hiddenlayer.sdk.rest.models import (
     MultiFileUploadRequestV3,
     ScanJob,
@@ -32,9 +32,14 @@ EXCLUDE_FILE_TYPES = [
 
 
 class ModelScanAPI:
-    def __init__(self, api_client: ApiClient) -> None:
+    def __init__(
+        self,
+        api_client: ApiClient,
+        refresh_token_func: Optional[Callable[[], str]] = None,
+    ) -> None:
         self._api_client = api_client
         self._model_supply_chain_api = ModelSupplyChainApi(api_client=api_client)
+        self._refresh_token_func = refresh_token_func
 
     def community_scan(
         self,
@@ -328,11 +333,21 @@ class ModelScanAPI:
 
         :returns: Scan results.
         """
-
-        try:
-            scan_report = self._model_supply_chain_api.get_scan_results(scan_id)
-        except NotFoundException:
-            return EmptyScanResults()
+        retry = False
+        while True:
+            try:
+                scan_report = self._model_supply_chain_api.get_scan_results(scan_id)
+                break
+            except NotFoundException:
+                return EmptyScanResults()
+            except UnauthorizedException as e:
+                if not retry and self._refresh_token_func:
+                    new_token = self._refresh_token_func()
+                    self._api_client.configuration.access_token = new_token
+                    self._api_client = ApiClient(self._api_client.configuration)
+                    retry = True
+                else:
+                    raise e
 
         return ScanResults.from_scanreportv3(scan_report_v3=scan_report)
 
@@ -461,6 +476,7 @@ class ModelScanAPI:
             delay = base_delay * 2**retries + random.uniform(
                 0, 1
             )  # exponential back off retry
+            delay = min(delay, 30)
             time.sleep(delay)
             scan_results = self.get_scan_results(scan_id=scan_id)
             print(f"scan status: {scan_results.status}")
