@@ -86,6 +86,7 @@ def test_scan_model_with_version(tmp_path, hl_client: HiddenlayerServiceClient):
 
     assert results.inventory.model_version == str(model_version)
 
+
 def test_scan_folder_with_version(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to scan a folder with a specified version"""
 
@@ -100,6 +101,7 @@ def test_scan_folder_with_version(tmp_path, hl_client: HiddenlayerServiceClient)
     _validate_scan_folder(tmp_path, results)
 
     assert results.inventory.model_version == str(model_version)
+
 
 def test_scan_model_multiple_times(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to scan a model multiple times"""
