@@ -7,8 +7,8 @@ from typing import Any, cast
 
 import pytest
 
+from hiddenlayer import HiddenLayer, AsyncHiddenLayer
 from tests.utils import assert_matches_type
-from hiddenlayer_sdk import HiddenLayer, AsyncHiddenLayer
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 

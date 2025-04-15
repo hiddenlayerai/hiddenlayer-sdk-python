@@ -5,8 +5,8 @@ from typing import Iterator, AsyncIterator
 import httpx
 import pytest
 
-from hiddenlayer_sdk import HiddenLayer, AsyncHiddenLayer
-from hiddenlayer_sdk._streaming import Stream, AsyncStream, ServerSentEvent
+from hiddenlayer import HiddenLayer, AsyncHiddenLayer
+from hiddenlayer._streaming import Stream, AsyncStream, ServerSentEvent
 
 
 @pytest.mark.asyncio

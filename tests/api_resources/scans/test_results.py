@@ -7,10 +7,10 @@ from typing import Any, cast
 
 import pytest
 
+from hiddenlayer import HiddenLayer, AsyncHiddenLayer
 from tests.utils import assert_matches_type
-from hiddenlayer_sdk import HiddenLayer, AsyncHiddenLayer
-from hiddenlayer_sdk._utils import parse_datetime
-from hiddenlayer_sdk.types.scans import (
+from hiddenlayer._utils import parse_datetime
+from hiddenlayer.types.scans import (
     ScanReport,
     ResultListResponse,
     ResultPatchResponse,

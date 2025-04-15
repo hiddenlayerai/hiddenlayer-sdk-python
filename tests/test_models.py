@@ -7,9 +7,9 @@ import pytest
 import pydantic
 from pydantic import Field
 
-from hiddenlayer_sdk._utils import PropertyInfo
-from hiddenlayer_sdk._compat import PYDANTIC_V2, parse_obj, model_dump, model_json
-from hiddenlayer_sdk._models import BaseModel, construct_type
+from hiddenlayer._utils import PropertyInfo
+from hiddenlayer._compat import PYDANTIC_V2, parse_obj, model_dump, model_json
+from hiddenlayer._models import BaseModel, construct_type
 
 
 class BasicModel(BaseModel):

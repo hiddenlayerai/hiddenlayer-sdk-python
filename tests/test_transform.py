@@ -8,15 +8,15 @@ from typing_extensions import Required, Annotated, TypedDict
 
 import pytest
 
-from hiddenlayer_sdk._types import NOT_GIVEN, Base64FileInput
-from hiddenlayer_sdk._utils import (
+from hiddenlayer._types import NOT_GIVEN, Base64FileInput
+from hiddenlayer._utils import (
     PropertyInfo,
     transform as _transform,
     parse_datetime,
     async_transform as _async_transform,
 )
-from hiddenlayer_sdk._compat import PYDANTIC_V2
-from hiddenlayer_sdk._models import BaseModel
+from hiddenlayer._compat import PYDANTIC_V2
+from hiddenlayer._models import BaseModel
 
 _T = TypeVar("_T")
 

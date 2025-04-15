@@ -4,8 +4,8 @@ from typing import Sequence
 
 import pytest
 
-from hiddenlayer_sdk._types import FileTypes
-from hiddenlayer_sdk._utils import extract_files
+from hiddenlayer._types import FileTypes
+from hiddenlayer._utils import extract_files
 
 
 def test_removes_files_from_input() -> None:
