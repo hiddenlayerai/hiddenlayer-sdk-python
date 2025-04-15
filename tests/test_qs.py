@@ -4,7 +4,7 @@ from urllib.parse import unquote
 
 import pytest
 
-from hiddenlayer_sdk._qs import Querystring, stringify
+from hiddenlayer._qs import Querystring, stringify
 
 
 def test_empty() -> None:

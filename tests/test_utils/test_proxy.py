@@ -2,7 +2,7 @@ import operator
 from typing import Any
 from typing_extensions import override
 
-from hiddenlayer_sdk._utils import LazyProxy
+from hiddenlayer._utils import LazyProxy
 
 
 class RecursiveLazyProxy(LazyProxy[Any]):

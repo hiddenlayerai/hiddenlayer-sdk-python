@@ -21,19 +21,19 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from hiddenlayer_sdk import HiddenLayer, AsyncHiddenLayer, APIResponseValidationError
-from hiddenlayer_sdk._types import Omit
-from hiddenlayer_sdk._utils import maybe_transform
-from hiddenlayer_sdk._models import BaseModel, FinalRequestOptions
-from hiddenlayer_sdk._constants import RAW_RESPONSE_HEADER
-from hiddenlayer_sdk._exceptions import APIStatusError, APITimeoutError, HiddenLayerError, APIResponseValidationError
-from hiddenlayer_sdk._base_client import (
+from hiddenlayer import HiddenLayer, AsyncHiddenLayer, APIResponseValidationError
+from hiddenlayer._types import Omit
+from hiddenlayer._utils import maybe_transform
+from hiddenlayer._models import BaseModel, FinalRequestOptions
+from hiddenlayer._constants import RAW_RESPONSE_HEADER
+from hiddenlayer._exceptions import APIStatusError, APITimeoutError, HiddenLayerError, APIResponseValidationError
+from hiddenlayer._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
     BaseClient,
     make_request_options,
 )
-from hiddenlayer_sdk.types.sensor_create_params import SensorCreateParams
+from hiddenlayer.types.sensor_create_params import SensorCreateParams
 
 from .utils import update_env
 
@@ -235,10 +235,10 @@ class TestHiddenLayer:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "hiddenlayer_sdk/_legacy_response.py",
-                        "hiddenlayer_sdk/_response.py",
+                        "hiddenlayer/_legacy_response.py",
+                        "hiddenlayer/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "hiddenlayer_sdk/_compat.py",
+                        "hiddenlayer/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -739,7 +739,7 @@ class TestHiddenLayer:
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("hiddenlayer_sdk._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("hiddenlayer._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/api/v2/sensors/create").mock(side_effect=httpx.TimeoutException("Test timeout error"))
@@ -754,7 +754,7 @@ class TestHiddenLayer:
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("hiddenlayer_sdk._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("hiddenlayer._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/api/v2/sensors/create").mock(return_value=httpx.Response(500))
@@ -770,7 +770,7 @@ class TestHiddenLayer:
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("hiddenlayer_sdk._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("hiddenlayer._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     def test_retries_taken(
@@ -801,7 +801,7 @@ class TestHiddenLayer:
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("hiddenlayer_sdk._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("hiddenlayer._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_omit_retry_count_header(
         self, client: HiddenLayer, failures_before_success: int, respx_mock: MockRouter
@@ -826,7 +826,7 @@ class TestHiddenLayer:
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("hiddenlayer_sdk._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("hiddenlayer._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_overwrite_retry_count_header(
         self, client: HiddenLayer, failures_before_success: int, respx_mock: MockRouter
@@ -1029,10 +1029,10 @@ class TestAsyncHiddenLayer:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "hiddenlayer_sdk/_legacy_response.py",
-                        "hiddenlayer_sdk/_response.py",
+                        "hiddenlayer/_legacy_response.py",
+                        "hiddenlayer/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "hiddenlayer_sdk/_compat.py",
+                        "hiddenlayer/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -1537,7 +1537,7 @@ class TestAsyncHiddenLayer:
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("hiddenlayer_sdk._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("hiddenlayer._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/api/v2/sensors/create").mock(side_effect=httpx.TimeoutException("Test timeout error"))
@@ -1552,7 +1552,7 @@ class TestAsyncHiddenLayer:
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("hiddenlayer_sdk._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("hiddenlayer._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/api/v2/sensors/create").mock(return_value=httpx.Response(500))
@@ -1568,7 +1568,7 @@ class TestAsyncHiddenLayer:
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("hiddenlayer_sdk._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("hiddenlayer._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
@@ -1600,7 +1600,7 @@ class TestAsyncHiddenLayer:
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("hiddenlayer_sdk._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("hiddenlayer._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_omit_retry_count_header(
@@ -1626,7 +1626,7 @@ class TestAsyncHiddenLayer:
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("hiddenlayer_sdk._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("hiddenlayer._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_overwrite_retry_count_header(
@@ -1662,8 +1662,8 @@ class TestAsyncHiddenLayer:
         import nest_asyncio
         import threading
 
-        from hiddenlayer_sdk._utils import asyncify
-        from hiddenlayer_sdk._base_client import get_platform
+        from hiddenlayer._utils import asyncify
+        from hiddenlayer._base_client import get_platform
 
         async def test_main() -> None:
             result = await asyncify(get_platform)()
