@@ -12,7 +12,15 @@ from .jobs import (
     JobsResourceWithStreamingResponse,
     AsyncJobsResourceWithStreamingResponse,
 )
-from ...types import scan_create_report_params, scan_retrieve_results_params
+from ...types import scan_retrieve_results_params
+from .reports import (
+    ReportsResource,
+    AsyncReportsResource,
+    ReportsResourceWithRawResponse,
+    AsyncReportsResourceWithRawResponse,
+    ReportsResourceWithStreamingResponse,
+    AsyncReportsResourceWithStreamingResponse,
+)
 from .results import (
     ResultsResource,
     AsyncResultsResource,
@@ -48,6 +56,10 @@ __all__ = ["ScansResource", "AsyncScansResource"]
 
 
 class ScansResource(SyncAPIResource):
+    @cached_property
+    def reports(self) -> ReportsResource:
+        return ReportsResource(self._client)
+
     @cached_property
     def results(self) -> ResultsResource:
         return ResultsResource(self._client)
@@ -119,42 +131,6 @@ class ScansResource(SyncAPIResource):
             cast_to=NoneType,
         )
 
-    def create_report(
-        self,
-        scan_id: str,
-        *,
-        location: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
-        """
-        Engine Report Endpoint of Model Scan Results
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not scan_id:
-            raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            f"/scans/v3/reports/{scan_id}",
-            body=maybe_transform({"location": location}, scan_create_report_params.ScanCreateReportParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
     def retrieve_results(
         self,
         scan_id: str,
@@ -206,6 +182,10 @@ class ScansResource(SyncAPIResource):
 
 
 class AsyncScansResource(AsyncAPIResource):
+    @cached_property
+    def reports(self) -> AsyncReportsResource:
+        return AsyncReportsResource(self._client)
+
     @cached_property
     def results(self) -> AsyncResultsResource:
         return AsyncResultsResource(self._client)
@@ -277,42 +257,6 @@ class AsyncScansResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
-    async def create_report(
-        self,
-        scan_id: str,
-        *,
-        location: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> None:
-        """
-        Engine Report Endpoint of Model Scan Results
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not scan_id:
-            raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            f"/scans/v3/reports/{scan_id}",
-            body=await async_maybe_transform({"location": location}, scan_create_report_params.ScanCreateReportParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
     async def retrieve_results(
         self,
         scan_id: str,
@@ -373,12 +317,13 @@ class ScansResourceWithRawResponse:
         self.check_readiness = to_raw_response_wrapper(
             scans.check_readiness,
         )
-        self.create_report = to_raw_response_wrapper(
-            scans.create_report,
-        )
         self.retrieve_results = to_raw_response_wrapper(
             scans.retrieve_results,
         )
+
+    @cached_property
+    def reports(self) -> ReportsResourceWithRawResponse:
+        return ReportsResourceWithRawResponse(self._scans.reports)
 
     @cached_property
     def results(self) -> ResultsResourceWithRawResponse:
@@ -403,12 +348,13 @@ class AsyncScansResourceWithRawResponse:
         self.check_readiness = async_to_raw_response_wrapper(
             scans.check_readiness,
         )
-        self.create_report = async_to_raw_response_wrapper(
-            scans.create_report,
-        )
         self.retrieve_results = async_to_raw_response_wrapper(
             scans.retrieve_results,
         )
+
+    @cached_property
+    def reports(self) -> AsyncReportsResourceWithRawResponse:
+        return AsyncReportsResourceWithRawResponse(self._scans.reports)
 
     @cached_property
     def results(self) -> AsyncResultsResourceWithRawResponse:
@@ -433,12 +379,13 @@ class ScansResourceWithStreamingResponse:
         self.check_readiness = to_streamed_response_wrapper(
             scans.check_readiness,
         )
-        self.create_report = to_streamed_response_wrapper(
-            scans.create_report,
-        )
         self.retrieve_results = to_streamed_response_wrapper(
             scans.retrieve_results,
         )
+
+    @cached_property
+    def reports(self) -> ReportsResourceWithStreamingResponse:
+        return ReportsResourceWithStreamingResponse(self._scans.reports)
 
     @cached_property
     def results(self) -> ResultsResourceWithStreamingResponse:
@@ -463,12 +410,13 @@ class AsyncScansResourceWithStreamingResponse:
         self.check_readiness = async_to_streamed_response_wrapper(
             scans.check_readiness,
         )
-        self.create_report = async_to_streamed_response_wrapper(
-            scans.create_report,
-        )
         self.retrieve_results = async_to_streamed_response_wrapper(
             scans.retrieve_results,
         )
+
+    @cached_property
+    def reports(self) -> AsyncReportsResourceWithStreamingResponse:
+        return AsyncReportsResourceWithStreamingResponse(self._scans.reports)
 
     @cached_property
     def results(self) -> AsyncResultsResourceWithStreamingResponse:
