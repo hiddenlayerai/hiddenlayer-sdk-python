@@ -70,12 +70,6 @@ Methods:
 - <code title="get /scans/v3/readiness">client.scans.<a href="./src/hiddenlayer/resources/scans/scans.py">check_readiness</a>() -> None</code>
 - <code title="get /scans/v3/results/{scan_id}">client.scans.<a href="./src/hiddenlayer/resources/scans/scans.py">retrieve_results</a>(scan_id, \*\*<a href="src/hiddenlayer/types/scan_retrieve_results_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scan_retrieve_results_response.py">object</a></code>
 
-## Reports
-
-Methods:
-
-- <code title="post /scans/v3/reports/{scan_id}">client.scans.reports.<a href="./src/hiddenlayer/resources/scans/reports.py">create</a>(scan_id, \*\*<a href="src/hiddenlayer/types/scans/report_create_params.py">params</a>) -> None</code>
-
 ## Results
 
 Types:

@@ -13,14 +13,6 @@ from .jobs import (
     AsyncJobsResourceWithStreamingResponse,
 )
 from ...types import scan_retrieve_results_params
-from .reports import (
-    ReportsResource,
-    AsyncReportsResource,
-    ReportsResourceWithRawResponse,
-    AsyncReportsResourceWithRawResponse,
-    ReportsResourceWithStreamingResponse,
-    AsyncReportsResourceWithStreamingResponse,
-)
 from .results import (
     ResultsResource,
     AsyncResultsResource,
@@ -56,10 +48,6 @@ __all__ = ["ScansResource", "AsyncScansResource"]
 
 
 class ScansResource(SyncAPIResource):
-    @cached_property
-    def reports(self) -> ReportsResource:
-        return ReportsResource(self._client)
-
     @cached_property
     def results(self) -> ResultsResource:
         return ResultsResource(self._client)
@@ -182,10 +170,6 @@ class ScansResource(SyncAPIResource):
 
 
 class AsyncScansResource(AsyncAPIResource):
-    @cached_property
-    def reports(self) -> AsyncReportsResource:
-        return AsyncReportsResource(self._client)
-
     @cached_property
     def results(self) -> AsyncResultsResource:
         return AsyncResultsResource(self._client)
@@ -322,10 +306,6 @@ class ScansResourceWithRawResponse:
         )
 
     @cached_property
-    def reports(self) -> ReportsResourceWithRawResponse:
-        return ReportsResourceWithRawResponse(self._scans.reports)
-
-    @cached_property
     def results(self) -> ResultsResourceWithRawResponse:
         return ResultsResourceWithRawResponse(self._scans.results)
 
@@ -351,10 +331,6 @@ class AsyncScansResourceWithRawResponse:
         self.retrieve_results = async_to_raw_response_wrapper(
             scans.retrieve_results,
         )
-
-    @cached_property
-    def reports(self) -> AsyncReportsResourceWithRawResponse:
-        return AsyncReportsResourceWithRawResponse(self._scans.reports)
 
     @cached_property
     def results(self) -> AsyncResultsResourceWithRawResponse:
@@ -384,10 +360,6 @@ class ScansResourceWithStreamingResponse:
         )
 
     @cached_property
-    def reports(self) -> ReportsResourceWithStreamingResponse:
-        return ReportsResourceWithStreamingResponse(self._scans.reports)
-
-    @cached_property
     def results(self) -> ResultsResourceWithStreamingResponse:
         return ResultsResourceWithStreamingResponse(self._scans.results)
 
@@ -413,10 +385,6 @@ class AsyncScansResourceWithStreamingResponse:
         self.retrieve_results = async_to_streamed_response_wrapper(
             scans.retrieve_results,
         )
-
-    @cached_property
-    def reports(self) -> AsyncReportsResourceWithStreamingResponse:
-        return AsyncReportsResourceWithStreamingResponse(self._scans.reports)
 
     @cached_property
     def results(self) -> AsyncResultsResourceWithStreamingResponse:
