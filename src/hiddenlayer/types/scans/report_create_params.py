@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing_extensions import Required, TypedDict
 
-__all__ = ["ScanCreateReportParams"]
+__all__ = ["ReportCreateParams"]
 
 
-class ScanCreateReportParams(TypedDict, total=False):
+class ReportCreateParams(TypedDict, total=False):
     location: Required[str]

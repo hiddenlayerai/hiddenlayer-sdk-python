@@ -10,6 +10,7 @@ from .result_list_params import ResultListParams as ResultListParams
 from .result_patch_params import ResultPatchParams as ResultPatchParams
 from .result_start_params import ResultStartParams as ResultStartParams
 from .upload_start_params import UploadStartParams as UploadStartParams
+from .report_create_params import ReportCreateParams as ReportCreateParams
 from .result_list_response import ResultListResponse as ResultListResponse
 from .result_patch_response import ResultPatchResponse as ResultPatchResponse
 from .upload_start_response import UploadStartResponse as UploadStartResponse
