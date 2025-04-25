@@ -13,12 +13,17 @@ modelscanner:
   enable: true
   orchestrator:
     license: ${HL_LICENSE}
-  minio:
-    enable: true
-  engine:
-    aws:
-      bucket: hl-adhoc-model-stage
     k8s:
       resources:
         requests:
           memory: 1Gi
+    engine:
+      aws:
+        bucket: hl-adhoc-model-stage
+      k8s:
+        resources:
+          requests:
+            cpu: "1"
+            memory: 1Gi
+  minio:
+    enable: true
