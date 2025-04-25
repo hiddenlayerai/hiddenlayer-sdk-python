@@ -16,8 +16,8 @@ create-kind-cluster:
 
 setup-enterprise-modscan:
 	helm install -f integration-tests/enterprise-modscan/config.yaml hl-installer oci://quay.io/hiddenlayer/distro-enterprise-platform-installer \
-	--set installer.authentication.hl_username=${QUAY_USERNAME} \
-	--set installer.authentication.hl_password=${QUAY_PASSWORD} \
+	--set installer.authentication.username=${QUAY_USERNAME} \
+	--set installer.authentication.password=${QUAY_PASSWORD} \
 	--set modelscanner-v3.orchestrator.license=${HL_LICENSE} \
 	--wait --wait-for-jobs && \
 	kubectl -n hl-aisec-platform logs -f job/hl-aisec-platform --pod-running-timeout=20s
