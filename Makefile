@@ -16,15 +16,15 @@ create-kind-cluster:
 
 setup-enterprise-modscan:
 	helm install -f integration-tests/enterprise-modscan/config.yaml hl-installer oci://quay.io/hiddenlayer/distro-enterprise-platform-installer \
-	--set installer.authentication.hl_username=${QUAY_USERNAME} \
-	--set installer.authentication.hl_password=${QUAY_PASSWORD} \
-	--set modelscanner-v3.orchestrator.license=${HL_LICENSE} \
+	--set installer.authentication.username=${QUAY_USERNAME} \
+	--set installer.authentication.password=${QUAY_PASSWORD} \
+	--set modelscanner.orchestrator.license=${HL_LICENSE} \
 	--wait --wait-for-jobs && \
-	kubectl -n hl-aisec-platform logs -f job/hl-aisec-platform --pod-running-timeout=20s
+	kubectl -n hl-aisec-platform logs -f job/hl-aisec-platform-1 --pod-running-timeout=20s
 
 port-forward-service:
 	kubectl port-forward svc/modelscanner-minio 9000:9000 -n hl-modelscanner &>/dev/null & \
-	kubectl port-forward svc/modelscanner-orchestrator 8000 -n hl-modelscanner &>/dev/null &
+	kubectl port-forward svc/modelscanner-orchestrator 8000:80 -n hl-modelscanner &>/dev/null &
 
 add-minio-bucket:
 	$(eval MINIO_ROOT_USER := $(shell kubectl get secret -n hl-modelscanner modelscanner-minio -o json | jq -r .data.rootUser | base64 --decode))
