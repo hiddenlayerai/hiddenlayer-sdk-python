@@ -18,9 +18,10 @@ setup-enterprise-modscan:
 	helm install -f integration-tests/enterprise-modscan/config.yaml hl-installer oci://quay.io/hiddenlayer/distro-enterprise-platform-installer \
 	--set installer.authentication.username=${QUAY_USERNAME} \
 	--set installer.authentication.password=${QUAY_PASSWORD} \
-	--set modelscanner-v3.orchestrator.license=${HL_LICENSE} \
+	--set modelscanner.enable=true \
+	--set modelscanner.orchestrator.license=${HL_LICENSE} \
 	--wait --wait-for-jobs && \
-	kubectl -n hl-aisec-platform logs -f job/hl-aisec-platform --pod-running-timeout=20s
+	kubectl -n hl-aisec-platform logs -f job/hl-aisec-platform-1 --pod-running-timeout=20s
 
 port-forward-service:
 	kubectl port-forward svc/modelscanner-minio 9000:9000 -n hl-modelscanner &>/dev/null & \
