@@ -24,7 +24,7 @@ setup-enterprise-modscan:
 
 port-forward-service:
 	kubectl port-forward svc/modelscanner-minio 9000:9000 -n hl-modelscanner &>/dev/null & \
-	kubectl port-forward svc/modelscanner-orchestrator 8000 -n hl-modelscanner &>/dev/null &
+	kubectl port-forward svc/modelscanner-orchestrator 8000:80 -n hl-modelscanner &>/dev/null &
 
 add-minio-bucket:
 	$(eval MINIO_ROOT_USER := $(shell kubectl get secret -n hl-modelscanner modelscanner-minio -o json | jq -r .data.rootUser | base64 --decode))
