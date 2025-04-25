@@ -5,13 +5,13 @@ installer:
   helmfile:
     mode: apply
   authentication:
-    hl_username: ${QUAY_USERNAME}
-    hl_password: ${QUAY_PASSWORD}
+    username: ${QUAY_USERNAME}
+    password: ${QUAY_PASSWORD}
 
-modelscanner-v3:
+modelscanner:
+  version: latest
   enable: true
   orchestrator:
-    version: latest
     license: ${HL_LICENSE}
   minio:
     enable: true
