@@ -9,8 +9,6 @@ global:
     password: ${QUAY_PASSWORD}
 
 modelscanner:
-  version: latest
-  enable: true
   orchestrator:
     license: ${HL_LICENSE}
     k8s:
