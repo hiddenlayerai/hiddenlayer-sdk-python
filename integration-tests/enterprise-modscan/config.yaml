@@ -1,4 +1,4 @@
-installer:
+global:
   namespace: hl-aisec-platform
   registry: quay.io/hiddenlayer
   ttlSecondsAfterFinished: 120
