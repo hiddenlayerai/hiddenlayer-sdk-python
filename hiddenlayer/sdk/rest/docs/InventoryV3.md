@@ -11,6 +11,8 @@ Name | Type | Description | Notes
 **model_version** | **str** |  | [optional] 
 **model_version_id** | **str** |  | [optional] 
 **requesting_entity** | **str** |  | [optional] 
+**request_source** | **str** | Identifies the system that requested the scan | [optional] 
+**origin** | **str** | Specifies the platform or service where the model originated before being scanned | [optional] 
 
 ## Example
 

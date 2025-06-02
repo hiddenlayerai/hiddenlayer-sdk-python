@@ -9,6 +9,8 @@ Name | Type | Description | Notes
 **model_version** | **str** | If you do not provide a version, one will be generated for you. | 
 **requested_scan_location** | **str** | Location to be scanned | 
 **requesting_entity** | **str** | Entity that requested the scan | 
+**request_source** | **str** | Identifies the system that requested the scan | [optional] 
+**origin** | **str** | Specifies the platform or service where the model originated before being scanned | [optional] 
 
 ## Example
 

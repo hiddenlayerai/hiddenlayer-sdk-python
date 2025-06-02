@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
@@ -32,7 +32,9 @@ class InventoryV3(BaseModel):
     model_version: Optional[StrictStr] = None
     model_version_id: Optional[StrictStr] = None
     requesting_entity: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["requested_scan_location", "model_name", "model_source", "model_version", "model_version_id", "requesting_entity"]
+    request_source: Optional[StrictStr] = Field(default=None, description="Identifies the system that requested the scan")
+    origin: Optional[StrictStr] = Field(default=None, description="Specifies the platform or service where the model originated before being scanned")
+    __properties: ClassVar[List[str]] = ["requested_scan_location", "model_name", "model_source", "model_version", "model_version_id", "requesting_entity", "request_source", "origin"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -90,7 +92,9 @@ class InventoryV3(BaseModel):
             "model_source": obj.get("model_source"),
             "model_version": obj.get("model_version"),
             "model_version_id": obj.get("model_version_id"),
-            "requesting_entity": obj.get("requesting_entity")
+            "requesting_entity": obj.get("requesting_entity"),
+            "request_source": obj.get("request_source"),
+            "origin": obj.get("origin")
         })
         return _obj
 
