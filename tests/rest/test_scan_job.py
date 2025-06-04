@@ -41,7 +41,9 @@ class TestScanJob(unittest.TestCase):
                     model_name = 'keras-tf-2025-05-27', 
                     model_version = '1.0.0', 
                     requested_scan_location = '/files-to-scan', 
-                    requesting_entity = '', ),
+                    requesting_entity = '', 
+                    request_source = 'API Upload', 
+                    origin = 'Hugging Face', ),
                 scan_id = '00000000-0000-0000-0000-000000000000',
                 status = 'pending'
             )

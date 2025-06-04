@@ -56,7 +56,9 @@ class TestScanResultsMapV3(unittest.TestCase):
                             model_source = '', 
                             model_version = '', 
                             model_version_id = '', 
-                            requesting_entity = '', ), 
+                            requesting_entity = '', 
+                            request_source = 'API Upload', 
+                            origin = 'Hugging Face', ), 
                         file_results = [
                             hiddenlayer.sdk.rest.models.file_result_v3.File Result V3(
                                 file_location = '', 
@@ -133,7 +135,9 @@ class TestScanResultsMapV3(unittest.TestCase):
                             model_source = '', 
                             model_version = '', 
                             model_version_id = '', 
-                            requesting_entity = '', ), 
+                            requesting_entity = '', 
+                            request_source = 'API Upload', 
+                            origin = 'Hugging Face', ), 
                         file_results = [
                             hiddenlayer.sdk.rest.models.file_result_v3.File Result V3(
                                 file_location = '', 

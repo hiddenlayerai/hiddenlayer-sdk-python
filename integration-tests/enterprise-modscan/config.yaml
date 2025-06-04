@@ -1,4 +1,4 @@
-installer:
+global:
   namespace: hl-aisec-platform
   registry: quay.io/hiddenlayer
   ttlSecondsAfterFinished: 120
@@ -9,8 +9,6 @@ installer:
     password: ${QUAY_PASSWORD}
 
 modelscanner:
-  version: latest
-  enable: true
   orchestrator:
     license: ${HL_LICENSE}
     k8s:

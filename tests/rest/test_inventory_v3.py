@@ -40,7 +40,9 @@ class TestInventoryV3(unittest.TestCase):
                 model_source = '',
                 model_version = '',
                 model_version_id = '',
-                requesting_entity = ''
+                requesting_entity = '',
+                request_source = 'API Upload',
+                origin = 'Hugging Face'
             )
         else:
             return InventoryV3(

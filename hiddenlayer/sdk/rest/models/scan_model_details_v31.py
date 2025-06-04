@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -30,7 +30,9 @@ class ScanModelDetailsV31(BaseModel):
     model_version: StrictStr = Field(description="If you do not provide a version, one will be generated for you.")
     requested_scan_location: StrictStr = Field(description="Location to be scanned")
     requesting_entity: StrictStr = Field(description="Entity that requested the scan")
-    __properties: ClassVar[List[str]] = ["model_name", "model_version", "requested_scan_location", "requesting_entity"]
+    request_source: Optional[StrictStr] = Field(default=None, description="Identifies the system that requested the scan")
+    origin: Optional[StrictStr] = Field(default=None, description="Specifies the platform or service where the model originated before being scanned")
+    __properties: ClassVar[List[str]] = ["model_name", "model_version", "requested_scan_location", "requesting_entity", "request_source", "origin"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -86,7 +88,9 @@ class ScanModelDetailsV31(BaseModel):
             "model_name": obj.get("model_name"),
             "model_version": obj.get("model_version"),
             "requested_scan_location": obj.get("requested_scan_location"),
-            "requesting_entity": obj.get("requesting_entity")
+            "requesting_entity": obj.get("requesting_entity"),
+            "request_source": obj.get("request_source"),
+            "origin": obj.get("origin")
         })
         return _obj
 
