@@ -14,7 +14,7 @@ modelscanner:
     k8s:
       resources:
         requests:
-          memory: 1Gi
+          memory: 256Mi
     engine:
       aws:
         bucket: hl-adhoc-model-stage
