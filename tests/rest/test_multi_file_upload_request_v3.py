@@ -38,7 +38,9 @@ class TestMultiFileUploadRequestV3(unittest.TestCase):
                 model_version = '',
                 model_name = '',
                 requesting_entity = '',
-                location_alias = ''
+                location_alias = '',
+                request_source = 'API Upload',
+                origin = 'Hugging Face'
             )
         else:
             return MultiFileUploadRequestV3(

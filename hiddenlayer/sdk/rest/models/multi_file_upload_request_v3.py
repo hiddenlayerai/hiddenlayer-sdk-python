@@ -30,7 +30,9 @@ class MultiFileUploadRequestV3(BaseModel):
     model_name: StrictStr = Field(description="Model name")
     requesting_entity: StrictStr = Field(description="Requesting entity")
     location_alias: Optional[StrictStr] = Field(default=None, description="Requested location alias")
-    __properties: ClassVar[List[str]] = ["model_version", "model_name", "requesting_entity", "location_alias"]
+    request_source: Optional[StrictStr] = Field(default=None, description="Identifies the system that requested the scan")
+    origin: Optional[StrictStr] = Field(default=None, description="Specifies the platform or service where the model originated before being scanned")
+    __properties: ClassVar[List[str]] = ["model_version", "model_name", "requesting_entity", "location_alias", "request_source", "origin"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -86,7 +88,9 @@ class MultiFileUploadRequestV3(BaseModel):
             "model_version": obj.get("model_version"),
             "model_name": obj.get("model_name"),
             "requesting_entity": obj.get("requesting_entity"),
-            "location_alias": obj.get("location_alias")
+            "location_alias": obj.get("location_alias"),
+            "request_source": obj.get("request_source"),
+            "origin": obj.get("origin")
         })
         return _obj
 

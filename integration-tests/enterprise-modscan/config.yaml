@@ -14,7 +14,7 @@ modelscanner:
     k8s:
       resources:
         requests:
-          memory: 1Gi
+          memory: 256Mi
     engine:
       aws:
         bucket: hl-adhoc-model-stage
@@ -22,6 +22,6 @@ modelscanner:
         resources:
           requests:
             cpu: "1"
-            memory: 1Gi
+            memory: 256Mi
   minio:
     enable: true

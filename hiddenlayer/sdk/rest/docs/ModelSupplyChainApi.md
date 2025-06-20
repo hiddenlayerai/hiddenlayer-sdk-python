@@ -375,7 +375,7 @@ configuration = hiddenlayer.sdk.rest.Configuration(
 with hiddenlayer.sdk.rest.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = hiddenlayer.sdk.rest.ModelSupplyChainApi(api_client)
-    scan_job = {"access":{"source":"HUGGING_FACE"},"inventory":{"model_name":"some-model","model_version":"main","requested_scan_location":"owner/repo","requesting_entity":"some-user@example.com"}} # ScanJob | Request body for create scan request
+    scan_job = {"access":{"source":"HUGGING_FACE"},"inventory":{"model_name":"some-model","model_version":"main","requested_scan_location":"owner/repo","requesting_entity":"some-user@example.com","request_source":"API Upload","origin":"Local File System"}} # ScanJob | Request body for create scan request
 
     try:
         # Request a Model Scan Job
