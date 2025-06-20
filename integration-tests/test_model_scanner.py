@@ -190,7 +190,7 @@ def test_get_sarif_results(tmp_path, hl_client: HiddenlayerServiceClient):
 
 def test_community_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
     """Integration test to community scanning a model"""
-    community_model = "https://huggingface.co/ScanMe/Models"
+    community_model = "https://huggingface.co/ScanMe/test-models"
     model_name = f"sdk-integration-scan-model-{uuid4()}"
     results = hl_client.model_scanner.community_scan(
         model_name=model_name,
