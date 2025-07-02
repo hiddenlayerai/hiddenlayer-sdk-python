@@ -6,10 +6,9 @@ import os
 from typing import Any, Union, Mapping
 from typing_extensions import Self, override
 
+import httpx
 import requests
 from requests.auth import HTTPBasicAuth
-
-import httpx
 
 from . import _exceptions
 from ._qs import Querystring
@@ -135,7 +134,7 @@ class HiddenLayer(SyncAPIClient):
             "X-Stainless-Async": "false",
             **self._custom_headers,
         }
-    
+
     def _get_jwt(self, *, api_id: str, api_key: str) -> str:
         "Get the JWT token to auth to the Hiddenlayer API."
 
@@ -156,7 +155,7 @@ class HiddenLayer(SyncAPIClient):
             )
 
         return resp.json()["access_token"]
-    
+
     def copy(
         self,
         *,
