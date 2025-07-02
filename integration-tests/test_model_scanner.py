@@ -52,7 +52,10 @@ def test_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
     model_name = f"sdk-integration-scan-model-{uuid4()}"
 
     results = hl_client.model_scanner.scan_file(
-        model_name=model_name, model_path=model_path
+        model_name=model_name,
+        model_path=model_path,
+        request_source="Integration",
+        origin="Databricks",
     )
 
     _validate_scan_model(results)
@@ -197,6 +200,8 @@ def test_community_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
         model_path=community_model,
         model_source=CommunityScanSource.HUGGING_FACE,
         model_version="main",
+        request_source="Integration",
+        origin="Hugging Face",
     )
     assert results is not None
     # These asserts are a little brittle as detections can be added and removed from modscan capabilities
@@ -214,9 +219,13 @@ def _setup_scan_model(tmp_path):
     return model_path
 
 
-def _validate_scan_model(results: ScanResults):
+def _validate_scan_model(results: ScanResults, request_source="API Upload",
+        origin: str = ""):
     assert results.file_count == 1
     assert results.files_with_detections_count == 1
+
+    assert results.inventory.request_source == request_source
+    assert results.inventory.origin == origin
 
     assert results.file_results is not None
     file_results = results.file_results[0]
@@ -248,7 +257,8 @@ def _setup_scan_folder(tmp_path):
         pickle.dump(MaliciousPickle(), f)
 
 
-def _validate_scan_folder(tmp_path, results: ScanResults):
+def _validate_scan_folder(tmp_path, results: ScanResults, request_source="API Upload",
+        origin: str = ""):
     safe_model = "safe_model.pkl"
     malicious_model = "malicious_model.pkl"
 
