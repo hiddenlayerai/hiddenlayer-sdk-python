@@ -29,6 +29,9 @@ attrs==25.3.0
 certifi==2023.7.22
     # via httpcore
     # via httpx
+    # via requests
+charset-normalizer==3.4.2
+    # via requests
 distro==1.8.0
     # via hiddenlayer
 exceptiongroup==1.2.2
@@ -48,6 +51,7 @@ httpx-aiohttp==0.1.6
 idna==3.4
     # via anyio
     # via httpx
+    # via requests
     # via yarl
 multidict==6.4.4
     # via aiohttp
@@ -59,6 +63,11 @@ pydantic==2.10.3
     # via hiddenlayer
 pydantic-core==2.27.1
     # via pydantic
+requests==2.32.4
+    # via hiddenlayer
+    # via requests-auth
+requests-auth==8.0.0
+    # via hiddenlayer
 sniffio==1.3.0
     # via anyio
     # via hiddenlayer
@@ -68,5 +77,7 @@ typing-extensions==4.12.2
     # via multidict
     # via pydantic
     # via pydantic-core
+urllib3==2.5.0
+    # via requests
 yarl==1.20.0
     # via aiohttp
