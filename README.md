@@ -1,6 +1,6 @@
 # Hidden Layer Python API library
 
-[![PyPI version](https://img.shields.io/pypi/v/hiddenlayer.svg)](https://pypi.org/project/hiddenlayer/)
+[![PyPI version](<https://img.shields.io/pypi/v/hiddenlayer.svg?label=pypi%20(stable)>)](https://pypi.org/project/hiddenlayer/)
 
 The Hidden Layer Python library provides convenient access to the Hidden Layer REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
@@ -20,7 +20,7 @@ pip install git+ssh://git@github.com/stainless-sdks/hiddenlayer-sdk-python.git
 ```
 
 > [!NOTE]
-> Once this package is [published to PyPI](https://app.stainless.com/docs/guides/publish), this will become: `pip install --pre hiddenlayer`
+> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install --pre hiddenlayer`
 
 ## Usage
 
@@ -37,6 +37,7 @@ client = HiddenLayer(
 sensor = client.sensors.create(
     plaintext_name="REPLACE_ME",
 )
+print(sensor.sensor_id)
 ```
 
 While you can provide a `bearer_token` keyword argument,
@@ -62,12 +63,47 @@ async def main() -> None:
     sensor = await client.sensors.create(
         plaintext_name="REPLACE_ME",
     )
+    print(sensor.sensor_id)
 
 
 asyncio.run(main())
 ```
 
 Functionality between the synchronous and asynchronous clients is otherwise identical.
+
+### With aiohttp
+
+By default, the async client uses `httpx` for HTTP requests. However, for improved concurrency performance you may also use `aiohttp` as the HTTP backend.
+
+You can enable this by installing `aiohttp`:
+
+```sh
+# install from this staging repo
+pip install 'hiddenlayer[aiohttp] @ git+ssh://git@github.com/stainless-sdks/hiddenlayer-sdk-python.git'
+```
+
+Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
+
+```python
+import os
+import asyncio
+from hiddenlayer import DefaultAioHttpClient
+from hiddenlayer import AsyncHiddenLayer
+
+
+async def main() -> None:
+    async with AsyncHiddenLayer(
+        bearer_token=os.environ.get("HIDDENLAYER_TOKEN"),  # This is the default and can be omitted
+        http_client=DefaultAioHttpClient(),
+    ) as client:
+        sensor = await client.sensors.create(
+            plaintext_name="REPLACE_ME",
+        )
+        print(sensor.sensor_id)
+
+
+asyncio.run(main())
+```
 
 ## Using types
 
@@ -77,8 +113,6 @@ Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typ
 - Converting to a dictionary, `model.to_dict()`
 
 Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
-
-from datetime import datetime
 
 ## Nested params
 
@@ -90,14 +124,7 @@ from hiddenlayer import HiddenLayer
 client = HiddenLayer()
 
 response = client.sensors.query(
-    filter={
-        "active": True,
-        "created_at_start": datetime.fromisoformat("2019-12-27T18:11:19.117"),
-        "created_at_stop": datetime.fromisoformat("2019-12-27T18:11:19.117"),
-        "plaintext_name": "plaintext_name",
-        "source": "adhoc",
-        "version": 0,
-    },
+    filter={},
 )
 print(response.filter)
 ```
@@ -171,7 +198,7 @@ client.with_options(max_retries=5).sensors.create(
 ### Timeouts
 
 By default requests time out after 1 minute. You can configure this with a `timeout` option,
-which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/#fine-tuning-the-configuration) object:
+which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:
 
 ```python
 from hiddenlayer import HiddenLayer
@@ -237,7 +264,7 @@ response = client.sensors.with_raw_response.create(
 print(response.headers.get('X-My-Header'))
 
 sensor = response.parse()  # get the object that `sensors.create()` would have returned
-print(sensor)
+print(sensor.sensor_id)
 ```
 
 These methods return an [`APIResponse`](https://github.com/stainless-sdks/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) object.

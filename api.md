@@ -58,17 +58,11 @@ Methods:
 
 # Scans
 
-Types:
-
-```python
-from hiddenlayer.types import ScanRetrieveResultsResponse
-```
-
 Methods:
 
 - <code title="get /scans/v3/health">client.scans.<a href="./src/hiddenlayer/resources/scans/scans.py">check_health</a>() -> None</code>
 - <code title="get /scans/v3/readiness">client.scans.<a href="./src/hiddenlayer/resources/scans/scans.py">check_readiness</a>() -> None</code>
-- <code title="get /scans/v3/results/{scan_id}">client.scans.<a href="./src/hiddenlayer/resources/scans/scans.py">retrieve_results</a>(scan_id, \*\*<a href="src/hiddenlayer/types/scan_retrieve_results_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scan_retrieve_results_response.py">object</a></code>
+- <code title="get /scans/v3/results/{scan_id}">client.scans.<a href="./src/hiddenlayer/resources/scans/scans.py">retrieve_results</a>(scan_id, \*\*<a href="src/hiddenlayer/types/scan_retrieve_results_params.py">params</a>) -> object</code>
 
 ## Results
 
