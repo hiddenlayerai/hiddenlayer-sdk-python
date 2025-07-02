@@ -71,6 +71,8 @@ requests-auth==8.0.0
 sniffio==1.3.0
     # via anyio
     # via hiddenlayer
+types-requests==2.32.4.20250611
+    # via hiddenlayer
 typing-extensions==4.12.2
     # via anyio
     # via hiddenlayer
@@ -79,5 +81,6 @@ typing-extensions==4.12.2
     # via pydantic-core
 urllib3==2.5.0
     # via requests
+    # via types-requests
 yarl==1.20.0
     # via aiohttp

@@ -154,7 +154,7 @@ class HiddenLayer(SyncAPIClient):
                 f"Unable to get authentication credentials for the HiddenLayer API - invalid response: {resp.json()}"
             )
 
-        return resp.json()["access_token"]
+        return resp.json()["access_token"] # type: ignore[no-any-return]
 
     def copy(
         self,

@@ -128,6 +128,8 @@ time-machine==2.9.0
 tomli==2.0.2
     # via mypy
     # via pytest
+types-requests==2.32.4.20250611
+    # via hiddenlayer
 typing-extensions==4.12.2
     # via anyio
     # via hiddenlayer
@@ -138,6 +140,7 @@ typing-extensions==4.12.2
     # via pyright
 urllib3==2.5.0
     # via requests
+    # via types-requests
 virtualenv==20.24.5
     # via nox
 yarl==1.20.0
