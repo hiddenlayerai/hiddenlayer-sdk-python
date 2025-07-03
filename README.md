@@ -27,10 +27,11 @@ pip install git+ssh://git@github.com/stainless-sdks/hiddenlayer-sdk-python.git
 The full API of this library can be found in [api.md](api.md).
 
 ```python
+import os
 from hiddenlayer import HiddenLayer
 
 client = HiddenLayer(
-    bearer_token="My Bearer Token",
+    bearer_token=os.environ.get("HIDDENLAYER_TOKEN"),  # This is the default and can be omitted
 )
 
 sensor = client.sensors.create(
@@ -40,16 +41,22 @@ sensor = client.sensors.create(
 print(sensor.sensor_id)
 ```
 
+While you can provide a `bearer_token` keyword argument,
+we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
+to add `HIDDENLAYER_TOKEN="My Bearer Token"` to your `.env` file
+so that your Bearer Token is not stored in source control.
+
 ## Async usage
 
 Simply import `AsyncHiddenLayer` instead of `HiddenLayer` and use `await` with each API call:
 
 ```python
+import os
 import asyncio
 from hiddenlayer import AsyncHiddenLayer
 
 client = AsyncHiddenLayer(
-    bearer_token="My Bearer Token",
+    bearer_token=os.environ.get("HIDDENLAYER_TOKEN"),  # This is the default and can be omitted
 )
 
 
@@ -80,6 +87,7 @@ pip install 'hiddenlayer[aiohttp] @ git+ssh://git@github.com/stainless-sdks/hidd
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
+import os
 import asyncio
 from hiddenlayer import DefaultAioHttpClient
 from hiddenlayer import AsyncHiddenLayer
@@ -87,7 +95,7 @@ from hiddenlayer import AsyncHiddenLayer
 
 async def main() -> None:
     async with AsyncHiddenLayer(
-        bearer_token="My Bearer Token",
+        bearer_token=os.environ.get("HIDDENLAYER_TOKEN"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
         sensor = await client.sensors.create(
@@ -116,9 +124,7 @@ Nested parameters are dictionaries, typed using `TypedDict`, for example:
 ```python
 from hiddenlayer import HiddenLayer
 
-client = HiddenLayer(
-    bearer_token="My Bearer Token",
-)
+client = HiddenLayer()
 
 cards = client.models.cards.list(
     x_correlation_id="00000000-0000-0000-0000-000000000000",
@@ -140,9 +146,7 @@ All errors inherit from `hiddenlayer.APIError`.
 import hiddenlayer
 from hiddenlayer import HiddenLayer
 
-client = HiddenLayer(
-    bearer_token="My Bearer Token",
-)
+client = HiddenLayer()
 
 try:
     client.sensors.create(
@@ -186,7 +190,6 @@ from hiddenlayer import HiddenLayer
 
 # Configure the default for all requests:
 client = HiddenLayer(
-    bearer_token="My Bearer Token",
     # default is 2
     max_retries=0,
 )
@@ -208,14 +211,12 @@ from hiddenlayer import HiddenLayer
 
 # Configure the default for all requests:
 client = HiddenLayer(
-    bearer_token="My Bearer Token",
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
 client = HiddenLayer(
-    bearer_token="My Bearer Token",
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
@@ -263,9 +264,7 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 ```py
 from hiddenlayer import HiddenLayer
 
-client = HiddenLayer(
-    bearer_token="My Bearer Token",
-)
+client = HiddenLayer()
 response = client.sensors.with_raw_response.create(
     plaintext_name="REPLACE_ME",
     x_correlation_id="00000000-0000-0000-0000-000000000000",
@@ -346,7 +345,6 @@ import httpx
 from hiddenlayer import HiddenLayer, DefaultHttpxClient
 
 client = HiddenLayer(
-    bearer_token="My Bearer Token",
     # Or use the `HIDDEN_LAYER_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
@@ -369,9 +367,7 @@ By default the library closes underlying HTTP connections whenever the client is
 ```py
 from hiddenlayer import HiddenLayer
 
-with HiddenLayer(
-    bearer_token="My Bearer Token",
-) as client:
+with HiddenLayer() as client:
   # make requests here
   ...
 

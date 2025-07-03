@@ -24,7 +24,7 @@ from pydantic import ValidationError
 from hiddenlayer import HiddenLayer, AsyncHiddenLayer, APIResponseValidationError
 from hiddenlayer._types import Omit
 from hiddenlayer._models import BaseModel, FinalRequestOptions
-from hiddenlayer._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
+from hiddenlayer._exceptions import APIStatusError, APITimeoutError, HiddenLayerError, APIResponseValidationError
 from hiddenlayer._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
@@ -341,6 +341,16 @@ class TestHiddenLayer:
         request = client2._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "stainless"
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
+
+    def test_validate_headers(self) -> None:
+        client = HiddenLayer(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
+        assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
+
+        with pytest.raises(HiddenLayerError):
+            with update_env(**{"HIDDENLAYER_TOKEN": Omit()}):
+                client2 = HiddenLayer(base_url=base_url, bearer_token=None, _strict_response_validation=True)
+            _ = client2
 
     def test_default_query_option(self) -> None:
         client = HiddenLayer(
@@ -1174,6 +1184,16 @@ class TestAsyncHiddenLayer:
         request = client2._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "stainless"
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
+
+    def test_validate_headers(self) -> None:
+        client = AsyncHiddenLayer(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
+        assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
+
+        with pytest.raises(HiddenLayerError):
+            with update_env(**{"HIDDENLAYER_TOKEN": Omit()}):
+                client2 = AsyncHiddenLayer(base_url=base_url, bearer_token=None, _strict_response_validation=True)
+            _ = client2
 
     def test_default_query_option(self) -> None:
         client = AsyncHiddenLayer(
