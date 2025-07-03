@@ -1,7 +1,15 @@
 # Shared Types
 
 ```python
-from hiddenlayer.types import Exception, Node
+from hiddenlayer.types import (
+    ArtifactContent,
+    Exception,
+    Message,
+    MultiformatMessageString,
+    Node,
+    PropertyBag,
+    Region,
+)
 ```
 
 # Models
@@ -51,13 +59,8 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.scans import FileScanReport, ScanReport, ResultListResponse
+from hiddenlayer.types.scans import FileScanReport, ScanReport
 ```
-
-Methods:
-
-- <code title="get /scan/v3/results/{scan_id}">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">retrieve</a>(scan_id, \*\*<a href="src/hiddenlayer/types/scans/result_retrieve_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scans/scan_report.py">ScanReport</a></code>
-- <code title="get /scan/v3/results">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">list</a>(\*\*<a href="src/hiddenlayer/types/scans/result_list_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scans/result_list_response.py">ResultListResponse</a></code>
 
 ## Jobs
 
