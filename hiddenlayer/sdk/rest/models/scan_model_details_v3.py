@@ -31,7 +31,9 @@ class ScanModelDetailsV3(BaseModel):
     model_source: Optional[StrictStr] = Field(default=None, description="source (provider) info")
     requested_scan_location: StrictStr = Field(description="Location to be scanned")
     requesting_entity: Optional[StrictStr] = Field(default=None, description="Entity that requested the scan")
-    __properties: ClassVar[List[str]] = ["model_name", "model_version", "model_source", "requested_scan_location", "requesting_entity"]
+    request_source: Optional[StrictStr] = Field(default=None, description="Source of the request")
+    origin: Optional[StrictStr] = Field(default=None, description="Origin of the scan")
+    __properties: ClassVar[List[str]] = ["model_name", "model_version", "model_source", "requested_scan_location", "requesting_entity", "request_source", "origin"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -88,7 +90,9 @@ class ScanModelDetailsV3(BaseModel):
             "model_version": obj.get("model_version"),
             "model_source": obj.get("model_source"),
             "requested_scan_location": obj.get("requested_scan_location"),
-            "requesting_entity": obj.get("requesting_entity")
+            "requesting_entity": obj.get("requesting_entity"),
+            "request_source": obj.get("request_source"),
+            "origin": obj.get("origin")
         })
         return _obj
 
