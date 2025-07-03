@@ -48,6 +48,8 @@ class ModelScanAPI:
         model_source: CommunityScanSource,
         model_version: str = "main",
         wait_for_results: bool = True,
+        request_source="API Upload",
+        origin: str = "",
     ) -> ScanResults:
         """
         Scan a model available at a remote location using the HiddenLayer Model Scanner.
@@ -67,6 +69,8 @@ class ModelScanAPI:
                 model_version=model_version,
                 requested_scan_location=model_path,
                 requesting_entity="hiddenlayer-python-sdk",
+                request_source=request_source,
+                origin=origin,
             ),
         )
         result = self._model_supply_chain_api.create_scan_job(scan_job)
@@ -85,6 +89,8 @@ class ModelScanAPI:
         model_path: Union[str, os.PathLike],
         model_version: str = "1",
         wait_for_results: bool = True,
+        request_source="API Upload",
+        origin: str = "",
     ) -> ScanResults:
         """
         Scan a local model file using the HiddenLayer Model Scanner.
@@ -104,6 +110,8 @@ class ModelScanAPI:
             model_name=model_name,
             model_version=model_version,
             requesting_entity="hiddenlayer-python-sdk",
+            request_source=request_source,
+            origin=origin,
         )
         response = self._model_supply_chain_api.begin_multi_file_upload(
             multi_file_upload_request_v3=request
@@ -130,6 +138,7 @@ class ModelScanAPI:
         model_version: str = "1",
         s3_client: Optional[object] = None,
         wait_for_results: bool = True,
+        request_source="API Upload",
     ) -> ScanResults:
         """
         Scan a model file on S3.
@@ -174,6 +183,8 @@ class ModelScanAPI:
             model_name=model_name,
             model_version=model_version,
             wait_for_results=wait_for_results,
+            request_source=request_source,
+            origin="S3",
         )
 
     def scan_azure_blob_model(
@@ -187,6 +198,7 @@ class ModelScanAPI:
         blob_service_client: Optional[object] = None,
         credential: Optional[object] = None,
         wait_for_results: bool = True,
+        request_source="API Upload",
     ) -> ScanResults:
         """
         Scan a model file on Azure Blob Storage.
@@ -252,6 +264,8 @@ class ModelScanAPI:
             model_name=model_name,
             model_version=model_version,
             wait_for_results=wait_for_results,
+            request_source=request_source,
+            origin="Azure Blob Storage",
         )
 
     def scan_huggingface_model(
@@ -268,6 +282,7 @@ class ModelScanAPI:
         force_download: bool = False,
         hf_token: Optional[Union[str, bool]] = None,
         wait_for_results: bool = True,
+        request_source="API Upload",
     ) -> ScanResults:
         """
         Scans a model on HuggingFace.
@@ -322,6 +337,8 @@ class ModelScanAPI:
             allow_file_patterns=allow_file_patterns,
             ignore_file_patterns=ignore_file_patterns,
             wait_for_results=wait_for_results,
+            request_source=request_source,
+            origin="Hugging Face",
         )
 
     def get_scan_results(self, *, scan_id: str) -> ScanResults:
@@ -390,6 +407,8 @@ class ModelScanAPI:
         allow_file_patterns: Optional[List[str]] = None,
         ignore_file_patterns: Optional[List[str]] = None,
         wait_for_results: bool = True,
+        request_source="API Upload",
+        origin: str = "",
     ) -> ScanResults:
         """
         Submits all files in a directory and its sub directories to be scanned.
@@ -411,6 +430,8 @@ class ModelScanAPI:
             model_name=model_name,
             model_version=model_version,
             requesting_entity="hiddenlayer-python-sdk",
+            request_source=request_source,
+            origin=origin,
         )
         response = self._model_supply_chain_api.begin_multi_file_upload(
             multi_file_upload_request_v3=request
