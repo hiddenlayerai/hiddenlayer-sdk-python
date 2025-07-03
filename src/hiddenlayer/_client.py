@@ -120,6 +120,12 @@ class HiddenLayer(SyncAPIClient):
 
     @property
     @override
+    def auth_headers(self) -> dict[str, str]:
+        bearer_token = self.bearer_token
+        return {"Authorization": f"Bearer {bearer_token}"}
+
+    @property
+    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
@@ -304,6 +310,12 @@ class AsyncHiddenLayer(AsyncAPIClient):
     @override
     def qs(self) -> Querystring:
         return Querystring(array_format="comma")
+
+    @property
+    @override
+    def auth_headers(self) -> dict[str, str]:
+        bearer_token = self.bearer_token
+        return {"Authorization": f"Bearer {bearer_token}"}
 
     @property
     @override
