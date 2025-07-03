@@ -17,16 +17,16 @@ class ResultSecurityPosture(BaseModel):
 
 
 class Result(BaseModel):
-    active_versions: List[int]
-
     created_at: int
-    """Unix Nano Epoch"""
+    """Unix Nano Epoch Timestamp"""
 
     api_model_id: str = FieldInfo(alias="model_id")
 
     plaintext_name: str
 
     source: str
+
+    active_versions: Optional[List[int]] = None
 
     attack_monitoring_threat_level: Optional[Literal["safe", "unsafe", "suspicious", "not available"]] = None
 

@@ -19,8 +19,9 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.sensor import Sensor
 from ..types.sensor_query_response import SensorQueryResponse
+from ..types.sensor_create_response import SensorCreateResponse
+from ..types.sensor_retrieve_response import SensorRetrieveResponse
 
 __all__ = ["SensorsResource", "AsyncSensorsResource"]
 
@@ -49,6 +50,7 @@ class SensorsResource(SyncAPIResource):
         self,
         *,
         plaintext_name: str,
+        x_correlation_id: str,
         active: bool | NotGiven = NOT_GIVEN,
         adhoc: bool | NotGiven = NOT_GIVEN,
         tags: Dict[str, object] | NotGiven = NOT_GIVEN,
@@ -59,9 +61,9 @@ class SensorsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Sensor:
+    ) -> SensorCreateResponse:
         """
-        Create a Sensor
+        Create Sensor Record
 
         Args:
           extra_headers: Send extra headers
@@ -72,6 +74,7 @@ class SensorsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return self._post(
             "/api/v2/sensors/create",
             body=maybe_transform(
@@ -87,20 +90,21 @@ class SensorsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Sensor,
+            cast_to=SensorCreateResponse,
         )
 
     def retrieve(
         self,
         sensor_id: str,
         *,
+        x_correlation_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Sensor:
+    ) -> SensorRetrieveResponse:
         """
         Get Sensor
 
@@ -115,18 +119,20 @@ class SensorsResource(SyncAPIResource):
         """
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return self._get(
             f"/api/v2/sensors/{sensor_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Sensor,
+            cast_to=SensorRetrieveResponse,
         )
 
     def delete(
         self,
         sensor_id: str,
         *,
+        x_correlation_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -135,7 +141,7 @@ class SensorsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> None:
         """
-        Delete Sensor
+        Remove an Adhoc Sensor
 
         Args:
           extra_headers: Send extra headers
@@ -149,6 +155,7 @@ class SensorsResource(SyncAPIResource):
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        extra_headers.update({"X-Correlation-Id": x_correlation_id})
         return self._delete(
             f"/api/v2/sensors/{sensor_id}",
             options=make_request_options(
@@ -160,6 +167,7 @@ class SensorsResource(SyncAPIResource):
     def query(
         self,
         *,
+        x_correlation_id: str,
         filter: sensor_query_params.Filter | NotGiven = NOT_GIVEN,
         order_by: str | NotGiven = NOT_GIVEN,
         order_dir: Literal["asc", "desc", "ASC", "DESC"] | NotGiven = NOT_GIVEN,
@@ -173,7 +181,7 @@ class SensorsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> SensorQueryResponse:
         """
-        Query a Sensor
+        Query Sensors
 
         Args:
           extra_headers: Send extra headers
@@ -184,6 +192,7 @@ class SensorsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return self._post(
             "/api/v2/sensors/query",
             body=maybe_transform(
@@ -227,6 +236,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         self,
         *,
         plaintext_name: str,
+        x_correlation_id: str,
         active: bool | NotGiven = NOT_GIVEN,
         adhoc: bool | NotGiven = NOT_GIVEN,
         tags: Dict[str, object] | NotGiven = NOT_GIVEN,
@@ -237,9 +247,9 @@ class AsyncSensorsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Sensor:
+    ) -> SensorCreateResponse:
         """
-        Create a Sensor
+        Create Sensor Record
 
         Args:
           extra_headers: Send extra headers
@@ -250,6 +260,7 @@ class AsyncSensorsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return await self._post(
             "/api/v2/sensors/create",
             body=await async_maybe_transform(
@@ -265,20 +276,21 @@ class AsyncSensorsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Sensor,
+            cast_to=SensorCreateResponse,
         )
 
     async def retrieve(
         self,
         sensor_id: str,
         *,
+        x_correlation_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Sensor:
+    ) -> SensorRetrieveResponse:
         """
         Get Sensor
 
@@ -293,18 +305,20 @@ class AsyncSensorsResource(AsyncAPIResource):
         """
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return await self._get(
             f"/api/v2/sensors/{sensor_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Sensor,
+            cast_to=SensorRetrieveResponse,
         )
 
     async def delete(
         self,
         sensor_id: str,
         *,
+        x_correlation_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -313,7 +327,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> None:
         """
-        Delete Sensor
+        Remove an Adhoc Sensor
 
         Args:
           extra_headers: Send extra headers
@@ -327,6 +341,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        extra_headers.update({"X-Correlation-Id": x_correlation_id})
         return await self._delete(
             f"/api/v2/sensors/{sensor_id}",
             options=make_request_options(
@@ -338,6 +353,7 @@ class AsyncSensorsResource(AsyncAPIResource):
     async def query(
         self,
         *,
+        x_correlation_id: str,
         filter: sensor_query_params.Filter | NotGiven = NOT_GIVEN,
         order_by: str | NotGiven = NOT_GIVEN,
         order_dir: Literal["asc", "desc", "ASC", "DESC"] | NotGiven = NOT_GIVEN,
@@ -351,7 +367,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> SensorQueryResponse:
         """
-        Query a Sensor
+        Query Sensors
 
         Args:
           extra_headers: Send extra headers
@@ -362,6 +378,7 @@ class AsyncSensorsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return await self._post(
             "/api/v2/sensors/query",
             body=await async_maybe_transform(

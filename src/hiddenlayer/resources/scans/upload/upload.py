@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing_extensions import Literal
+
 import httpx
 
 from .file import (
@@ -58,6 +60,7 @@ class UploadResource(SyncAPIResource):
         self,
         scan_id: str,
         *,
+        x_correlation_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -66,7 +69,7 @@ class UploadResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> UploadCompleteAllResponse:
         """
-        Indicate All files are uploaded and start the scan
+        Scan uploaded files
 
         Args:
           extra_headers: Send extra headers
@@ -79,6 +82,7 @@ class UploadResource(SyncAPIResource):
         """
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return self._patch(
             f"/scan/v3/upload/{scan_id}",
             options=make_request_options(
@@ -93,7 +97,10 @@ class UploadResource(SyncAPIResource):
         model_name: str,
         model_version: str,
         requesting_entity: str,
+        x_correlation_id: str,
         location_alias: str | NotGiven = NOT_GIVEN,
+        origin: str | NotGiven = NOT_GIVEN,
+        request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -102,7 +109,7 @@ class UploadResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> UploadStartResponse:
         """
-        Start V3 Upload
+        Start a model upload
 
         Args:
           model_name: Model name
@@ -113,6 +120,11 @@ class UploadResource(SyncAPIResource):
 
           location_alias: Requested location alias
 
+          origin: Specifies the platform or service where the model originated before being
+              scanned
+
+          request_source: Identifies the system that requested the scan
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -121,6 +133,7 @@ class UploadResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return self._post(
             "/scan/v3/upload",
             body=maybe_transform(
@@ -129,6 +142,8 @@ class UploadResource(SyncAPIResource):
                     "model_version": model_version,
                     "requesting_entity": requesting_entity,
                     "location_alias": location_alias,
+                    "origin": origin,
+                    "request_source": request_source,
                 },
                 upload_start_params.UploadStartParams,
             ),
@@ -167,6 +182,7 @@ class AsyncUploadResource(AsyncAPIResource):
         self,
         scan_id: str,
         *,
+        x_correlation_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -175,7 +191,7 @@ class AsyncUploadResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> UploadCompleteAllResponse:
         """
-        Indicate All files are uploaded and start the scan
+        Scan uploaded files
 
         Args:
           extra_headers: Send extra headers
@@ -188,6 +204,7 @@ class AsyncUploadResource(AsyncAPIResource):
         """
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return await self._patch(
             f"/scan/v3/upload/{scan_id}",
             options=make_request_options(
@@ -202,7 +219,10 @@ class AsyncUploadResource(AsyncAPIResource):
         model_name: str,
         model_version: str,
         requesting_entity: str,
+        x_correlation_id: str,
         location_alias: str | NotGiven = NOT_GIVEN,
+        origin: str | NotGiven = NOT_GIVEN,
+        request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"] | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -211,7 +231,7 @@ class AsyncUploadResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> UploadStartResponse:
         """
-        Start V3 Upload
+        Start a model upload
 
         Args:
           model_name: Model name
@@ -222,6 +242,11 @@ class AsyncUploadResource(AsyncAPIResource):
 
           location_alias: Requested location alias
 
+          origin: Specifies the platform or service where the model originated before being
+              scanned
+
+          request_source: Identifies the system that requested the scan
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -230,6 +255,7 @@ class AsyncUploadResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return await self._post(
             "/scan/v3/upload",
             body=await async_maybe_transform(
@@ -238,6 +264,8 @@ class AsyncUploadResource(AsyncAPIResource):
                     "model_version": model_version,
                     "requesting_entity": requesting_entity,
                     "location_alias": location_alias,
+                    "origin": origin,
+                    "request_source": request_source,
                 },
                 upload_start_params.UploadStartParams,
             ),

@@ -5,10 +5,10 @@ from datetime import datetime
 
 from .._models import BaseModel
 
-__all__ = ["Sensor"]
+__all__ = ["SensorRetrieveResponse"]
 
 
-class Sensor(BaseModel):
+class SensorRetrieveResponse(BaseModel):
     active: bool
 
     created_at: datetime
@@ -20,5 +20,7 @@ class Sensor(BaseModel):
     tenant_id: str
 
     version: int
+
+    adhoc: Optional[bool] = None
 
     tags: Optional[Dict[str, object]] = None

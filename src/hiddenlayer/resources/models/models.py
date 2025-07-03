@@ -55,6 +55,7 @@ class ModelsResource(SyncAPIResource):
         self,
         model_id: str,
         *,
+        x_correlation_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -76,6 +77,7 @@ class ModelsResource(SyncAPIResource):
         """
         if not model_id:
             raise ValueError(f"Expected a non-empty value for `model_id` but received {model_id!r}")
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return self._get(
             f"/api/v2/models/{model_id}",
             options=make_request_options(
@@ -88,6 +90,7 @@ class ModelsResource(SyncAPIResource):
         self,
         model_id: str,
         *,
+        x_correlation_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -110,6 +113,7 @@ class ModelsResource(SyncAPIResource):
         if not model_id:
             raise ValueError(f"Expected a non-empty value for `model_id` but received {model_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        extra_headers.update({"X-Correlation-Id": x_correlation_id})
         return self._delete(
             f"/api/v2/models/{model_id}",
             options=make_request_options(
@@ -147,6 +151,7 @@ class AsyncModelsResource(AsyncAPIResource):
         self,
         model_id: str,
         *,
+        x_correlation_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -168,6 +173,7 @@ class AsyncModelsResource(AsyncAPIResource):
         """
         if not model_id:
             raise ValueError(f"Expected a non-empty value for `model_id` but received {model_id!r}")
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return await self._get(
             f"/api/v2/models/{model_id}",
             options=make_request_options(
@@ -180,6 +186,7 @@ class AsyncModelsResource(AsyncAPIResource):
         self,
         model_id: str,
         *,
+        x_correlation_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -202,6 +209,7 @@ class AsyncModelsResource(AsyncAPIResource):
         if not model_id:
             raise ValueError(f"Expected a non-empty value for `model_id` but received {model_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        extra_headers.update({"X-Correlation-Id": x_correlation_id})
         return await self._delete(
             f"/api/v2/models/{model_id}",
             options=make_request_options(

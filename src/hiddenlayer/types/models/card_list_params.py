@@ -2,26 +2,62 @@
 
 from __future__ import annotations
 
-from typing_extensions import Annotated, TypedDict
+from typing import List, Union
+from datetime import datetime
+from typing_extensions import Literal, Required, Annotated, TypedDict
 
 from ..._utils import PropertyInfo
 
-__all__ = ["CardListParams"]
+__all__ = ["CardListParams", "ModelCreated", "ModelName", "Source"]
 
 
 class CardListParams(TypedDict, total=False):
+    x_correlation_id: Required[Annotated[str, PropertyInfo(alias="X-Correlation-Id")]]
+
+    aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]]
+
+    aidr_status: Literal["ENABLED", "DISABLED", "ANY"]
+    """filter by aidr enabled"""
+
     limit: int
 
-    model_name_contains: Annotated[str, PropertyInfo(alias="model_name[contains]")]
+    model_created: ModelCreated
+    """match on models created between dates"""
+
+    model_name: ModelName
     """substring match on model name"""
 
-    model_name_eq: Annotated[str, PropertyInfo(alias="model_name[eq]")]
-    """substring match on model name"""
+    modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]]
+
+    modscan_status: Literal["ENABLED", "DISABLED", "ANY"]
 
     offset: int
+
+    provider: List[Literal["AZURE", "ADHOC"]]
 
     sort: str
     """
     allow sorting by model name or created at timestamp, ascending (+) or the
     default descending (-)
     """
+
+    source: Source
+    """substring and full match on model source"""
+
+
+class ModelCreated(TypedDict, total=False):
+    gte: Annotated[Union[str, datetime], PropertyInfo(format="iso8601")]
+
+    lte: Annotated[Union[str, datetime], PropertyInfo(format="iso8601")]
+
+
+class ModelName(TypedDict, total=False):
+    contains: str
+
+    eq: str
+
+
+class Source(TypedDict, total=False):
+    contains: str
+
+    eq: str

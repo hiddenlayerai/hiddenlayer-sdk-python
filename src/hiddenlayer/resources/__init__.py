@@ -24,14 +24,6 @@ from .sensors import (
     SensorsResourceWithStreamingResponse,
     AsyncSensorsResourceWithStreamingResponse,
 )
-from .vectors import (
-    VectorsResource,
-    AsyncVectorsResource,
-    VectorsResourceWithRawResponse,
-    AsyncVectorsResourceWithRawResponse,
-    VectorsResourceWithStreamingResponse,
-    AsyncVectorsResourceWithStreamingResponse,
-)
 
 __all__ = [
     "ModelsResource",
@@ -46,12 +38,6 @@ __all__ = [
     "AsyncSensorsResourceWithRawResponse",
     "SensorsResourceWithStreamingResponse",
     "AsyncSensorsResourceWithStreamingResponse",
-    "VectorsResource",
-    "AsyncVectorsResource",
-    "VectorsResourceWithRawResponse",
-    "AsyncVectorsResourceWithRawResponse",
-    "VectorsResourceWithStreamingResponse",
-    "AsyncVectorsResourceWithStreamingResponse",
     "ScansResource",
     "AsyncScansResource",
     "ScansResourceWithRawResponse",
