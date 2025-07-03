@@ -222,8 +222,9 @@ def _setup_scan_model(tmp_path):
     return model_path
 
 
-def _validate_scan_model(results: ScanResults, request_source="API Upload",
-        origin: str =  "Local File System"):
+def _validate_scan_model(
+    results: ScanResults, request_source="API Upload", origin: str = "Local File System"
+):
     assert results.file_count == 1
     assert results.files_with_detections_count == 1
 
@@ -260,8 +261,9 @@ def _setup_scan_folder(tmp_path):
         pickle.dump(MaliciousPickle(), f)
 
 
-def _validate_scan_folder(tmp_path, results: ScanResults, request_source="API Upload",
-        origin: str = ""):
+def _validate_scan_folder(
+    tmp_path, results: ScanResults, request_source="API Upload", origin: str = ""
+):
     safe_model = "safe_model.pkl"
     malicious_model = "malicious_model.pkl"
 
