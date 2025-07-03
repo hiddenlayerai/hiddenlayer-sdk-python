@@ -8,9 +8,9 @@ __all__ = ["JobRequestParams", "Access", "Inventory"]
 
 
 class JobRequestParams(TypedDict, total=False):
-    access: Access
+    access: Required[Access]
 
-    inventory: Inventory
+    inventory: Required[Inventory]
 
 
 class Access(TypedDict, total=False):
@@ -38,3 +38,12 @@ class Inventory(TypedDict, total=False):
 
     requesting_entity: Required[str]
     """Entity that requested the scan"""
+
+    origin: str
+    """
+    Specifies the platform or service where the model originated before being
+    scanned
+    """
+
+    request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]
+    """Identifies the system that requested the scan"""

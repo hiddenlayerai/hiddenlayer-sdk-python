@@ -34,68 +34,43 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types import Sensor, SensorQueryResponse
+from hiddenlayer.types import SensorCreateResponse, SensorRetrieveResponse, SensorQueryResponse
 ```
 
 Methods:
 
-- <code title="post /api/v2/sensors/create">client.sensors.<a href="./src/hiddenlayer/resources/sensors.py">create</a>(\*\*<a href="src/hiddenlayer/types/sensor_create_params.py">params</a>) -> <a href="./src/hiddenlayer/types/sensor.py">Sensor</a></code>
-- <code title="get /api/v2/sensors/{sensor_id}">client.sensors.<a href="./src/hiddenlayer/resources/sensors.py">retrieve</a>(sensor_id) -> <a href="./src/hiddenlayer/types/sensor.py">Sensor</a></code>
+- <code title="post /api/v2/sensors/create">client.sensors.<a href="./src/hiddenlayer/resources/sensors.py">create</a>(\*\*<a href="src/hiddenlayer/types/sensor_create_params.py">params</a>) -> <a href="./src/hiddenlayer/types/sensor_create_response.py">SensorCreateResponse</a></code>
+- <code title="get /api/v2/sensors/{sensor_id}">client.sensors.<a href="./src/hiddenlayer/resources/sensors.py">retrieve</a>(sensor_id) -> <a href="./src/hiddenlayer/types/sensor_retrieve_response.py">SensorRetrieveResponse</a></code>
 - <code title="delete /api/v2/sensors/{sensor_id}">client.sensors.<a href="./src/hiddenlayer/resources/sensors.py">delete</a>(sensor_id) -> None</code>
 - <code title="post /api/v2/sensors/query">client.sensors.<a href="./src/hiddenlayer/resources/sensors.py">query</a>(\*\*<a href="src/hiddenlayer/types/sensor_query_params.py">params</a>) -> <a href="./src/hiddenlayer/types/sensor_query_response.py">SensorQueryResponse</a></code>
 
-# Vectors
-
-Types:
-
-```python
-from hiddenlayer.types import VectorSubmitVectorsResponse
-```
-
-Methods:
-
-- <code title="post /api/v2/submit">client.vectors.<a href="./src/hiddenlayer/resources/vectors.py">submit_vectors</a>(\*\*<a href="src/hiddenlayer/types/vector_submit_vectors_params.py">params</a>) -> <a href="./src/hiddenlayer/types/vector_submit_vectors_response.py">VectorSubmitVectorsResponse</a></code>
-
 # Scans
-
-Methods:
-
-- <code title="get /scans/v3/health">client.scans.<a href="./src/hiddenlayer/resources/scans/scans.py">check_health</a>() -> None</code>
-- <code title="get /scans/v3/readiness">client.scans.<a href="./src/hiddenlayer/resources/scans/scans.py">check_readiness</a>() -> None</code>
-- <code title="get /scans/v3/results/{scan_id}">client.scans.<a href="./src/hiddenlayer/resources/scans/scans.py">retrieve_results</a>(scan_id, \*\*<a href="src/hiddenlayer/types/scan_retrieve_results_params.py">params</a>) -> object</code>
 
 ## Results
 
 Types:
 
 ```python
-from hiddenlayer.types.scans import (
-    FileScanReport,
-    ScanReport,
-    ResultListResponse,
-    ResultPatchResponse,
-)
+from hiddenlayer.types.scans import FileScanReport, ScanReport, ResultListResponse
 ```
 
 Methods:
 
 - <code title="get /scan/v3/results/{scan_id}">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">retrieve</a>(scan_id, \*\*<a href="src/hiddenlayer/types/scans/result_retrieve_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scans/scan_report.py">ScanReport</a></code>
 - <code title="get /scan/v3/results">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">list</a>(\*\*<a href="src/hiddenlayer/types/scans/result_list_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scans/result_list_response.py">ResultListResponse</a></code>
-- <code title="patch /scan/v3/results/{scan_id}">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">patch</a>(path_scan_id, \*\*<a href="src/hiddenlayer/types/scans/result_patch_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scans/result_patch_response.py">ResultPatchResponse</a></code>
-- <code title="post /scan/v3/results/{scan_id}">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">start</a>(path_scan_id, \*\*<a href="src/hiddenlayer/types/scans/result_start_params.py">params</a>) -> None</code>
 
 ## Jobs
 
 Types:
 
 ```python
-from hiddenlayer.types.scans import ScanJob
+from hiddenlayer.types.scans import ScanJob, JobListResponse
 ```
 
 Methods:
 
-- <code title="get /scan/v3/jobs">client.scans.jobs.<a href="./src/hiddenlayer/resources/scans/jobs.py">list</a>() -> <a href="./src/hiddenlayer/types/scans/scan_job.py">ScanJob</a></code>
-- <code title="post /scan/v3/jobs">client.scans.jobs.<a href="./src/hiddenlayer/resources/scans/jobs.py">request</a>(\*\*<a href="src/hiddenlayer/types/scans/job_request_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scans/scan_report.py">ScanReport</a></code>
+- <code title="get /scan/v3/jobs">client.scans.jobs.<a href="./src/hiddenlayer/resources/scans/jobs.py">list</a>() -> <a href="./src/hiddenlayer/types/scans/job_list_response.py">JobListResponse</a></code>
+- <code title="post /scan/v3/jobs">client.scans.jobs.<a href="./src/hiddenlayer/resources/scans/jobs.py">request</a>(\*\*<a href="src/hiddenlayer/types/scans/job_request_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scans/scan_job.py">ScanJob</a></code>
 
 ## Upload
 

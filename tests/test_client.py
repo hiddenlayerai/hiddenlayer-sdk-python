@@ -24,7 +24,7 @@ from pydantic import ValidationError
 from hiddenlayer import HiddenLayer, AsyncHiddenLayer, APIResponseValidationError
 from hiddenlayer._types import Omit
 from hiddenlayer._models import BaseModel, FinalRequestOptions
-from hiddenlayer._exceptions import APIStatusError, APITimeoutError, HiddenLayerError, APIResponseValidationError
+from hiddenlayer._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
 from hiddenlayer._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
@@ -341,16 +341,6 @@ class TestHiddenLayer:
         request = client2._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "stainless"
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
-
-    def test_validate_headers(self) -> None:
-        client = HiddenLayer(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
-        request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
-
-        with pytest.raises(HiddenLayerError):
-            with update_env(**{"HIDDENLAYER_TOKEN": Omit()}):
-                client2 = HiddenLayer(base_url=base_url, bearer_token=None, _strict_response_validation=True)
-            _ = client2
 
     def test_default_query_option(self) -> None:
         client = HiddenLayer(
@@ -745,7 +735,9 @@ class TestHiddenLayer:
         respx_mock.post("/api/v2/sensors/create").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            client.sensors.with_streaming_response.create(plaintext_name="example_model").__enter__()
+            client.sensors.with_streaming_response.create(
+                plaintext_name="plaintext_name", x_correlation_id="00000000-0000-0000-0000-000000000000"
+            ).__enter__()
 
         assert _get_open_connections(self.client) == 0
 
@@ -755,7 +747,9 @@ class TestHiddenLayer:
         respx_mock.post("/api/v2/sensors/create").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            client.sensors.with_streaming_response.create(plaintext_name="example_model").__enter__()
+            client.sensors.with_streaming_response.create(
+                plaintext_name="plaintext_name", x_correlation_id="00000000-0000-0000-0000-000000000000"
+            ).__enter__()
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -784,7 +778,9 @@ class TestHiddenLayer:
 
         respx_mock.post("/api/v2/sensors/create").mock(side_effect=retry_handler)
 
-        response = client.sensors.with_raw_response.create(plaintext_name="example_model")
+        response = client.sensors.with_raw_response.create(
+            plaintext_name="plaintext_name", x_correlation_id="00000000-0000-0000-0000-000000000000"
+        )
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -809,7 +805,9 @@ class TestHiddenLayer:
         respx_mock.post("/api/v2/sensors/create").mock(side_effect=retry_handler)
 
         response = client.sensors.with_raw_response.create(
-            plaintext_name="example_model", extra_headers={"x-stainless-retry-count": Omit()}
+            plaintext_name="plaintext_name",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            extra_headers={"x-stainless-retry-count": Omit()},
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -834,7 +832,9 @@ class TestHiddenLayer:
         respx_mock.post("/api/v2/sensors/create").mock(side_effect=retry_handler)
 
         response = client.sensors.with_raw_response.create(
-            plaintext_name="example_model", extra_headers={"x-stainless-retry-count": "42"}
+            plaintext_name="plaintext_name",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            extra_headers={"x-stainless-retry-count": "42"},
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
@@ -1174,16 +1174,6 @@ class TestAsyncHiddenLayer:
         request = client2._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "stainless"
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
-
-    def test_validate_headers(self) -> None:
-        client = AsyncHiddenLayer(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
-        request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("Authorization") == f"Bearer {bearer_token}"
-
-        with pytest.raises(HiddenLayerError):
-            with update_env(**{"HIDDENLAYER_TOKEN": Omit()}):
-                client2 = AsyncHiddenLayer(base_url=base_url, bearer_token=None, _strict_response_validation=True)
-            _ = client2
 
     def test_default_query_option(self) -> None:
         client = AsyncHiddenLayer(
@@ -1584,7 +1574,9 @@ class TestAsyncHiddenLayer:
         respx_mock.post("/api/v2/sensors/create").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await async_client.sensors.with_streaming_response.create(plaintext_name="example_model").__aenter__()
+            await async_client.sensors.with_streaming_response.create(
+                plaintext_name="plaintext_name", x_correlation_id="00000000-0000-0000-0000-000000000000"
+            ).__aenter__()
 
         assert _get_open_connections(self.client) == 0
 
@@ -1596,7 +1588,9 @@ class TestAsyncHiddenLayer:
         respx_mock.post("/api/v2/sensors/create").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await async_client.sensors.with_streaming_response.create(plaintext_name="example_model").__aenter__()
+            await async_client.sensors.with_streaming_response.create(
+                plaintext_name="plaintext_name", x_correlation_id="00000000-0000-0000-0000-000000000000"
+            ).__aenter__()
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -1626,7 +1620,9 @@ class TestAsyncHiddenLayer:
 
         respx_mock.post("/api/v2/sensors/create").mock(side_effect=retry_handler)
 
-        response = await client.sensors.with_raw_response.create(plaintext_name="example_model")
+        response = await client.sensors.with_raw_response.create(
+            plaintext_name="plaintext_name", x_correlation_id="00000000-0000-0000-0000-000000000000"
+        )
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1652,7 +1648,9 @@ class TestAsyncHiddenLayer:
         respx_mock.post("/api/v2/sensors/create").mock(side_effect=retry_handler)
 
         response = await client.sensors.with_raw_response.create(
-            plaintext_name="example_model", extra_headers={"x-stainless-retry-count": Omit()}
+            plaintext_name="plaintext_name",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            extra_headers={"x-stainless-retry-count": Omit()},
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -1678,7 +1676,9 @@ class TestAsyncHiddenLayer:
         respx_mock.post("/api/v2/sensors/create").mock(side_effect=retry_handler)
 
         response = await client.sensors.with_raw_response.create(
-            plaintext_name="example_model", extra_headers={"x-stainless-retry-count": "42"}
+            plaintext_name="plaintext_name",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            extra_headers={"x-stainless-retry-count": "42"},
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"

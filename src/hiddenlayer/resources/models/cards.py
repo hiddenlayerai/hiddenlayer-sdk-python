@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from typing import List
+from typing_extensions import Literal
+
 import httpx
 
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
@@ -44,11 +47,18 @@ class CardsResource(SyncAPIResource):
     def list(
         self,
         *,
+        x_correlation_id: str,
+        aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]] | NotGiven = NOT_GIVEN,
+        aidr_status: Literal["ENABLED", "DISABLED", "ANY"] | NotGiven = NOT_GIVEN,
         limit: int | NotGiven = NOT_GIVEN,
-        model_name_contains: str | NotGiven = NOT_GIVEN,
-        model_name_eq: str | NotGiven = NOT_GIVEN,
+        model_created: card_list_params.ModelCreated | NotGiven = NOT_GIVEN,
+        model_name: card_list_params.ModelName | NotGiven = NOT_GIVEN,
+        modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]] | NotGiven = NOT_GIVEN,
+        modscan_status: Literal["ENABLED", "DISABLED", "ANY"] | NotGiven = NOT_GIVEN,
         offset: int | NotGiven = NOT_GIVEN,
+        provider: List[Literal["AZURE", "ADHOC"]] | NotGiven = NOT_GIVEN,
         sort: str | NotGiven = NOT_GIVEN,
+        source: card_list_params.Source | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -60,12 +70,16 @@ class CardsResource(SyncAPIResource):
         List Model Cards
 
         Args:
-          model_name_contains: substring match on model name
+          aidr_status: filter by aidr enabled
 
-          model_name_eq: substring match on model name
+          model_created: match on models created between dates
+
+          model_name: substring match on model name
 
           sort: allow sorting by model name or created at timestamp, ascending (+) or the
               default descending (-)
+
+          source: substring and full match on model source
 
           extra_headers: Send extra headers
 
@@ -75,6 +89,7 @@ class CardsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return self._get(
             "/models/v3/cards",
             options=make_request_options(
@@ -84,11 +99,17 @@ class CardsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "aidr_severity": aidr_severity,
+                        "aidr_status": aidr_status,
                         "limit": limit,
-                        "model_name_contains": model_name_contains,
-                        "model_name_eq": model_name_eq,
+                        "model_created": model_created,
+                        "model_name": model_name,
+                        "modscan_severity": modscan_severity,
+                        "modscan_status": modscan_status,
                         "offset": offset,
+                        "provider": provider,
                         "sort": sort,
+                        "source": source,
                     },
                     card_list_params.CardListParams,
                 ),
@@ -120,11 +141,18 @@ class AsyncCardsResource(AsyncAPIResource):
     async def list(
         self,
         *,
+        x_correlation_id: str,
+        aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]] | NotGiven = NOT_GIVEN,
+        aidr_status: Literal["ENABLED", "DISABLED", "ANY"] | NotGiven = NOT_GIVEN,
         limit: int | NotGiven = NOT_GIVEN,
-        model_name_contains: str | NotGiven = NOT_GIVEN,
-        model_name_eq: str | NotGiven = NOT_GIVEN,
+        model_created: card_list_params.ModelCreated | NotGiven = NOT_GIVEN,
+        model_name: card_list_params.ModelName | NotGiven = NOT_GIVEN,
+        modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]] | NotGiven = NOT_GIVEN,
+        modscan_status: Literal["ENABLED", "DISABLED", "ANY"] | NotGiven = NOT_GIVEN,
         offset: int | NotGiven = NOT_GIVEN,
+        provider: List[Literal["AZURE", "ADHOC"]] | NotGiven = NOT_GIVEN,
         sort: str | NotGiven = NOT_GIVEN,
+        source: card_list_params.Source | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -136,12 +164,16 @@ class AsyncCardsResource(AsyncAPIResource):
         List Model Cards
 
         Args:
-          model_name_contains: substring match on model name
+          aidr_status: filter by aidr enabled
 
-          model_name_eq: substring match on model name
+          model_created: match on models created between dates
+
+          model_name: substring match on model name
 
           sort: allow sorting by model name or created at timestamp, ascending (+) or the
               default descending (-)
+
+          source: substring and full match on model source
 
           extra_headers: Send extra headers
 
@@ -151,6 +183,7 @@ class AsyncCardsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return await self._get(
             "/models/v3/cards",
             options=make_request_options(
@@ -160,11 +193,17 @@ class AsyncCardsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform(
                     {
+                        "aidr_severity": aidr_severity,
+                        "aidr_status": aidr_status,
                         "limit": limit,
-                        "model_name_contains": model_name_contains,
-                        "model_name_eq": model_name_eq,
+                        "model_created": model_created,
+                        "model_name": model_name,
+                        "modscan_severity": modscan_severity,
+                        "modscan_status": modscan_status,
                         "offset": offset,
+                        "provider": provider,
                         "sort": sort,
+                        "source": source,
                     },
                     card_list_params.CardListParams,
                 ),

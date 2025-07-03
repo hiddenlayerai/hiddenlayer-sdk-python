@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, TypedDict
+from typing_extensions import Literal, Required, Annotated, TypedDict
+
+from ..._utils import PropertyInfo
 
 __all__ = ["UploadStartParams"]
 
@@ -17,5 +19,16 @@ class UploadStartParams(TypedDict, total=False):
     requesting_entity: Required[str]
     """Requesting entity"""
 
+    x_correlation_id: Required[Annotated[str, PropertyInfo(alias="X-Correlation-Id")]]
+
     location_alias: str
     """Requested location alias"""
+
+    origin: str
+    """
+    Specifies the platform or service where the model originated before being
+    scanned
+    """
+
+    request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]
+    """Identifies the system that requested the scan"""

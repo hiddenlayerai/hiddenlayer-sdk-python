@@ -7,22 +7,7 @@ from pydantic import Field as FieldInfo
 
 from ..._models import BaseModel
 
-__all__ = ["ScanJob", "Access", "Inventory"]
-
-
-class Access(BaseModel):
-    source: Optional[
-        Literal[
-            "LOCAL",
-            "AWS_PRESIGNED",
-            "AWS_IAM_ROLE",
-            "AZURE_BLOB_SAS",
-            "AZURE_BLOB_AD",
-            "GOOGLE_SIGNED",
-            "GOOGLE_OAUTH",
-            "HUGGING_FACE",
-        ]
-    ] = None
+__all__ = ["ScanJob", "Inventory"]
 
 
 class Inventory(BaseModel):
@@ -38,11 +23,18 @@ class Inventory(BaseModel):
     requesting_entity: str
     """Entity that requested the scan"""
 
+    origin: Optional[str] = None
+    """
+    Specifies the platform or service where the model originated before being
+    scanned
+    """
+
+    request_source: Optional[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] = None
+    """Identifies the system that requested the scan"""
+
 
 class ScanJob(BaseModel):
-    access: Optional[Access] = None
-
-    inventory: Optional[Inventory] = None
+    inventory: Inventory
 
     scan_id: Optional[str] = None
     """unique identifier for the scan"""

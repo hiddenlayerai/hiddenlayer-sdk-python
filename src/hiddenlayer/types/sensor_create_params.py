@@ -3,13 +3,17 @@
 from __future__ import annotations
 
 from typing import Dict
-from typing_extensions import Required, TypedDict
+from typing_extensions import Required, Annotated, TypedDict
+
+from .._utils import PropertyInfo
 
 __all__ = ["SensorCreateParams"]
 
 
 class SensorCreateParams(TypedDict, total=False):
     plaintext_name: Required[str]
+
+    x_correlation_id: Required[Annotated[str, PropertyInfo(alias="X-Correlation-Id")]]
 
     active: bool
 

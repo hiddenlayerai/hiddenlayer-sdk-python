@@ -6,11 +6,19 @@ from pydantic import Field as FieldInfo
 
 from .._models import BaseModel
 
-__all__ = ["ModelRetrieveResponse", "Version"]
+__all__ = ["ModelRetrieveResponse", "Version", "VersionDeployment"]
+
+
+class VersionDeployment(BaseModel):
+    active: Optional[bool] = None
+
+    path: Optional[str] = None
 
 
 class Version(BaseModel):
     version: str
+
+    deployments: Optional[List[VersionDeployment]] = None
 
     locations: Optional[Dict[str, object]] = None
 

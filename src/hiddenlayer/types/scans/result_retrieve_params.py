@@ -2,11 +2,15 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Required, Annotated, TypedDict
+
+from ..._utils import PropertyInfo
 
 __all__ = ["ResultRetrieveParams"]
 
 
 class ResultRetrieveParams(TypedDict, total=False):
+    x_correlation_id: Required[Annotated[str, PropertyInfo(alias="X-Correlation-Id")]]
+
     has_detections: bool
     """Filter file_results to only those that have detections (and parents)"""

@@ -9,7 +9,11 @@ import pytest
 
 from hiddenlayer import HiddenLayer, AsyncHiddenLayer
 from tests.utils import assert_matches_type
-from hiddenlayer.types import Sensor, SensorQueryResponse
+from hiddenlayer.types import (
+    SensorQueryResponse,
+    SensorCreateResponse,
+    SensorRetrieveResponse,
+)
 from hiddenlayer._utils import parse_datetime
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -22,45 +26,49 @@ class TestSensors:
     @parametrize
     def test_method_create(self, client: HiddenLayer) -> None:
         sensor = client.sensors.create(
-            plaintext_name="example_model",
+            plaintext_name="plaintext_name",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
-        assert_matches_type(Sensor, sensor, path=["response"])
+        assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     def test_method_create_with_all_params(self, client: HiddenLayer) -> None:
         sensor = client.sensors.create(
-            plaintext_name="example_model",
+            plaintext_name="plaintext_name",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
             active=True,
             adhoc=True,
-            tags={"0": "bar"},
-            version=1,
+            tags={"foo": "bar"},
+            version=0,
         )
-        assert_matches_type(Sensor, sensor, path=["response"])
+        assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     def test_raw_response_create(self, client: HiddenLayer) -> None:
         response = client.sensors.with_raw_response.create(
-            plaintext_name="example_model",
+            plaintext_name="plaintext_name",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         sensor = response.parse()
-        assert_matches_type(Sensor, sensor, path=["response"])
+        assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     def test_streaming_response_create(self, client: HiddenLayer) -> None:
         with client.sensors.with_streaming_response.create(
-            plaintext_name="example_model",
+            plaintext_name="plaintext_name",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             sensor = response.parse()
-            assert_matches_type(Sensor, sensor, path=["response"])
+            assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -68,33 +76,36 @@ class TestSensors:
     @parametrize
     def test_method_retrieve(self, client: HiddenLayer) -> None:
         sensor = client.sensors.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
-        assert_matches_type(Sensor, sensor, path=["response"])
+        assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     def test_raw_response_retrieve(self, client: HiddenLayer) -> None:
         response = client.sensors.with_raw_response.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         sensor = response.parse()
-        assert_matches_type(Sensor, sensor, path=["response"])
+        assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     def test_streaming_response_retrieve(self, client: HiddenLayer) -> None:
         with client.sensors.with_streaming_response.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             sensor = response.parse()
-            assert_matches_type(Sensor, sensor, path=["response"])
+            assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -103,14 +114,16 @@ class TestSensors:
     def test_path_params_retrieve(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `sensor_id` but received ''"):
             client.sensors.with_raw_response.retrieve(
-                "",
+                sensor_id="",
+                x_correlation_id="00000000-0000-0000-0000-000000000000",
             )
 
     @pytest.mark.skip()
     @parametrize
     def test_method_delete(self, client: HiddenLayer) -> None:
         sensor = client.sensors.delete(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert sensor is None
 
@@ -118,7 +131,8 @@ class TestSensors:
     @parametrize
     def test_raw_response_delete(self, client: HiddenLayer) -> None:
         response = client.sensors.with_raw_response.delete(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
 
         assert response.is_closed is True
@@ -130,7 +144,8 @@ class TestSensors:
     @parametrize
     def test_streaming_response_delete(self, client: HiddenLayer) -> None:
         with client.sensors.with_streaming_response.delete(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -145,19 +160,23 @@ class TestSensors:
     def test_path_params_delete(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `sensor_id` but received ''"):
             client.sensors.with_raw_response.delete(
-                "",
+                sensor_id="",
+                x_correlation_id="00000000-0000-0000-0000-000000000000",
             )
 
     @pytest.mark.skip()
     @parametrize
     def test_method_query(self, client: HiddenLayer) -> None:
-        sensor = client.sensors.query()
+        sensor = client.sensors.query(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        )
         assert_matches_type(SensorQueryResponse, sensor, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     def test_method_query_with_all_params(self, client: HiddenLayer) -> None:
         sensor = client.sensors.query(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
             filter={
                 "active": True,
                 "created_at_start": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -176,7 +195,9 @@ class TestSensors:
     @pytest.mark.skip()
     @parametrize
     def test_raw_response_query(self, client: HiddenLayer) -> None:
-        response = client.sensors.with_raw_response.query()
+        response = client.sensors.with_raw_response.query(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -186,7 +207,9 @@ class TestSensors:
     @pytest.mark.skip()
     @parametrize
     def test_streaming_response_query(self, client: HiddenLayer) -> None:
-        with client.sensors.with_streaming_response.query() as response:
+        with client.sensors.with_streaming_response.query(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -205,45 +228,49 @@ class TestAsyncSensors:
     @parametrize
     async def test_method_create(self, async_client: AsyncHiddenLayer) -> None:
         sensor = await async_client.sensors.create(
-            plaintext_name="example_model",
+            plaintext_name="plaintext_name",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
-        assert_matches_type(Sensor, sensor, path=["response"])
+        assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         sensor = await async_client.sensors.create(
-            plaintext_name="example_model",
+            plaintext_name="plaintext_name",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
             active=True,
             adhoc=True,
-            tags={"0": "bar"},
-            version=1,
+            tags={"foo": "bar"},
+            version=0,
         )
-        assert_matches_type(Sensor, sensor, path=["response"])
+        assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.sensors.with_raw_response.create(
-            plaintext_name="example_model",
+            plaintext_name="plaintext_name",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         sensor = await response.parse()
-        assert_matches_type(Sensor, sensor, path=["response"])
+        assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.sensors.with_streaming_response.create(
-            plaintext_name="example_model",
+            plaintext_name="plaintext_name",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             sensor = await response.parse()
-            assert_matches_type(Sensor, sensor, path=["response"])
+            assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -251,33 +278,36 @@ class TestAsyncSensors:
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         sensor = await async_client.sensors.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
-        assert_matches_type(Sensor, sensor, path=["response"])
+        assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.sensors.with_raw_response.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         sensor = await response.parse()
-        assert_matches_type(Sensor, sensor, path=["response"])
+        assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.sensors.with_streaming_response.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             sensor = await response.parse()
-            assert_matches_type(Sensor, sensor, path=["response"])
+            assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -286,14 +316,16 @@ class TestAsyncSensors:
     async def test_path_params_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `sensor_id` but received ''"):
             await async_client.sensors.with_raw_response.retrieve(
-                "",
+                sensor_id="",
+                x_correlation_id="00000000-0000-0000-0000-000000000000",
             )
 
     @pytest.mark.skip()
     @parametrize
     async def test_method_delete(self, async_client: AsyncHiddenLayer) -> None:
         sensor = await async_client.sensors.delete(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert sensor is None
 
@@ -301,7 +333,8 @@ class TestAsyncSensors:
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.sensors.with_raw_response.delete(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
 
         assert response.is_closed is True
@@ -313,7 +346,8 @@ class TestAsyncSensors:
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.sensors.with_streaming_response.delete(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -328,19 +362,23 @@ class TestAsyncSensors:
     async def test_path_params_delete(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `sensor_id` but received ''"):
             await async_client.sensors.with_raw_response.delete(
-                "",
+                sensor_id="",
+                x_correlation_id="00000000-0000-0000-0000-000000000000",
             )
 
     @pytest.mark.skip()
     @parametrize
     async def test_method_query(self, async_client: AsyncHiddenLayer) -> None:
-        sensor = await async_client.sensors.query()
+        sensor = await async_client.sensors.query(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        )
         assert_matches_type(SensorQueryResponse, sensor, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     async def test_method_query_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         sensor = await async_client.sensors.query(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
             filter={
                 "active": True,
                 "created_at_start": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -359,7 +397,9 @@ class TestAsyncSensors:
     @pytest.mark.skip()
     @parametrize
     async def test_raw_response_query(self, async_client: AsyncHiddenLayer) -> None:
-        response = await async_client.sensors.with_raw_response.query()
+        response = await async_client.sensors.with_raw_response.query(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -369,7 +409,9 @@ class TestAsyncSensors:
     @pytest.mark.skip()
     @parametrize
     async def test_streaming_response_query(self, async_client: AsyncHiddenLayer) -> None:
-        async with async_client.sensors.with_streaming_response.query() as response:
+        async with async_client.sensors.with_streaming_response.query(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 

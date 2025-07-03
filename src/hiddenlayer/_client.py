@@ -23,7 +23,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._version import __version__
-from .resources import sensors, vectors
+from .resources import sensors
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError, HiddenLayerError
 from ._base_client import (
@@ -49,7 +49,6 @@ __all__ = [
 class HiddenLayer(SyncAPIClient):
     models: models.ModelsResource
     sensors: sensors.SensorsResource
-    vectors: vectors.VectorsResource
     scans: scans.ScansResource
     with_raw_response: HiddenLayerWithRawResponse
     with_streaming_response: HiddenLayerWithStreamedResponse
@@ -110,7 +109,6 @@ class HiddenLayer(SyncAPIClient):
 
         self.models = models.ModelsResource(self)
         self.sensors = sensors.SensorsResource(self)
-        self.vectors = vectors.VectorsResource(self)
         self.scans = scans.ScansResource(self)
         self.with_raw_response = HiddenLayerWithRawResponse(self)
         self.with_streaming_response = HiddenLayerWithStreamedResponse(self)
@@ -119,12 +117,6 @@ class HiddenLayer(SyncAPIClient):
     @override
     def qs(self) -> Querystring:
         return Querystring(array_format="comma")
-
-    @property
-    @override
-    def auth_headers(self) -> dict[str, str]:
-        bearer_token = self.bearer_token
-        return {"Authorization": f"Bearer {bearer_token}"}
 
     @property
     @override
@@ -244,7 +236,6 @@ class HiddenLayer(SyncAPIClient):
 class AsyncHiddenLayer(AsyncAPIClient):
     models: models.AsyncModelsResource
     sensors: sensors.AsyncSensorsResource
-    vectors: vectors.AsyncVectorsResource
     scans: scans.AsyncScansResource
     with_raw_response: AsyncHiddenLayerWithRawResponse
     with_streaming_response: AsyncHiddenLayerWithStreamedResponse
@@ -305,7 +296,6 @@ class AsyncHiddenLayer(AsyncAPIClient):
 
         self.models = models.AsyncModelsResource(self)
         self.sensors = sensors.AsyncSensorsResource(self)
-        self.vectors = vectors.AsyncVectorsResource(self)
         self.scans = scans.AsyncScansResource(self)
         self.with_raw_response = AsyncHiddenLayerWithRawResponse(self)
         self.with_streaming_response = AsyncHiddenLayerWithStreamedResponse(self)
@@ -314,12 +304,6 @@ class AsyncHiddenLayer(AsyncAPIClient):
     @override
     def qs(self) -> Querystring:
         return Querystring(array_format="comma")
-
-    @property
-    @override
-    def auth_headers(self) -> dict[str, str]:
-        bearer_token = self.bearer_token
-        return {"Authorization": f"Bearer {bearer_token}"}
 
     @property
     @override
@@ -419,7 +403,6 @@ class HiddenLayerWithRawResponse:
     def __init__(self, client: HiddenLayer) -> None:
         self.models = models.ModelsResourceWithRawResponse(client.models)
         self.sensors = sensors.SensorsResourceWithRawResponse(client.sensors)
-        self.vectors = vectors.VectorsResourceWithRawResponse(client.vectors)
         self.scans = scans.ScansResourceWithRawResponse(client.scans)
 
 
@@ -427,7 +410,6 @@ class AsyncHiddenLayerWithRawResponse:
     def __init__(self, client: AsyncHiddenLayer) -> None:
         self.models = models.AsyncModelsResourceWithRawResponse(client.models)
         self.sensors = sensors.AsyncSensorsResourceWithRawResponse(client.sensors)
-        self.vectors = vectors.AsyncVectorsResourceWithRawResponse(client.vectors)
         self.scans = scans.AsyncScansResourceWithRawResponse(client.scans)
 
 
@@ -435,7 +417,6 @@ class HiddenLayerWithStreamedResponse:
     def __init__(self, client: HiddenLayer) -> None:
         self.models = models.ModelsResourceWithStreamingResponse(client.models)
         self.sensors = sensors.SensorsResourceWithStreamingResponse(client.sensors)
-        self.vectors = vectors.VectorsResourceWithStreamingResponse(client.vectors)
         self.scans = scans.ScansResourceWithStreamingResponse(client.scans)
 
 
@@ -443,7 +424,6 @@ class AsyncHiddenLayerWithStreamedResponse:
     def __init__(self, client: AsyncHiddenLayer) -> None:
         self.models = models.AsyncModelsResourceWithStreamingResponse(client.models)
         self.sensors = sensors.AsyncSensorsResourceWithStreamingResponse(client.sensors)
-        self.vectors = vectors.AsyncVectorsResourceWithStreamingResponse(client.vectors)
         self.scans = scans.AsyncScansResourceWithStreamingResponse(client.scans)
 
 

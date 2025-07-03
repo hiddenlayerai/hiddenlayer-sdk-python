@@ -9,6 +9,7 @@ import pytest
 
 from hiddenlayer import HiddenLayer, AsyncHiddenLayer
 from tests.utils import assert_matches_type
+from hiddenlayer._utils import parse_datetime
 from hiddenlayer.types.models import CardListResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -20,25 +21,45 @@ class TestCards:
     @pytest.mark.skip()
     @parametrize
     def test_method_list(self, client: HiddenLayer) -> None:
-        card = client.models.cards.list()
+        card = client.models.cards.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        )
         assert_matches_type(CardListResponse, card, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     def test_method_list_with_all_params(self, client: HiddenLayer) -> None:
         card = client.models.cards.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            aidr_severity=["SAFE"],
+            aidr_status="ENABLED",
             limit=1,
-            model_name_contains="model_name[contains]",
-            model_name_eq="model_name[eq]",
+            model_created={
+                "gte": parse_datetime("2019-12-27T18:11:19.117Z"),
+                "lte": parse_datetime("2019-12-27T18:11:19.117Z"),
+            },
+            model_name={
+                "contains": "contains",
+                "eq": "eq",
+            },
+            modscan_severity=["SAFE"],
+            modscan_status="ENABLED",
             offset=0,
+            provider=["AZURE"],
             sort="sort",
+            source={
+                "contains": "contains",
+                "eq": "eq",
+            },
         )
         assert_matches_type(CardListResponse, card, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     def test_raw_response_list(self, client: HiddenLayer) -> None:
-        response = client.models.cards.with_raw_response.list()
+        response = client.models.cards.with_raw_response.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -48,7 +69,9 @@ class TestCards:
     @pytest.mark.skip()
     @parametrize
     def test_streaming_response_list(self, client: HiddenLayer) -> None:
-        with client.models.cards.with_streaming_response.list() as response:
+        with client.models.cards.with_streaming_response.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -66,25 +89,45 @@ class TestAsyncCards:
     @pytest.mark.skip()
     @parametrize
     async def test_method_list(self, async_client: AsyncHiddenLayer) -> None:
-        card = await async_client.models.cards.list()
+        card = await async_client.models.cards.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        )
         assert_matches_type(CardListResponse, card, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         card = await async_client.models.cards.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            aidr_severity=["SAFE"],
+            aidr_status="ENABLED",
             limit=1,
-            model_name_contains="model_name[contains]",
-            model_name_eq="model_name[eq]",
+            model_created={
+                "gte": parse_datetime("2019-12-27T18:11:19.117Z"),
+                "lte": parse_datetime("2019-12-27T18:11:19.117Z"),
+            },
+            model_name={
+                "contains": "contains",
+                "eq": "eq",
+            },
+            modscan_severity=["SAFE"],
+            modscan_status="ENABLED",
             offset=0,
+            provider=["AZURE"],
             sort="sort",
+            source={
+                "contains": "contains",
+                "eq": "eq",
+            },
         )
         assert_matches_type(CardListResponse, card, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncHiddenLayer) -> None:
-        response = await async_client.models.cards.with_raw_response.list()
+        response = await async_client.models.cards.with_raw_response.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -94,7 +137,9 @@ class TestAsyncCards:
     @pytest.mark.skip()
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncHiddenLayer) -> None:
-        async with async_client.models.cards.with_streaming_response.list() as response:
+        async with async_client.models.cards.with_streaming_response.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 

@@ -9,7 +9,7 @@ import pytest
 
 from hiddenlayer import HiddenLayer, AsyncHiddenLayer
 from tests.utils import assert_matches_type
-from hiddenlayer.types.scans import ScanJob, ScanReport
+from hiddenlayer.types.scans import ScanJob, JobListResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -21,7 +21,7 @@ class TestJobs:
     @parametrize
     def test_method_list(self, client: HiddenLayer) -> None:
         job = client.scans.jobs.list()
-        assert_matches_type(ScanJob, job, path=["response"])
+        assert_matches_type(JobListResponse, job, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -31,7 +31,7 @@ class TestJobs:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         job = response.parse()
-        assert_matches_type(ScanJob, job, path=["response"])
+        assert_matches_type(JobListResponse, job, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -41,15 +41,23 @@ class TestJobs:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             job = response.parse()
-            assert_matches_type(ScanJob, job, path=["response"])
+            assert_matches_type(JobListResponse, job, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @pytest.mark.skip()
     @parametrize
     def test_method_request(self, client: HiddenLayer) -> None:
-        job = client.scans.jobs.request()
-        assert_matches_type(ScanReport, job, path=["response"])
+        job = client.scans.jobs.request(
+            access={},
+            inventory={
+                "model_name": "some-model",
+                "model_version": "",
+                "requested_scan_location": "owner/repo",
+                "requesting_entity": "some-user@example.com",
+            },
+        )
+        assert_matches_type(ScanJob, job, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -58,32 +66,50 @@ class TestJobs:
             access={"source": "HUGGING_FACE"},
             inventory={
                 "model_name": "some-model",
-                "model_version": "main",
+                "model_version": "",
                 "requested_scan_location": "owner/repo",
                 "requesting_entity": "some-user@example.com",
+                "origin": "Hugging Face",
+                "request_source": "API Upload",
             },
         )
-        assert_matches_type(ScanReport, job, path=["response"])
+        assert_matches_type(ScanJob, job, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     def test_raw_response_request(self, client: HiddenLayer) -> None:
-        response = client.scans.jobs.with_raw_response.request()
+        response = client.scans.jobs.with_raw_response.request(
+            access={},
+            inventory={
+                "model_name": "some-model",
+                "model_version": "",
+                "requested_scan_location": "owner/repo",
+                "requesting_entity": "some-user@example.com",
+            },
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         job = response.parse()
-        assert_matches_type(ScanReport, job, path=["response"])
+        assert_matches_type(ScanJob, job, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     def test_streaming_response_request(self, client: HiddenLayer) -> None:
-        with client.scans.jobs.with_streaming_response.request() as response:
+        with client.scans.jobs.with_streaming_response.request(
+            access={},
+            inventory={
+                "model_name": "some-model",
+                "model_version": "",
+                "requested_scan_location": "owner/repo",
+                "requesting_entity": "some-user@example.com",
+            },
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             job = response.parse()
-            assert_matches_type(ScanReport, job, path=["response"])
+            assert_matches_type(ScanJob, job, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -97,7 +123,7 @@ class TestAsyncJobs:
     @parametrize
     async def test_method_list(self, async_client: AsyncHiddenLayer) -> None:
         job = await async_client.scans.jobs.list()
-        assert_matches_type(ScanJob, job, path=["response"])
+        assert_matches_type(JobListResponse, job, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -107,7 +133,7 @@ class TestAsyncJobs:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         job = await response.parse()
-        assert_matches_type(ScanJob, job, path=["response"])
+        assert_matches_type(JobListResponse, job, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -117,15 +143,23 @@ class TestAsyncJobs:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             job = await response.parse()
-            assert_matches_type(ScanJob, job, path=["response"])
+            assert_matches_type(JobListResponse, job, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @pytest.mark.skip()
     @parametrize
     async def test_method_request(self, async_client: AsyncHiddenLayer) -> None:
-        job = await async_client.scans.jobs.request()
-        assert_matches_type(ScanReport, job, path=["response"])
+        job = await async_client.scans.jobs.request(
+            access={},
+            inventory={
+                "model_name": "some-model",
+                "model_version": "",
+                "requested_scan_location": "owner/repo",
+                "requesting_entity": "some-user@example.com",
+            },
+        )
+        assert_matches_type(ScanJob, job, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -134,31 +168,49 @@ class TestAsyncJobs:
             access={"source": "HUGGING_FACE"},
             inventory={
                 "model_name": "some-model",
-                "model_version": "main",
+                "model_version": "",
                 "requested_scan_location": "owner/repo",
                 "requesting_entity": "some-user@example.com",
+                "origin": "Hugging Face",
+                "request_source": "API Upload",
             },
         )
-        assert_matches_type(ScanReport, job, path=["response"])
+        assert_matches_type(ScanJob, job, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     async def test_raw_response_request(self, async_client: AsyncHiddenLayer) -> None:
-        response = await async_client.scans.jobs.with_raw_response.request()
+        response = await async_client.scans.jobs.with_raw_response.request(
+            access={},
+            inventory={
+                "model_name": "some-model",
+                "model_version": "",
+                "requested_scan_location": "owner/repo",
+                "requesting_entity": "some-user@example.com",
+            },
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         job = await response.parse()
-        assert_matches_type(ScanReport, job, path=["response"])
+        assert_matches_type(ScanJob, job, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
     async def test_streaming_response_request(self, async_client: AsyncHiddenLayer) -> None:
-        async with async_client.scans.jobs.with_streaming_response.request() as response:
+        async with async_client.scans.jobs.with_streaming_response.request(
+            access={},
+            inventory={
+                "model_name": "some-model",
+                "model_version": "",
+                "requested_scan_location": "owner/repo",
+                "requesting_entity": "some-user@example.com",
+            },
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             job = await response.parse()
-            assert_matches_type(ScanReport, job, path=["response"])
+            assert_matches_type(ScanJob, job, path=["response"])
 
         assert cast(Any, response.is_closed) is True

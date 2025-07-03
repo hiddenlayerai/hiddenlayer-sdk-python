@@ -1,14 +1,14 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 from datetime import datetime
 
 from .._models import BaseModel
 
-__all__ = ["SensorQueryResponse", "Result"]
+__all__ = ["SensorCreateResponse"]
 
 
-class Result(BaseModel):
+class SensorCreateResponse(BaseModel):
     active: bool
 
     created_at: datetime
@@ -24,13 +24,3 @@ class Result(BaseModel):
     adhoc: Optional[bool] = None
 
     tags: Optional[Dict[str, object]] = None
-
-
-class SensorQueryResponse(BaseModel):
-    page_number: int
-
-    page_size: int
-
-    results: List[Result]
-
-    total_count: int

@@ -17,7 +17,7 @@ from ..._response import (
 from ...types.scans import job_request_params
 from ..._base_client import make_request_options
 from ...types.scans.scan_job import ScanJob
-from ...types.scans.scan_report import ScanReport
+from ...types.scans.job_list_response import JobListResponse
 
 __all__ = ["JobsResource", "AsyncJobsResource"]
 
@@ -51,31 +51,31 @@ class JobsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScanJob:
-        """List all Model Scan Jobs"""
+    ) -> JobListResponse:
+        """List model scan jobs"""
         extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
         return self._get(
             "/scan/v3/jobs",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ScanJob,
+            cast_to=JobListResponse,
         )
 
     def request(
         self,
         *,
-        access: job_request_params.Access | NotGiven = NOT_GIVEN,
-        inventory: job_request_params.Inventory | NotGiven = NOT_GIVEN,
+        access: job_request_params.Access,
+        inventory: job_request_params.Inventory,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScanReport:
+    ) -> ScanJob:
         """
-        Request a Model Scan Job
+        Scan a remote model
 
         Args:
           extra_headers: Send extra headers
@@ -86,7 +86,6 @@ class JobsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
         return self._post(
             "/scan/v3/jobs",
             body=maybe_transform(
@@ -99,7 +98,7 @@ class JobsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ScanReport,
+            cast_to=ScanJob,
         )
 
 
@@ -132,31 +131,31 @@ class AsyncJobsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScanJob:
-        """List all Model Scan Jobs"""
+    ) -> JobListResponse:
+        """List model scan jobs"""
         extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
         return await self._get(
             "/scan/v3/jobs",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ScanJob,
+            cast_to=JobListResponse,
         )
 
     async def request(
         self,
         *,
-        access: job_request_params.Access | NotGiven = NOT_GIVEN,
-        inventory: job_request_params.Inventory | NotGiven = NOT_GIVEN,
+        access: job_request_params.Access,
+        inventory: job_request_params.Inventory,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ScanReport:
+    ) -> ScanJob:
         """
-        Request a Model Scan Job
+        Scan a remote model
 
         Args:
           extra_headers: Send extra headers
@@ -167,7 +166,6 @@ class AsyncJobsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
         return await self._post(
             "/scan/v3/jobs",
             body=await async_maybe_transform(
@@ -180,7 +178,7 @@ class AsyncJobsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ScanReport,
+            cast_to=ScanJob,
         )
 
 
