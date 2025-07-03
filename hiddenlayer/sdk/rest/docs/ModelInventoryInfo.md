@@ -11,6 +11,8 @@ Name | Type | Description | Notes
 **model_source** | **str** | source (provider) info | [optional] 
 **requested_scan_location** | **str** | Location to be scanned | 
 **requesting_entity** | **str** | Entity that requested the scan | [optional] 
+**request_source** | **str** | Source of the request | [optional] 
+**origin** | **str** | Origin of the scan | [optional] 
 **model_id** | **str** | Unique identifier for the model | 
 **model_version_id** | **str** | unique identifier for the model version | 
 

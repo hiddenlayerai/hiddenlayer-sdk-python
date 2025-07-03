@@ -40,6 +40,8 @@ class TestModelInventoryInfo(unittest.TestCase):
                 model_source = 'adhoc',
                 requested_scan_location = '/files-to-scan',
                 requesting_entity = '',
+                request_source = 'API Upload',
+                origin = 'Databricks',
                 model_id = '00000000-0000-0000-0000-000000000000',
                 model_version_id = '00000000-0000-0000-0000-000000000000'
             )
