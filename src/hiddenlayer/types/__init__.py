@@ -2,7 +2,15 @@
 
 from __future__ import annotations
 
-from .shared import Node as Node, Exception as Exception
+from .shared import (
+    Node as Node,
+    Region as Region,
+    Message as Message,
+    Exception as Exception,
+    PropertyBag as PropertyBag,
+    ArtifactContent as ArtifactContent,
+    MultiformatMessageString as MultiformatMessageString,
+)
 from .sensor_query_params import SensorQueryParams as SensorQueryParams
 from .sensor_create_params import SensorCreateParams as SensorCreateParams
 from .sensor_query_response import SensorQueryResponse as SensorQueryResponse
