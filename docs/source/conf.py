@@ -6,11 +6,11 @@ sys.path.insert(0, os.path.abspath("../.."))
 
 # -- Project information
 project = "HiddenLayer Python SDK"
-copyright = "2024"
+copyright = "2025"
 author = "HiddenLayer Integrations Team"
 
 release = "2.0"
-version = "2.0.8"
+version = "2.0.9"
 
 # -- General configuration
 
