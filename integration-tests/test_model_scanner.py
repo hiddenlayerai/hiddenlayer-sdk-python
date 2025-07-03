@@ -58,7 +58,7 @@ def test_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
         origin="Databricks",
     )
 
-    _validate_scan_model(results)
+    _validate_scan_model(results, request_source="Integration", origin="Databricks")
 
 
 def test_scan_folder(tmp_path, hl_client: HiddenlayerServiceClient):
@@ -208,6 +208,9 @@ def test_community_scan_model(tmp_path, hl_client: HiddenlayerServiceClient):
     assert results.file_count == 12
     assert results.files_with_detections_count == 6
 
+    assert results.inventory.request_source == "Integration"
+    assert results.inventory.origin == "Hugging Face"
+
 
 def _setup_scan_model(tmp_path):
     model_path = tmp_path / "model.pkl"
@@ -220,7 +223,7 @@ def _setup_scan_model(tmp_path):
 
 
 def _validate_scan_model(results: ScanResults, request_source="API Upload",
-        origin: str = ""):
+        origin: str =  "Local File System"):
     assert results.file_count == 1
     assert results.files_with_detections_count == 1
 
