@@ -59,7 +59,7 @@ httpx==0.28.1
     # via hiddenlayer
     # via httpx-aiohttp
     # via respx
-httpx-aiohttp==0.1.6
+httpx-aiohttp==0.1.8
     # via hiddenlayer
 idna==3.4
     # via anyio
