@@ -2,8 +2,7 @@
 
 from typing import Dict, List, Optional
 
-from pydantic import Field as FieldInfo
-
+from .._compat import PYDANTIC_V2, ConfigDict
 from .._models import BaseModel
 
 __all__ = ["ModelRetrieveResponse", "Version", "VersionDeployment"]
@@ -22,7 +21,7 @@ class Version(BaseModel):
 
     locations: Optional[Dict[str, object]] = None
 
-    api_model_version_id: Optional[str] = FieldInfo(alias="model_version_id", default=None)
+    model_version_id: Optional[str] = None
 
     multi_file: Optional[bool] = None
 
@@ -30,14 +29,22 @@ class Version(BaseModel):
 
     tags: Optional[Dict[str, object]] = None
 
+    if PYDANTIC_V2:
+        # allow fields with a `model_` prefix
+        model_config = ConfigDict(protected_namespaces=tuple())
+
 
 class ModelRetrieveResponse(BaseModel):
     name: str
 
     source: str
 
-    api_model_id: Optional[str] = FieldInfo(alias="model_id", default=None)
+    model_id: Optional[str] = None
 
     tenant_id: Optional[str] = None
 
     versions: Optional[List[Version]] = None
+
+    if PYDANTIC_V2:
+        # allow fields with a `model_` prefix
+        model_config = ConfigDict(protected_namespaces=tuple())
