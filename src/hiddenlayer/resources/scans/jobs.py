@@ -17,9 +17,10 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...types.scans import job_list_params, job_request_params
+from ...types.scans import job_list_params, job_request_params, job_retrieve_params
 from ..._base_client import make_request_options
 from ...types.scans.scan_job import ScanJob
+from ...types.scans.scan_report import ScanReport
 from ...types.scans.job_list_response import JobListResponse
 
 __all__ = ["JobsResource", "AsyncJobsResource"]
@@ -44,6 +45,49 @@ class JobsResource(SyncAPIResource):
         For more information, see https://www.github.com/stainless-sdks/hiddenlayer-sdk-python#with_streaming_response
         """
         return JobsResourceWithStreamingResponse(self)
+
+    def retrieve(
+        self,
+        scan_id: str,
+        *,
+        x_correlation_id: str,
+        has_detections: bool | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ScanReport:
+        """
+        Get scan results (SARIF / V3)
+
+        Args:
+          has_detections: Filter file_results to only those that have detections (and parents)
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not scan_id:
+            raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
+        extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
+        return self._get(
+            f"/scan/v3/results/{scan_id}",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform({"has_detections": has_detections}, job_retrieve_params.JobRetrieveParams),
+            ),
+            cast_to=ScanReport,
+        )
 
     def list(
         self,
@@ -199,6 +243,51 @@ class AsyncJobsResource(AsyncAPIResource):
         """
         return AsyncJobsResourceWithStreamingResponse(self)
 
+    async def retrieve(
+        self,
+        scan_id: str,
+        *,
+        x_correlation_id: str,
+        has_detections: bool | NotGiven = NOT_GIVEN,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ScanReport:
+        """
+        Get scan results (SARIF / V3)
+
+        Args:
+          has_detections: Filter file_results to only those that have detections (and parents)
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not scan_id:
+            raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
+        extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
+        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
+        return await self._get(
+            f"/scan/v3/results/{scan_id}",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {"has_detections": has_detections}, job_retrieve_params.JobRetrieveParams
+                ),
+            ),
+            cast_to=ScanReport,
+        )
+
     async def list(
         self,
         *,
@@ -337,6 +426,9 @@ class JobsResourceWithRawResponse:
     def __init__(self, jobs: JobsResource) -> None:
         self._jobs = jobs
 
+        self.retrieve = to_raw_response_wrapper(
+            jobs.retrieve,
+        )
         self.list = to_raw_response_wrapper(
             jobs.list,
         )
@@ -349,6 +441,9 @@ class AsyncJobsResourceWithRawResponse:
     def __init__(self, jobs: AsyncJobsResource) -> None:
         self._jobs = jobs
 
+        self.retrieve = async_to_raw_response_wrapper(
+            jobs.retrieve,
+        )
         self.list = async_to_raw_response_wrapper(
             jobs.list,
         )
@@ -361,6 +456,9 @@ class JobsResourceWithStreamingResponse:
     def __init__(self, jobs: JobsResource) -> None:
         self._jobs = jobs
 
+        self.retrieve = to_streamed_response_wrapper(
+            jobs.retrieve,
+        )
         self.list = to_streamed_response_wrapper(
             jobs.list,
         )
@@ -373,6 +471,9 @@ class AsyncJobsResourceWithStreamingResponse:
     def __init__(self, jobs: AsyncJobsResource) -> None:
         self._jobs = jobs
 
+        self.retrieve = async_to_streamed_response_wrapper(
+            jobs.retrieve,
+        )
         self.list = async_to_streamed_response_wrapper(
             jobs.list,
         )
