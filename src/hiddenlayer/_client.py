@@ -23,7 +23,7 @@ from ._utils import is_given, get_async_library
 from ._compat import cached_property
 from ._version import __version__
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
-from ._exceptions import APIStatusError, HiddenLayerError
+from ._exceptions import APIStatusError
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
@@ -50,12 +50,16 @@ __all__ = [
 
 class HiddenLayer(SyncAPIClient):
     # client options
-    bearer_token: str
+    bearer_token: str | None
+    client_id: str | None
+    client_secret: str | None
 
     def __init__(
         self,
         *,
         bearer_token: str | None = None,
+        client_id: str | None = None,
+        client_secret: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -77,15 +81,22 @@ class HiddenLayer(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous HiddenLayer client instance.
 
-        This automatically infers the `bearer_token` argument from the `HIDDENLAYER_TOKEN` environment variable if it is not provided.
+        This automatically infers the following arguments from their corresponding environment variables if they are not provided:
+        - `bearer_token` from `HIDDENLAYER_TOKEN`
+        - `client_id` from `HIDDENLAYER_CLIENT_ID`
+        - `client_secret` from `HIDDENLAYER_CLIENT_SECRET`
         """
         if bearer_token is None:
             bearer_token = os.environ.get("HIDDENLAYER_TOKEN")
-        if bearer_token is None:
-            raise HiddenLayerError(
-                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the HIDDENLAYER_TOKEN environment variable"
-            )
         self.bearer_token = bearer_token
+
+        if client_id is None:
+            client_id = os.environ.get("HIDDENLAYER_CLIENT_ID")
+        self.client_id = client_id
+
+        if client_secret is None:
+            client_secret = os.environ.get("HIDDENLAYER_CLIENT_SECRET")
+        self.client_secret = client_secret
 
         if base_url is None:
             base_url = os.environ.get("HIDDEN_LAYER_BASE_URL")
@@ -137,8 +148,18 @@ class HiddenLayer(SyncAPIClient):
     @property
     @override
     def auth_headers(self) -> dict[str, str]:
+        return {**self._bearer_auth, **self._hidden_layer_user_auth}
+
+    @property
+    def _bearer_auth(self) -> dict[str, str]:
         bearer_token = self.bearer_token
+        if bearer_token is None:
+            return {}
         return {"Authorization": f"Bearer {bearer_token}"}
+
+    @property
+    def _hidden_layer_user_auth(self) -> httpx.Auth | None:
+        raise NotImplementedError("This auth method has not been implemented yet.")
 
     @property
     @override
@@ -153,6 +174,8 @@ class HiddenLayer(SyncAPIClient):
         self,
         *,
         bearer_token: str | None = None,
+        client_id: str | None = None,
+        client_secret: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.Client | None = None,
@@ -187,6 +210,8 @@ class HiddenLayer(SyncAPIClient):
         http_client = http_client or self._client
         return self.__class__(
             bearer_token=bearer_token or self.bearer_token,
+            client_id=client_id or self.client_id,
+            client_secret=client_secret or self.client_secret,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -236,12 +261,16 @@ class HiddenLayer(SyncAPIClient):
 
 class AsyncHiddenLayer(AsyncAPIClient):
     # client options
-    bearer_token: str
+    bearer_token: str | None
+    client_id: str | None
+    client_secret: str | None
 
     def __init__(
         self,
         *,
         bearer_token: str | None = None,
+        client_id: str | None = None,
+        client_secret: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -263,15 +292,22 @@ class AsyncHiddenLayer(AsyncAPIClient):
     ) -> None:
         """Construct a new async AsyncHiddenLayer client instance.
 
-        This automatically infers the `bearer_token` argument from the `HIDDENLAYER_TOKEN` environment variable if it is not provided.
+        This automatically infers the following arguments from their corresponding environment variables if they are not provided:
+        - `bearer_token` from `HIDDENLAYER_TOKEN`
+        - `client_id` from `HIDDENLAYER_CLIENT_ID`
+        - `client_secret` from `HIDDENLAYER_CLIENT_SECRET`
         """
         if bearer_token is None:
             bearer_token = os.environ.get("HIDDENLAYER_TOKEN")
-        if bearer_token is None:
-            raise HiddenLayerError(
-                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the HIDDENLAYER_TOKEN environment variable"
-            )
         self.bearer_token = bearer_token
+
+        if client_id is None:
+            client_id = os.environ.get("HIDDENLAYER_CLIENT_ID")
+        self.client_id = client_id
+
+        if client_secret is None:
+            client_secret = os.environ.get("HIDDENLAYER_CLIENT_SECRET")
+        self.client_secret = client_secret
 
         if base_url is None:
             base_url = os.environ.get("HIDDEN_LAYER_BASE_URL")
@@ -323,8 +359,18 @@ class AsyncHiddenLayer(AsyncAPIClient):
     @property
     @override
     def auth_headers(self) -> dict[str, str]:
+        return {**self._bearer_auth, **self._hidden_layer_user_auth}
+
+    @property
+    def _bearer_auth(self) -> dict[str, str]:
         bearer_token = self.bearer_token
+        if bearer_token is None:
+            return {}
         return {"Authorization": f"Bearer {bearer_token}"}
+
+    @property
+    def _hidden_layer_user_auth(self) -> httpx.Auth | None:
+        raise NotImplementedError("This auth method has not been implemented yet.")
 
     @property
     @override
@@ -339,6 +385,8 @@ class AsyncHiddenLayer(AsyncAPIClient):
         self,
         *,
         bearer_token: str | None = None,
+        client_id: str | None = None,
+        client_secret: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.AsyncClient | None = None,
@@ -373,6 +421,8 @@ class AsyncHiddenLayer(AsyncAPIClient):
         http_client = http_client or self._client
         return self.__class__(
             bearer_token=bearer_token or self.bearer_token,
+            client_id=client_id or self.client_id,
+            client_secret=client_secret or self.client_secret,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
