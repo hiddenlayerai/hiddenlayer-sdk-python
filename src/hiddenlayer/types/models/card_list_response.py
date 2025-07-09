@@ -3,8 +3,7 @@
 from typing import Dict, List, Optional
 from typing_extensions import Literal
 
-from pydantic import Field as FieldInfo
-
+from ..._compat import PYDANTIC_V2, ConfigDict
 from ..._models import BaseModel
 
 __all__ = ["CardListResponse", "Result", "ResultSecurityPosture"]
@@ -13,14 +12,18 @@ __all__ = ["CardListResponse", "Result", "ResultSecurityPosture"]
 class ResultSecurityPosture(BaseModel):
     attack_monitoring: Optional[bool] = None
 
-    api_model_scan: Optional[bool] = FieldInfo(alias="model_scan", default=None)
+    model_scan: Optional[bool] = None
+
+    if PYDANTIC_V2:
+        # allow fields with a `model_` prefix
+        model_config = ConfigDict(protected_namespaces=tuple())
 
 
 class Result(BaseModel):
     created_at: int
     """Unix Nano Epoch Timestamp"""
 
-    api_model_id: str = FieldInfo(alias="model_id")
+    model_id: str
 
     plaintext_name: str
 
@@ -30,13 +33,15 @@ class Result(BaseModel):
 
     attack_monitoring_threat_level: Optional[Literal["safe", "unsafe", "suspicious", "not available"]] = None
 
-    api_model_scan_threat_level: Optional[Literal["safe", "unsafe", "suspicious", "not available"]] = FieldInfo(
-        alias="model_scan_threat_level", default=None
-    )
+    model_scan_threat_level: Optional[Literal["safe", "unsafe", "suspicious", "not available"]] = None
 
     security_posture: Optional[ResultSecurityPosture] = None
 
     tags: Optional[Dict[str, object]] = None
+
+    if PYDANTIC_V2:
+        # allow fields with a `model_` prefix
+        model_config = ConfigDict(protected_namespaces=tuple())
 
 
 class CardListResponse(BaseModel):

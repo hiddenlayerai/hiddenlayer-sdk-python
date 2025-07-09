@@ -3,18 +3,17 @@
 from typing import Optional
 from typing_extensions import Literal
 
-from pydantic import Field as FieldInfo
-
+from ..._compat import PYDANTIC_V2, ConfigDict
 from ..._models import BaseModel
 
 __all__ = ["ScanJob", "Inventory"]
 
 
 class Inventory(BaseModel):
-    api_model_name: str = FieldInfo(alias="model_name")
+    model_name: str
     """Name of the model"""
 
-    api_model_version: str = FieldInfo(alias="model_version")
+    model_version: str
     """If you do not provide a version, one will be generated for you."""
 
     requested_scan_location: str
@@ -31,6 +30,10 @@ class Inventory(BaseModel):
 
     request_source: Optional[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] = None
     """Identifies the system that requested the scan"""
+
+    if PYDANTIC_V2:
+        # allow fields with a `model_` prefix
+        model_config = ConfigDict(protected_namespaces=tuple())
 
 
 class ScanJob(BaseModel):

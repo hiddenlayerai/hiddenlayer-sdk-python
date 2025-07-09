@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Union, Mapping
+from typing import TYPE_CHECKING, Any, Union, Mapping
 from typing_extensions import Self, override
 
 import httpx
@@ -22,8 +22,8 @@ from ._types import (
     RequestOptions,
 )
 from ._utils import is_given, get_async_library
+from ._compat import cached_property
 from ._version import __version__
-from .resources import sensors
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError, HiddenLayerError
 from ._base_client import (
@@ -31,8 +31,12 @@ from ._base_client import (
     SyncAPIClient,
     AsyncAPIClient,
 )
-from .resources.scans import scans
-from .resources.models import models
+
+if TYPE_CHECKING:
+    from .resources import scans, models, sensors
+    from .resources.sensors import SensorsResource, AsyncSensorsResource
+    from .resources.scans.scans import ScansResource, AsyncScansResource
+    from .resources.models.models import ModelsResource, AsyncModelsResource
 
 __all__ = [
     "Timeout",
@@ -47,12 +51,6 @@ __all__ = [
 
 
 class HiddenLayer(SyncAPIClient):
-    models: models.ModelsResource
-    sensors: sensors.SensorsResource
-    scans: scans.ScansResource
-    with_raw_response: HiddenLayerWithRawResponse
-    with_streaming_response: HiddenLayerWithStreamedResponse
-
     # client options
     bearer_token: str
 
@@ -107,11 +105,31 @@ class HiddenLayer(SyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.models = models.ModelsResource(self)
-        self.sensors = sensors.SensorsResource(self)
-        self.scans = scans.ScansResource(self)
-        self.with_raw_response = HiddenLayerWithRawResponse(self)
-        self.with_streaming_response = HiddenLayerWithStreamedResponse(self)
+    @cached_property
+    def models(self) -> ModelsResource:
+        from .resources.models import ModelsResource
+
+        return ModelsResource(self)
+
+    @cached_property
+    def sensors(self) -> SensorsResource:
+        from .resources.sensors import SensorsResource
+
+        return SensorsResource(self)
+
+    @cached_property
+    def scans(self) -> ScansResource:
+        from .resources.scans import ScansResource
+
+        return ScansResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> HiddenLayerWithRawResponse:
+        return HiddenLayerWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> HiddenLayerWithStreamedResponse:
+        return HiddenLayerWithStreamedResponse(self)
 
     @property
     @override
@@ -240,12 +258,6 @@ class HiddenLayer(SyncAPIClient):
 
 
 class AsyncHiddenLayer(AsyncAPIClient):
-    models: models.AsyncModelsResource
-    sensors: sensors.AsyncSensorsResource
-    scans: scans.AsyncScansResource
-    with_raw_response: AsyncHiddenLayerWithRawResponse
-    with_streaming_response: AsyncHiddenLayerWithStreamedResponse
-
     # client options
     bearer_token: str
 
@@ -300,11 +312,31 @@ class AsyncHiddenLayer(AsyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.models = models.AsyncModelsResource(self)
-        self.sensors = sensors.AsyncSensorsResource(self)
-        self.scans = scans.AsyncScansResource(self)
-        self.with_raw_response = AsyncHiddenLayerWithRawResponse(self)
-        self.with_streaming_response = AsyncHiddenLayerWithStreamedResponse(self)
+    @cached_property
+    def models(self) -> AsyncModelsResource:
+        from .resources.models import AsyncModelsResource
+
+        return AsyncModelsResource(self)
+
+    @cached_property
+    def sensors(self) -> AsyncSensorsResource:
+        from .resources.sensors import AsyncSensorsResource
+
+        return AsyncSensorsResource(self)
+
+    @cached_property
+    def scans(self) -> AsyncScansResource:
+        from .resources.scans import AsyncScansResource
+
+        return AsyncScansResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> AsyncHiddenLayerWithRawResponse:
+        return AsyncHiddenLayerWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncHiddenLayerWithStreamedResponse:
+        return AsyncHiddenLayerWithStreamedResponse(self)
 
     @property
     @override
@@ -412,31 +444,103 @@ class AsyncHiddenLayer(AsyncAPIClient):
 
 
 class HiddenLayerWithRawResponse:
+    _client: HiddenLayer
+
     def __init__(self, client: HiddenLayer) -> None:
-        self.models = models.ModelsResourceWithRawResponse(client.models)
-        self.sensors = sensors.SensorsResourceWithRawResponse(client.sensors)
-        self.scans = scans.ScansResourceWithRawResponse(client.scans)
+        self._client = client
+
+    @cached_property
+    def models(self) -> models.ModelsResourceWithRawResponse:
+        from .resources.models import ModelsResourceWithRawResponse
+
+        return ModelsResourceWithRawResponse(self._client.models)
+
+    @cached_property
+    def sensors(self) -> sensors.SensorsResourceWithRawResponse:
+        from .resources.sensors import SensorsResourceWithRawResponse
+
+        return SensorsResourceWithRawResponse(self._client.sensors)
+
+    @cached_property
+    def scans(self) -> scans.ScansResourceWithRawResponse:
+        from .resources.scans import ScansResourceWithRawResponse
+
+        return ScansResourceWithRawResponse(self._client.scans)
 
 
 class AsyncHiddenLayerWithRawResponse:
+    _client: AsyncHiddenLayer
+
     def __init__(self, client: AsyncHiddenLayer) -> None:
-        self.models = models.AsyncModelsResourceWithRawResponse(client.models)
-        self.sensors = sensors.AsyncSensorsResourceWithRawResponse(client.sensors)
-        self.scans = scans.AsyncScansResourceWithRawResponse(client.scans)
+        self._client = client
+
+    @cached_property
+    def models(self) -> models.AsyncModelsResourceWithRawResponse:
+        from .resources.models import AsyncModelsResourceWithRawResponse
+
+        return AsyncModelsResourceWithRawResponse(self._client.models)
+
+    @cached_property
+    def sensors(self) -> sensors.AsyncSensorsResourceWithRawResponse:
+        from .resources.sensors import AsyncSensorsResourceWithRawResponse
+
+        return AsyncSensorsResourceWithRawResponse(self._client.sensors)
+
+    @cached_property
+    def scans(self) -> scans.AsyncScansResourceWithRawResponse:
+        from .resources.scans import AsyncScansResourceWithRawResponse
+
+        return AsyncScansResourceWithRawResponse(self._client.scans)
 
 
 class HiddenLayerWithStreamedResponse:
+    _client: HiddenLayer
+
     def __init__(self, client: HiddenLayer) -> None:
-        self.models = models.ModelsResourceWithStreamingResponse(client.models)
-        self.sensors = sensors.SensorsResourceWithStreamingResponse(client.sensors)
-        self.scans = scans.ScansResourceWithStreamingResponse(client.scans)
+        self._client = client
+
+    @cached_property
+    def models(self) -> models.ModelsResourceWithStreamingResponse:
+        from .resources.models import ModelsResourceWithStreamingResponse
+
+        return ModelsResourceWithStreamingResponse(self._client.models)
+
+    @cached_property
+    def sensors(self) -> sensors.SensorsResourceWithStreamingResponse:
+        from .resources.sensors import SensorsResourceWithStreamingResponse
+
+        return SensorsResourceWithStreamingResponse(self._client.sensors)
+
+    @cached_property
+    def scans(self) -> scans.ScansResourceWithStreamingResponse:
+        from .resources.scans import ScansResourceWithStreamingResponse
+
+        return ScansResourceWithStreamingResponse(self._client.scans)
 
 
 class AsyncHiddenLayerWithStreamedResponse:
+    _client: AsyncHiddenLayer
+
     def __init__(self, client: AsyncHiddenLayer) -> None:
-        self.models = models.AsyncModelsResourceWithStreamingResponse(client.models)
-        self.sensors = sensors.AsyncSensorsResourceWithStreamingResponse(client.sensors)
-        self.scans = scans.AsyncScansResourceWithStreamingResponse(client.scans)
+        self._client = client
+
+    @cached_property
+    def models(self) -> models.AsyncModelsResourceWithStreamingResponse:
+        from .resources.models import AsyncModelsResourceWithStreamingResponse
+
+        return AsyncModelsResourceWithStreamingResponse(self._client.models)
+
+    @cached_property
+    def sensors(self) -> sensors.AsyncSensorsResourceWithStreamingResponse:
+        from .resources.sensors import AsyncSensorsResourceWithStreamingResponse
+
+        return AsyncSensorsResourceWithStreamingResponse(self._client.sensors)
+
+    @cached_property
+    def scans(self) -> scans.AsyncScansResourceWithStreamingResponse:
+        from .resources.scans import AsyncScansResourceWithStreamingResponse
+
+        return AsyncScansResourceWithStreamingResponse(self._client.scans)
 
 
 Client = HiddenLayer
