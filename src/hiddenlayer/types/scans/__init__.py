@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 from .scan_job import ScanJob as ScanJob
+from .scan_report import ScanReport as ScanReport
+from .job_list_params import JobListParams as JobListParams
+from .job_list_response import JobListResponse as JobListResponse
 from .job_request_params import JobRequestParams as JobRequestParams
 from .upload_start_params import UploadStartParams as UploadStartParams
 from .upload_start_response import UploadStartResponse as UploadStartResponse
