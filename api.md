@@ -67,11 +67,12 @@ from hiddenlayer.types.scans import FileScanReport, ScanReport
 Types:
 
 ```python
-from hiddenlayer.types.scans import ScanJob
+from hiddenlayer.types.scans import ScanJob, JobListResponse
 ```
 
 Methods:
 
+- <code title="get /scan/v3/results">client.scans.jobs.<a href="./src/hiddenlayer/resources/scans/jobs.py">list</a>(\*\*<a href="src/hiddenlayer/types/scans/job_list_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scans/job_list_response.py">JobListResponse</a></code>
 - <code title="post /scan/v3/jobs">client.scans.jobs.<a href="./src/hiddenlayer/resources/scans/jobs.py">request</a>(\*\*<a href="src/hiddenlayer/types/scans/job_request_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scans/scan_job.py">ScanJob</a></code>
 
 ## Upload

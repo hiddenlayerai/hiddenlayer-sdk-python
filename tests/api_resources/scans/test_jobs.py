@@ -9,13 +9,73 @@ import pytest
 
 from hiddenlayer import HiddenLayer, AsyncHiddenLayer
 from tests.utils import assert_matches_type
-from hiddenlayer.types.scans import ScanJob
+from hiddenlayer._utils import parse_datetime
+from hiddenlayer.types.scans import ScanJob, JobListResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 
 class TestJobs:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+
+    @pytest.mark.skip()
+    @parametrize
+    def test_method_list(self, client: HiddenLayer) -> None:
+        job = client.scans.jobs.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        )
+        assert_matches_type(JobListResponse, job, path=["response"])
+
+    @pytest.mark.skip()
+    @parametrize
+    def test_method_list_with_all_params(self, client: HiddenLayer) -> None:
+        job = client.scans.jobs.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            detection_category="detection_category",
+            end_time=parse_datetime("2019-12-27T18:11:19.117Z"),
+            latest_per_model_version_only=True,
+            limit=1,
+            model_ids=["182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"],
+            model_name={
+                "contains": "contains",
+                "eq": "eq",
+            },
+            model_version_ids=["182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"],
+            offset=0,
+            scanner_version="scanner_version",
+            severity=["string"],
+            sort="sort",
+            source={"eq": "adhoc"},
+            start_time=parse_datetime("2019-12-27T18:11:19.117Z"),
+            status=["string"],
+        )
+        assert_matches_type(JobListResponse, job, path=["response"])
+
+    @pytest.mark.skip()
+    @parametrize
+    def test_raw_response_list(self, client: HiddenLayer) -> None:
+        response = client.scans.jobs.with_raw_response.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        job = response.parse()
+        assert_matches_type(JobListResponse, job, path=["response"])
+
+    @pytest.mark.skip()
+    @parametrize
+    def test_streaming_response_list(self, client: HiddenLayer) -> None:
+        with client.scans.jobs.with_streaming_response.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            job = response.parse()
+            assert_matches_type(JobListResponse, job, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @pytest.mark.skip()
     @parametrize
@@ -90,6 +150,65 @@ class TestAsyncJobs:
     parametrize = pytest.mark.parametrize(
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
+
+    @pytest.mark.skip()
+    @parametrize
+    async def test_method_list(self, async_client: AsyncHiddenLayer) -> None:
+        job = await async_client.scans.jobs.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        )
+        assert_matches_type(JobListResponse, job, path=["response"])
+
+    @pytest.mark.skip()
+    @parametrize
+    async def test_method_list_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
+        job = await async_client.scans.jobs.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            detection_category="detection_category",
+            end_time=parse_datetime("2019-12-27T18:11:19.117Z"),
+            latest_per_model_version_only=True,
+            limit=1,
+            model_ids=["182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"],
+            model_name={
+                "contains": "contains",
+                "eq": "eq",
+            },
+            model_version_ids=["182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"],
+            offset=0,
+            scanner_version="scanner_version",
+            severity=["string"],
+            sort="sort",
+            source={"eq": "adhoc"},
+            start_time=parse_datetime("2019-12-27T18:11:19.117Z"),
+            status=["string"],
+        )
+        assert_matches_type(JobListResponse, job, path=["response"])
+
+    @pytest.mark.skip()
+    @parametrize
+    async def test_raw_response_list(self, async_client: AsyncHiddenLayer) -> None:
+        response = await async_client.scans.jobs.with_raw_response.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        job = await response.parse()
+        assert_matches_type(JobListResponse, job, path=["response"])
+
+    @pytest.mark.skip()
+    @parametrize
+    async def test_streaming_response_list(self, async_client: AsyncHiddenLayer) -> None:
+        async with async_client.scans.jobs.with_streaming_response.list(
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            job = await response.parse()
+            assert_matches_type(JobListResponse, job, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
 
     @pytest.mark.skip()
     @parametrize
