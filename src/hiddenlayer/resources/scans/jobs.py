@@ -17,7 +17,6 @@ from ..._response import (
 from ...types.scans import job_request_params
 from ..._base_client import make_request_options
 from ...types.scans.scan_job import ScanJob
-from ...types.scans.job_list_response import JobListResponse
 
 __all__ = ["JobsResource", "AsyncJobsResource"]
 
@@ -41,26 +40,6 @@ class JobsResource(SyncAPIResource):
         For more information, see https://www.github.com/stainless-sdks/hiddenlayer-sdk-python#with_streaming_response
         """
         return JobsResourceWithStreamingResponse(self)
-
-    def list(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> JobListResponse:
-        """List model scan jobs"""
-        extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
-        return self._get(
-            "/scan/v3/jobs",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=JobListResponse,
-        )
 
     def request(
         self,
@@ -122,26 +101,6 @@ class AsyncJobsResource(AsyncAPIResource):
         """
         return AsyncJobsResourceWithStreamingResponse(self)
 
-    async def list(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> JobListResponse:
-        """List model scan jobs"""
-        extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
-        return await self._get(
-            "/scan/v3/jobs",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=JobListResponse,
-        )
-
     async def request(
         self,
         *,
@@ -186,9 +145,6 @@ class JobsResourceWithRawResponse:
     def __init__(self, jobs: JobsResource) -> None:
         self._jobs = jobs
 
-        self.list = to_raw_response_wrapper(
-            jobs.list,
-        )
         self.request = to_raw_response_wrapper(
             jobs.request,
         )
@@ -198,9 +154,6 @@ class AsyncJobsResourceWithRawResponse:
     def __init__(self, jobs: AsyncJobsResource) -> None:
         self._jobs = jobs
 
-        self.list = async_to_raw_response_wrapper(
-            jobs.list,
-        )
         self.request = async_to_raw_response_wrapper(
             jobs.request,
         )
@@ -210,9 +163,6 @@ class JobsResourceWithStreamingResponse:
     def __init__(self, jobs: JobsResource) -> None:
         self._jobs = jobs
 
-        self.list = to_streamed_response_wrapper(
-            jobs.list,
-        )
         self.request = to_streamed_response_wrapper(
             jobs.request,
         )
@@ -222,9 +172,6 @@ class AsyncJobsResourceWithStreamingResponse:
     def __init__(self, jobs: AsyncJobsResource) -> None:
         self._jobs = jobs
 
-        self.list = async_to_streamed_response_wrapper(
-            jobs.list,
-        )
         self.request = async_to_streamed_response_wrapper(
             jobs.request,
         )
