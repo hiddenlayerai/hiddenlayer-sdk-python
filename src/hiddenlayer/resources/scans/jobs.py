@@ -128,7 +128,7 @@ class JobsResource(SyncAPIResource):
 
           model_name: filter by the model name
 
-          model_version_ids: Model Version ID
+          model_version_ids: Model Version IDs
 
           scanner_version: filter by version of the scanner
 
@@ -327,7 +327,7 @@ class AsyncJobsResource(AsyncAPIResource):
 
           model_name: filter by the model name
 
-          model_version_ids: Model Version ID
+          model_version_ids: Model Version IDs
 
           scanner_version: filter by version of the scanner
 
