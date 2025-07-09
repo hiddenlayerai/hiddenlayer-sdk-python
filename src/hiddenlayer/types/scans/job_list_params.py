@@ -32,7 +32,7 @@ class JobListParams(TypedDict, total=False):
     """filter by the model name"""
 
     model_version_ids: List[str]
-    """Model Version IDs"""
+    """Model Version ID"""
 
     offset: int
 
