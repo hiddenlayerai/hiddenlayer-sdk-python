@@ -46,7 +46,7 @@ class TestCards:
             modscan_status="ENABLED",
             offset=0,
             provider=["AZURE"],
-            sort="sort",
+            sort="-model_name",
             source={
                 "contains": "contains",
                 "eq": "eq",
@@ -114,7 +114,7 @@ class TestAsyncCards:
             modscan_status="ENABLED",
             offset=0,
             provider=["AZURE"],
-            sort="sort",
+            sort="-model_name",
             source={
                 "contains": "contains",
                 "eq": "eq",
