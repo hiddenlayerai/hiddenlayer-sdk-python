@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal, Required, Annotated, TypedDict
-
-from ..._utils import PropertyInfo
+from typing_extensions import Literal, Required, TypedDict
 
 __all__ = ["UploadStartParams"]
 
@@ -18,8 +16,6 @@ class UploadStartParams(TypedDict, total=False):
 
     requesting_entity: Required[str]
     """Requesting entity"""
-
-    x_correlation_id: Required[Annotated[str, PropertyInfo(alias="X-Correlation-Id")]]
 
     location_alias: str
     """Requested location alias"""

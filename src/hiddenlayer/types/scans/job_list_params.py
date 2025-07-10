@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import List, Union
 from datetime import datetime
-from typing_extensions import Literal, Required, Annotated, TypedDict
+from typing_extensions import Literal, Annotated, TypedDict
 
 from ..._utils import PropertyInfo
 
@@ -12,8 +12,6 @@ __all__ = ["JobListParams", "ModelName", "Source"]
 
 
 class JobListParams(TypedDict, total=False):
-    x_correlation_id: Required[Annotated[str, PropertyInfo(alias="X-Correlation-Id")]]
-
     detection_category: str
     """filter by a single detection category"""
 

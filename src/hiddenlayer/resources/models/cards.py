@@ -47,7 +47,6 @@ class CardsResource(SyncAPIResource):
     def list(
         self,
         *,
-        x_correlation_id: str,
         aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]] | NotGiven = NOT_GIVEN,
         aidr_status: Literal["ENABLED", "DISABLED", "ANY"] | NotGiven = NOT_GIVEN,
         limit: int | NotGiven = NOT_GIVEN,
@@ -89,7 +88,6 @@ class CardsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return self._get(
             "/models/v3/cards",
             options=make_request_options(
@@ -141,7 +139,6 @@ class AsyncCardsResource(AsyncAPIResource):
     async def list(
         self,
         *,
-        x_correlation_id: str,
         aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]] | NotGiven = NOT_GIVEN,
         aidr_status: Literal["ENABLED", "DISABLED", "ANY"] | NotGiven = NOT_GIVEN,
         limit: int | NotGiven = NOT_GIVEN,
@@ -183,7 +180,6 @@ class AsyncCardsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return await self._get(
             "/models/v3/cards",
             options=make_request_options(

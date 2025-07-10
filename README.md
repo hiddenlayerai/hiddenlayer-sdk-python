@@ -36,7 +36,6 @@ client = HiddenLayer(
 
 sensor = client.sensors.create(
     plaintext_name="REPLACE_ME",
-    x_correlation_id="00000000-0000-0000-0000-000000000000",
 )
 print(sensor.sensor_id)
 ```
@@ -63,7 +62,6 @@ client = AsyncHiddenLayer(
 async def main() -> None:
     sensor = await client.sensors.create(
         plaintext_name="REPLACE_ME",
-        x_correlation_id="00000000-0000-0000-0000-000000000000",
     )
     print(sensor.sensor_id)
 
@@ -100,7 +98,6 @@ async def main() -> None:
     ) as client:
         sensor = await client.sensors.create(
             plaintext_name="REPLACE_ME",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         print(sensor.sensor_id)
 
@@ -127,7 +124,6 @@ from hiddenlayer import HiddenLayer
 client = HiddenLayer()
 
 cards = client.models.cards.list(
-    x_correlation_id="00000000-0000-0000-0000-000000000000",
     model_created={},
 )
 print(cards.model_created)
@@ -151,7 +147,6 @@ client = HiddenLayer()
 try:
     client.sensors.create(
         plaintext_name="REPLACE_ME",
-        x_correlation_id="00000000-0000-0000-0000-000000000000",
     )
 except hiddenlayer.APIConnectionError as e:
     print("The server could not be reached")
@@ -197,7 +192,6 @@ client = HiddenLayer(
 # Or, configure per-request:
 client.with_options(max_retries=5).sensors.create(
     plaintext_name="REPLACE_ME",
-    x_correlation_id="00000000-0000-0000-0000-000000000000",
 )
 ```
 
@@ -223,7 +217,6 @@ client = HiddenLayer(
 # Override per-request:
 client.with_options(timeout=5.0).sensors.create(
     plaintext_name="REPLACE_ME",
-    x_correlation_id="00000000-0000-0000-0000-000000000000",
 )
 ```
 
@@ -267,7 +260,6 @@ from hiddenlayer import HiddenLayer
 client = HiddenLayer()
 response = client.sensors.with_raw_response.create(
     plaintext_name="REPLACE_ME",
-    x_correlation_id="00000000-0000-0000-0000-000000000000",
 )
 print(response.headers.get('X-My-Header'))
 
@@ -288,7 +280,6 @@ To stream the response body, use `.with_streaming_response` instead, which requi
 ```python
 with client.sensors.with_streaming_response.create(
     plaintext_name="REPLACE_ME",
-    x_correlation_id="00000000-0000-0000-0000-000000000000",
 ) as response:
     print(response.headers.get("X-My-Header"))
 
