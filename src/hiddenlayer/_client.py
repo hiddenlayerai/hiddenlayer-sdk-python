@@ -21,6 +21,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._compat import cached_property
+from ._oauth2 import OAuth2ClientCredentials, make_oauth2
 from ._version import __version__
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError
@@ -148,18 +149,22 @@ class HiddenLayer(SyncAPIClient):
     @property
     @override
     def auth_headers(self) -> dict[str, str]:
-        return {**self._bearer_auth, **self._hidden_layer_user_auth}
-
-    @property
-    def _bearer_auth(self) -> dict[str, str]:
         bearer_token = self.bearer_token
         if bearer_token is None:
             return {}
         return {"Authorization": f"Bearer {bearer_token}"}
 
     @property
-    def _hidden_layer_user_auth(self) -> httpx.Auth | None:
-        raise NotImplementedError("This auth method has not been implemented yet.")
+    @override
+    def custom_auth(self) -> httpx.Auth | None:
+        if self.client_id and self.client_secret:
+            return make_oauth2(
+                client_id=self.client_id,
+                client_secret=self.client_secret,
+                token_url=self._prepare_url("https://auth.hiddenlayer.ai/oauth2/token?grant_type=client_credentials"),
+                header="Authorization",
+            )
+        return None
 
     @property
     @override
@@ -169,6 +174,15 @@ class HiddenLayer(SyncAPIClient):
             "X-Stainless-Async": "false",
             **self._custom_headers,
         }
+
+    @override
+    def _should_retry(self, response: httpx.Response) -> bool:
+        # Retry on 401 if we are using OAuth2 and the token might be expired
+        if response.status_code == 401 and isinstance(self.custom_auth, OAuth2ClientCredentials):
+            if self.custom_auth.token_is_expired():
+                self.custom_auth.invalidate_token()
+                return True
+        return super()._should_retry(response)
 
     def copy(
         self,
@@ -359,18 +373,22 @@ class AsyncHiddenLayer(AsyncAPIClient):
     @property
     @override
     def auth_headers(self) -> dict[str, str]:
-        return {**self._bearer_auth, **self._hidden_layer_user_auth}
-
-    @property
-    def _bearer_auth(self) -> dict[str, str]:
         bearer_token = self.bearer_token
         if bearer_token is None:
             return {}
         return {"Authorization": f"Bearer {bearer_token}"}
 
     @property
-    def _hidden_layer_user_auth(self) -> httpx.Auth | None:
-        raise NotImplementedError("This auth method has not been implemented yet.")
+    @override
+    def custom_auth(self) -> httpx.Auth | None:
+        if self.client_id and self.client_secret:
+            return make_oauth2(
+                client_id=self.client_id,
+                client_secret=self.client_secret,
+                token_url=self._prepare_url("https://auth.hiddenlayer.ai/oauth2/token?grant_type=client_credentials"),
+                header="Authorization",
+            )
+        return None
 
     @property
     @override
@@ -380,6 +398,15 @@ class AsyncHiddenLayer(AsyncAPIClient):
             "X-Stainless-Async": f"async:{get_async_library()}",
             **self._custom_headers,
         }
+
+    @override
+    def _should_retry(self, response: httpx.Response) -> bool:
+        # Retry on 401 if we are using OAuth2 and the token might be expired
+        if response.status_code == 401 and isinstance(self.custom_auth, OAuth2ClientCredentials):
+            if self.custom_auth.token_is_expired():
+                self.custom_auth.invalidate_token()
+                return True
+        return super()._should_retry(response)
 
     def copy(
         self,
