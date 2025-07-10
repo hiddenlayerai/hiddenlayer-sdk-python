@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Union
 from datetime import datetime
-from typing_extensions import Literal, Required, Annotated, TypedDict
+from typing_extensions import Literal, Annotated, TypedDict
 
 from .._utils import PropertyInfo
 
@@ -12,8 +12,6 @@ __all__ = ["SensorQueryParams", "Filter"]
 
 
 class SensorQueryParams(TypedDict, total=False):
-    x_correlation_id: Required[Annotated[str, PropertyInfo(alias="X-Correlation-Id")]]
-
     filter: Filter
 
     order_by: str

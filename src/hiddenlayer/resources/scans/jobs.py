@@ -50,7 +50,6 @@ class JobsResource(SyncAPIResource):
         self,
         scan_id: str,
         *,
-        x_correlation_id: str,
         has_detections: bool | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -76,7 +75,6 @@ class JobsResource(SyncAPIResource):
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
-        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return self._get(
             f"/scan/v3/results/{scan_id}",
             options=make_request_options(
@@ -92,7 +90,6 @@ class JobsResource(SyncAPIResource):
     def list(
         self,
         *,
-        x_correlation_id: str,
         detection_category: str | NotGiven = NOT_GIVEN,
         end_time: Union[str, datetime] | NotGiven = NOT_GIVEN,
         latest_per_model_version_only: bool | NotGiven = NOT_GIVEN,
@@ -152,7 +149,6 @@ class JobsResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
-        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return self._get(
             "/scan/v3/results",
             options=make_request_options(
@@ -247,7 +243,6 @@ class AsyncJobsResource(AsyncAPIResource):
         self,
         scan_id: str,
         *,
-        x_correlation_id: str,
         has_detections: bool | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -273,7 +268,6 @@ class AsyncJobsResource(AsyncAPIResource):
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
-        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return await self._get(
             f"/scan/v3/results/{scan_id}",
             options=make_request_options(
@@ -291,7 +285,6 @@ class AsyncJobsResource(AsyncAPIResource):
     async def list(
         self,
         *,
-        x_correlation_id: str,
         detection_category: str | NotGiven = NOT_GIVEN,
         end_time: Union[str, datetime] | NotGiven = NOT_GIVEN,
         latest_per_model_version_only: bool | NotGiven = NOT_GIVEN,
@@ -351,7 +344,6 @@ class AsyncJobsResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
-        extra_headers = {"X-Correlation-Id": x_correlation_id, **(extra_headers or {})}
         return await self._get(
             "/scan/v3/results",
             options=make_request_options(

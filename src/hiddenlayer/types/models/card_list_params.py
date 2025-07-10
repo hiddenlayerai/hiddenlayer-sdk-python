@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import List, Union
 from datetime import datetime
-from typing_extensions import Literal, Required, Annotated, TypedDict
+from typing_extensions import Literal, Annotated, TypedDict
 
 from ..._utils import PropertyInfo
 
@@ -12,8 +12,6 @@ __all__ = ["CardListParams", "ModelCreated", "ModelName", "Source"]
 
 
 class CardListParams(TypedDict, total=False):
-    x_correlation_id: Required[Annotated[str, PropertyInfo(alias="X-Correlation-Id")]]
-
     aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]]
 
     aidr_status: Literal["ENABLED", "DISABLED", "ANY"]
