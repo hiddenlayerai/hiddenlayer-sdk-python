@@ -30,7 +30,10 @@ The full API of this library can be found in [api.md](api.md).
 ```python
 from hiddenlayer import HiddenLayer
 
-client = HiddenLayer()
+client = HiddenLayer(
+    # defaults to "prod-us".
+    environment="prod-eu",
+)
 
 sensor = client.sensors.create(
     plaintext_name="REPLACE_ME",
@@ -51,7 +54,10 @@ Simply import `AsyncHiddenLayer` instead of `HiddenLayer` and use `await` with e
 import asyncio
 from hiddenlayer import AsyncHiddenLayer
 
-client = AsyncHiddenLayer()
+client = AsyncHiddenLayer(
+    # defaults to "prod-us".
+    environment="prod-eu",
+)
 
 
 async def main() -> None:
