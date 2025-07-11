@@ -28,12 +28,9 @@ pip install git+ssh://git@github.com/stainless-sdks/hiddenlayer-sdk-python.git
 The full API of this library can be found in [api.md](api.md).
 
 ```python
-import os
 from hiddenlayer import HiddenLayer
 
-client = HiddenLayer(
-    bearer_token=os.environ.get("HIDDENLAYER_TOKEN"),  # This is the default and can be omitted
-)
+client = HiddenLayer()
 
 sensor = client.sensors.create(
     plaintext_name="REPLACE_ME",
@@ -51,13 +48,10 @@ so that your Bearer Token is not stored in source control.
 Simply import `AsyncHiddenLayer` instead of `HiddenLayer` and use `await` with each API call:
 
 ```python
-import os
 import asyncio
 from hiddenlayer import AsyncHiddenLayer
 
-client = AsyncHiddenLayer(
-    bearer_token=os.environ.get("HIDDENLAYER_TOKEN"),  # This is the default and can be omitted
-)
+client = AsyncHiddenLayer()
 
 
 async def main() -> None:
@@ -86,7 +80,6 @@ pip install 'hiddenlayer[aiohttp] @ git+ssh://git@github.com/stainless-sdks/hidd
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
-import os
 import asyncio
 from hiddenlayer import DefaultAioHttpClient
 from hiddenlayer import AsyncHiddenLayer
@@ -94,7 +87,6 @@ from hiddenlayer import AsyncHiddenLayer
 
 async def main() -> None:
     async with AsyncHiddenLayer(
-        bearer_token=os.environ.get("HIDDENLAYER_TOKEN"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
         sensor = await client.sensors.create(
