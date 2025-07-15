@@ -8,7 +8,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._utils import maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -17,7 +17,8 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..._base_client import make_request_options
+from ...pagination import SyncOffsetPage, AsyncOffsetPage
+from ..._base_client import AsyncPaginator, make_request_options
 from ...types.models import card_list_params
 from ...types.models.card_list_response import CardListResponse
 
@@ -64,7 +65,7 @@ class CardsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CardListResponse:
+    ) -> SyncOffsetPage[CardListResponse]:
         """
         List Model Cards
 
@@ -88,8 +89,9 @@ class CardsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
-            "/models/v3/cards",
+        return self._get_api_list(
+            "/models/v4/cards",
+            page=SyncOffsetPage[CardListResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -112,7 +114,7 @@ class CardsResource(SyncAPIResource):
                     card_list_params.CardListParams,
                 ),
             ),
-            cast_to=CardListResponse,
+            model=CardListResponse,
         )
 
 
@@ -136,7 +138,7 @@ class AsyncCardsResource(AsyncAPIResource):
         """
         return AsyncCardsResourceWithStreamingResponse(self)
 
-    async def list(
+    def list(
         self,
         *,
         aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]] | NotGiven = NOT_GIVEN,
@@ -156,7 +158,7 @@ class AsyncCardsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CardListResponse:
+    ) -> AsyncPaginator[CardListResponse, AsyncOffsetPage[CardListResponse]]:
         """
         List Model Cards
 
@@ -180,14 +182,15 @@ class AsyncCardsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
-            "/models/v3/cards",
+        return self._get_api_list(
+            "/models/v4/cards",
+            page=AsyncOffsetPage[CardListResponse],
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform(
+                query=maybe_transform(
                     {
                         "aidr_severity": aidr_severity,
                         "aidr_status": aidr_status,
@@ -204,7 +207,7 @@ class AsyncCardsResource(AsyncAPIResource):
                     card_list_params.CardListParams,
                 ),
             ),
-            cast_to=CardListResponse,
+            model=CardListResponse,
         )
 
 

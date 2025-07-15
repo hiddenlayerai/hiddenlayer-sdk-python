@@ -122,10 +122,10 @@ from hiddenlayer import HiddenLayer
 
 client = HiddenLayer()
 
-cards = client.models.cards.list(
+page = client.models.cards.list(
     model_created={},
 )
-print(cards.model_created)
+print(page.results)
 ```
 
 ## Handling errors
