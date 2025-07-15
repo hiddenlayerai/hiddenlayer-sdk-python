@@ -6,7 +6,7 @@ from typing_extensions import override
 from ._models import BaseModel
 from ._base_client import BasePage, PageInfo, BaseSyncPage, BaseAsyncPage
 
-__all__ = ["CursorPaginationPage", "SyncCursorPagination", "AsyncCursorPagination"]
+__all__ = ["CursorPaginationPage", "SyncCursorPagination", "AsyncCursorPagination", "SyncOffsetPage", "AsyncOffsetPage"]
 
 _T = TypeVar("_T")
 
@@ -61,3 +61,67 @@ class AsyncCursorPagination(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
             return None
 
         return PageInfo(params={"cursor": next})
+
+
+class SyncOffsetPage(BaseSyncPage[_T], BasePage[_T], Generic[_T]):
+    results: List[_T]
+    total_count: Optional[int] = None
+    page_size: Optional[int] = None
+    page_number: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        results = self.results
+        if not results:
+            return []
+        return results
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        offset = self._options.params.get("offset") or 0
+        if not isinstance(offset, int):
+            raise ValueError(f'Expected "offset" param to be an integer but got {offset}')
+
+        length = len(self._get_page_items())
+        current_count = offset + length
+
+        total_count = self.total_count
+        if total_count is None:
+            return None
+
+        if current_count < total_count:
+            return PageInfo(params={"offset": current_count})
+
+        return None
+
+
+class AsyncOffsetPage(BaseAsyncPage[_T], BasePage[_T], Generic[_T]):
+    results: List[_T]
+    total_count: Optional[int] = None
+    page_size: Optional[int] = None
+    page_number: Optional[int] = None
+
+    @override
+    def _get_page_items(self) -> List[_T]:
+        results = self.results
+        if not results:
+            return []
+        return results
+
+    @override
+    def next_page_info(self) -> Optional[PageInfo]:
+        offset = self._options.params.get("offset") or 0
+        if not isinstance(offset, int):
+            raise ValueError(f'Expected "offset" param to be an integer but got {offset}')
+
+        length = len(self._get_page_items())
+        current_count = offset + length
+
+        total_count = self.total_count
+        if total_count is None:
+            return None
+
+        if current_count < total_count:
+            return PageInfo(params={"offset": current_count})
+
+        return None

@@ -35,7 +35,7 @@ from hiddenlayer.types.models import CardListResponse
 
 Methods:
 
-- <code title="get /models/v3/cards">client.models.cards.<a href="./src/hiddenlayer/resources/models/cards.py">list</a>(\*\*<a href="src/hiddenlayer/types/models/card_list_params.py">params</a>) -> <a href="./src/hiddenlayer/types/models/card_list_response.py">CardListResponse</a></code>
+- <code title="get /models/v4/cards">client.models.cards.<a href="./src/hiddenlayer/resources/models/cards.py">list</a>(\*\*<a href="src/hiddenlayer/types/models/card_list_params.py">params</a>) -> <a href="./src/hiddenlayer/types/models/card_list_response.py">SyncOffsetPage[CardListResponse]</a></code>
 
 # Sensors
 

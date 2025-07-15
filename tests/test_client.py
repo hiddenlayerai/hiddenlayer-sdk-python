@@ -463,7 +463,7 @@ class TestHiddenLayer:
     def test_multipart_repeating_array(self, client: HiddenLayer) -> None:
         request = client._build_request(
             FinalRequestOptions.construct(
-                method="get",
+                method="post",
                 url="/foo",
                 headers={"Content-Type": "multipart/form-data; boundary=6b7ba517decee4a450543ea6ae821c82"},
                 json_data={"array": ["foo", "bar"]},
@@ -560,6 +560,16 @@ class TestHiddenLayer:
         with update_env(HIDDEN_LAYER_BASE_URL="http://localhost:5000/from/env"):
             client = HiddenLayer(bearer_token=bearer_token, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
+
+        # explicit environment arg requires explicitness
+        with update_env(HIDDEN_LAYER_BASE_URL="http://localhost:5000/from/env"):
+            with pytest.raises(ValueError, match=r"you must pass base_url=None"):
+                HiddenLayer(bearer_token=bearer_token, _strict_response_validation=True, environment="prod-us")
+
+            client = HiddenLayer(
+                base_url=None, bearer_token=bearer_token, _strict_response_validation=True, environment="prod-us"
+            )
+            assert str(client.base_url).startswith("https://api.hiddenlayer.ai")
 
     @pytest.mark.parametrize(
         "client",
@@ -1286,7 +1296,7 @@ class TestAsyncHiddenLayer:
     def test_multipart_repeating_array(self, async_client: AsyncHiddenLayer) -> None:
         request = async_client._build_request(
             FinalRequestOptions.construct(
-                method="get",
+                method="post",
                 url="/foo",
                 headers={"Content-Type": "multipart/form-data; boundary=6b7ba517decee4a450543ea6ae821c82"},
                 json_data={"array": ["foo", "bar"]},
@@ -1383,6 +1393,16 @@ class TestAsyncHiddenLayer:
         with update_env(HIDDEN_LAYER_BASE_URL="http://localhost:5000/from/env"):
             client = AsyncHiddenLayer(bearer_token=bearer_token, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
+
+        # explicit environment arg requires explicitness
+        with update_env(HIDDEN_LAYER_BASE_URL="http://localhost:5000/from/env"):
+            with pytest.raises(ValueError, match=r"you must pass base_url=None"):
+                AsyncHiddenLayer(bearer_token=bearer_token, _strict_response_validation=True, environment="prod-us")
+
+            client = AsyncHiddenLayer(
+                base_url=None, bearer_token=bearer_token, _strict_response_validation=True, environment="prod-us"
+            )
+            assert str(client.base_url).startswith("https://api.hiddenlayer.ai")
 
     @pytest.mark.parametrize(
         "client",

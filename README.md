@@ -16,8 +16,8 @@ The REST API documentation can be found on [docs.hiddenlayer-sdk.com](https://do
 ## Installation
 
 ```sh
-# install from this staging repo
-pip install git+ssh://git@github.com/stainless-sdks/hiddenlayer-sdk-python.git
+# install from the production repo
+pip install git+ssh://git@github.com/hiddenlayer-engineering/hiddenlayer-sdk-python.git
 ```
 
 > [!NOTE]
@@ -28,11 +28,11 @@ pip install git+ssh://git@github.com/stainless-sdks/hiddenlayer-sdk-python.git
 The full API of this library can be found in [api.md](api.md).
 
 ```python
-import os
 from hiddenlayer import HiddenLayer
 
 client = HiddenLayer(
-    bearer_token=os.environ.get("HIDDENLAYER_TOKEN"),  # This is the default and can be omitted
+    # defaults to "prod-us".
+    environment="prod-eu",
 )
 
 sensor = client.sensors.create(
@@ -51,12 +51,12 @@ so that your Bearer Token is not stored in source control.
 Simply import `AsyncHiddenLayer` instead of `HiddenLayer` and use `await` with each API call:
 
 ```python
-import os
 import asyncio
 from hiddenlayer import AsyncHiddenLayer
 
 client = AsyncHiddenLayer(
-    bearer_token=os.environ.get("HIDDENLAYER_TOKEN"),  # This is the default and can be omitted
+    # defaults to "prod-us".
+    environment="prod-eu",
 )
 
 
@@ -79,14 +79,13 @@ By default, the async client uses `httpx` for HTTP requests. However, for improv
 You can enable this by installing `aiohttp`:
 
 ```sh
-# install from this staging repo
-pip install 'hiddenlayer[aiohttp] @ git+ssh://git@github.com/stainless-sdks/hiddenlayer-sdk-python.git'
+# install from the production repo
+pip install 'hiddenlayer[aiohttp] @ git+ssh://git@github.com/hiddenlayer-engineering/hiddenlayer-sdk-python.git'
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
-import os
 import asyncio
 from hiddenlayer import DefaultAioHttpClient
 from hiddenlayer import AsyncHiddenLayer
@@ -94,7 +93,6 @@ from hiddenlayer import AsyncHiddenLayer
 
 async def main() -> None:
     async with AsyncHiddenLayer(
-        bearer_token=os.environ.get("HIDDENLAYER_TOKEN"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
         sensor = await client.sensors.create(
@@ -124,10 +122,10 @@ from hiddenlayer import HiddenLayer
 
 client = HiddenLayer()
 
-cards = client.models.cards.list(
+page = client.models.cards.list(
     model_created={},
 )
-print(cards.model_created)
+print(page.results)
 ```
 
 ## Handling errors
@@ -268,9 +266,9 @@ sensor = response.parse()  # get the object that `sensors.create()` would have r
 print(sensor.sensor_id)
 ```
 
-These methods return an [`APIResponse`](https://github.com/stainless-sdks/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -376,7 +374,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/hiddenlayer-sdk-python/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/issues) with questions, bugs, or suggestions.
 
 ### Determining the installed version
 

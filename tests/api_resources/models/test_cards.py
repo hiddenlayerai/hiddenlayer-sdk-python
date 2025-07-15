@@ -10,6 +10,7 @@ import pytest
 from hiddenlayer import HiddenLayer, AsyncHiddenLayer
 from tests.utils import assert_matches_type
 from hiddenlayer._utils import parse_datetime
+from hiddenlayer.pagination import SyncOffsetPage, AsyncOffsetPage
 from hiddenlayer.types.models import CardListResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -22,7 +23,7 @@ class TestCards:
     @parametrize
     def test_method_list(self, client: HiddenLayer) -> None:
         card = client.models.cards.list()
-        assert_matches_type(CardListResponse, card, path=["response"])
+        assert_matches_type(SyncOffsetPage[CardListResponse], card, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -49,7 +50,7 @@ class TestCards:
                 "eq": "eq",
             },
         )
-        assert_matches_type(CardListResponse, card, path=["response"])
+        assert_matches_type(SyncOffsetPage[CardListResponse], card, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -59,7 +60,7 @@ class TestCards:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         card = response.parse()
-        assert_matches_type(CardListResponse, card, path=["response"])
+        assert_matches_type(SyncOffsetPage[CardListResponse], card, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -69,7 +70,7 @@ class TestCards:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             card = response.parse()
-            assert_matches_type(CardListResponse, card, path=["response"])
+            assert_matches_type(SyncOffsetPage[CardListResponse], card, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -83,7 +84,7 @@ class TestAsyncCards:
     @parametrize
     async def test_method_list(self, async_client: AsyncHiddenLayer) -> None:
         card = await async_client.models.cards.list()
-        assert_matches_type(CardListResponse, card, path=["response"])
+        assert_matches_type(AsyncOffsetPage[CardListResponse], card, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -110,7 +111,7 @@ class TestAsyncCards:
                 "eq": "eq",
             },
         )
-        assert_matches_type(CardListResponse, card, path=["response"])
+        assert_matches_type(AsyncOffsetPage[CardListResponse], card, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -120,7 +121,7 @@ class TestAsyncCards:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         card = await response.parse()
-        assert_matches_type(CardListResponse, card, path=["response"])
+        assert_matches_type(AsyncOffsetPage[CardListResponse], card, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
@@ -130,6 +131,6 @@ class TestAsyncCards:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             card = await response.parse()
-            assert_matches_type(CardListResponse, card, path=["response"])
+            assert_matches_type(AsyncOffsetPage[CardListResponse], card, path=["response"])
 
         assert cast(Any, response.is_closed) is True
