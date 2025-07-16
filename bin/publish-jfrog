@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -eux
+
+# Build the package using Rye
+mkdir -p dist
+rye build --clean
+
+# Use twine to publish to JFrog since Rye doesn't accept JFrog URLs
+export TWINE_USERNAME=$JFROG_USER
+export TWINE_PASSWORD=$JFROG_TOKEN
+
+twine upload \
+  --repository-url https://hiddenlayer.jfrog.io/artifactory/api/pypi/hl-pypi-local \
+  --verbose \
+  dist/*
