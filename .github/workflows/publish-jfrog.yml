@@ -24,6 +24,10 @@ jobs:
           RYE_VERSION: '0.44.0'
           RYE_INSTALL_OPTION: '--yes'
 
+      - name: Install twine
+        run: |
+          pip install twine
+
       - name: Publish to JFrog
         run: |
           bash ./bin/publish-jfrog

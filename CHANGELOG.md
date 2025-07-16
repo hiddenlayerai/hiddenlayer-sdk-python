@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-alpha.3 (2025-07-16)
+
+Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
+
 ## 0.1.0-alpha.2 (2025-07-16)
 
 Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
