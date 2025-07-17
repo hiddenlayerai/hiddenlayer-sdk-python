@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.4 (2025-07-17)
+
+Full Changelog: [v0.1.0-alpha.3...v0.1.0-alpha.4](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.3...v0.1.0-alpha.4)
+
+### Features
+
+* **api:** added sensor update ([6a77a18](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/6a77a187141a0775d7a50c268205ce1be99e82fc))
+
 ## 0.1.0-alpha.3 (2025-07-16)
 
 Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
