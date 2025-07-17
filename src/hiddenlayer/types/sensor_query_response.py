@@ -3,6 +3,7 @@
 from typing import Dict, List, Optional
 from datetime import datetime
 
+from .._compat import PYDANTIC_V2, ConfigDict
 from .._models import BaseModel
 
 __all__ = ["SensorQueryResponse", "Result"]
@@ -13,17 +14,23 @@ class Result(BaseModel):
 
     created_at: datetime
 
+    model_id: str
+
     plaintext_name: str
 
     sensor_id: str
 
-    tenant_id: str
+    tags: Dict[str, object]
 
-    version: int
+    tenant_id: str
 
     adhoc: Optional[bool] = None
 
-    tags: Optional[Dict[str, object]] = None
+    version: Optional[int] = None
+
+    if PYDANTIC_V2:
+        # allow fields with a `model_` prefix
+        model_config = ConfigDict(protected_namespaces=tuple())
 
 
 class SensorQueryResponse(BaseModel):
