@@ -38,7 +38,7 @@ client = HiddenLayer(
 sensor = client.sensors.create(
     plaintext_name="REPLACE_ME",
 )
-print(sensor.sensor_id)
+print(sensor.model_id)
 ```
 
 While you can provide a `bearer_token` keyword argument,
@@ -64,7 +64,7 @@ async def main() -> None:
     sensor = await client.sensors.create(
         plaintext_name="REPLACE_ME",
     )
-    print(sensor.sensor_id)
+    print(sensor.model_id)
 
 
 asyncio.run(main())
@@ -98,7 +98,7 @@ async def main() -> None:
         sensor = await client.sensors.create(
             plaintext_name="REPLACE_ME",
         )
-        print(sensor.sensor_id)
+        print(sensor.model_id)
 
 
 asyncio.run(main())
@@ -263,7 +263,7 @@ response = client.sensors.with_raw_response.create(
 print(response.headers.get('X-My-Header'))
 
 sensor = response.parse()  # get the object that `sensors.create()` would have returned
-print(sensor.sensor_id)
+print(sensor.model_id)
 ```
 
 These methods return an [`APIResponse`](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) object.
