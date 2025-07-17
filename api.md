@@ -42,13 +42,19 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types import SensorCreateResponse, SensorRetrieveResponse, SensorQueryResponse
+from hiddenlayer.types import (
+    SensorCreateResponse,
+    SensorRetrieveResponse,
+    SensorUpdateResponse,
+    SensorQueryResponse,
+)
 ```
 
 Methods:
 
 - <code title="post /api/v2/sensors/create">client.sensors.<a href="./src/hiddenlayer/resources/sensors.py">create</a>(\*\*<a href="src/hiddenlayer/types/sensor_create_params.py">params</a>) -> <a href="./src/hiddenlayer/types/sensor_create_response.py">SensorCreateResponse</a></code>
 - <code title="get /api/v2/sensors/{sensor_id}">client.sensors.<a href="./src/hiddenlayer/resources/sensors.py">retrieve</a>(sensor_id) -> <a href="./src/hiddenlayer/types/sensor_retrieve_response.py">SensorRetrieveResponse</a></code>
+- <code title="put /api/v2/sensors/{sensor_id}">client.sensors.<a href="./src/hiddenlayer/resources/sensors.py">update</a>(sensor_id, \*\*<a href="src/hiddenlayer/types/sensor_update_params.py">params</a>) -> <a href="./src/hiddenlayer/types/sensor_update_response.py">SensorUpdateResponse</a></code>
 - <code title="delete /api/v2/sensors/{sensor_id}">client.sensors.<a href="./src/hiddenlayer/resources/sensors.py">delete</a>(sensor_id) -> None</code>
 - <code title="post /api/v2/sensors/query">client.sensors.<a href="./src/hiddenlayer/resources/sensors.py">query</a>(\*\*<a href="src/hiddenlayer/types/sensor_query_params.py">params</a>) -> <a href="./src/hiddenlayer/types/sensor_query_response.py">SensorQueryResponse</a></code>
 
