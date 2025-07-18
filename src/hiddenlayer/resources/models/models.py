@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Iterable
+
 import httpx
 
 from .cards import (
@@ -12,7 +14,9 @@ from .cards import (
     CardsResourceWithStreamingResponse,
     AsyncCardsResourceWithStreamingResponse,
 )
+from ...types import model_create_params
 from ..._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
+from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -22,6 +26,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
+from ...types.model_create_response import ModelCreateResponse
 from ...types.model_retrieve_response import ModelRetrieveResponse
 
 __all__ = ["ModelsResource", "AsyncModelsResource"]
@@ -50,6 +55,38 @@ class ModelsResource(SyncAPIResource):
         For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#with_streaming_response
         """
         return ModelsResourceWithStreamingResponse(self)
+
+    def create(
+        self,
+        *,
+        body: Iterable[model_create_params.Body],
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ModelCreateResponse:
+        """
+        Upsert Models
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._put(
+            "/api/v2/models",
+            body=maybe_transform(body, Iterable[model_create_params.Body]),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ModelCreateResponse,
+        )
 
     def retrieve(
         self,
@@ -143,6 +180,38 @@ class AsyncModelsResource(AsyncAPIResource):
         """
         return AsyncModelsResourceWithStreamingResponse(self)
 
+    async def create(
+        self,
+        *,
+        body: Iterable[model_create_params.Body],
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ModelCreateResponse:
+        """
+        Upsert Models
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._put(
+            "/api/v2/models",
+            body=await async_maybe_transform(body, Iterable[model_create_params.Body]),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ModelCreateResponse,
+        )
+
     async def retrieve(
         self,
         model_id: str,
@@ -215,6 +284,9 @@ class ModelsResourceWithRawResponse:
     def __init__(self, models: ModelsResource) -> None:
         self._models = models
 
+        self.create = to_raw_response_wrapper(
+            models.create,
+        )
         self.retrieve = to_raw_response_wrapper(
             models.retrieve,
         )
@@ -231,6 +303,9 @@ class AsyncModelsResourceWithRawResponse:
     def __init__(self, models: AsyncModelsResource) -> None:
         self._models = models
 
+        self.create = async_to_raw_response_wrapper(
+            models.create,
+        )
         self.retrieve = async_to_raw_response_wrapper(
             models.retrieve,
         )
@@ -247,6 +322,9 @@ class ModelsResourceWithStreamingResponse:
     def __init__(self, models: ModelsResource) -> None:
         self._models = models
 
+        self.create = to_streamed_response_wrapper(
+            models.create,
+        )
         self.retrieve = to_streamed_response_wrapper(
             models.retrieve,
         )
@@ -263,6 +341,9 @@ class AsyncModelsResourceWithStreamingResponse:
     def __init__(self, models: AsyncModelsResource) -> None:
         self._models = models
 
+        self.create = async_to_streamed_response_wrapper(
+            models.create,
+        )
         self.retrieve = async_to_streamed_response_wrapper(
             models.retrieve,
         )

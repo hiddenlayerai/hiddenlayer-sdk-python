@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.6 (2025-07-18)
+
+Full Changelog: [v0.1.0-alpha.5...v0.1.0-alpha.6](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.5...v0.1.0-alpha.6)
+
+### Features
+
+* **api:** added PUT /api/v2/models to config ([d2be4c9](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/d2be4c99d166db198c902efe6e9430b7ded0d270))
+
 ## 0.1.0-alpha.5 (2025-07-17)
 
 Full Changelog: [v0.1.0-alpha.4...v0.1.0-alpha.5](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.4...v0.1.0-alpha.5)
