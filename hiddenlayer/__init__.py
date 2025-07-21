@@ -1,5 +1,6 @@
 import os
 from typing import Callable, Optional
+from urllib.parse import urljoin
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -33,8 +34,13 @@ class HiddenlayerServiceClient:
         api_id: Optional[str] = None,
         api_key: Optional[str] = None,
         host: str = "https://api.us.hiddenlayer.ai",
+        auth_url: Optional[str] = None,
     ):
         self.host = host.strip()
+        if auth_url:
+            self.auth_url = auth_url.strip()
+        else:
+            self.auth_url = None
         self.is_saas = is_saas(host)
         refresh_jwt_func: Optional[Callable[[], str]] = None
 
@@ -65,9 +71,12 @@ class HiddenlayerServiceClient:
     def _get_jwt(self, *, api_id: str, api_key: str) -> str:
         "Get the JWT token to auth to the Hiddenlayer API."
 
-        auth_url = os.getenv("HL_AUTH_URL", "https://auth.hiddenlayer.ai")
+        if self.auth_url:
+            auth_url = self.auth_url
+        else:
+            auth_url = os.getenv("HL_AUTH_URL", "https://auth.hiddenlayer.ai")
 
-        token_url = f"{auth_url}/oauth2/token?grant_type=client_credentials"
+        token_url = urljoin(auth_url, "/oauth2/token?grant_type=client_credentials")
 
         resp = requests.post(token_url, auth=HTTPBasicAuth(api_id, api_key))
 
