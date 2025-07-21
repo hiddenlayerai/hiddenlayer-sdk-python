@@ -1,6 +1,6 @@
 import os
 from typing import Callable, Optional
-from urllib.parse import urlparse
+from urllib.parse import urljoin
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -76,7 +76,7 @@ class HiddenlayerServiceClient:
         else:
             auth_url = os.getenv("HL_AUTH_URL", "https://auth.hiddenlayer.ai")
 
-        token_url = urlparse.urljoin(
+        token_url = urljoin(
             auth_url, "/oauth2/token?grant_type=client_credentials"
         )
 
