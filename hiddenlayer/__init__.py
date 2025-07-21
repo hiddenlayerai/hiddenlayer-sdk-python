@@ -76,9 +76,7 @@ class HiddenlayerServiceClient:
         else:
             auth_url = os.getenv("HL_AUTH_URL", "https://auth.hiddenlayer.ai")
 
-        token_url = urljoin(
-            auth_url, "/oauth2/token?grant_type=client_credentials"
-        )
+        token_url = urljoin(auth_url, "/oauth2/token?grant_type=client_credentials")
 
         resp = requests.post(token_url, auth=HTTPBasicAuth(api_id, api_key))
 
