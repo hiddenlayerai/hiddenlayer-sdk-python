@@ -1,8 +1,8 @@
 import os
 from typing import Callable, Optional
+from urllib.parse import urlparse
 
 import requests
-from urllib.parse import urlparse
 from requests.auth import HTTPBasicAuth
 
 from hiddenlayer.sdk.rest.api_client import ApiClient
