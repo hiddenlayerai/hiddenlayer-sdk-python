@@ -8,7 +8,6 @@ from pydantic import Field as FieldInfo
 
 from .region import Region
 from .message import Message
-from ..._compat import PYDANTIC_V2
 from ..._models import BaseModel
 from .property_bag import PropertyBag
 
@@ -261,25 +260,3 @@ class Exception(BaseModel):
 
     stack: Optional[Stack] = None
     """The sequence of function calls leading to the exception."""
-
-
-if PYDANTIC_V2:
-    Exception.model_rebuild()
-    Stack.model_rebuild()
-    StackFrame.model_rebuild()
-    StackFrameLocation.model_rebuild()
-    StackFrameLocationLogicalLocation.model_rebuild()
-    StackFrameLocationPhysicalLocation.model_rebuild()
-    StackFrameLocationPhysicalLocationAddress.model_rebuild()
-    StackFrameLocationPhysicalLocationArtifactLocation.model_rebuild()
-    StackFrameLocationRelationship.model_rebuild()
-else:
-    Exception.update_forward_refs()  # type: ignore
-    Stack.update_forward_refs()  # type: ignore
-    StackFrame.update_forward_refs()  # type: ignore
-    StackFrameLocation.update_forward_refs()  # type: ignore
-    StackFrameLocationLogicalLocation.update_forward_refs()  # type: ignore
-    StackFrameLocationPhysicalLocation.update_forward_refs()  # type: ignore
-    StackFrameLocationPhysicalLocationAddress.update_forward_refs()  # type: ignore
-    StackFrameLocationPhysicalLocationArtifactLocation.update_forward_refs()  # type: ignore
-    StackFrameLocationRelationship.update_forward_refs()  # type: ignore

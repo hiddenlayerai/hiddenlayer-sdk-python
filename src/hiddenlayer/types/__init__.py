@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from . import shared
+from .. import _compat
 from .shared import (
     Node as Node,
     Region as Region,
@@ -21,3 +23,14 @@ from .sensor_create_response import SensorCreateResponse as SensorCreateResponse
 from .sensor_update_response import SensorUpdateResponse as SensorUpdateResponse
 from .model_retrieve_response import ModelRetrieveResponse as ModelRetrieveResponse
 from .sensor_retrieve_response import SensorRetrieveResponse as SensorRetrieveResponse
+
+# Rebuild cyclical models only after all modules are imported.
+# This ensures that, when building the deferred (due to cyclical references) model schema,
+# Pydantic can resolve the necessary references.
+# See: https://github.com/pydantic/pydantic/issues/11250 for more context.
+if _compat.PYDANTIC_V2:
+    shared.exception.Exception.model_rebuild(_parent_namespace_depth=0)
+    shared.node.Node.model_rebuild(_parent_namespace_depth=0)
+else:
+    shared.exception.Exception.update_forward_refs()  # type: ignore
+    shared.node.Node.update_forward_refs()  # type: ignore
