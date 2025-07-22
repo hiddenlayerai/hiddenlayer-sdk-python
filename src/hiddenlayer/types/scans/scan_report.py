@@ -4,6 +4,8 @@ from typing import List, Union, Optional
 from datetime import datetime
 from typing_extensions import Literal, TypeAlias
 
+from pydantic import Field as FieldInfo
+
 from ..._compat import PYDANTIC_V2, ConfigDict
 from ..._models import BaseModel
 
@@ -322,6 +324,9 @@ class ScanReport(BaseModel):
 
     version: str
     """scanner version"""
+
+    schema_version: Optional[str] = FieldInfo(alias="$schema_version", default=None)
+    """version of the scan report schema format"""
 
     detection_categories: Optional[List[str]] = None
     """list of detection categories found"""
