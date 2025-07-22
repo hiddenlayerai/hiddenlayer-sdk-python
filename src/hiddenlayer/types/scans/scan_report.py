@@ -23,6 +23,7 @@ __all__ = [
     "FileResultDetection",
     "FileResultDetectionMitreAtlas",
     "FileResultDetectionRuleDetail",
+    "Summary",
 ]
 
 
@@ -274,6 +275,29 @@ class FileResult(BaseModel):
     """Error messages returned by the scanner"""
 
 
+class Summary(BaseModel):
+    categories: Optional[List[str]] = None
+    """list of unique detection categories found"""
+
+    detection_count: Optional[int] = None
+    """total number of detections found"""
+
+    file_count: Optional[int] = None
+    """total number of files scanned"""
+
+    files_failed_to_scan: Optional[int] = None
+    """number of files that failed during scanning"""
+
+    files_with_detections_count: Optional[int] = None
+    """number of files that contain detections"""
+
+    severity: Optional[Literal["low", "medium", "high", "critical", "safe", "unknown"]] = None
+    """highest severity level found across all detections"""
+
+    unknown_files: Optional[int] = None
+    """number of files with unknown file type"""
+
+
 class ScanReport(BaseModel):
     detection_count: int
     """number of detections found"""
@@ -312,3 +336,6 @@ class ScanReport(BaseModel):
 
     severity: Optional[Literal["low", "medium", "high", "critical", "safe", "unknown"]] = None
     """detection severity"""
+
+    summary: Optional[Summary] = None
+    """aggregated summary statistics for the scan"""

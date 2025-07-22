@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.1.0-alpha.7 (2025-07-22)
+
+Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)
+
+### Features
+
+* **api:** api update ([2433e73](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/2433e73b7c551f02db091efb9af210632f0032cd))
+
+
+### Bug Fixes
+
+* **parsing:** ignore empty metadata ([f3b496b](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/f3b496b5f48e4bd6aa38ab260c76cface06bea8a))
+
+
+### Chores
+
+* **types:** rebuild Pydantic models after all types are defined ([186ccda](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/186ccda280184623ff694cdbce1eae5c98e57aa9))
+
 ## 0.1.0-alpha.6 (2025-07-18)
 
 Full Changelog: [v0.1.0-alpha.5...v0.1.0-alpha.6](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.5...v0.1.0-alpha.6)

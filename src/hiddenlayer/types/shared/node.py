@@ -8,7 +8,6 @@ from pydantic import Field as FieldInfo
 
 from .region import Region
 from .message import Message
-from ..._compat import PYDANTIC_V2
 from ..._models import BaseModel
 from .property_bag import PropertyBag
 
@@ -220,21 +219,3 @@ class Node(BaseModel):
 
     properties: Optional[PropertyBag] = None
     """Key/value pairs that provide additional information about the node."""
-
-
-if PYDANTIC_V2:
-    Node.model_rebuild()
-    Location.model_rebuild()
-    LocationLogicalLocation.model_rebuild()
-    LocationPhysicalLocation.model_rebuild()
-    LocationPhysicalLocationAddress.model_rebuild()
-    LocationPhysicalLocationArtifactLocation.model_rebuild()
-    LocationRelationship.model_rebuild()
-else:
-    Node.update_forward_refs()  # type: ignore
-    Location.update_forward_refs()  # type: ignore
-    LocationLogicalLocation.update_forward_refs()  # type: ignore
-    LocationPhysicalLocation.update_forward_refs()  # type: ignore
-    LocationPhysicalLocationAddress.update_forward_refs()  # type: ignore
-    LocationPhysicalLocationArtifactLocation.update_forward_refs()  # type: ignore
-    LocationRelationship.update_forward_refs()  # type: ignore
