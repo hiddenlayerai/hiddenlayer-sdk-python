@@ -276,7 +276,7 @@ class FileResult(BaseModel):
 
 
 class Summary(BaseModel):
-    categories: Optional[List[str]] = None
+    detection_categories: Optional[List[str]] = None
     """list of unique detection categories found"""
 
     detection_count: Optional[int] = None

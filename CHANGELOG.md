@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.8 (2025-07-22)
+
+Full Changelog: [v0.1.0-alpha.7...v0.1.0-alpha.8](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.7...v0.1.0-alpha.8)
+
+### Features
+
+* **api:** api update ([5e105bc](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/5e105bc648ffd9e084494d327ee7399ad5079f43))
+
 ## 0.1.0-alpha.7 (2025-07-22)
 
 Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)
