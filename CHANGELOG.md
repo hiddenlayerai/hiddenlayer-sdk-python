@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.10 (2025-07-23)
+
+Full Changelog: [v0.1.0-alpha.9...v0.1.0-alpha.10](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.9...v0.1.0-alpha.10)
+
+### Bug Fixes
+
+* **parsing:** parse extra field types ([c62653d](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/c62653dcbd61315c94430b5cc155051e4c0f6cbb))
+
 ## 0.1.0-alpha.9 (2025-07-22)
 
 Full Changelog: [v0.1.0-alpha.8...v0.1.0-alpha.9](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.8...v0.1.0-alpha.9)
