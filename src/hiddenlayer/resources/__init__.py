@@ -24,6 +24,14 @@ from .sensors import (
     SensorsResourceWithStreamingResponse,
     AsyncSensorsResourceWithStreamingResponse,
 )
+from .prompt_analyzer import (
+    PromptAnalyzerResource,
+    AsyncPromptAnalyzerResource,
+    PromptAnalyzerResourceWithRawResponse,
+    AsyncPromptAnalyzerResourceWithRawResponse,
+    PromptAnalyzerResourceWithStreamingResponse,
+    AsyncPromptAnalyzerResourceWithStreamingResponse,
+)
 
 __all__ = [
     "ModelsResource",
@@ -32,6 +40,12 @@ __all__ = [
     "AsyncModelsResourceWithRawResponse",
     "ModelsResourceWithStreamingResponse",
     "AsyncModelsResourceWithStreamingResponse",
+    "PromptAnalyzerResource",
+    "AsyncPromptAnalyzerResource",
+    "PromptAnalyzerResourceWithRawResponse",
+    "AsyncPromptAnalyzerResourceWithRawResponse",
+    "PromptAnalyzerResourceWithStreamingResponse",
+    "AsyncPromptAnalyzerResourceWithStreamingResponse",
     "SensorsResource",
     "AsyncSensorsResource",
     "SensorsResourceWithRawResponse",

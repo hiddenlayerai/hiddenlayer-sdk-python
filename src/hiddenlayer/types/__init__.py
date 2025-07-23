@@ -23,6 +23,8 @@ from .sensor_create_response import SensorCreateResponse as SensorCreateResponse
 from .sensor_update_response import SensorUpdateResponse as SensorUpdateResponse
 from .model_retrieve_response import ModelRetrieveResponse as ModelRetrieveResponse
 from .sensor_retrieve_response import SensorRetrieveResponse as SensorRetrieveResponse
+from .prompt_analyzer_create_params import PromptAnalyzerCreateParams as PromptAnalyzerCreateParams
+from .prompt_analyzer_create_response import PromptAnalyzerCreateResponse as PromptAnalyzerCreateResponse
 
 # Rebuild cyclical models only after all modules are imported.
 # This ensures that, when building the deferred (due to cyclical references) model schema,
