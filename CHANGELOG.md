@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.12 (2025-07-25)
+
+Full Changelog: [v0.1.0-alpha.11...v0.1.0-alpha.12](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.11...v0.1.0-alpha.12)
+
+### Features
+
+* **api:** manual updates ([03fdded](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/03fddedb61bda77435ade41ffdc7286295dac2f1))
+
+
+### Chores
+
+* **project:** add settings file for vscode ([d6407aa](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/d6407aae7256cb72bdb447f3e6fd20ee36d12119))
+
 ## 0.1.0-alpha.11 (2025-07-23)
 
 Full Changelog: [v0.1.0-alpha.10...v0.1.0-alpha.11](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.10...v0.1.0-alpha.11)

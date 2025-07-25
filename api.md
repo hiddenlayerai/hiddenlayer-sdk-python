@@ -50,6 +50,21 @@ Methods:
 
 - <code title="post /api/v1/submit/prompt-analyzer">client.prompt_analyzer.<a href="./src/hiddenlayer/resources/prompt_analyzer.py">create</a>(\*\*<a href="src/hiddenlayer/types/prompt_analyzer_create_params.py">params</a>) -> <a href="./src/hiddenlayer/types/prompt_analyzer_create_response.py">PromptAnalyzerCreateResponse</a></code>
 
+# ModelIntel
+
+## Files
+
+Types:
+
+```python
+from hiddenlayer.types.model_intel import FileRetrieveResponse, FileGetMetadataResponse
+```
+
+Methods:
+
+- <code title="get /model-intel/v1/file/{sha256}">client.model_intel.files.<a href="./src/hiddenlayer/resources/model_intel/files.py">retrieve</a>(sha256, \*\*<a href="src/hiddenlayer/types/model_intel/file_retrieve_params.py">params</a>) -> <a href="./src/hiddenlayer/types/model_intel/file_retrieve_response.py">FileRetrieveResponse</a></code>
+- <code title="get /model-intel/v1/file/{sha256}/metadata">client.model_intel.files.<a href="./src/hiddenlayer/resources/model_intel/files.py">get_metadata</a>(sha256) -> <a href="./src/hiddenlayer/types/model_intel/file_get_metadata_response.py">FileGetMetadataResponse</a></code>
+
 # Sensors
 
 Types:
