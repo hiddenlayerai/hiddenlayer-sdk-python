@@ -1,17 +1,3 @@
-# Shared Types
-
-```python
-from hiddenlayer.types import (
-    ArtifactContent,
-    Exception,
-    Message,
-    MultiformatMessageString,
-    Node,
-    PropertyBag,
-    Region,
-)
-```
-
 # Models
 
 Types:
