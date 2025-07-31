@@ -3,6 +3,7 @@
 import typing as _t
 
 from . import types
+from .lib import CommunityScanner, AsyncCommunityScanner
 from ._types import NOT_GIVEN, Omit, NoneType, NotGiven, Transport, ProxiesTypes
 from ._utils import file_from_path
 from ._client import (
@@ -45,6 +46,8 @@ __all__ = [
     "__version__",
     "__title__",
     "NoneType",
+    "CommunityScanner",
+    "AsyncCommunityScanner",
     "Transport",
     "ProxiesTypes",
     "NotGiven",

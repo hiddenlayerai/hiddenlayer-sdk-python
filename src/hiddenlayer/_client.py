@@ -36,6 +36,7 @@ from ._base_client import (
 if TYPE_CHECKING:
     from .resources import scans, models, sensors, prompt_analyzer
     from .resources.sensors import SensorsResource, AsyncSensorsResource
+    from .lib.community_scan import CommunityScanner, AsyncCommunityScanner
     from .resources.scans.scans import ScansResource, AsyncScansResource
     from .resources.models.models import ModelsResource, AsyncModelsResource
     from .resources.prompt_analyzer import PromptAnalyzerResource, AsyncPromptAnalyzerResource
@@ -173,6 +174,12 @@ class HiddenLayer(SyncAPIClient):
         return ScansResource(self)
 
     @cached_property
+    def community_scanner(self) -> "CommunityScanner":
+        from .lib.community_scan import CommunityScanner
+
+        return CommunityScanner(self)
+
+    @cached_property
     def with_raw_response(self) -> HiddenLayerWithRawResponse:
         return HiddenLayerWithRawResponse(self)
 
@@ -242,7 +249,7 @@ class HiddenLayer(SyncAPIClient):
                 f"Unable to get authentication credentials for the HiddenLayer API - invalid response: {resp.json()}"
             )
 
-        return resp.json()["access_token"] # type: ignore[no-any-return]
+        return resp.json()["access_token"]  # type: ignore[no-any-return]
 
     def copy(
         self,
@@ -448,6 +455,12 @@ class AsyncHiddenLayer(AsyncAPIClient):
         from .resources.scans import AsyncScansResource
 
         return AsyncScansResource(self)
+
+    @cached_property
+    def community_scanner(self) -> "AsyncCommunityScanner":
+        from .lib.community_scan import AsyncCommunityScanner
+
+        return AsyncCommunityScanner(self)
 
     @cached_property
     def with_raw_response(self) -> AsyncHiddenLayerWithRawResponse:
