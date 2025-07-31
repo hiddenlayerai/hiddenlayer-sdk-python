@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-alpha.14 (2025-07-31)
+
+Full Changelog: [v0.1.0-alpha.13...v0.1.0-alpha.14](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.13...v0.1.0-alpha.14)
+
 ## 0.1.0-alpha.13 (2025-07-31)
 
 Full Changelog: [v0.1.0-alpha.12...v0.1.0-alpha.13](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.12...v0.1.0-alpha.13)
