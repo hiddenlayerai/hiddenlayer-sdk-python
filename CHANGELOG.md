@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.0-alpha.13 (2025-07-31)
+
+Full Changelog: [v0.1.0-alpha.12...v0.1.0-alpha.13](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.12...v0.1.0-alpha.13)
+
+### Features
+
+* **api:** api update ([ab856d6](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/ab856d679d1886feb580ae99b79790ab511a125c))
+* **api:** manual updates ([f926e12](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/f926e12f4ed77fa2777c354944e03f28c98fd989))
+* **api:** remove model intel routes ([dff1d61](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/dff1d610507c2ecbac95b4c195d78d7494f68c3f))
+* **client:** support file upload requests ([c00c3a0](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/c00c3a0f8bc1ab385d6f7e7895cf1033cc5d3dcc))
+
+
+### Chores
+
+* remove custom code ([aa328cc](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/aa328ccd2f408272249035c3fdbc5728e5e1cd49))
+
 ## 0.1.0-alpha.12 (2025-07-25)
 
 Full Changelog: [v0.1.0-alpha.11...v0.1.0-alpha.12](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.11...v0.1.0-alpha.12)

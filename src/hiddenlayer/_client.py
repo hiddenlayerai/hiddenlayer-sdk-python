@@ -34,12 +34,11 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import scans, models, sensors, model_intel, prompt_analyzer
+    from .resources import scans, models, sensors, prompt_analyzer
     from .resources.sensors import SensorsResource, AsyncSensorsResource
     from .resources.scans.scans import ScansResource, AsyncScansResource
     from .resources.models.models import ModelsResource, AsyncModelsResource
     from .resources.prompt_analyzer import PromptAnalyzerResource, AsyncPromptAnalyzerResource
-    from .resources.model_intel.model_intel import ModelIntelResource, AsyncModelIntelResource
 
 __all__ = [
     "ENVIRONMENTS",
@@ -160,12 +159,6 @@ class HiddenLayer(SyncAPIClient):
         from .resources.prompt_analyzer import PromptAnalyzerResource
 
         return PromptAnalyzerResource(self)
-
-    @cached_property
-    def model_intel(self) -> ModelIntelResource:
-        from .resources.model_intel import ModelIntelResource
-
-        return ModelIntelResource(self)
 
     @cached_property
     def sensors(self) -> SensorsResource:
@@ -445,12 +438,6 @@ class AsyncHiddenLayer(AsyncAPIClient):
         return AsyncPromptAnalyzerResource(self)
 
     @cached_property
-    def model_intel(self) -> AsyncModelIntelResource:
-        from .resources.model_intel import AsyncModelIntelResource
-
-        return AsyncModelIntelResource(self)
-
-    @cached_property
     def sensors(self) -> AsyncSensorsResource:
         from .resources.sensors import AsyncSensorsResource
 
@@ -623,12 +610,6 @@ class HiddenLayerWithRawResponse:
         return PromptAnalyzerResourceWithRawResponse(self._client.prompt_analyzer)
 
     @cached_property
-    def model_intel(self) -> model_intel.ModelIntelResourceWithRawResponse:
-        from .resources.model_intel import ModelIntelResourceWithRawResponse
-
-        return ModelIntelResourceWithRawResponse(self._client.model_intel)
-
-    @cached_property
     def sensors(self) -> sensors.SensorsResourceWithRawResponse:
         from .resources.sensors import SensorsResourceWithRawResponse
 
@@ -658,12 +639,6 @@ class AsyncHiddenLayerWithRawResponse:
         from .resources.prompt_analyzer import AsyncPromptAnalyzerResourceWithRawResponse
 
         return AsyncPromptAnalyzerResourceWithRawResponse(self._client.prompt_analyzer)
-
-    @cached_property
-    def model_intel(self) -> model_intel.AsyncModelIntelResourceWithRawResponse:
-        from .resources.model_intel import AsyncModelIntelResourceWithRawResponse
-
-        return AsyncModelIntelResourceWithRawResponse(self._client.model_intel)
 
     @cached_property
     def sensors(self) -> sensors.AsyncSensorsResourceWithRawResponse:
@@ -697,12 +672,6 @@ class HiddenLayerWithStreamedResponse:
         return PromptAnalyzerResourceWithStreamingResponse(self._client.prompt_analyzer)
 
     @cached_property
-    def model_intel(self) -> model_intel.ModelIntelResourceWithStreamingResponse:
-        from .resources.model_intel import ModelIntelResourceWithStreamingResponse
-
-        return ModelIntelResourceWithStreamingResponse(self._client.model_intel)
-
-    @cached_property
     def sensors(self) -> sensors.SensorsResourceWithStreamingResponse:
         from .resources.sensors import SensorsResourceWithStreamingResponse
 
@@ -732,12 +701,6 @@ class AsyncHiddenLayerWithStreamedResponse:
         from .resources.prompt_analyzer import AsyncPromptAnalyzerResourceWithStreamingResponse
 
         return AsyncPromptAnalyzerResourceWithStreamingResponse(self._client.prompt_analyzer)
-
-    @cached_property
-    def model_intel(self) -> model_intel.AsyncModelIntelResourceWithStreamingResponse:
-        from .resources.model_intel import AsyncModelIntelResourceWithStreamingResponse
-
-        return AsyncModelIntelResourceWithStreamingResponse(self._client.model_intel)
 
     @cached_property
     def sensors(self) -> sensors.AsyncSensorsResourceWithStreamingResponse:

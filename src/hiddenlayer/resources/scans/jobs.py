@@ -59,7 +59,7 @@ class JobsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> ScanReport:
         """
-        Get scan results (SARIF / V3)
+        Get scan results
 
         Args:
           has_detections: Filter file_results to only those that have detections (and parents)
@@ -252,7 +252,7 @@ class AsyncJobsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
     ) -> ScanReport:
         """
-        Get scan results (SARIF / V3)
+        Get scan results
 
         Args:
           has_detections: Filter file_results to only those that have detections (and parents)
