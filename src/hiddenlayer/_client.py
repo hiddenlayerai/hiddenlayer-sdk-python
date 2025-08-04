@@ -35,6 +35,7 @@ from ._base_client import (
 
 if TYPE_CHECKING:
     from .resources import scans, models, sensors, prompt_analyzer
+    from .lib.model_scan import ModelScanner, AsyncModelScanner
     from .resources.sensors import SensorsResource, AsyncSensorsResource
     from .lib.community_scan import CommunityScanner, AsyncCommunityScanner
     from .resources.scans.scans import ScansResource, AsyncScansResource
@@ -178,6 +179,12 @@ class HiddenLayer(SyncAPIClient):
         from .lib.community_scan import CommunityScanner
 
         return CommunityScanner(self)
+
+    @cached_property
+    def model_scanner(self) -> "ModelScanner":
+        from .lib.model_scan import ModelScanner
+
+        return ModelScanner(self)
 
     @cached_property
     def with_raw_response(self) -> HiddenLayerWithRawResponse:
@@ -461,6 +468,12 @@ class AsyncHiddenLayer(AsyncAPIClient):
         from .lib.community_scan import AsyncCommunityScanner
 
         return AsyncCommunityScanner(self)
+
+    @cached_property
+    def model_scanner(self) -> "AsyncModelScanner":
+        from .lib.model_scan import AsyncModelScanner
+
+        return AsyncModelScanner(self)
 
     @cached_property
     def with_raw_response(self) -> AsyncHiddenLayerWithRawResponse:
