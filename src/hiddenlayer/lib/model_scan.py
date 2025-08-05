@@ -8,6 +8,7 @@ including scan_file and scan_folder methods with multipart upload functionality.
 import os
 import time
 import random
+import asyncio
 import logging
 from typing import List, Union, Literal, Optional, Generator, cast
 from fnmatch import fnmatch
@@ -15,6 +16,8 @@ from pathlib import Path
 from typing_extensions import TYPE_CHECKING
 
 import httpx
+
+from .._exceptions import NotFoundError
 
 logger = logging.getLogger(__name__)
 
@@ -268,20 +271,27 @@ class ModelScanner:
         Wait for scan results using exponential backoff polling.
 
         This mimics the behavior of the old SDK's _wait_for_scan_results method.
+        Handles initial 404 errors when scan is not immediately available.
         """
-        scan_results = self._client.scans.jobs.retrieve(scan_id)
-
         base_delay = 0.1  # seconds
         retries = 0
-        logger.info(f"scan status: {scan_results.status}")
+        scan_results = None
 
-        while scan_results.status not in [ScanStatus.DONE, ScanStatus.FAILED, ScanStatus.CANCELED]:
+        while True:
+            try:
+                scan_results = self._client.scans.jobs.retrieve(scan_id)
+                # If we got here, scan exists - check if it's done
+                if scan_results.status in [ScanStatus.DONE, ScanStatus.FAILED, ScanStatus.CANCELED]:
+                    break
+                logger.info(f"scan status: {scan_results.status}")
+            except NotFoundError:
+                # Scan not found yet, treat it like any other retry condition
+                logger.info(f"scan not found yet, retrying...")
+
             retries += 1
             delay = base_delay * 2**retries + random.uniform(0, 1)  # exponential back off retry
             delay = min(delay, 30)  # cap at 30 seconds
             time.sleep(delay)
-            scan_results = self._client.scans.jobs.retrieve(scan_id)
-            logger.info(f"scan status: {scan_results.status}")
 
         return scan_results
 
@@ -434,21 +444,26 @@ class AsyncModelScanner:
     async def _wait_for_scan_results(self, *, scan_id: str) -> "ScanReport":
         """
         Async version of _wait_for_scan_results.
+        Handles initial 404 errors when scan is not immediately available.
         """
-        import asyncio
-
-        scan_results = await self._client.scans.jobs.retrieve(scan_id)
-
         base_delay = 0.1  # seconds
         retries = 0
-        logger.info(f"scan status: {scan_results.status}")
+        scan_results = None
 
-        while scan_results.status not in [ScanStatus.DONE, ScanStatus.FAILED, ScanStatus.CANCELED]:
+        while True:
+            try:
+                scan_results = await self._client.scans.jobs.retrieve(scan_id)
+                # If we got here, scan exists - check if it's done
+                if scan_results.status in [ScanStatus.DONE, ScanStatus.FAILED, ScanStatus.CANCELED]:
+                    break
+                logger.info(f"scan status: {scan_results.status}")
+            except NotFoundError:
+                # Scan not found yet, treat it like any other retry condition
+                logger.info(f"scan not found yet, retrying...")
+
             retries += 1
             delay = base_delay * 2**retries + random.uniform(0, 1)  # exponential back off retry
             delay = min(delay, 30)  # cap at 30 seconds
             await asyncio.sleep(delay)
-            scan_results = await self._client.scans.jobs.retrieve(scan_id)
-            logger.info(f"scan status: {scan_results.status}")
 
         return scan_results
