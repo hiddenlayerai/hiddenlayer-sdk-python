@@ -6,9 +6,6 @@ including scan_file and scan_folder methods with multipart upload functionality.
 """
 
 import os
-import time
-import random
-import asyncio
 import logging
 from typing import List, Union, Literal, Optional, Generator, cast
 from fnmatch import fnmatch
@@ -17,7 +14,7 @@ from typing_extensions import TYPE_CHECKING
 
 import httpx
 
-from .._exceptions import NotFoundError
+from .scan_utils import get_scan_results, wait_for_scan_results, get_scan_results_async, wait_for_scan_results_async
 
 logger = logging.getLogger(__name__)
 
@@ -93,16 +90,6 @@ def filter_path_objects(
         yield item
 
 
-class ScanStatus:
-    """Scan status constants matching the old SDK."""
-
-    DONE = "done"
-    FAILED = "failed"
-    PENDING = "pending"
-    RUNNING = "running"
-    CANCELED = "canceled"
-
-
 class ModelScanner:
     """
     Model scanner that provides file and folder scanning functionality.
@@ -158,9 +145,9 @@ class ModelScanner:
         self._client.scans.upload.complete_all(scan_id=scan_id)
 
         if wait_for_results:
-            scan_results = self._wait_for_scan_results(scan_id=scan_id)
+            scan_results = wait_for_scan_results(self._client, scan_id=scan_id)
         else:
-            scan_results = self._get_scan_results(scan_id=scan_id)
+            scan_results = get_scan_results(self._client, scan_id=scan_id)
 
         return scan_results
 
@@ -223,9 +210,9 @@ class ModelScanner:
         self._client.scans.upload.complete_all(scan_id=scan_id)
 
         if wait_for_results:
-            scan_results = self._wait_for_scan_results(scan_id=scan_id)
+            scan_results = wait_for_scan_results(self._client, scan_id=scan_id)
         else:
-            scan_results = self._get_scan_results(scan_id=scan_id)
+            scan_results = get_scan_results(self._client, scan_id=scan_id)
 
         return scan_results
 
@@ -266,60 +253,6 @@ class ModelScanner:
         # Complete the file upload
         self._client.scans.upload.file.complete(file_id=upload.upload_id, scan_id=scan_id)
 
-    def _get_scan_results(self, *, scan_id: str) -> "ScanReport":
-        """
-        Get scan results with retry logic for 404 errors.
-        Used when wait_for_results=False to handle initial scan availability.
-        """
-        retries = 0
-        max_retries = 5  # Fewer retries since we're not waiting for completion
-        base_delay = 0.5  # Slightly longer base delay
-
-        while retries < max_retries:
-            try:
-                return self._client.scans.jobs.retrieve(scan_id)
-            except NotFoundError:
-                retries += 1
-                if retries >= max_retries:
-                    logger.error(f"Scan {scan_id} not found after {max_retries} attempts")
-                    raise
-
-                delay = base_delay * retries + random.uniform(0, 0.5)
-                logger.info(f"Scan not yet available, retrying in {delay:.1f}s (attempt {retries + 1}/{max_retries})")
-                time.sleep(delay)
-
-        # Should never reach here due to raise above, but satisfy linter
-        raise RuntimeError(f"Scan {scan_id} not found after {max_retries} attempts")
-
-    def _wait_for_scan_results(self, *, scan_id: str) -> "ScanReport":
-        """
-        Wait for scan results using exponential backoff polling.
-
-        This mimics the behavior of the old SDK's _wait_for_scan_results method.
-        Handles initial 404 errors when scan is not immediately available.
-        """
-        base_delay = 0.1  # seconds
-        retries = 0
-        scan_results = None
-
-        while True:
-            try:
-                scan_results = self._client.scans.jobs.retrieve(scan_id)
-                # If we got here, scan exists - check if it's done
-                if scan_results.status in [ScanStatus.DONE, ScanStatus.FAILED, ScanStatus.CANCELED]:
-                    break
-                logger.info(f"scan status: {scan_results.status}")
-            except NotFoundError:
-                # Scan not found yet, treat it like any other retry condition
-                logger.info(f"scan not found yet, retrying...")
-
-            retries += 1
-            delay = base_delay * 2**retries + random.uniform(0, 1)  # exponential back off retry
-            delay = min(delay, 30)  # cap at 30 seconds
-            time.sleep(delay)
-
-        return scan_results
-
 
 class AsyncModelScanner:
     """
@@ -328,31 +261,6 @@ class AsyncModelScanner:
 
     def __init__(self, client: "AsyncHiddenLayer") -> None:
         self._client = client
-
-    async def _get_scan_results(self, *, scan_id: str) -> "ScanReport":
-        """
-        Async version of _get_scan_results with retry logic for 404 errors.
-        Used when wait_for_results=False to handle initial scan availability.
-        """
-        retries = 0
-        max_retries = 5  # Fewer retries since we're not waiting for completion
-        base_delay = 0.5  # Slightly longer base delay
-
-        while retries < max_retries:
-            try:
-                return await self._client.scans.jobs.retrieve(scan_id)
-            except NotFoundError:
-                retries += 1
-                if retries >= max_retries:
-                    logger.error(f"Scan {scan_id} not found after {max_retries} attempts")
-                    raise
-
-                delay = base_delay * retries + random.uniform(0, 0.5)
-                logger.info(f"Scan not yet available, retrying in {delay:.1f}s (attempt {retries + 1}/{max_retries})")
-                await asyncio.sleep(delay)
-
-        # Should never reach here due to raise above, but satisfy linter
-        raise RuntimeError(f"Scan {scan_id} not found after {max_retries} attempts")
 
     async def scan_file(
         self,
@@ -391,9 +299,9 @@ class AsyncModelScanner:
         await self._client.scans.upload.complete_all(scan_id=scan_id)
 
         if wait_for_results:
-            scan_results = await self._wait_for_scan_results(scan_id=scan_id)
+            scan_results = await wait_for_scan_results_async(self._client, scan_id=scan_id)
         else:
-            scan_results = await self._get_scan_results(scan_id=scan_id)
+            scan_results = await get_scan_results_async(self._client, scan_id=scan_id)
 
         return scan_results
 
@@ -447,9 +355,9 @@ class AsyncModelScanner:
         await self._client.scans.upload.complete_all(scan_id=scan_id)
 
         if wait_for_results:
-            scan_results = await self._wait_for_scan_results(scan_id=scan_id)
+            scan_results = await wait_for_scan_results_async(self._client, scan_id=scan_id)
         else:
-            scan_results = await self._get_scan_results(scan_id=scan_id)
+            scan_results = await get_scan_results_async(self._client, scan_id=scan_id)
 
         return scan_results
 
@@ -490,30 +398,3 @@ class AsyncModelScanner:
 
         # Complete the file upload
         await self._client.scans.upload.file.complete(file_id=upload.upload_id, scan_id=scan_id)
-
-    async def _wait_for_scan_results(self, *, scan_id: str) -> "ScanReport":
-        """
-        Async version of _wait_for_scan_results.
-        Handles initial 404 errors when scan is not immediately available.
-        """
-        base_delay = 0.1  # seconds
-        retries = 0
-        scan_results = None
-
-        while True:
-            try:
-                scan_results = await self._client.scans.jobs.retrieve(scan_id)
-                # If we got here, scan exists - check if it's done
-                if scan_results.status in [ScanStatus.DONE, ScanStatus.FAILED, ScanStatus.CANCELED]:
-                    break
-                logger.info(f"scan status: {scan_results.status}")
-            except NotFoundError:
-                # Scan not found yet, treat it like any other retry condition
-                logger.info(f"scan not found yet, retrying...")
-
-            retries += 1
-            delay = base_delay * 2**retries + random.uniform(0, 1)  # exponential back off retry
-            delay = min(delay, 30)  # cap at 30 seconds
-            await asyncio.sleep(delay)
-
-        return scan_results

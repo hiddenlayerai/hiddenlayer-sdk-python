@@ -11,12 +11,12 @@ from hiddenlayer import HiddenLayer, AsyncHiddenLayer
 from hiddenlayer.types.scans import ScanReport
 from hiddenlayer.lib.model_scan import (
     EXCLUDE_FILE_TYPES,
-    ScanStatus,
     ModelScanner,
     PathInputType,
     AsyncModelScanner,
     filter_path_objects,
 )
+from hiddenlayer.lib.scan_utils import ScanStatus
 from hiddenlayer.types.scans.upload import FileAddResponse
 from hiddenlayer.types.scans.upload_start_response import UploadStartResponse
 from hiddenlayer.types.scans.upload_complete_all_response import UploadCompleteAllResponse
@@ -140,8 +140,8 @@ class TestModelScanner:
             # Clean up temp file
             os.unlink(temp_path)
 
-    @patch("hiddenlayer.lib.model_scan.time.sleep")
-    @patch("hiddenlayer.lib.model_scan.logger")
+    @patch("hiddenlayer.lib.scan_utils.time.sleep")
+    @patch("hiddenlayer.lib.scan_utils.logger")
     def test_scan_file_with_waiting_success(self, mock_logger: Mock, mock_sleep: Mock) -> None:
         """Test scan_file with wait_for_results=True until success."""
         # Create a temporary test file

@@ -5,11 +5,11 @@ This module provides the community_scan method that was available in the old SDK
 which combines scan request + polling + results retrieval in a single convenient method.
 """
 
-import time
-import random
 import logging
 from typing import Union, Literal, cast
 from typing_extensions import TYPE_CHECKING
+
+from .scan_utils import get_scan_results, wait_for_scan_results, get_scan_results_async, wait_for_scan_results_async
 
 logger = logging.getLogger(__name__)
 
@@ -29,16 +29,6 @@ class CommunityScanSource:
     GOOGLE_SIGNED = "GOOGLE_SIGNED"
     GOOGLE_OAUTH = "GOOGLE_OAUTH"
     HUGGING_FACE = "HUGGING_FACE"
-
-
-class ScanStatus:
-    """Scan status constants matching the old SDK."""
-
-    DONE = "done"
-    FAILED = "failed"
-    PENDING = "pending"
-    RUNNING = "running"
-    CANCELED = "canceled"
 
 
 class CommunityScanner:
@@ -112,32 +102,10 @@ class CommunityScanner:
             raise ValueError("scan_id must have a value")
 
         if wait_for_results:
-            return self._wait_for_scan_results(scan_id=scan_id)
+            return wait_for_scan_results(self._client, scan_id=scan_id)
         else:
             # Return current scan status without waiting
-            return self._client.scans.jobs.retrieve(scan_id)
-
-    def _wait_for_scan_results(self, scan_id: str) -> "ScanReport":
-        """
-        Wait for scan results using exponential backoff polling.
-
-        This mimics the behavior of the old SDK's _wait_for_scan_results method.
-        """
-        scan_results = self._client.scans.jobs.retrieve(scan_id)
-
-        base_delay = 0.1  # seconds
-        retries = 0
-        logger.info(f"scan status: {scan_results.status}")
-
-        while scan_results.status not in [ScanStatus.DONE, ScanStatus.FAILED, ScanStatus.CANCELED]:
-            retries += 1
-            delay = base_delay * 2**retries + random.uniform(0, 1)  # exponential back off retry
-            delay = min(delay, 30)  # cap at 30 seconds
-            time.sleep(delay)
-            scan_results = self._client.scans.jobs.retrieve(scan_id)
-            logger.info(f"scan status: {scan_results.status}")
-
-        return scan_results
+            return get_scan_results(self._client, scan_id=scan_id)
 
 
 class AsyncCommunityScanner:
@@ -200,29 +168,7 @@ class AsyncCommunityScanner:
             raise ValueError("scan_id must have a value")
 
         if wait_for_results:
-            return await self._wait_for_scan_results(scan_id=scan_id)
+            return await wait_for_scan_results_async(self._client, scan_id=scan_id)
         else:
             # Return current scan status without waiting
-            return await self._client.scans.jobs.retrieve(scan_id)
-
-    async def _wait_for_scan_results(self, scan_id: str) -> "ScanReport":
-        """
-        Async version of _wait_for_scan_results.
-        """
-        import asyncio
-
-        scan_results = await self._client.scans.jobs.retrieve(scan_id)
-
-        base_delay = 0.1  # seconds
-        retries = 0
-        logger.info(f"scan status: {scan_results.status}")
-
-        while scan_results.status not in [ScanStatus.DONE, ScanStatus.FAILED, ScanStatus.CANCELED]:
-            retries += 1
-            delay = base_delay * 2**retries + random.uniform(0, 1)  # exponential back off retry
-            delay = min(delay, 30)  # cap at 30 seconds
-            await asyncio.sleep(delay)
-            scan_results = await self._client.scans.jobs.retrieve(scan_id)
-            logger.info(f"scan status: {scan_results.status}")
-
-        return scan_results
+            return await get_scan_results_async(self._client, scan_id=scan_id)

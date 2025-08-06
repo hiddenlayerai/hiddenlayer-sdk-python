@@ -8,7 +8,8 @@ import pytest
 
 from hiddenlayer import HiddenLayer, AsyncHiddenLayer
 from hiddenlayer.types.scans import ScanJob, ScanReport
-from hiddenlayer.lib.community_scan import ScanStatus, CommunityScanner, CommunityScanSource, AsyncCommunityScanner
+from hiddenlayer.lib.scan_utils import ScanStatus
+from hiddenlayer.lib.community_scan import CommunityScanner, CommunityScanSource, AsyncCommunityScanner
 
 
 class TestCommunityScannerIntegration:
@@ -77,8 +78,8 @@ class TestCommunityScanner:
         self.mock_client.scans.jobs.retrieve.assert_called_once_with("test-scan-id-123")
         assert result is mock_scan_report
 
-    @patch("hiddenlayer.lib.community_scan.time.sleep")
-    @patch("hiddenlayer.lib.community_scan.logger")
+    @patch("hiddenlayer.lib.scan_utils.time.sleep")
+    @patch("hiddenlayer.lib.scan_utils.logger")
     def test_community_scan_with_waiting_success(self, mock_logger: Mock, mock_sleep: Mock) -> None:
         """Test community_scan with wait_for_results=True until success."""
         # Mock the scan job response
@@ -114,7 +115,7 @@ class TestCommunityScanner:
         assert mock_sleep.call_count == 2
 
         # Should have logged status updates
-        assert mock_logger.info.call_count == 3
+        assert mock_logger.info.call_count == 2
 
         # Final result should be the "done" report
         assert result is mock_reports[2]
@@ -207,8 +208,8 @@ class TestAsyncCommunityScanner:
         assert result is mock_scan_report
 
     @pytest.mark.asyncio
-    @patch("asyncio.sleep", new_callable=AsyncMock)
-    @patch("hiddenlayer.lib.community_scan.logger")
+    @patch("hiddenlayer.lib.scan_utils.asyncio.sleep", new_callable=AsyncMock)
+    @patch("hiddenlayer.lib.scan_utils.logger")
     async def test_async_community_scan_with_waiting_success(self, mock_logger: Mock, mock_sleep: AsyncMock) -> None:
         """Test async community_scan with wait_for_results=True until success."""
         # Mock the scan job response
@@ -244,7 +245,7 @@ class TestAsyncCommunityScanner:
         assert mock_sleep.call_count == 2
 
         # Should have logged status updates
-        assert mock_logger.info.call_count == 3
+        assert mock_logger.info.call_count == 2
 
         # Final result should be the "done" report
         assert result is mock_reports[2]
