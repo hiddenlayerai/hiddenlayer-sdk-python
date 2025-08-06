@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.19 (2025-08-06)
+
+Full Changelog: [v0.1.0-alpha.18...v0.1.0-alpha.19](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.18...v0.1.0-alpha.19)
+
+### Chores
+
+* **internal:** fix ruff target version ([509ce89](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/509ce8922316e9136e4991a049dd4b22daaa9e88))
+
 ## 0.1.0-alpha.18 (2025-08-06)
 
 Full Changelog: [v0.1.0-alpha.17...v0.1.0-alpha.18](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.17...v0.1.0-alpha.18)
