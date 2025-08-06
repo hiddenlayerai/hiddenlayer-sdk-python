@@ -160,7 +160,7 @@ class ModelScanner:
         if wait_for_results:
             scan_results = self._wait_for_scan_results(scan_id=scan_id)
         else:
-            scan_results = self._client.scans.jobs.retrieve(scan_id)
+            scan_results = self._get_scan_results(scan_id=scan_id)
 
         return scan_results
 
@@ -225,7 +225,7 @@ class ModelScanner:
         if wait_for_results:
             scan_results = self._wait_for_scan_results(scan_id=scan_id)
         else:
-            scan_results = self._client.scans.jobs.retrieve(scan_id)
+            scan_results = self._get_scan_results(scan_id=scan_id)
 
         return scan_results
 
@@ -266,6 +266,31 @@ class ModelScanner:
         # Complete the file upload
         self._client.scans.upload.file.complete(file_id=upload.upload_id, scan_id=scan_id)
 
+    def _get_scan_results(self, *, scan_id: str) -> "ScanReport":
+        """
+        Get scan results with retry logic for 404 errors.
+        Used when wait_for_results=False to handle initial scan availability.
+        """
+        retries = 0
+        max_retries = 5  # Fewer retries since we're not waiting for completion
+        base_delay = 0.5  # Slightly longer base delay
+
+        while retries < max_retries:
+            try:
+                return self._client.scans.jobs.retrieve(scan_id)
+            except NotFoundError:
+                retries += 1
+                if retries >= max_retries:
+                    logger.error(f"Scan {scan_id} not found after {max_retries} attempts")
+                    raise
+
+                delay = base_delay * retries + random.uniform(0, 0.5)
+                logger.info(f"Scan not yet available, retrying in {delay:.1f}s (attempt {retries + 1}/{max_retries})")
+                time.sleep(delay)
+
+        # Should never reach here due to raise above, but satisfy linter
+        raise RuntimeError(f"Scan {scan_id} not found after {max_retries} attempts")
+
     def _wait_for_scan_results(self, *, scan_id: str) -> "ScanReport":
         """
         Wait for scan results using exponential backoff polling.
@@ -303,6 +328,31 @@ class AsyncModelScanner:
 
     def __init__(self, client: "AsyncHiddenLayer") -> None:
         self._client = client
+
+    async def _get_scan_results(self, *, scan_id: str) -> "ScanReport":
+        """
+        Async version of _get_scan_results with retry logic for 404 errors.
+        Used when wait_for_results=False to handle initial scan availability.
+        """
+        retries = 0
+        max_retries = 5  # Fewer retries since we're not waiting for completion
+        base_delay = 0.5  # Slightly longer base delay
+
+        while retries < max_retries:
+            try:
+                return await self._client.scans.jobs.retrieve(scan_id)
+            except NotFoundError:
+                retries += 1
+                if retries >= max_retries:
+                    logger.error(f"Scan {scan_id} not found after {max_retries} attempts")
+                    raise
+
+                delay = base_delay * retries + random.uniform(0, 0.5)
+                logger.info(f"Scan not yet available, retrying in {delay:.1f}s (attempt {retries + 1}/{max_retries})")
+                await asyncio.sleep(delay)
+
+        # Should never reach here due to raise above, but satisfy linter
+        raise RuntimeError(f"Scan {scan_id} not found after {max_retries} attempts")
 
     async def scan_file(
         self,
@@ -343,7 +393,7 @@ class AsyncModelScanner:
         if wait_for_results:
             scan_results = await self._wait_for_scan_results(scan_id=scan_id)
         else:
-            scan_results = await self._client.scans.jobs.retrieve(scan_id)
+            scan_results = await self._get_scan_results(scan_id=scan_id)
 
         return scan_results
 
@@ -399,7 +449,7 @@ class AsyncModelScanner:
         if wait_for_results:
             scan_results = await self._wait_for_scan_results(scan_id=scan_id)
         else:
-            scan_results = await self._client.scans.jobs.retrieve(scan_id)
+            scan_results = await self._get_scan_results(scan_id=scan_id)
 
         return scan_results
 
