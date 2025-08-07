@@ -216,6 +216,208 @@ class ModelScanner:
 
         return scan_results
 
+    def scan_s3_model(
+        self,
+        *,
+        model_name: str,
+        bucket: str,
+        key: str,
+        model_version: str = "1",
+        s3_client: Optional[object] = None,
+        wait_for_results: bool = True,
+        request_source: str = "API Upload",
+    ) -> "ScanReport":
+        """
+        Scan a model file on S3.
+
+        :param model_name: Name of the model to be shown on the HiddenLayer UI.
+        :param bucket: Name of the s3 bucket where the model file is stored.
+        :param key: Path to the model file on s3.
+        :param model_version: Version of the model to be shown on the HiddenLayer UI.
+        :param s3_client: boto3 s3 client.
+        :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
+        :param request_source: Source that requested the scan.
+
+        :returns: Scan Results
+
+        :examples:
+            .. code-block:: python
+
+                hl_client.model_scanner.scan_s3_model(
+                    model_name="your-model-name", bucket="s3_bucket", key="path/to/file"
+                )
+        """
+        try:
+            import boto3  # type: ignore
+        except ImportError as err:
+            raise ImportError("Python package boto3 is not installed.") from err
+
+        if not s3_client:
+            s3_client = boto3.client("s3")  # type: ignore
+
+        file_name = key.split("/")[-1]
+
+        try:
+            s3_client.download_file(bucket, key, f"/tmp/{file_name}")  # type: ignore
+        except Exception as e:
+            raise RuntimeError(f"Couldn't download model s3://{bucket}/{key}: {e}") from e
+
+        return self.scan_file(
+            model_path=f"/tmp/{file_name}",
+            model_name=model_name,
+            model_version=model_version,
+            wait_for_results=wait_for_results,
+            request_source=request_source,
+            origin="S3",
+        )
+
+    def scan_azure_blob_model(
+        self,
+        *,
+        model_name: str,
+        account_url: str,
+        container: str,
+        blob: str,
+        model_version: str = "1",
+        blob_service_client: Optional[object] = None,
+        credential: Optional[object] = None,
+        wait_for_results: bool = True,
+        request_source: str = "API Upload",
+    ) -> "ScanReport":
+        """
+        Scan a model file on Azure Blob Storage.
+
+        :param model_name: Name of the model to be shown on the HiddenLayer UI.
+        :param account_url: Azure Blob url of where the file is stored.
+        :param container: Azure Blob container containing the model file.
+        :param blob: Path to the model file inside the Azure blob container.
+        :param model_version: Version of the model to be shown on the HiddenLayer UI.
+        :param blob_service_client: BlobServiceClient object. Defaults to creating one using DefaultCredential().
+        :param credential: Credential to be passed to the BlobServiceClient object, can be a credential object, SAS key, etc.
+            Defaults to `DefaultCredential`
+        :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
+        :param request_source: Source that requested the scan.
+
+        :returns: Scan Results
+
+        :examples:
+            .. code-block:: python
+
+                hl_client.model_scanner.scan_azure_blob_model(
+                    model_name="your-model-name",
+                    account_url="https://<storageaccountname>.blob.core.windows.net",
+                    container="container_name",
+                    blob="path/to/file.bin",
+                    credential="?<sas_key>",  # If using a SAS key and not DefaultCredentials
+                )
+        """
+        try:
+            from azure.identity import DefaultAzureCredential  # type: ignore
+        except ImportError as err:
+            raise ImportError("Python package azure-identity is not installed.") from err
+
+        try:
+            from azure.storage.blob import BlobServiceClient  # type: ignore
+        except ImportError as err:
+            raise ImportError("Python package azure-storage-blob is not installed.") from err
+
+        if not credential:
+            credential = DefaultAzureCredential()  # type: ignore
+
+        if not blob_service_client:
+            blob_service_client = BlobServiceClient(account_url, credential=credential)  # type: ignore
+
+        file_name = blob.split("/")[-1]
+
+        blob_client = blob_service_client.get_blob_client(  # type: ignore
+            container=container, blob=blob
+        )
+
+        try:
+            with open(os.path.join("/tmp", file_name), "wb") as f:
+                download_stream = blob_client.download_blob()  # type: ignore
+                f.write(download_stream.readall())  # type: ignore
+
+        except Exception as e:
+            raise RuntimeError(f"Couldn't download model {account_url}, {container}, {blob}: {e}") from e
+
+        return self.scan_file(
+            model_path=f"/tmp/{file_name}",
+            model_name=model_name,
+            model_version=model_version,
+            wait_for_results=wait_for_results,
+            request_source=request_source,
+            origin="Azure Blob Storage",
+        )
+
+    def scan_huggingface_model(
+        self,
+        *,
+        repo_id: str,
+        model_name: Optional[str] = None,
+        revision: Optional[str] = None,
+        local_dir: str = "/tmp",
+        allow_file_patterns: Optional[List[str]] = None,
+        ignore_file_patterns: Optional[List[str]] = None,
+        force_download: bool = False,
+        hf_token: Optional[Union[str, bool]] = None,
+        wait_for_results: bool = True,
+        request_source: str = "API Upload",
+    ) -> "ScanReport":
+        """
+        Scans a model on HuggingFace.
+
+        Note: Requires the `huggingface_hub` pip package to be installed.
+
+        :param repo_id: The HuggingFace repository id.
+        :param model_name: Name of the model to be shown on the HiddenLayer UI. If not provided, uses repo_id.
+        :param revision: An optional Git revision id which can be a branch name, a tag, or a commit hash.
+        :param local_dir: If provided, the downloaded files will be placed under this directory.
+        :param allow_file_patterns: If provided, only files matching at least one pattern are scanned.
+        :param ignore_file_patterns: If provided, files matching any of the patterns are not scanned.
+        :param force_download: Whether the file should be downloaded even if it already exists in the local cache.
+        :param hf_token: A token to be used for the download.
+            If True, the token is read from the HuggingFace config folder.
+            If a string, it's used as the authentication token.
+        :param wait_for_results: True whether to wait for the scan to finish, defaults to True.
+        :param request_source: Source that requested the scan.
+
+        :returns: Scan Results
+        """
+        try:
+            from huggingface_hub import snapshot_download  # type: ignore
+        except ImportError as err:
+            raise ImportError("Python package huggingface_hub is not installed.") from err
+
+        local_dir = f"/tmp/{repo_id}" if local_dir == "/tmp" else local_dir
+        ignore_file_patterns = EXCLUDE_FILE_TYPES + ignore_file_patterns if ignore_file_patterns else EXCLUDE_FILE_TYPES
+
+        snapshot_download(
+            repo_id,
+            revision=revision,
+            allow_patterns=allow_file_patterns,
+            ignore_patterns=ignore_file_patterns,
+            local_dir=local_dir,
+            local_dir_use_symlinks=False,
+            cache_dir=local_dir,
+            force_download=force_download,
+            token=hf_token,
+        )
+
+        if revision is None:
+            revision = "1"
+
+        return self.scan_folder(
+            model_name=model_name or repo_id,
+            model_version=revision,
+            path=local_dir,
+            allow_file_patterns=allow_file_patterns,
+            ignore_file_patterns=ignore_file_patterns,
+            wait_for_results=wait_for_results,
+            request_source=request_source,
+            origin="Hugging Face",
+        )
+
     def _scan_file(self, *, scan_id: str, file_path: Path) -> None:
         """Upload a single file using multipart upload."""
         filesize = file_path.stat().st_size
@@ -360,6 +562,156 @@ class AsyncModelScanner:
             scan_results = await get_scan_results_async(self._client, scan_id=scan_id)
 
         return scan_results
+
+    async def scan_s3_model(
+        self,
+        *,
+        model_name: str,
+        bucket: str,
+        key: str,
+        model_version: str = "1",
+        s3_client: Optional[object] = None,
+        wait_for_results: bool = True,
+        request_source: str = "API Upload",
+    ) -> "ScanReport":
+        """
+        Async version of scan_s3_model.
+
+        See ModelScanner.scan_s3_model for parameter documentation.
+        """
+        try:
+            import boto3  # type: ignore
+        except ImportError as err:
+            raise ImportError("Python package boto3 is not installed.") from err
+
+        if not s3_client:
+            s3_client = boto3.client("s3")  # type: ignore
+
+        file_name = key.split("/")[-1]
+
+        try:
+            s3_client.download_file(bucket, key, f"/tmp/{file_name}")  # type: ignore
+        except Exception as e:
+            raise RuntimeError(f"Couldn't download model s3://{bucket}/{key}: {e}") from e
+
+        return await self.scan_file(
+            model_path=f"/tmp/{file_name}",
+            model_name=model_name,
+            model_version=model_version,
+            wait_for_results=wait_for_results,
+            request_source=request_source,
+            origin="S3",
+        )
+
+    async def scan_azure_blob_model(
+        self,
+        *,
+        model_name: str,
+        account_url: str,
+        container: str,
+        blob: str,
+        model_version: str = "1",
+        blob_service_client: Optional[object] = None,
+        credential: Optional[object] = None,
+        wait_for_results: bool = True,
+        request_source: str = "API Upload",
+    ) -> "ScanReport":
+        """
+        Async version of scan_azure_blob_model.
+
+        See ModelScanner.scan_azure_blob_model for parameter documentation.
+        """
+        try:
+            from azure.identity import DefaultAzureCredential  # type: ignore
+        except ImportError as err:
+            raise ImportError("Python package azure-identity is not installed.") from err
+
+        try:
+            from azure.storage.blob import BlobServiceClient  # type: ignore
+        except ImportError as err:
+            raise ImportError("Python package azure-storage-blob is not installed.") from err
+
+        if not credential:
+            credential = DefaultAzureCredential()  # type: ignore
+
+        if not blob_service_client:
+            blob_service_client = BlobServiceClient(account_url, credential=credential)  # type: ignore
+
+        file_name = blob.split("/")[-1]
+
+        blob_client = blob_service_client.get_blob_client(  # type: ignore
+            container=container, blob=blob
+        )
+
+        try:
+            with open(os.path.join("/tmp", file_name), "wb") as f:
+                download_stream = blob_client.download_blob()  # type: ignore
+                f.write(download_stream.readall())  # type: ignore
+
+        except Exception as e:
+            raise RuntimeError(f"Couldn't download model {account_url}, {container}, {blob}: {e}") from e
+
+        return await self.scan_file(
+            model_path=f"/tmp/{file_name}",
+            model_name=model_name,
+            model_version=model_version,
+            wait_for_results=wait_for_results,
+            request_source=request_source,
+            origin="Azure Blob Storage",
+        )
+
+    async def scan_huggingface_model(
+        self,
+        *,
+        repo_id: str,
+        model_name: Optional[str] = None,
+        revision: Optional[str] = None,
+        local_dir: str = "/tmp",
+        allow_file_patterns: Optional[List[str]] = None,
+        ignore_file_patterns: Optional[List[str]] = None,
+        force_download: bool = False,
+        hf_token: Optional[Union[str, bool]] = None,
+        wait_for_results: bool = True,
+        request_source: str = "API Upload",
+    ) -> "ScanReport":
+        """
+        Async version of scan_huggingface_model.
+
+        See ModelScanner.scan_huggingface_model for parameter documentation.
+        """
+        try:
+            from huggingface_hub import snapshot_download  # type: ignore
+        except ImportError as err:
+            raise ImportError("Python package huggingface_hub is not installed.") from err
+
+        local_dir = f"/tmp/{repo_id}" if local_dir == "/tmp" else local_dir
+        ignore_file_patterns = EXCLUDE_FILE_TYPES + ignore_file_patterns if ignore_file_patterns else EXCLUDE_FILE_TYPES
+
+        snapshot_download(
+            repo_id,
+            revision=revision,
+            allow_patterns=allow_file_patterns,
+            ignore_patterns=ignore_file_patterns,
+            local_dir=local_dir,
+            local_dir_use_symlinks=False,
+            cache_dir=local_dir,
+            force_download=force_download,
+            token=hf_token,
+        )
+
+        if revision is None:
+            revision = "1"
+
+        return await self.scan_folder(
+            model_name=model_name or repo_id,
+            model_version=revision,
+            path=local_dir,
+            allow_file_patterns=allow_file_patterns,
+            ignore_file_patterns=ignore_file_patterns,
+            wait_for_results=wait_for_results,
+            request_source=request_source,
+            origin="Hugging Face",
+        )
 
     async def _scan_file(self, *, scan_id: str, file_path: Path) -> None:
         """Async version of _scan_file."""
