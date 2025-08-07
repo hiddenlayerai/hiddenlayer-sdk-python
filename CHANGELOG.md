@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.20 (2025-08-07)
+
+Full Changelog: [v0.1.0-alpha.19...v0.1.0-alpha.20](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.19...v0.1.0-alpha.20)
+
+### Features
+
+* **api:** remove create /api/v2/models ([d2d1103](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/d2d110327ce164c9ace4747e0da49c162a12ffde))
+
 ## 0.1.0-alpha.19 (2025-08-06)
 
 Full Changelog: [v0.1.0-alpha.18...v0.1.0-alpha.19](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.18...v0.1.0-alpha.19)

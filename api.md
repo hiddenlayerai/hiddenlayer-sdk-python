@@ -3,12 +3,11 @@
 Types:
 
 ```python
-from hiddenlayer.types import ModelCreateResponse, ModelRetrieveResponse
+from hiddenlayer.types import ModelRetrieveResponse
 ```
 
 Methods:
 
-- <code title="put /api/v2/models">client.models.<a href="./src/hiddenlayer/resources/models/models.py">create</a>(\*\*<a href="src/hiddenlayer/types/model_create_params.py">params</a>) -> <a href="./src/hiddenlayer/types/model_create_response.py">ModelCreateResponse</a></code>
 - <code title="get /api/v2/models/{model_id}">client.models.<a href="./src/hiddenlayer/resources/models/models.py">retrieve</a>(model_id) -> <a href="./src/hiddenlayer/types/model_retrieve_response.py">ModelRetrieveResponse</a></code>
 - <code title="delete /api/v2/models/{model_id}">client.models.<a href="./src/hiddenlayer/resources/models/models.py">delete</a>(model_id) -> None</code>
 
