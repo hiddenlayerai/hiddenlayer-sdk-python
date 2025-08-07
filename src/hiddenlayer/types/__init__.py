@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-from .model_create_params import ModelCreateParams as ModelCreateParams
 from .sensor_query_params import SensorQueryParams as SensorQueryParams
 from .sensor_create_params import SensorCreateParams as SensorCreateParams
 from .sensor_update_params import SensorUpdateParams as SensorUpdateParams
-from .model_create_response import ModelCreateResponse as ModelCreateResponse
 from .sensor_query_response import SensorQueryResponse as SensorQueryResponse
 from .sensor_create_response import SensorCreateResponse as SensorCreateResponse
 from .sensor_update_response import SensorUpdateResponse as SensorUpdateResponse
