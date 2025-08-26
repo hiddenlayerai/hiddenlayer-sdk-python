@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.1.0-alpha.21 (2025-08-26)
+
+Full Changelog: [v0.1.0-alpha.20...v0.1.0-alpha.21](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.20...v0.1.0-alpha.21)
+
+### Bug Fixes
+
+* avoid newer type syntax ([2450326](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/2450326713c4b1363ce61096389623aed9a3fc5f))
+
+
+### Chores
+
+* **internal:** change ci workflow machines ([0184a6c](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/0184a6cc5a54c83c36a498d7cbcc32789db3b3be))
+* **internal:** codegen related update ([2924314](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/29243141ec253dc932eafc66533f5e9e741cca99))
+* **internal:** update comment in script ([1552b01](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/1552b0178410fc7b06edfaae412c41b282b3dcb5))
+* update @stainless-api/prism-cli to v5.15.0 ([49e15d5](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/49e15d59663269cf65d53ed967dbca173707f1e8))
+* update github action ([8aa456b](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/8aa456b76cc854b3419198adf8e544bab8bfaffe))
+
 ## 0.1.0-alpha.20 (2025-08-07)
 
 Full Changelog: [v0.1.0-alpha.19...v0.1.0-alpha.20](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.19...v0.1.0-alpha.20)

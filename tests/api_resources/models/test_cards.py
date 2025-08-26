@@ -19,13 +19,13 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestCards:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_list(self, client: HiddenLayer) -> None:
         card = client.models.cards.list()
         assert_matches_type(SyncOffsetPage[CardListResponse], card, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_list_with_all_params(self, client: HiddenLayer) -> None:
         card = client.models.cards.list(
@@ -52,7 +52,7 @@ class TestCards:
         )
         assert_matches_type(SyncOffsetPage[CardListResponse], card, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: HiddenLayer) -> None:
         response = client.models.cards.with_raw_response.list()
@@ -62,7 +62,7 @@ class TestCards:
         card = response.parse()
         assert_matches_type(SyncOffsetPage[CardListResponse], card, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: HiddenLayer) -> None:
         with client.models.cards.with_streaming_response.list() as response:
@@ -80,13 +80,13 @@ class TestAsyncCards:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_list(self, async_client: AsyncHiddenLayer) -> None:
         card = await async_client.models.cards.list()
         assert_matches_type(AsyncOffsetPage[CardListResponse], card, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         card = await async_client.models.cards.list(
@@ -113,7 +113,7 @@ class TestAsyncCards:
         )
         assert_matches_type(AsyncOffsetPage[CardListResponse], card, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.models.cards.with_raw_response.list()
@@ -123,7 +123,7 @@ class TestAsyncCards:
         card = await response.parse()
         assert_matches_type(AsyncOffsetPage[CardListResponse], card, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.models.cards.with_streaming_response.list() as response:
