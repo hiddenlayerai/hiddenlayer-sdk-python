@@ -12,6 +12,9 @@ __all__ = ["JobListParams", "ModelName", "Source"]
 
 
 class JobListParams(TypedDict, total=False):
+    compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]]
+    """A comma separated list of rule set evaluation statuses to include"""
+
     detection_category: str
     """filter by a single detection category"""
 
