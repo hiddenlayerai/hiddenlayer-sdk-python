@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.0-alpha.22 (2025-08-29)
+
+Full Changelog: [v0.1.0-alpha.21...v0.1.0-alpha.22](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.21...v0.1.0-alpha.22)
+
+### Features
+
+* **api:** api update ([f523d38](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/f523d38d325d7289203b06c3d1e5243f654b283f))
+
+
+### Chores
+
+* **internal:** add Sequence related utils ([f0af51b](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/f0af51badaf337f14b0a64663f97f1d0a3b9976e))
+* **internal:** update pyright exclude list ([6f11796](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/6f1179674007bbe5fd140204492223b4d35854f6))
+
 ## 0.1.0-alpha.21 (2025-08-26)
 
 Full Changelog: [v0.1.0-alpha.20...v0.1.0-alpha.21](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.20...v0.1.0-alpha.21)

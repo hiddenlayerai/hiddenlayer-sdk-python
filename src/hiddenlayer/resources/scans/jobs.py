@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import List, Union
 from datetime import datetime
+from typing_extensions import Literal
 
 import httpx
 
@@ -90,6 +91,7 @@ class JobsResource(SyncAPIResource):
     def list(
         self,
         *,
+        compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]] | NotGiven = NOT_GIVEN,
         detection_category: str | NotGiven = NOT_GIVEN,
         end_time: Union[str, datetime] | NotGiven = NOT_GIVEN,
         latest_per_model_version_only: bool | NotGiven = NOT_GIVEN,
@@ -115,6 +117,8 @@ class JobsResource(SyncAPIResource):
         Get scan results (Summaries)
 
         Args:
+          compliance_status: A comma separated list of rule set evaluation statuses to include
+
           detection_category: filter by a single detection category
 
           end_time: End Time
@@ -158,6 +162,7 @@ class JobsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "compliance_status": compliance_status,
                         "detection_category": detection_category,
                         "end_time": end_time,
                         "latest_per_model_version_only": latest_per_model_version_only,
@@ -285,6 +290,7 @@ class AsyncJobsResource(AsyncAPIResource):
     async def list(
         self,
         *,
+        compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]] | NotGiven = NOT_GIVEN,
         detection_category: str | NotGiven = NOT_GIVEN,
         end_time: Union[str, datetime] | NotGiven = NOT_GIVEN,
         latest_per_model_version_only: bool | NotGiven = NOT_GIVEN,
@@ -310,6 +316,8 @@ class AsyncJobsResource(AsyncAPIResource):
         Get scan results (Summaries)
 
         Args:
+          compliance_status: A comma separated list of rule set evaluation statuses to include
+
           detection_category: filter by a single detection category
 
           end_time: End Time
@@ -353,6 +361,7 @@ class AsyncJobsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform(
                     {
+                        "compliance_status": compliance_status,
                         "detection_category": detection_category,
                         "end_time": end_time,
                         "latest_per_model_version_only": latest_per_model_version_only,

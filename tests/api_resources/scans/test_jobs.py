@@ -83,6 +83,7 @@ class TestJobs:
     @parametrize
     def test_method_list_with_all_params(self, client: HiddenLayer) -> None:
         job = client.scans.jobs.list(
+            compliance_status=["COMPLIANT"],
             detection_category="detection_category",
             end_time=parse_datetime("2019-12-27T18:11:19.117Z"),
             latest_per_model_version_only=True,
@@ -260,6 +261,7 @@ class TestAsyncJobs:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         job = await async_client.scans.jobs.list(
+            compliance_status=["COMPLIANT"],
             detection_category="detection_category",
             end_time=parse_datetime("2019-12-27T18:11:19.117Z"),
             latest_per_model_version_only=True,

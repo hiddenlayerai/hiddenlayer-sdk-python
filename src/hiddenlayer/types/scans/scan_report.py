@@ -15,6 +15,7 @@ __all__ = [
     "InventoryScanModelDetailsV3",
     "InventoryScanModelIDsV3",
     "InventoryScanModelComboV3",
+    "Compliance",
     "FileResult",
     "FileResultDetails",
     "FileResultDetailsFileTypeDetails",
@@ -108,6 +109,16 @@ class InventoryScanModelComboV3(BaseModel):
 
 
 Inventory: TypeAlias = Union[InventoryScanModelDetailsV3, InventoryScanModelIDsV3, InventoryScanModelComboV3]
+
+
+class Compliance(BaseModel):
+    evaluated_at: Optional[datetime] = None
+    """The datetime when the rule set was evaluated against the scan result"""
+
+    rule_set_ids: Optional[List[str]] = None
+    """A list of non-default rule sets that were used when evaluating the scan result"""
+
+    status: Optional[Literal["COMPLIANT", "NONCOMPLIANT"]] = None
 
 
 class FileResultDetailsFileTypeDetailsGgufFileAttributes(BaseModel):
@@ -327,6 +338,8 @@ class ScanReport(BaseModel):
 
     schema_version: Optional[str] = FieldInfo(alias="$schema_version", default=None)
     """version of the scan report schema format"""
+
+    compliance: Optional[Compliance] = None
 
     detection_categories: Optional[List[str]] = None
     """list of detection categories found"""
