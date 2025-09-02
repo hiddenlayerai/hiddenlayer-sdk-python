@@ -6,6 +6,7 @@ from typing import List, Union
 from datetime import datetime
 from typing_extensions import Literal, Annotated, TypedDict
 
+from ..._types import SequenceNotStr
 from ..._utils import PropertyInfo
 
 __all__ = ["JobListParams", "ModelName", "Source"]
@@ -26,13 +27,13 @@ class JobListParams(TypedDict, total=False):
 
     limit: int
 
-    model_ids: List[str]
+    model_ids: SequenceNotStr[str]
     """Model ID"""
 
     model_name: ModelName
     """filter by the model name"""
 
-    model_version_ids: List[str]
+    model_version_ids: SequenceNotStr[str]
     """Model Version IDs"""
 
     offset: int
@@ -40,7 +41,7 @@ class JobListParams(TypedDict, total=False):
     scanner_version: str
     """filter by version of the scanner"""
 
-    severity: List[str]
+    severity: SequenceNotStr[str]
     """Severities"""
 
     sort: str
@@ -55,7 +56,7 @@ class JobListParams(TypedDict, total=False):
     start_time: Annotated[Union[str, datetime], PropertyInfo(format="iso8601")]
     """Start Time"""
 
-    status: List[str]
+    status: SequenceNotStr[str]
     """Statuses"""
 
 

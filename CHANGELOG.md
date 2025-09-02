@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-alpha.23 (2025-09-02)
+
+Full Changelog: [v0.1.0-alpha.22...v0.1.0-alpha.23](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.22...v0.1.0-alpha.23)
+
+### Features
+
+* **api:** api update ([0192f46](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/0192f465bdabc8204a0889040502017c227cd4f3))
+* **types:** replace List[str] with SequenceNotStr in params ([a5e1c2a](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/a5e1c2ac52a81996654d05931917fd0aec4ca7b6))
+
 ## 0.1.0-alpha.22 (2025-08-29)
 
 Full Changelog: [v0.1.0-alpha.21...v0.1.0-alpha.22](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.21...v0.1.0-alpha.22)

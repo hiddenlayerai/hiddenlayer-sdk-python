@@ -16,7 +16,7 @@ class SensorQueryParams(TypedDict, total=False):
 
     order_by: str
 
-    order_dir: Literal["asc", "desc", "ASC", "DESC"]
+    order_dir: Literal["asc", "desc"]
 
     page_number: int
 
