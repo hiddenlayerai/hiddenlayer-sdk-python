@@ -208,7 +208,7 @@ class SensorsResource(SyncAPIResource):
         *,
         filter: sensor_query_params.Filter | NotGiven = NOT_GIVEN,
         order_by: str | NotGiven = NOT_GIVEN,
-        order_dir: Literal["asc", "desc", "ASC", "DESC"] | NotGiven = NOT_GIVEN,
+        order_dir: Literal["asc", "desc"] | NotGiven = NOT_GIVEN,
         page_number: int | NotGiven = NOT_GIVEN,
         page_size: int | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -430,7 +430,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         *,
         filter: sensor_query_params.Filter | NotGiven = NOT_GIVEN,
         order_by: str | NotGiven = NOT_GIVEN,
-        order_dir: Literal["asc", "desc", "ASC", "DESC"] | NotGiven = NOT_GIVEN,
+        order_dir: Literal["asc", "desc"] | NotGiven = NOT_GIVEN,
         page_number: int | NotGiven = NOT_GIVEN,
         page_size: int | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
