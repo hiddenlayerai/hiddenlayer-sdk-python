@@ -6,7 +6,7 @@ from typing_extensions import Literal, TypeAlias
 
 from pydantic import Field as FieldInfo
 
-from ..._compat import PYDANTIC_V2, ConfigDict
+from ..._compat import PYDANTIC_V1, ConfigDict
 from ..._models import BaseModel
 
 __all__ = [
@@ -55,7 +55,7 @@ class InventoryScanModelDetailsV3(BaseModel):
     requesting_entity: Optional[str] = None
     """Entity that requested the scan"""
 
-    if PYDANTIC_V2:
+    if not PYDANTIC_V1:
         # allow fields with a `model_` prefix
         model_config = ConfigDict(protected_namespaces=tuple())
 
@@ -67,7 +67,7 @@ class InventoryScanModelIDsV3(BaseModel):
     model_version_id: str
     """unique identifier for the model version"""
 
-    if PYDANTIC_V2:
+    if not PYDANTIC_V1:
         # allow fields with a `model_` prefix
         model_config = ConfigDict(protected_namespaces=tuple())
 
@@ -103,7 +103,7 @@ class InventoryScanModelComboV3(BaseModel):
     requesting_entity: Optional[str] = None
     """Entity that requested the scan"""
 
-    if PYDANTIC_V2:
+    if not PYDANTIC_V1:
         # allow fields with a `model_` prefix
         model_config = ConfigDict(protected_namespaces=tuple())
 

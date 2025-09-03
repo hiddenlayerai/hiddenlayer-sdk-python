@@ -3,7 +3,7 @@
 from typing import Dict, Optional
 from datetime import datetime
 
-from .._compat import PYDANTIC_V2, ConfigDict
+from .._compat import PYDANTIC_V1, ConfigDict
 from .._models import BaseModel
 
 __all__ = ["SensorRetrieveResponse"]
@@ -28,6 +28,6 @@ class SensorRetrieveResponse(BaseModel):
 
     version: Optional[int] = None
 
-    if PYDANTIC_V2:
+    if not PYDANTIC_V1:
         # allow fields with a `model_` prefix
         model_config = ConfigDict(protected_namespaces=tuple())
