@@ -3,7 +3,7 @@
 from typing import Dict, Optional
 from typing_extensions import Literal
 
-from ..._compat import PYDANTIC_V2, ConfigDict
+from ..._compat import PYDANTIC_V1, ConfigDict
 from ..._models import BaseModel
 
 __all__ = ["CardListResponse", "SecurityPosture"]
@@ -14,7 +14,7 @@ class SecurityPosture(BaseModel):
 
     model_scan: Optional[bool] = None
 
-    if PYDANTIC_V2:
+    if not PYDANTIC_V1:
         # allow fields with a `model_` prefix
         model_config = ConfigDict(protected_namespaces=tuple())
 
@@ -45,6 +45,6 @@ class CardListResponse(BaseModel):
 
     tags: Optional[Dict[str, object]] = None
 
-    if PYDANTIC_V2:
+    if not PYDANTIC_V1:
         # allow fields with a `model_` prefix
         model_config = ConfigDict(protected_namespaces=tuple())

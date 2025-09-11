@@ -3,7 +3,7 @@
 from typing import Optional
 from typing_extensions import Literal
 
-from ..._compat import PYDANTIC_V2, ConfigDict
+from ..._compat import PYDANTIC_V1, ConfigDict
 from ..._models import BaseModel
 
 __all__ = ["ScanJob", "Inventory"]
@@ -31,7 +31,7 @@ class Inventory(BaseModel):
     request_source: Optional[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] = None
     """Identifies the system that requested the scan"""
 
-    if PYDANTIC_V2:
+    if not PYDANTIC_V1:
         # allow fields with a `model_` prefix
         model_config = ConfigDict(protected_namespaces=tuple())
 

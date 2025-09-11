@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.24 (2025-09-11)
+
+Full Changelog: [v0.1.0-alpha.23...v0.1.0-alpha.24](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.23...v0.1.0-alpha.24)
+
+### Features
+
+* improve future compat with pydantic v3 ([1aed84f](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/1aed84fc565e40734f229cf1ee2d86d7152f670a))
+
+
+### Chores
+
+* **internal:** move mypy configurations to `pyproject.toml` file ([ba5e158](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/ba5e1586993c00ec16aeb3195d4aae3ab8859bf7))
+
 ## 0.1.0-alpha.23 (2025-09-02)
 
 Full Changelog: [v0.1.0-alpha.22...v0.1.0-alpha.23](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.22...v0.1.0-alpha.23)
