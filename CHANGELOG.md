@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.25 (2025-09-12)
+
+Full Changelog: [v0.1.0-alpha.24...v0.1.0-alpha.25](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.24...v0.1.0-alpha.25)
+
+### Features
+
+* **api:** update tokenUrl ([cdc49d2](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/cdc49d29f21227398522bf7b388dcc573d27aebd))
+
+
+### Chores
+
+* **tests:** simplify `get_platform` test ([9f9d70c](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/9f9d70cc86012175becee389a438572560fef8e6))
+
 ## 0.1.0-alpha.24 (2025-09-11)
 
 Full Changelog: [v0.1.0-alpha.23...v0.1.0-alpha.24](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.23...v0.1.0-alpha.24)
