@@ -1,9 +1,9 @@
-# Hidden Layer Python API library
+# HiddenLayer Python API library
 
 <!-- prettier-ignore -->
-[![PyPI version](https://img.shields.io/pypi/v/hiddenlayer.svg?label=pypi%20(stable))](https://pypi.org/project/hiddenlayer/)
+[![PyPI version](https://img.shields.io/pypi/v/hiddenlayer-sdk.svg?label=pypi%20(stable))](https://pypi.org/project/hiddenlayer-sdk/)
 
-The Hidden Layer Python library provides convenient access to the Hidden Layer REST API from any Python 3.8+
+The HiddenLayer Python library provides convenient access to the HiddenLayer REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
@@ -11,7 +11,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Documentation
 
-The REST API documentation can be found on [docs.hiddenlayer-sdk.com](https://docs.hiddenlayer-sdk.com). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [dev.hiddenlayer.ai](https://dev.hiddenlayer.ai). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -21,7 +21,7 @@ pip install git+ssh://git@github.com/hiddenlayer-engineering/hiddenlayer-sdk-pyt
 ```
 
 > [!NOTE]
-> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install --pre hiddenlayer`
+> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install --pre hiddenlayer-sdk`
 
 ## Usage
 
