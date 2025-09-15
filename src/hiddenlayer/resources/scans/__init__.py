@@ -24,8 +24,22 @@ from .upload import (
     UploadResourceWithStreamingResponse,
     AsyncUploadResourceWithStreamingResponse,
 )
+from .results import (
+    ResultsResource,
+    AsyncResultsResource,
+    ResultsResourceWithRawResponse,
+    AsyncResultsResourceWithRawResponse,
+    ResultsResourceWithStreamingResponse,
+    AsyncResultsResourceWithStreamingResponse,
+)
 
 __all__ = [
+    "ResultsResource",
+    "AsyncResultsResource",
+    "ResultsResourceWithRawResponse",
+    "AsyncResultsResourceWithRawResponse",
+    "ResultsResourceWithStreamingResponse",
+    "AsyncResultsResourceWithStreamingResponse",
     "JobsResource",
     "AsyncJobsResource",
     "JobsResourceWithRawResponse",

@@ -63,8 +63,12 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.scans import FileScanReport, ScanReport
+from hiddenlayer.types.scans import FileScanReport, ScanReport, ResultSarifResponse
 ```
+
+Methods:
+
+- <code title="get /scan/v3/results/{scan_id}/sarif">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">sarif</a>(scan_id) -> str</code>
 
 ## Jobs
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.26 (2025-09-15)
+
+Full Changelog: [v0.1.0-alpha.25...v0.1.0-alpha.26](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.25...v0.1.0-alpha.26)
+
+### Features
+
+* **api:** add sarif route ([337a430](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/337a4304e42008593296ef8084ea6b6f4453f709))
+
 ## 0.1.0-alpha.25 (2025-09-12)
 
 Full Changelog: [v0.1.0-alpha.24...v0.1.0-alpha.25](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.24...v0.1.0-alpha.25)
