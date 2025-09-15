@@ -16,6 +16,8 @@ class PromptAnalyzerCreateParams(TypedDict, total=False):
 
     output: str
 
+    hl_project_id: Annotated[str, PropertyInfo(alias="HL-Project-Id")]
+
     x_llm_block_guardrail_detection: Annotated[bool, PropertyInfo(alias="X-LLM-Block-Guardrail-Detection")]
 
     x_llm_block_input_code_detection: Annotated[bool, PropertyInfo(alias="X-LLM-Block-Input-Code-Detection")]

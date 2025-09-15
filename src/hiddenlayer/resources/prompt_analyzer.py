@@ -49,6 +49,7 @@ class PromptAnalyzerResource(SyncAPIResource):
         prompt: str,
         model: str | NotGiven = NOT_GIVEN,
         output: str | NotGiven = NOT_GIVEN,
+        hl_project_id: str | NotGiven = NOT_GIVEN,
         x_llm_block_guardrail_detection: bool | NotGiven = NOT_GIVEN,
         x_llm_block_input_code_detection: bool | NotGiven = NOT_GIVEN,
         x_llm_block_input_dos_detection: bool | NotGiven = NOT_GIVEN,
@@ -103,6 +104,7 @@ class PromptAnalyzerResource(SyncAPIResource):
         extra_headers = {
             **strip_not_given(
                 {
+                    "HL-Project-Id": hl_project_id,
                     "X-LLM-Block-Guardrail-Detection": ("true" if x_llm_block_guardrail_detection else "false")
                     if is_given(x_llm_block_guardrail_detection)
                     else NOT_GIVEN,
@@ -222,6 +224,7 @@ class AsyncPromptAnalyzerResource(AsyncAPIResource):
         prompt: str,
         model: str | NotGiven = NOT_GIVEN,
         output: str | NotGiven = NOT_GIVEN,
+        hl_project_id: str | NotGiven = NOT_GIVEN,
         x_llm_block_guardrail_detection: bool | NotGiven = NOT_GIVEN,
         x_llm_block_input_code_detection: bool | NotGiven = NOT_GIVEN,
         x_llm_block_input_dos_detection: bool | NotGiven = NOT_GIVEN,
@@ -276,6 +279,7 @@ class AsyncPromptAnalyzerResource(AsyncAPIResource):
         extra_headers = {
             **strip_not_given(
                 {
+                    "HL-Project-Id": hl_project_id,
                     "X-LLM-Block-Guardrail-Detection": ("true" if x_llm_block_guardrail_detection else "false")
                     if is_given(x_llm_block_guardrail_detection)
                     else NOT_GIVEN,
