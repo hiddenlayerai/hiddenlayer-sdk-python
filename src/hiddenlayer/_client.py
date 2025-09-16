@@ -32,9 +32,10 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import scans, models, sensors, prompt_analyzer
+    from .resources import scans, models, sensors, interactions, prompt_analyzer
     from .resources.sensors import SensorsResource, AsyncSensorsResource
     from .resources.scans.scans import ScansResource, AsyncScansResource
+    from .resources.interactions import InteractionsResource, AsyncInteractionsResource
     from .resources.models.models import ModelsResource, AsyncModelsResource
     from .resources.prompt_analyzer import PromptAnalyzerResource, AsyncPromptAnalyzerResource
 
@@ -157,6 +158,12 @@ class HiddenLayer(SyncAPIClient):
         from .resources.prompt_analyzer import PromptAnalyzerResource
 
         return PromptAnalyzerResource(self)
+
+    @cached_property
+    def interactions(self) -> InteractionsResource:
+        from .resources.interactions import InteractionsResource
+
+        return InteractionsResource(self)
 
     @cached_property
     def sensors(self) -> SensorsResource:
@@ -415,6 +422,12 @@ class AsyncHiddenLayer(AsyncAPIClient):
         return AsyncPromptAnalyzerResource(self)
 
     @cached_property
+    def interactions(self) -> AsyncInteractionsResource:
+        from .resources.interactions import AsyncInteractionsResource
+
+        return AsyncInteractionsResource(self)
+
+    @cached_property
     def sensors(self) -> AsyncSensorsResource:
         from .resources.sensors import AsyncSensorsResource
 
@@ -587,6 +600,12 @@ class HiddenLayerWithRawResponse:
         return PromptAnalyzerResourceWithRawResponse(self._client.prompt_analyzer)
 
     @cached_property
+    def interactions(self) -> interactions.InteractionsResourceWithRawResponse:
+        from .resources.interactions import InteractionsResourceWithRawResponse
+
+        return InteractionsResourceWithRawResponse(self._client.interactions)
+
+    @cached_property
     def sensors(self) -> sensors.SensorsResourceWithRawResponse:
         from .resources.sensors import SensorsResourceWithRawResponse
 
@@ -616,6 +635,12 @@ class AsyncHiddenLayerWithRawResponse:
         from .resources.prompt_analyzer import AsyncPromptAnalyzerResourceWithRawResponse
 
         return AsyncPromptAnalyzerResourceWithRawResponse(self._client.prompt_analyzer)
+
+    @cached_property
+    def interactions(self) -> interactions.AsyncInteractionsResourceWithRawResponse:
+        from .resources.interactions import AsyncInteractionsResourceWithRawResponse
+
+        return AsyncInteractionsResourceWithRawResponse(self._client.interactions)
 
     @cached_property
     def sensors(self) -> sensors.AsyncSensorsResourceWithRawResponse:
@@ -649,6 +674,12 @@ class HiddenLayerWithStreamedResponse:
         return PromptAnalyzerResourceWithStreamingResponse(self._client.prompt_analyzer)
 
     @cached_property
+    def interactions(self) -> interactions.InteractionsResourceWithStreamingResponse:
+        from .resources.interactions import InteractionsResourceWithStreamingResponse
+
+        return InteractionsResourceWithStreamingResponse(self._client.interactions)
+
+    @cached_property
     def sensors(self) -> sensors.SensorsResourceWithStreamingResponse:
         from .resources.sensors import SensorsResourceWithStreamingResponse
 
@@ -678,6 +709,12 @@ class AsyncHiddenLayerWithStreamedResponse:
         from .resources.prompt_analyzer import AsyncPromptAnalyzerResourceWithStreamingResponse
 
         return AsyncPromptAnalyzerResourceWithStreamingResponse(self._client.prompt_analyzer)
+
+    @cached_property
+    def interactions(self) -> interactions.AsyncInteractionsResourceWithStreamingResponse:
+        from .resources.interactions import AsyncInteractionsResourceWithStreamingResponse
+
+        return AsyncInteractionsResourceWithStreamingResponse(self._client.interactions)
 
     @cached_property
     def sensors(self) -> sensors.AsyncSensorsResourceWithStreamingResponse:
