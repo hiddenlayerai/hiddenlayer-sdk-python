@@ -5,9 +5,10 @@ from datetime import datetime
 
 from pydantic import Field as FieldInfo
 
+from .input import Input
+from .output import Output
 from .._models import BaseModel
-from .interactions_input import InteractionsInput
-from .interactions_output import InteractionsOutput
+from .metadata_project import MetadataProject
 
 __all__ = [
     "InteractionAnalyzeResponse",
@@ -16,7 +17,6 @@ __all__ = [
     "AnalysisFindingsFramework",
     "AnalyzedData",
     "Metadata",
-    "MetadataProject",
     "ModifiedData",
 ]
 
@@ -57,17 +57,9 @@ class Analysis(BaseModel):
 
 
 class AnalyzedData(BaseModel):
-    input: InteractionsInput
+    input: Input
 
-    output: Optional[InteractionsOutput] = None
-
-
-class MetadataProject(BaseModel):
-    project_alias: Optional[str] = None
-
-    project_id: Optional[str] = None
-
-    ruleset_id: Optional[str] = None
+    output: Optional[Output] = None
 
 
 class Metadata(BaseModel):
@@ -87,9 +79,9 @@ class Metadata(BaseModel):
 
 
 class ModifiedData(BaseModel):
-    input: InteractionsInput
+    input: Input
 
-    output: InteractionsOutput
+    output: Output
 
 
 class InteractionAnalyzeResponse(BaseModel):

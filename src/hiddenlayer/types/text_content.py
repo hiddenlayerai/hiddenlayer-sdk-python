@@ -1,17 +1,18 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, Optional
 
 from pydantic import Field as FieldInfo
 
 from .._models import BaseModel
-from .interactions_text_content import InteractionsTextContent
 
-__all__ = ["InteractionsOutput"]
+__all__ = ["TextContent"]
 
 
-class InteractionsOutput(BaseModel):
-    messages: Optional[List[InteractionsTextContent]] = None
+class TextContent(BaseModel):
+    content: str
+
+    role: Optional[str] = None
 
     __pydantic_extra__: Dict[str, object] = FieldInfo(init=False)  # pyright: ignore[reportIncompatibleVariableOverride]
     if TYPE_CHECKING:

@@ -2,32 +2,21 @@
 
 from __future__ import annotations
 
-from typing import Dict, Union
-from typing_extensions import Required, Annotated, TypeAlias, TypedDict
+from typing_extensions import Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
-from .interactions_input_param import InteractionsInputParam
-from .interactions_output_param import InteractionsOutputParam
+from .input_param import InputParam
+from .output_param import OutputParam
+from .metadata_param import MetadataParam
 
-__all__ = ["InteractionAnalyzeParams", "Metadata"]
+__all__ = ["InteractionAnalyzeParams"]
 
 
 class InteractionAnalyzeParams(TypedDict, total=False):
-    metadata: Required[Metadata]
+    metadata: Required[MetadataParam]
 
-    input: InteractionsInputParam
+    input: InputParam
 
-    output: InteractionsOutputParam
+    output: OutputParam
 
     hl_project_id: Annotated[str, PropertyInfo(alias="HL-Project-Id")]
-
-
-class MetadataTyped(TypedDict, total=False):
-    model: Required[str]
-
-    requester_id: Required[str]
-
-    provider: str
-
-
-Metadata: TypeAlias = Union[MetadataTyped, Dict[str, object]]

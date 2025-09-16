@@ -5,13 +5,13 @@ from __future__ import annotations
 from typing import Dict, Union
 from typing_extensions import Required, TypeAlias, TypedDict
 
-__all__ = ["InteractionsTextContentParam"]
+__all__ = ["TextContentParam"]
 
 
-class InteractionsTextContentParamTyped(TypedDict, total=False):
+class TextContentParamTyped(TypedDict, total=False):
     content: Required[str]
 
     role: str
 
 
-InteractionsTextContentParam: TypeAlias = Union[InteractionsTextContentParamTyped, Dict[str, object]]
+TextContentParam: TypeAlias = Union[TextContentParamTyped, Dict[str, object]]
