@@ -557,12 +557,12 @@ class TestHiddenLayer:
         assert client.base_url == "https://example.com/from_setter/"
 
     def test_base_url_env(self) -> None:
-        with update_env(HIDDEN_LAYER_BASE_URL="http://localhost:5000/from/env"):
+        with update_env(HIDDENLAYER_BASE_URL="http://localhost:5000/from/env"):
             client = HiddenLayer(bearer_token=bearer_token, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
         # explicit environment arg requires explicitness
-        with update_env(HIDDEN_LAYER_BASE_URL="http://localhost:5000/from/env"):
+        with update_env(HIDDENLAYER_BASE_URL="http://localhost:5000/from/env"):
             with pytest.raises(ValueError, match=r"you must pass base_url=None"):
                 HiddenLayer(bearer_token=bearer_token, _strict_response_validation=True, environment="prod-us")
 
@@ -1390,12 +1390,12 @@ class TestAsyncHiddenLayer:
         assert client.base_url == "https://example.com/from_setter/"
 
     def test_base_url_env(self) -> None:
-        with update_env(HIDDEN_LAYER_BASE_URL="http://localhost:5000/from/env"):
+        with update_env(HIDDENLAYER_BASE_URL="http://localhost:5000/from/env"):
             client = AsyncHiddenLayer(bearer_token=bearer_token, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
         # explicit environment arg requires explicitness
-        with update_env(HIDDEN_LAYER_BASE_URL="http://localhost:5000/from/env"):
+        with update_env(HIDDENLAYER_BASE_URL="http://localhost:5000/from/env"):
             with pytest.raises(ValueError, match=r"you must pass base_url=None"):
                 AsyncHiddenLayer(bearer_token=bearer_token, _strict_response_validation=True, environment="prod-us")
 

@@ -112,14 +112,14 @@ class HiddenLayer(SyncAPIClient):
 
         self._environment = environment
 
-        base_url_env = os.environ.get("HIDDEN_LAYER_BASE_URL")
+        base_url_env = os.environ.get("HIDDENLAYER_BASE_URL")
         if is_given(base_url) and base_url is not None:
             # cast required because mypy doesn't understand the type narrowing
             base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
         elif is_given(environment):
             if base_url_env and base_url is not None:
                 raise ValueError(
-                    "Ambiguous URL; The `HIDDEN_LAYER_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
+                    "Ambiguous URL; The `HIDDENLAYER_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
                 )
 
             try:
@@ -374,14 +374,14 @@ class AsyncHiddenLayer(AsyncAPIClient):
 
         self._environment = environment
 
-        base_url_env = os.environ.get("HIDDEN_LAYER_BASE_URL")
+        base_url_env = os.environ.get("HIDDENLAYER_BASE_URL")
         if is_given(base_url) and base_url is not None:
             # cast required because mypy doesn't understand the type narrowing
             base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
         elif is_given(environment):
             if base_url_env and base_url is not None:
                 raise ValueError(
-                    "Ambiguous URL; The `HIDDEN_LAYER_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
+                    "Ambiguous URL; The `HIDDENLAYER_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
                 )
 
             try:
