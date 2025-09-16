@@ -41,11 +41,11 @@ Types:
 
 ```python
 from hiddenlayer.types import (
-    Input,
-    Metadata,
-    MetadataProject,
-    Output,
-    TextContent,
+    InteractionsInput,
+    InteractionsMetadata,
+    InteractionsMetadataProject,
+    InteractionsOutput,
+    InteractionsTextContent,
     InteractionAnalyzeResponse,
 )
 ```

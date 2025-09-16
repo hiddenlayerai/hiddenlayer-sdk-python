@@ -5,10 +5,10 @@ from __future__ import annotations
 from typing import Dict, Union
 from typing_extensions import Required, TypeAlias, TypedDict
 
-__all__ = ["MetadataParam"]
+__all__ = ["InteractionsMetadataParam"]
 
 
-class MetadataParamTyped(TypedDict, total=False):
+class InteractionsMetadataParamTyped(TypedDict, total=False):
     model: Required[str]
 
     requester_id: Required[str]
@@ -16,4 +16,4 @@ class MetadataParamTyped(TypedDict, total=False):
     provider: str
 
 
-MetadataParam: TypeAlias = Union[MetadataParamTyped, Dict[str, object]]
+InteractionsMetadataParam: TypeAlias = Union[InteractionsMetadataParamTyped, Dict[str, object]]

@@ -5,18 +5,18 @@ from __future__ import annotations
 from typing_extensions import Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
-from .input_param import InputParam
-from .output_param import OutputParam
-from .metadata_param import MetadataParam
+from .interactions_input_param import InteractionsInputParam
+from .interactions_output_param import InteractionsOutputParam
+from .interactions_metadata_param import InteractionsMetadataParam
 
 __all__ = ["InteractionAnalyzeParams"]
 
 
 class InteractionAnalyzeParams(TypedDict, total=False):
-    metadata: Required[MetadataParam]
+    metadata: Required[InteractionsMetadataParam]
 
-    input: InputParam
+    input: InteractionsInputParam
 
-    output: OutputParam
+    output: InteractionsOutputParam
 
     hl_project_id: Annotated[str, PropertyInfo(alias="HL-Project-Id")]

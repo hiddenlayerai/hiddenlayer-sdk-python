@@ -5,13 +5,13 @@ from typing import TYPE_CHECKING, Dict, List, Optional
 from pydantic import Field as FieldInfo
 
 from .._models import BaseModel
-from .text_content import TextContent
+from .interactions_text_content import InteractionsTextContent
 
-__all__ = ["Input"]
+__all__ = ["InteractionsInput"]
 
 
-class Input(BaseModel):
-    messages: Optional[List[TextContent]] = None
+class InteractionsInput(BaseModel):
+    messages: Optional[List[InteractionsTextContent]] = None
 
     __pydantic_extra__: Dict[str, object] = FieldInfo(init=False)  # pyright: ignore[reportIncompatibleVariableOverride]
     if TYPE_CHECKING:

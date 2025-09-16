@@ -4,10 +4,10 @@ from typing import Optional
 
 from .._models import BaseModel
 
-__all__ = ["MetadataProject"]
+__all__ = ["InteractionsMetadataProject"]
 
 
-class MetadataProject(BaseModel):
+class InteractionsMetadataProject(BaseModel):
     project_alias: Optional[str] = None
 
     project_id: Optional[str] = None
