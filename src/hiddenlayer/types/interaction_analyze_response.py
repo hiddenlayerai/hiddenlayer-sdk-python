@@ -6,6 +6,8 @@ from datetime import datetime
 from pydantic import Field as FieldInfo
 
 from .._models import BaseModel
+from .interactions_input import InteractionsInput
+from .interactions_output import InteractionsOutput
 
 __all__ = [
     "InteractionAnalyzeResponse",
@@ -13,17 +15,9 @@ __all__ = [
     "AnalysisFindings",
     "AnalysisFindingsFramework",
     "AnalyzedData",
-    "AnalyzedDataInput",
-    "AnalyzedDataInputMessage",
-    "AnalyzedDataOutput",
-    "AnalyzedDataOutputMessage",
     "Metadata",
     "MetadataProject",
     "ModifiedData",
-    "ModifiedDataInput",
-    "ModifiedDataInputMessage",
-    "ModifiedDataOutput",
-    "ModifiedDataOutputMessage",
 ]
 
 
@@ -62,58 +56,10 @@ class Analysis(BaseModel):
     version: str
 
 
-class AnalyzedDataInputMessage(BaseModel):
-    content: str
-
-    role: Optional[str] = None
-
-    __pydantic_extra__: Dict[str, object] = FieldInfo(init=False)  # pyright: ignore[reportIncompatibleVariableOverride]
-    if TYPE_CHECKING:
-        # Stub to indicate that arbitrary properties are accepted.
-        # To access properties that are not valid identifiers you can use `getattr`, e.g.
-        # `getattr(obj, '$type')`
-        def __getattr__(self, attr: str) -> object: ...
-
-
-class AnalyzedDataInput(BaseModel):
-    messages: Optional[List[AnalyzedDataInputMessage]] = None
-
-    __pydantic_extra__: Dict[str, object] = FieldInfo(init=False)  # pyright: ignore[reportIncompatibleVariableOverride]
-    if TYPE_CHECKING:
-        # Stub to indicate that arbitrary properties are accepted.
-        # To access properties that are not valid identifiers you can use `getattr`, e.g.
-        # `getattr(obj, '$type')`
-        def __getattr__(self, attr: str) -> object: ...
-
-
-class AnalyzedDataOutputMessage(BaseModel):
-    content: str
-
-    role: Optional[str] = None
-
-    __pydantic_extra__: Dict[str, object] = FieldInfo(init=False)  # pyright: ignore[reportIncompatibleVariableOverride]
-    if TYPE_CHECKING:
-        # Stub to indicate that arbitrary properties are accepted.
-        # To access properties that are not valid identifiers you can use `getattr`, e.g.
-        # `getattr(obj, '$type')`
-        def __getattr__(self, attr: str) -> object: ...
-
-
-class AnalyzedDataOutput(BaseModel):
-    messages: Optional[List[AnalyzedDataOutputMessage]] = None
-
-    __pydantic_extra__: Dict[str, object] = FieldInfo(init=False)  # pyright: ignore[reportIncompatibleVariableOverride]
-    if TYPE_CHECKING:
-        # Stub to indicate that arbitrary properties are accepted.
-        # To access properties that are not valid identifiers you can use `getattr`, e.g.
-        # `getattr(obj, '$type')`
-        def __getattr__(self, attr: str) -> object: ...
-
-
 class AnalyzedData(BaseModel):
-    input: AnalyzedDataInput
+    input: InteractionsInput
 
-    output: Optional[AnalyzedDataOutput] = None
+    output: Optional[InteractionsOutput] = None
 
 
 class MetadataProject(BaseModel):
@@ -140,58 +86,10 @@ class Metadata(BaseModel):
     event_id: Optional[str] = None
 
 
-class ModifiedDataInputMessage(BaseModel):
-    content: str
-
-    role: Optional[str] = None
-
-    __pydantic_extra__: Dict[str, object] = FieldInfo(init=False)  # pyright: ignore[reportIncompatibleVariableOverride]
-    if TYPE_CHECKING:
-        # Stub to indicate that arbitrary properties are accepted.
-        # To access properties that are not valid identifiers you can use `getattr`, e.g.
-        # `getattr(obj, '$type')`
-        def __getattr__(self, attr: str) -> object: ...
-
-
-class ModifiedDataInput(BaseModel):
-    messages: Optional[List[ModifiedDataInputMessage]] = None
-
-    __pydantic_extra__: Dict[str, object] = FieldInfo(init=False)  # pyright: ignore[reportIncompatibleVariableOverride]
-    if TYPE_CHECKING:
-        # Stub to indicate that arbitrary properties are accepted.
-        # To access properties that are not valid identifiers you can use `getattr`, e.g.
-        # `getattr(obj, '$type')`
-        def __getattr__(self, attr: str) -> object: ...
-
-
-class ModifiedDataOutputMessage(BaseModel):
-    content: str
-
-    role: Optional[str] = None
-
-    __pydantic_extra__: Dict[str, object] = FieldInfo(init=False)  # pyright: ignore[reportIncompatibleVariableOverride]
-    if TYPE_CHECKING:
-        # Stub to indicate that arbitrary properties are accepted.
-        # To access properties that are not valid identifiers you can use `getattr`, e.g.
-        # `getattr(obj, '$type')`
-        def __getattr__(self, attr: str) -> object: ...
-
-
-class ModifiedDataOutput(BaseModel):
-    messages: Optional[List[ModifiedDataOutputMessage]] = None
-
-    __pydantic_extra__: Dict[str, object] = FieldInfo(init=False)  # pyright: ignore[reportIncompatibleVariableOverride]
-    if TYPE_CHECKING:
-        # Stub to indicate that arbitrary properties are accepted.
-        # To access properties that are not valid identifiers you can use `getattr`, e.g.
-        # `getattr(obj, '$type')`
-        def __getattr__(self, attr: str) -> object: ...
-
-
 class ModifiedData(BaseModel):
-    input: ModifiedDataInput
+    input: InteractionsInput
 
-    output: ModifiedDataOutput
+    output: InteractionsOutput
 
 
 class InteractionAnalyzeResponse(BaseModel):

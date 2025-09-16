@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from .interactions_input import InteractionsInput as InteractionsInput
+from .interactions_output import InteractionsOutput as InteractionsOutput
 from .sensor_query_params import SensorQueryParams as SensorQueryParams
 from .sensor_create_params import SensorCreateParams as SensorCreateParams
 from .sensor_update_params import SensorUpdateParams as SensorUpdateParams
@@ -9,8 +11,12 @@ from .sensor_query_response import SensorQueryResponse as SensorQueryResponse
 from .sensor_create_response import SensorCreateResponse as SensorCreateResponse
 from .sensor_update_response import SensorUpdateResponse as SensorUpdateResponse
 from .model_retrieve_response import ModelRetrieveResponse as ModelRetrieveResponse
+from .interactions_input_param import InteractionsInputParam as InteractionsInputParam
 from .sensor_retrieve_response import SensorRetrieveResponse as SensorRetrieveResponse
+from .interactions_output_param import InteractionsOutputParam as InteractionsOutputParam
+from .interactions_text_content import InteractionsTextContent as InteractionsTextContent
 from .interaction_analyze_params import InteractionAnalyzeParams as InteractionAnalyzeParams
 from .interaction_analyze_response import InteractionAnalyzeResponse as InteractionAnalyzeResponse
 from .prompt_analyzer_create_params import PromptAnalyzerCreateParams as PromptAnalyzerCreateParams
+from .interactions_text_content_param import InteractionsTextContentParam as InteractionsTextContentParam
 from .prompt_analyzer_create_response import PromptAnalyzerCreateResponse as PromptAnalyzerCreateResponse

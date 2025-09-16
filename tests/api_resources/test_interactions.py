@@ -9,7 +9,9 @@ import pytest
 
 from hiddenlayer import HiddenLayer, AsyncHiddenLayer
 from tests.utils import assert_matches_type
-from hiddenlayer.types import InteractionAnalyzeResponse
+from hiddenlayer.types import (
+    InteractionAnalyzeResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
