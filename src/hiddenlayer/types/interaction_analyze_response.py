@@ -8,7 +8,7 @@ from pydantic import Field as FieldInfo
 from .._models import BaseModel
 from .interactions_input import InteractionsInput
 from .interactions_output import InteractionsOutput
-from .interactions_metadata_project import InteractionsMetadataProject
+from .interactions_project import InteractionsProject
 
 __all__ = [
     "InteractionAnalyzeResponse",
@@ -67,7 +67,7 @@ class Metadata(BaseModel):
 
     processing_time_ms: float
 
-    project: InteractionsMetadataProject
+    project: InteractionsProject
 
     provider: str
 

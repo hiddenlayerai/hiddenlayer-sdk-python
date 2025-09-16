@@ -43,8 +43,8 @@ Types:
 from hiddenlayer.types import (
     InteractionsInput,
     InteractionsMetadata,
-    InteractionsMetadataProject,
     InteractionsOutput,
+    InteractionsProject,
     InteractionsTextContent,
     InteractionAnalyzeResponse,
 )

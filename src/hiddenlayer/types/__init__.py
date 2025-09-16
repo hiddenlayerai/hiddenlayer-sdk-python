@@ -5,6 +5,7 @@ from __future__ import annotations
 from .interactions_input import InteractionsInput as InteractionsInput
 from .interactions_output import InteractionsOutput as InteractionsOutput
 from .sensor_query_params import SensorQueryParams as SensorQueryParams
+from .interactions_project import InteractionsProject as InteractionsProject
 from .sensor_create_params import SensorCreateParams as SensorCreateParams
 from .sensor_update_params import SensorUpdateParams as SensorUpdateParams
 from .sensor_query_response import SensorQueryResponse as SensorQueryResponse
@@ -18,7 +19,6 @@ from .interactions_text_content import InteractionsTextContent as InteractionsTe
 from .interaction_analyze_params import InteractionAnalyzeParams as InteractionAnalyzeParams
 from .interactions_metadata_param import InteractionsMetadataParam as InteractionsMetadataParam
 from .interaction_analyze_response import InteractionAnalyzeResponse as InteractionAnalyzeResponse
-from .interactions_metadata_project import InteractionsMetadataProject as InteractionsMetadataProject
 from .prompt_analyzer_create_params import PromptAnalyzerCreateParams as PromptAnalyzerCreateParams
 from .interactions_text_content_param import InteractionsTextContentParam as InteractionsTextContentParam
 from .prompt_analyzer_create_response import PromptAnalyzerCreateResponse as PromptAnalyzerCreateResponse
