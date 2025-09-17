@@ -44,7 +44,6 @@ from hiddenlayer.types import (
     InteractionsInput,
     InteractionsMetadata,
     InteractionsOutput,
-    InteractionsProject,
     InteractionsTextContent,
     InteractionAnalyzeResponse,
 )

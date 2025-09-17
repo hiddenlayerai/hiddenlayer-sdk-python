@@ -5,7 +5,6 @@ from __future__ import annotations
 from .interactions_input import InteractionsInput as InteractionsInput
 from .interactions_output import InteractionsOutput as InteractionsOutput
 from .sensor_query_params import SensorQueryParams as SensorQueryParams
-from .interactions_project import InteractionsProject as InteractionsProject
 from .sensor_create_params import SensorCreateParams as SensorCreateParams
 from .sensor_update_params import SensorUpdateParams as SensorUpdateParams
 from .sensor_query_response import SensorQueryResponse as SensorQueryResponse

@@ -8,7 +8,6 @@ from pydantic import Field as FieldInfo
 from .._models import BaseModel
 from .interactions_input import InteractionsInput
 from .interactions_output import InteractionsOutput
-from .interactions_project import InteractionsProject
 
 __all__ = [
     "InteractionAnalyzeResponse",
@@ -17,6 +16,7 @@ __all__ = [
     "AnalysisFindingsFramework",
     "AnalyzedData",
     "Metadata",
+    "MetadataProject",
     "ModifiedData",
 ]
 
@@ -62,12 +62,20 @@ class AnalyzedData(BaseModel):
     output: Optional[InteractionsOutput] = None
 
 
+class MetadataProject(BaseModel):
+    project_alias: Optional[str] = None
+
+    project_id: Optional[str] = None
+
+    ruleset_id: Optional[str] = None
+
+
 class Metadata(BaseModel):
     model: str
 
     processing_time_ms: float
 
-    project: InteractionsProject
+    project: MetadataProject
 
     provider: str
 
