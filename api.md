@@ -37,6 +37,18 @@ Methods:
 
 - <code title="post /api/v1/submit/prompt-analyzer">client.prompt_analyzer.<a href="./src/hiddenlayer/resources/prompt_analyzer.py">create</a>(\*\*<a href="src/hiddenlayer/types/prompt_analyzer_create_params.py">params</a>) -> <a href="./src/hiddenlayer/types/prompt_analyzer_create_response.py">PromptAnalyzerCreateResponse</a></code>
 
+# Interactions
+
+Types:
+
+```python
+from hiddenlayer.types import InteractionAnalyzeResponse
+```
+
+Methods:
+
+- <code title="post /detection/v1/interactions">client.interactions.<a href="./src/hiddenlayer/resources/interactions.py">analyze</a>(\*\*<a href="src/hiddenlayer/types/interaction_analyze_params.py">params</a>) -> <a href="./src/hiddenlayer/types/interaction_analyze_response.py">InteractionAnalyzeResponse</a></code>
+
 # Sensors
 
 Types:

@@ -32,11 +32,12 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import scans, models, sensors, prompt_analyzer
+    from .resources import scans, models, sensors, interactions, prompt_analyzer
     from .lib.model_scan import ModelScanner, AsyncModelScanner
     from .resources.sensors import SensorsResource, AsyncSensorsResource
     from .lib.community_scan import CommunityScanner, AsyncCommunityScanner
     from .resources.scans.scans import ScansResource, AsyncScansResource
+    from .resources.interactions import InteractionsResource, AsyncInteractionsResource
     from .resources.models.models import ModelsResource, AsyncModelsResource
     from .resources.prompt_analyzer import PromptAnalyzerResource, AsyncPromptAnalyzerResource
 
@@ -113,14 +114,14 @@ class HiddenLayer(SyncAPIClient):
 
         self._environment = environment
 
-        base_url_env = os.environ.get("HIDDEN_LAYER_BASE_URL")
+        base_url_env = os.environ.get("HIDDENLAYER_BASE_URL")
         if is_given(base_url) and base_url is not None:
             # cast required because mypy doesn't understand the type narrowing
             base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
         elif is_given(environment):
             if base_url_env and base_url is not None:
                 raise ValueError(
-                    "Ambiguous URL; The `HIDDEN_LAYER_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
+                    "Ambiguous URL; The `HIDDENLAYER_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
                 )
 
             try:
@@ -159,6 +160,12 @@ class HiddenLayer(SyncAPIClient):
         from .resources.prompt_analyzer import PromptAnalyzerResource
 
         return PromptAnalyzerResource(self)
+
+    @cached_property
+    def interactions(self) -> InteractionsResource:
+        from .resources.interactions import InteractionsResource
+
+        return InteractionsResource(self)
 
     @cached_property
     def sensors(self) -> SensorsResource:
@@ -382,14 +389,14 @@ class AsyncHiddenLayer(AsyncAPIClient):
 
         self._environment = environment
 
-        base_url_env = os.environ.get("HIDDEN_LAYER_BASE_URL")
+        base_url_env = os.environ.get("HIDDENLAYER_BASE_URL")
         if is_given(base_url) and base_url is not None:
             # cast required because mypy doesn't understand the type narrowing
             base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
         elif is_given(environment):
             if base_url_env and base_url is not None:
                 raise ValueError(
-                    "Ambiguous URL; The `HIDDEN_LAYER_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
+                    "Ambiguous URL; The `HIDDENLAYER_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
                 )
 
             try:
@@ -428,6 +435,12 @@ class AsyncHiddenLayer(AsyncAPIClient):
         from .resources.prompt_analyzer import AsyncPromptAnalyzerResource
 
         return AsyncPromptAnalyzerResource(self)
+
+    @cached_property
+    def interactions(self) -> AsyncInteractionsResource:
+        from .resources.interactions import AsyncInteractionsResource
+
+        return AsyncInteractionsResource(self)
 
     @cached_property
     def sensors(self) -> AsyncSensorsResource:
@@ -614,6 +627,12 @@ class HiddenLayerWithRawResponse:
         return PromptAnalyzerResourceWithRawResponse(self._client.prompt_analyzer)
 
     @cached_property
+    def interactions(self) -> interactions.InteractionsResourceWithRawResponse:
+        from .resources.interactions import InteractionsResourceWithRawResponse
+
+        return InteractionsResourceWithRawResponse(self._client.interactions)
+
+    @cached_property
     def sensors(self) -> sensors.SensorsResourceWithRawResponse:
         from .resources.sensors import SensorsResourceWithRawResponse
 
@@ -643,6 +662,12 @@ class AsyncHiddenLayerWithRawResponse:
         from .resources.prompt_analyzer import AsyncPromptAnalyzerResourceWithRawResponse
 
         return AsyncPromptAnalyzerResourceWithRawResponse(self._client.prompt_analyzer)
+
+    @cached_property
+    def interactions(self) -> interactions.AsyncInteractionsResourceWithRawResponse:
+        from .resources.interactions import AsyncInteractionsResourceWithRawResponse
+
+        return AsyncInteractionsResourceWithRawResponse(self._client.interactions)
 
     @cached_property
     def sensors(self) -> sensors.AsyncSensorsResourceWithRawResponse:
@@ -676,6 +701,12 @@ class HiddenLayerWithStreamedResponse:
         return PromptAnalyzerResourceWithStreamingResponse(self._client.prompt_analyzer)
 
     @cached_property
+    def interactions(self) -> interactions.InteractionsResourceWithStreamingResponse:
+        from .resources.interactions import InteractionsResourceWithStreamingResponse
+
+        return InteractionsResourceWithStreamingResponse(self._client.interactions)
+
+    @cached_property
     def sensors(self) -> sensors.SensorsResourceWithStreamingResponse:
         from .resources.sensors import SensorsResourceWithStreamingResponse
 
@@ -705,6 +736,12 @@ class AsyncHiddenLayerWithStreamedResponse:
         from .resources.prompt_analyzer import AsyncPromptAnalyzerResourceWithStreamingResponse
 
         return AsyncPromptAnalyzerResourceWithStreamingResponse(self._client.prompt_analyzer)
+
+    @cached_property
+    def interactions(self) -> interactions.AsyncInteractionsResourceWithStreamingResponse:
+        from .resources.interactions import AsyncInteractionsResourceWithStreamingResponse
+
+        return AsyncInteractionsResourceWithStreamingResponse(self._client.interactions)
 
     @cached_property
     def sensors(self) -> sensors.AsyncSensorsResourceWithStreamingResponse:

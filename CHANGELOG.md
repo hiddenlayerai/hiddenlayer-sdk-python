@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.1.0-alpha.27 (2025-09-17)
+
+Full Changelog: [v0.1.0-alpha.26...v0.1.0-alpha.27](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.26...v0.1.0-alpha.27)
+
+### Features
+
+* **api:** add Interactions endpoint ([dde9346](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/dde9346d35bbad61dbc108f14b982750e7031a96))
+* **api:** add models for Interactions ([90e3bf1](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/90e3bf1a5235578723be8518829623f2609fb226))
+* **api:** additional Interactions models ([8853eb3](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/8853eb317e31f642dfc3d8d98367131b5a743926))
+* **api:** api update ([7e3f0ea](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/7e3f0ea87cc0ea5db73dc72051946cf5b00451c5))
+
+
+### Bug Fixes
+
+* **api:** drop Interactions Project model ([a4f3c6d](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/a4f3c6dacd62455ec6917c7d5ac21ae3fc928867))
+* **api:** ensure correct HiddenLayer branding ([db14bba](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/db14bba1281cda6b8bd294f433eb1f400f8a8b76))
+* **api:** properly namespace Interactions models ([ae8cbf7](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/ae8cbf798bed8dd7f7ee513dfc63c8f7aab7969f))
+* **api:** remove all Interactions models ([8c049b0](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/8c049b0f5262d9b7ac805dd81ccd5bc0a13de37e))
+* **api:** rename Interactions project model ([1a4a26c](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/1a4a26c4eee075b7cb7d194c52c59367c38822f0))
+* **api:** set `default_env_prefix` to `HIDDENLAYER` in `client_settings` ([84a46a5](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/84a46a5dddc47e22c15b29b3bdd2a633066dfd43))
+* **docs:** update docs url ([3314a6f](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/3314a6f7b7024c67dc866d9ed2c0a82feb74859c))
+
+
+### Chores
+
+* **internal:** update pydantic dependency ([a5b0e2e](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/a5b0e2eb759d7b327f4f415da6268081f488ddb5))
+
 ## 0.1.0-alpha.26 (2025-09-15)
 
 Full Changelog: [v0.1.0-alpha.25...v0.1.0-alpha.26](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.25...v0.1.0-alpha.26)

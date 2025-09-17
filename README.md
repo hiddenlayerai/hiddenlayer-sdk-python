@@ -229,10 +229,10 @@ Note that requests that time out are [retried twice by default](#retries).
 
 We use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.
 
-You can enable logging by setting the environment variable `HIDDEN_LAYER_LOG` to `info`.
+You can enable logging by setting the environment variable `HIDDENLAYER_LOG` to `info`.
 
 ```shell
-$ export HIDDEN_LAYER_LOG=info
+$ export HIDDENLAYER_LOG=info
 ```
 
 Or to `debug` for more verbose logging.
@@ -335,7 +335,7 @@ import httpx
 from hiddenlayer import HiddenLayer, DefaultHttpxClient
 
 client = HiddenLayer(
-    # Or use the `HIDDEN_LAYER_BASE_URL` env var
+    # Or use the `HIDDENLAYER_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
         proxy="http://my.test.proxy.example.com",
