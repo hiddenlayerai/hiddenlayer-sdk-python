@@ -16,9 +16,6 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.interactions_input_param import InteractionsInputParam
-from ..types.interactions_output_param import InteractionsOutputParam
-from ..types.interactions_metadata_param import InteractionsMetadataParam
 from ..types.interaction_analyze_response import InteractionAnalyzeResponse
 
 __all__ = ["InteractionsResource", "AsyncInteractionsResource"]
@@ -47,9 +44,9 @@ class InteractionsResource(SyncAPIResource):
     def analyze(
         self,
         *,
-        metadata: InteractionsMetadataParam,
-        input: InteractionsInputParam | NotGiven = NOT_GIVEN,
-        output: InteractionsOutputParam | NotGiven = NOT_GIVEN,
+        metadata: interaction_analyze_params.Metadata,
+        input: interaction_analyze_params.Input | NotGiven = NOT_GIVEN,
+        output: interaction_analyze_params.Output | NotGiven = NOT_GIVEN,
         hl_project_id: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -112,9 +109,9 @@ class AsyncInteractionsResource(AsyncAPIResource):
     async def analyze(
         self,
         *,
-        metadata: InteractionsMetadataParam,
-        input: InteractionsInputParam | NotGiven = NOT_GIVEN,
-        output: InteractionsOutputParam | NotGiven = NOT_GIVEN,
+        metadata: interaction_analyze_params.Metadata,
+        input: interaction_analyze_params.Input | NotGiven = NOT_GIVEN,
+        output: interaction_analyze_params.Output | NotGiven = NOT_GIVEN,
         hl_project_id: str | NotGiven = NOT_GIVEN,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.

@@ -40,13 +40,7 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types import (
-    InteractionsInput,
-    InteractionsMetadata,
-    InteractionsOutput,
-    InteractionsTextContent,
-    InteractionAnalyzeResponse,
-)
+from hiddenlayer.types import InteractionAnalyzeResponse
 ```
 
 Methods:
