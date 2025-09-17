@@ -7,8 +7,6 @@ from typing import TYPE_CHECKING, Any, Dict, Union, Mapping, cast
 from typing_extensions import Self, Literal, override
 
 import httpx
-import requests
-from requests.auth import HTTPBasicAuth
 
 from . import _exceptions
 from ._qs import Querystring
@@ -237,26 +235,6 @@ class HiddenLayer(SyncAPIClient):
                 return True
         return super()._should_retry(response)
 
-    def _get_jwt(self, *, api_id: str, api_key: str) -> str:
-        "Get the JWT token to auth to the Hiddenlayer API."
-
-        auth_url = os.getenv("HL_AUTH_URL", "https://auth.hiddenlayer.ai")
-
-        token_url = f"{auth_url}/oauth2/token?grant_type=client_credentials"
-
-        resp = requests.post(token_url, auth=HTTPBasicAuth(api_id, api_key))
-
-        if not resp.ok:
-            raise Exception(
-                f"Unable to get authentication credentials for the HiddenLayer API: {resp.status_code}: {resp.text}"
-            )
-
-        if "access_token" not in resp.json():
-            raise Exception(
-                f"Unable to get authentication credentials for the HiddenLayer API - invalid response: {resp.json()}"
-            )
-
-        return resp.json()["access_token"]  # type: ignore[no-any-return]
 
     def copy(
         self,
