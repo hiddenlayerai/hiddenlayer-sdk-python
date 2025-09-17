@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.28 (2025-09-17)
+
+Full Changelog: [v0.1.0-alpha.27...v0.1.0-alpha.28](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.27...v0.1.0-alpha.28)
+
+### Chores
+
+* **api:** remove unneeded files ([#50](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/issues/50)) ([e0e6e2b](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/e0e6e2bf8f87b82e30eb177b241a9c7913d49cce))
+
 ## 0.1.0-alpha.27 (2025-09-17)
 
 Full Changelog: [v0.1.0-alpha.26...v0.1.0-alpha.27](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.26...v0.1.0-alpha.27)
