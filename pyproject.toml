@@ -3,7 +3,7 @@ name = "hiddenlayer"
 version = "0.1.0-alpha.29"
 description = "The official Python library for the hiddenlayer API"
 dynamic = ["readme"]
-license = "Apache-2.0"
+license = {text = "Apache-2.0"}
 authors = [
 { name = "HiddenLayer", email = "dev-feedback@hiddenlayer-sdk.com" },
 ]
@@ -101,9 +101,11 @@ include = [
 ]
 
 [tool.hatch.build.targets.wheel]
+core-metadata-version = "2.3"
 packages = ["src/hiddenlayer"]
 
 [tool.hatch.build.targets.sdist]
+core-metadata-version = "2.3"
 # Basically everything except hidden files/directories (such as .github, .devcontainers, .python-version, etc)
 include = [
   "/*.toml",
