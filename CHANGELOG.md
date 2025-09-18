@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.29 (2025-09-18)
+
+Full Changelog: [v0.1.0-alpha.28...v0.1.0-alpha.29](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.28...v0.1.0-alpha.29)
+
+### Features
+
+* **api:** api update ([6472e4e](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/6472e4e38cdba10f8e6495bbd7c6da53c7165db0))
+
+
+### Chores
+
+* **types:** change optional parameter type from NotGiven to Omit ([724a3f5](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/724a3f51dfe3e25c73474f799fb0e07352eabbfe))
+
 ## 0.1.0-alpha.28 (2025-09-17)
 
 Full Changelog: [v0.1.0-alpha.27...v0.1.0-alpha.28](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.27...v0.1.0-alpha.28)
