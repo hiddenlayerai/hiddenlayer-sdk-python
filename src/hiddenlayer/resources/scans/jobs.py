@@ -8,7 +8,7 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven, SequenceNotStr
+from ..._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -51,13 +51,13 @@ class JobsResource(SyncAPIResource):
         self,
         scan_id: str,
         *,
-        has_detections: bool | NotGiven = NOT_GIVEN,
+        has_detections: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ScanReport:
         """
         Get scan results
@@ -91,27 +91,27 @@ class JobsResource(SyncAPIResource):
     def list(
         self,
         *,
-        compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]] | NotGiven = NOT_GIVEN,
-        detection_category: str | NotGiven = NOT_GIVEN,
-        end_time: Union[str, datetime] | NotGiven = NOT_GIVEN,
-        latest_per_model_version_only: bool | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        model_ids: SequenceNotStr[str] | NotGiven = NOT_GIVEN,
-        model_name: job_list_params.ModelName | NotGiven = NOT_GIVEN,
-        model_version_ids: SequenceNotStr[str] | NotGiven = NOT_GIVEN,
-        offset: int | NotGiven = NOT_GIVEN,
-        scanner_version: str | NotGiven = NOT_GIVEN,
-        severity: SequenceNotStr[str] | NotGiven = NOT_GIVEN,
-        sort: str | NotGiven = NOT_GIVEN,
-        source: job_list_params.Source | NotGiven = NOT_GIVEN,
-        start_time: Union[str, datetime] | NotGiven = NOT_GIVEN,
-        status: SequenceNotStr[str] | NotGiven = NOT_GIVEN,
+        compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]] | Omit = omit,
+        detection_category: str | Omit = omit,
+        end_time: Union[str, datetime] | Omit = omit,
+        latest_per_model_version_only: bool | Omit = omit,
+        limit: int | Omit = omit,
+        model_ids: SequenceNotStr[str] | Omit = omit,
+        model_name: job_list_params.ModelName | Omit = omit,
+        model_version_ids: SequenceNotStr[str] | Omit = omit,
+        offset: int | Omit = omit,
+        scanner_version: str | Omit = omit,
+        severity: SequenceNotStr[str] | Omit = omit,
+        sort: str | Omit = omit,
+        source: job_list_params.Source | Omit = omit,
+        start_time: Union[str, datetime] | Omit = omit,
+        status: SequenceNotStr[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> JobListResponse:
         """
         Get scan results (Summaries)
@@ -194,7 +194,7 @@ class JobsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ScanJob:
         """
         Scan a remote model
@@ -248,13 +248,13 @@ class AsyncJobsResource(AsyncAPIResource):
         self,
         scan_id: str,
         *,
-        has_detections: bool | NotGiven = NOT_GIVEN,
+        has_detections: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ScanReport:
         """
         Get scan results
@@ -290,27 +290,27 @@ class AsyncJobsResource(AsyncAPIResource):
     async def list(
         self,
         *,
-        compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]] | NotGiven = NOT_GIVEN,
-        detection_category: str | NotGiven = NOT_GIVEN,
-        end_time: Union[str, datetime] | NotGiven = NOT_GIVEN,
-        latest_per_model_version_only: bool | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        model_ids: SequenceNotStr[str] | NotGiven = NOT_GIVEN,
-        model_name: job_list_params.ModelName | NotGiven = NOT_GIVEN,
-        model_version_ids: SequenceNotStr[str] | NotGiven = NOT_GIVEN,
-        offset: int | NotGiven = NOT_GIVEN,
-        scanner_version: str | NotGiven = NOT_GIVEN,
-        severity: SequenceNotStr[str] | NotGiven = NOT_GIVEN,
-        sort: str | NotGiven = NOT_GIVEN,
-        source: job_list_params.Source | NotGiven = NOT_GIVEN,
-        start_time: Union[str, datetime] | NotGiven = NOT_GIVEN,
-        status: SequenceNotStr[str] | NotGiven = NOT_GIVEN,
+        compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]] | Omit = omit,
+        detection_category: str | Omit = omit,
+        end_time: Union[str, datetime] | Omit = omit,
+        latest_per_model_version_only: bool | Omit = omit,
+        limit: int | Omit = omit,
+        model_ids: SequenceNotStr[str] | Omit = omit,
+        model_name: job_list_params.ModelName | Omit = omit,
+        model_version_ids: SequenceNotStr[str] | Omit = omit,
+        offset: int | Omit = omit,
+        scanner_version: str | Omit = omit,
+        severity: SequenceNotStr[str] | Omit = omit,
+        sort: str | Omit = omit,
+        source: job_list_params.Source | Omit = omit,
+        start_time: Union[str, datetime] | Omit = omit,
+        status: SequenceNotStr[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> JobListResponse:
         """
         Get scan results (Summaries)
@@ -393,7 +393,7 @@ class AsyncJobsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ScanJob:
         """
         Scan a remote model

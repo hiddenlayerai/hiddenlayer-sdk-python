@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Any, Dict, Union, Mapping, cast
+from typing import TYPE_CHECKING, Any, Dict, Mapping, cast
 from typing_extensions import Self, Literal, override
 
 import httpx
@@ -11,13 +11,13 @@ import httpx
 from . import _exceptions
 from ._qs import Querystring
 from ._types import (
-    NOT_GIVEN,
     Omit,
     Timeout,
     NotGiven,
     Transport,
     ProxiesTypes,
     RequestOptions,
+    not_given,
 )
 from ._utils import is_given, get_async_library
 from ._compat import cached_property
@@ -71,9 +71,9 @@ class HiddenLayer(SyncAPIClient):
         bearer_token: str | None = None,
         client_id: str | None = None,
         client_secret: str | None = None,
-        environment: Literal["prod-us", "prod-eu"] | NotGiven = NOT_GIVEN,
-        base_url: str | httpx.URL | None | NotGiven = NOT_GIVEN,
-        timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
+        environment: Literal["prod-us", "prod-eu"] | NotGiven = not_given,
+        base_url: str | httpx.URL | None | NotGiven = not_given,
+        timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -236,9 +236,9 @@ class HiddenLayer(SyncAPIClient):
         client_secret: str | None = None,
         environment: Literal["prod-us", "prod-eu"] | None = None,
         base_url: str | httpx.URL | None = None,
-        timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
-        max_retries: int | NotGiven = NOT_GIVEN,
+        max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -333,9 +333,9 @@ class AsyncHiddenLayer(AsyncAPIClient):
         bearer_token: str | None = None,
         client_id: str | None = None,
         client_secret: str | None = None,
-        environment: Literal["prod-us", "prod-eu"] | NotGiven = NOT_GIVEN,
-        base_url: str | httpx.URL | None | NotGiven = NOT_GIVEN,
-        timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
+        environment: Literal["prod-us", "prod-eu"] | NotGiven = not_given,
+        base_url: str | httpx.URL | None | NotGiven = not_given,
+        timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -498,9 +498,9 @@ class AsyncHiddenLayer(AsyncAPIClient):
         client_secret: str | None = None,
         environment: Literal["prod-us", "prod-eu"] | None = None,
         base_url: str | httpx.URL | None = None,
-        timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
-        max_retries: int | NotGiven = NOT_GIVEN,
+        max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,

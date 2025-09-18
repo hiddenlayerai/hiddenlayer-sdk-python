@@ -8,7 +8,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..types import sensor_query_params, sensor_create_params, sensor_update_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NoneType, NotGiven
+from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -51,16 +51,16 @@ class SensorsResource(SyncAPIResource):
         self,
         *,
         plaintext_name: str,
-        active: bool | NotGiven = NOT_GIVEN,
-        adhoc: bool | NotGiven = NOT_GIVEN,
-        tags: Dict[str, object] | NotGiven = NOT_GIVEN,
-        version: int | NotGiven = NOT_GIVEN,
+        active: bool | Omit = omit,
+        adhoc: bool | Omit = omit,
+        tags: Dict[str, object] | Omit = omit,
+        version: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorCreateResponse:
         """
         Create Sensor Record
@@ -101,7 +101,7 @@ class SensorsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorRetrieveResponse:
         """
         Get Sensor
@@ -129,15 +129,15 @@ class SensorsResource(SyncAPIResource):
         self,
         sensor_id: str,
         *,
-        active: bool | NotGiven = NOT_GIVEN,
-        plaintext_name: str | NotGiven = NOT_GIVEN,
-        tags: Dict[str, object] | NotGiven = NOT_GIVEN,
+        active: bool | Omit = omit,
+        plaintext_name: str | Omit = omit,
+        tags: Dict[str, object] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorUpdateResponse:
         """
         Update Sensor
@@ -178,7 +178,7 @@ class SensorsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
         Remove an Adhoc Sensor
@@ -206,17 +206,17 @@ class SensorsResource(SyncAPIResource):
     def query(
         self,
         *,
-        filter: sensor_query_params.Filter | NotGiven = NOT_GIVEN,
-        order_by: str | NotGiven = NOT_GIVEN,
-        order_dir: Literal["asc", "desc"] | NotGiven = NOT_GIVEN,
-        page_number: int | NotGiven = NOT_GIVEN,
-        page_size: int | NotGiven = NOT_GIVEN,
+        filter: sensor_query_params.Filter | Omit = omit,
+        order_by: str | Omit = omit,
+        order_dir: Literal["asc", "desc"] | Omit = omit,
+        page_number: int | Omit = omit,
+        page_size: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorQueryResponse:
         """
         Query Sensors
@@ -273,16 +273,16 @@ class AsyncSensorsResource(AsyncAPIResource):
         self,
         *,
         plaintext_name: str,
-        active: bool | NotGiven = NOT_GIVEN,
-        adhoc: bool | NotGiven = NOT_GIVEN,
-        tags: Dict[str, object] | NotGiven = NOT_GIVEN,
-        version: int | NotGiven = NOT_GIVEN,
+        active: bool | Omit = omit,
+        adhoc: bool | Omit = omit,
+        tags: Dict[str, object] | Omit = omit,
+        version: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorCreateResponse:
         """
         Create Sensor Record
@@ -323,7 +323,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorRetrieveResponse:
         """
         Get Sensor
@@ -351,15 +351,15 @@ class AsyncSensorsResource(AsyncAPIResource):
         self,
         sensor_id: str,
         *,
-        active: bool | NotGiven = NOT_GIVEN,
-        plaintext_name: str | NotGiven = NOT_GIVEN,
-        tags: Dict[str, object] | NotGiven = NOT_GIVEN,
+        active: bool | Omit = omit,
+        plaintext_name: str | Omit = omit,
+        tags: Dict[str, object] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorUpdateResponse:
         """
         Update Sensor
@@ -400,7 +400,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
         Remove an Adhoc Sensor
@@ -428,17 +428,17 @@ class AsyncSensorsResource(AsyncAPIResource):
     async def query(
         self,
         *,
-        filter: sensor_query_params.Filter | NotGiven = NOT_GIVEN,
-        order_by: str | NotGiven = NOT_GIVEN,
-        order_dir: Literal["asc", "desc"] | NotGiven = NOT_GIVEN,
-        page_number: int | NotGiven = NOT_GIVEN,
-        page_size: int | NotGiven = NOT_GIVEN,
+        filter: sensor_query_params.Filter | Omit = omit,
+        order_by: str | Omit = omit,
+        order_dir: Literal["asc", "desc"] | Omit = omit,
+        page_number: int | Omit = omit,
+        page_size: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorQueryResponse:
         """
         Query Sensors

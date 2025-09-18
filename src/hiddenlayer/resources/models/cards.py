@@ -7,7 +7,7 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -48,23 +48,23 @@ class CardsResource(SyncAPIResource):
     def list(
         self,
         *,
-        aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]] | NotGiven = NOT_GIVEN,
-        aidr_status: Literal["ENABLED", "DISABLED", "ANY"] | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        model_created: card_list_params.ModelCreated | NotGiven = NOT_GIVEN,
-        model_name: card_list_params.ModelName | NotGiven = NOT_GIVEN,
-        modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]] | NotGiven = NOT_GIVEN,
-        modscan_status: Literal["ENABLED", "DISABLED", "ANY"] | NotGiven = NOT_GIVEN,
-        offset: int | NotGiven = NOT_GIVEN,
-        provider: List[Literal["AZURE", "ADHOC"]] | NotGiven = NOT_GIVEN,
-        sort: str | NotGiven = NOT_GIVEN,
-        source: card_list_params.Source | NotGiven = NOT_GIVEN,
+        aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]] | Omit = omit,
+        aidr_status: Literal["ENABLED", "DISABLED", "ANY"] | Omit = omit,
+        limit: int | Omit = omit,
+        model_created: card_list_params.ModelCreated | Omit = omit,
+        model_name: card_list_params.ModelName | Omit = omit,
+        modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]] | Omit = omit,
+        modscan_status: Literal["ENABLED", "DISABLED", "ANY"] | Omit = omit,
+        offset: int | Omit = omit,
+        provider: List[Literal["AZURE", "ADHOC"]] | Omit = omit,
+        sort: str | Omit = omit,
+        source: card_list_params.Source | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncOffsetPage[CardListResponse]:
         """
         List Model Cards
@@ -141,23 +141,23 @@ class AsyncCardsResource(AsyncAPIResource):
     def list(
         self,
         *,
-        aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]] | NotGiven = NOT_GIVEN,
-        aidr_status: Literal["ENABLED", "DISABLED", "ANY"] | NotGiven = NOT_GIVEN,
-        limit: int | NotGiven = NOT_GIVEN,
-        model_created: card_list_params.ModelCreated | NotGiven = NOT_GIVEN,
-        model_name: card_list_params.ModelName | NotGiven = NOT_GIVEN,
-        modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]] | NotGiven = NOT_GIVEN,
-        modscan_status: Literal["ENABLED", "DISABLED", "ANY"] | NotGiven = NOT_GIVEN,
-        offset: int | NotGiven = NOT_GIVEN,
-        provider: List[Literal["AZURE", "ADHOC"]] | NotGiven = NOT_GIVEN,
-        sort: str | NotGiven = NOT_GIVEN,
-        source: card_list_params.Source | NotGiven = NOT_GIVEN,
+        aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]] | Omit = omit,
+        aidr_status: Literal["ENABLED", "DISABLED", "ANY"] | Omit = omit,
+        limit: int | Omit = omit,
+        model_created: card_list_params.ModelCreated | Omit = omit,
+        model_name: card_list_params.ModelName | Omit = omit,
+        modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]] | Omit = omit,
+        modscan_status: Literal["ENABLED", "DISABLED", "ANY"] | Omit = omit,
+        offset: int | Omit = omit,
+        provider: List[Literal["AZURE", "ADHOC"]] | Omit = omit,
+        sort: str | Omit = omit,
+        source: card_list_params.Source | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[CardListResponse, AsyncOffsetPage[CardListResponse]]:
         """
         List Model Cards
