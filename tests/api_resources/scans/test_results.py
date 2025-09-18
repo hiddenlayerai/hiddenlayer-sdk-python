@@ -20,7 +20,16 @@ class TestResults:
     @parametrize
     def test_method_sarif(self, client: HiddenLayer) -> None:
         result = client.scans.results.sarif(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            scan_id="00000000-0000-0000-0000-000000000000",
+        )
+        assert_matches_type(str, result, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_sarif_with_all_params(self, client: HiddenLayer) -> None:
+        result = client.scans.results.sarif(
+            scan_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(str, result, path=["response"])
 
@@ -28,7 +37,7 @@ class TestResults:
     @parametrize
     def test_raw_response_sarif(self, client: HiddenLayer) -> None:
         response = client.scans.results.with_raw_response.sarif(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            scan_id="00000000-0000-0000-0000-000000000000",
         )
 
         assert response.is_closed is True
@@ -40,7 +49,7 @@ class TestResults:
     @parametrize
     def test_streaming_response_sarif(self, client: HiddenLayer) -> None:
         with client.scans.results.with_streaming_response.sarif(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            scan_id="00000000-0000-0000-0000-000000000000",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -55,7 +64,7 @@ class TestResults:
     def test_path_params_sarif(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `scan_id` but received ''"):
             client.scans.results.with_raw_response.sarif(
-                "",
+                scan_id="",
             )
 
 
@@ -68,7 +77,16 @@ class TestAsyncResults:
     @parametrize
     async def test_method_sarif(self, async_client: AsyncHiddenLayer) -> None:
         result = await async_client.scans.results.sarif(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            scan_id="00000000-0000-0000-0000-000000000000",
+        )
+        assert_matches_type(str, result, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_sarif_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
+        result = await async_client.scans.results.sarif(
+            scan_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(str, result, path=["response"])
 
@@ -76,7 +94,7 @@ class TestAsyncResults:
     @parametrize
     async def test_raw_response_sarif(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.scans.results.with_raw_response.sarif(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            scan_id="00000000-0000-0000-0000-000000000000",
         )
 
         assert response.is_closed is True
@@ -88,7 +106,7 @@ class TestAsyncResults:
     @parametrize
     async def test_streaming_response_sarif(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.scans.results.with_streaming_response.sarif(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            scan_id="00000000-0000-0000-0000-000000000000",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -103,5 +121,5 @@ class TestAsyncResults:
     async def test_path_params_sarif(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `scan_id` but received ''"):
             await async_client.scans.results.with_raw_response.sarif(
-                "",
+                scan_id="",
             )

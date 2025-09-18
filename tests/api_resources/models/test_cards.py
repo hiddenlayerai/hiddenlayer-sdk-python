@@ -49,6 +49,7 @@ class TestCards:
                 "contains": "contains",
                 "eq": "eq",
             },
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(SyncOffsetPage[CardListResponse], card, path=["response"])
 
@@ -110,6 +111,7 @@ class TestAsyncCards:
                 "contains": "contains",
                 "eq": "eq",
             },
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(AsyncOffsetPage[CardListResponse], card, path=["response"])
 

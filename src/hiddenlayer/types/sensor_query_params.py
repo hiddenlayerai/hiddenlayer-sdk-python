@@ -22,6 +22,8 @@ class SensorQueryParams(TypedDict, total=False):
 
     page_size: int
 
+    x_correlation_id: Annotated[str, PropertyInfo(alias="X-Correlation-Id")]
+
 
 class Filter(TypedDict, total=False):
     active: bool

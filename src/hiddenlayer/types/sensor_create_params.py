@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from typing import Dict
-from typing_extensions import Required, TypedDict
+from typing_extensions import Required, Annotated, TypedDict
+
+from .._utils import PropertyInfo
 
 __all__ = ["SensorCreateParams"]
 
@@ -18,3 +20,5 @@ class SensorCreateParams(TypedDict, total=False):
     tags: Dict[str, object]
 
     version: int
+
+    x_correlation_id: Annotated[str, PropertyInfo(alias="X-Correlation-Id")]
