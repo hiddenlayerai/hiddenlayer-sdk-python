@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.32 (2025-09-19)
+
+Full Changelog: [v0.1.0-alpha.31...v0.1.0-alpha.32](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.31...v0.1.0-alpha.32)
+
+### Features
+
+* **api:** api update ([a91887d](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/a91887d7f2d6022be03a9840684c8f16733fbff4))
+
+
+### Chores
+
+* do not install brew dependencies in ./scripts/bootstrap by default ([f84656f](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/commit/f84656fbf20f36b2c9b68c393cd615fcb84649aa))
+
 ## 0.1.0-alpha.31 (2025-09-19)
 
 Full Changelog: [v0.1.0-alpha.30...v0.1.0-alpha.31](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/compare/v0.1.0-alpha.30...v0.1.0-alpha.31)

@@ -48,6 +48,7 @@ class PromptAnalyzerResource(SyncAPIResource):
         model: str | Omit = omit,
         output: str | Omit = omit,
         hl_project_id: str | Omit = omit,
+        x_correlation_id: str | Omit = omit,
         x_requester_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -72,6 +73,7 @@ class PromptAnalyzerResource(SyncAPIResource):
             **strip_not_given(
                 {
                     "HL-Project-Id": hl_project_id,
+                    "X-Correlation-Id": x_correlation_id,
                     "X-Requester-Id": x_requester_id,
                 }
             ),
@@ -121,6 +123,7 @@ class AsyncPromptAnalyzerResource(AsyncAPIResource):
         model: str | Omit = omit,
         output: str | Omit = omit,
         hl_project_id: str | Omit = omit,
+        x_correlation_id: str | Omit = omit,
         x_requester_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -145,6 +148,7 @@ class AsyncPromptAnalyzerResource(AsyncAPIResource):
             **strip_not_given(
                 {
                     "HL-Project-Id": hl_project_id,
+                    "X-Correlation-Id": x_correlation_id,
                     "X-Requester-Id": x_requester_id,
                 }
             ),

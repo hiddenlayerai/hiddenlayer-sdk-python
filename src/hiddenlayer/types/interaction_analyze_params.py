@@ -19,6 +19,8 @@ class InteractionAnalyzeParams(TypedDict, total=False):
 
     hl_project_id: Annotated[str, PropertyInfo(alias="HL-Project-Id")]
 
+    x_correlation_id: Annotated[str, PropertyInfo(alias="X-Correlation-Id")]
+
 
 class MetadataTyped(TypedDict, total=False):
     model: Required[str]
