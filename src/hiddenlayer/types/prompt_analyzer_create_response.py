@@ -3,6 +3,8 @@
 from typing import List, Optional
 from typing_extensions import Literal
 
+from pydantic import Field as FieldInfo
+
 from .._models import BaseModel
 
 __all__ = [
@@ -11,17 +13,21 @@ __all__ = [
     "Frameworks",
     "FrameworksMitre",
     "FrameworksOwasp",
+    "FrameworksOwasp2025",
     "Policy",
+    "Response",
     "Results",
     "ResultsGuardrailResults",
+    "ResultsGuardrailResultsRefusalClassifierResults",
     "ResultsInputBlockListResults",
     "ResultsInputCodeResults",
     "ResultsInputDosResults",
+    "ResultsInputLanguageResults",
     "ResultsInputPiiResults",
-    "ResultsInputURLs",
+    "ResultsInputURLResults",
     "ResultsOutputCodeResults",
     "ResultsOutputPiiResults",
-    "ResultsOutputURLs",
+    "ResultsOutputURLResults",
     "ResultsPromptInjectionClassifierResult",
 ]
 
@@ -35,6 +41,9 @@ class Categories(BaseModel):
 
     input_dos: Optional[bool] = None
     """The input contains a denial of service attack"""
+
+    input_language: Optional[bool] = None
+    """The input contains a disallowed language"""
 
     input_pii: Optional[bool] = None
     """The input contains personally identifiable information"""
@@ -71,10 +80,20 @@ class FrameworksOwasp(BaseModel):
     """The name of the OWASP framework label"""
 
 
+class FrameworksOwasp2025(BaseModel):
+    label: Optional[str] = None
+    """The label of the OWASP:2025 framework label"""
+
+    name: Optional[str] = None
+    """The name of the OWASP:2025 framework label"""
+
+
 class Frameworks(BaseModel):
     mitre: Optional[List[FrameworksMitre]] = None
 
     owasp: Optional[List[FrameworksOwasp]] = None
+
+    owasp_2025: Optional[List[FrameworksOwasp2025]] = FieldInfo(alias="owasp:2025", default=None)
 
 
 class Policy(BaseModel):
@@ -154,9 +173,39 @@ class Policy(BaseModel):
     """Skip prompt injection detection"""
 
 
+class Response(BaseModel):
+    model: Optional[str] = None
+
+    output: Optional[str] = None
+
+    prompt: Optional[str] = None
+
+    provider: Optional[str] = None
+
+    unmodified_output: Optional[str] = None
+
+    unmodified_prompt: Optional[str] = None
+
+
+class ResultsGuardrailResultsRefusalClassifierResults(BaseModel):
+    elapsed_ms: Optional[float] = None
+    """The time in milliseconds it took to process the refusal classifier"""
+
+    probabilities: Optional[List[float]] = None
+
+    verdict: Optional[bool] = None
+    """The verdict of the refusal classifier"""
+
+    version: Optional[float] = None
+    """The version of the refusal classifier"""
+
+
 class ResultsGuardrailResults(BaseModel):
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the guardrail"""
+
+    refusal_classifier_results: Optional[ResultsGuardrailResultsRefusalClassifierResults] = None
+    """The refusal classifier results"""
 
     verdict: Optional[bool] = None
     """The verdict of the guardrail analysis"""
@@ -184,8 +233,22 @@ class ResultsInputDosResults(BaseModel):
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the input denial of service"""
 
+    embeddings_length: Optional[float] = None
+    """The length of the embeddings analyzed"""
+
     verdict: Optional[bool] = None
     """The verdict of the input denial of service analysis"""
+
+
+class ResultsInputLanguageResults(BaseModel):
+    elapsed_ms: Optional[float] = None
+    """The time in milliseconds it took to process the input language detection"""
+
+    language: Optional[str] = None
+    """Language detected in the input"""
+
+    verdict: Optional[bool] = None
+    """The verdict of the input language analysis"""
 
 
 class ResultsInputPiiResults(BaseModel):
@@ -201,7 +264,7 @@ class ResultsInputPiiResults(BaseModel):
     """The verdict of the input personally identifiable information analysis"""
 
 
-class ResultsInputURLs(BaseModel):
+class ResultsInputURLResults(BaseModel):
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the guardrail"""
 
@@ -229,7 +292,7 @@ class ResultsOutputPiiResults(BaseModel):
     """The verdict of the output personally identifiable information analysis"""
 
 
-class ResultsOutputURLs(BaseModel):
+class ResultsOutputURLResults(BaseModel):
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the guardrail"""
 
@@ -237,6 +300,12 @@ class ResultsOutputURLs(BaseModel):
 
 
 class ResultsPromptInjectionClassifierResult(BaseModel):
+    allow_override: Optional[str] = None
+    """The allow override applied to the prompt"""
+
+    block_override: Optional[str] = None
+    """The block override applied to the prompt"""
+
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the prompt injection classifier"""
 
@@ -262,10 +331,13 @@ class Results(BaseModel):
     input_dos_results: Optional[ResultsInputDosResults] = None
     """The input denial of service results"""
 
+    input_language_results: Optional[ResultsInputLanguageResults] = None
+    """The input language results"""
+
     input_pii_results: Optional[ResultsInputPiiResults] = None
     """The input personally identifiable information results"""
 
-    input_urls: Optional[ResultsInputURLs] = None
+    input_url_results: Optional[ResultsInputURLResults] = None
     """The input URL results"""
 
     output_code_results: Optional[ResultsOutputCodeResults] = None
@@ -274,7 +346,7 @@ class Results(BaseModel):
     output_pii_results: Optional[ResultsOutputPiiResults] = None
     """The output personally identifiable information results"""
 
-    output_urls: Optional[ResultsOutputURLs] = None
+    output_url_results: Optional[ResultsOutputURLResults] = None
     """The output URL results"""
 
     prompt_injection_classifier_results: Optional[List[ResultsPromptInjectionClassifierResult]] = None
@@ -297,7 +369,7 @@ class PromptAnalyzerCreateResponse(BaseModel):
 
     provider: Optional[str] = None
 
-    response: Optional[object] = None
+    response: Optional[Response] = None
 
     results: Optional[Results] = None
     """The analysis results"""
