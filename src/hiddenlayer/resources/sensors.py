@@ -34,7 +34,7 @@ class SensorsResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
         """
         return SensorsResourceWithRawResponse(self)
 
@@ -43,7 +43,7 @@ class SensorsResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#with_streaming_response
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#with_streaming_response
         """
         return SensorsResourceWithStreamingResponse(self)
 
@@ -266,7 +266,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
         """
         return AsyncSensorsResourceWithRawResponse(self)
 
@@ -275,7 +275,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#with_streaming_response
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#with_streaming_response
         """
         return AsyncSensorsResourceWithStreamingResponse(self)
 
