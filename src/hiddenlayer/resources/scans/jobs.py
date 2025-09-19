@@ -9,7 +9,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._utils import maybe_transform, strip_not_given, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -52,6 +52,7 @@ class JobsResource(SyncAPIResource):
         scan_id: str,
         *,
         has_detections: bool | Omit = omit,
+        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -76,6 +77,7 @@ class JobsResource(SyncAPIResource):
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
+        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._get(
             f"/scan/v3/results/{scan_id}",
             options=make_request_options(
@@ -106,6 +108,7 @@ class JobsResource(SyncAPIResource):
         source: job_list_params.Source | Omit = omit,
         start_time: Union[str, datetime] | Omit = omit,
         status: SequenceNotStr[str] | Omit = omit,
+        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -153,6 +156,7 @@ class JobsResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
+        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._get(
             "/scan/v3/results",
             options=make_request_options(
@@ -249,6 +253,7 @@ class AsyncJobsResource(AsyncAPIResource):
         scan_id: str,
         *,
         has_detections: bool | Omit = omit,
+        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -273,6 +278,7 @@ class AsyncJobsResource(AsyncAPIResource):
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
+        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._get(
             f"/scan/v3/results/{scan_id}",
             options=make_request_options(
@@ -305,6 +311,7 @@ class AsyncJobsResource(AsyncAPIResource):
         source: job_list_params.Source | Omit = omit,
         start_time: Union[str, datetime] | Omit = omit,
         status: SequenceNotStr[str] | Omit = omit,
+        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -352,6 +359,7 @@ class AsyncJobsResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
+        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._get(
             "/scan/v3/results",
             options=make_request_options(

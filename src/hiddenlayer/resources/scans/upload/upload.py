@@ -15,7 +15,7 @@ from .file import (
     AsyncFileResourceWithStreamingResponse,
 )
 from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ...._utils import maybe_transform, async_maybe_transform
+from ...._utils import maybe_transform, strip_not_given, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -60,6 +60,7 @@ class UploadResource(SyncAPIResource):
         self,
         scan_id: str,
         *,
+        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -81,6 +82,7 @@ class UploadResource(SyncAPIResource):
         """
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
+        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._patch(
             f"/scan/v3/upload/{scan_id}",
             options=make_request_options(
@@ -98,6 +100,7 @@ class UploadResource(SyncAPIResource):
         location_alias: str | Omit = omit,
         origin: str | Omit = omit,
         request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"] | Omit = omit,
+        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -130,6 +133,7 @@ class UploadResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._post(
             "/scan/v3/upload",
             body=maybe_transform(
@@ -178,6 +182,7 @@ class AsyncUploadResource(AsyncAPIResource):
         self,
         scan_id: str,
         *,
+        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -199,6 +204,7 @@ class AsyncUploadResource(AsyncAPIResource):
         """
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
+        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._patch(
             f"/scan/v3/upload/{scan_id}",
             options=make_request_options(
@@ -216,6 +222,7 @@ class AsyncUploadResource(AsyncAPIResource):
         location_alias: str | Omit = omit,
         origin: str | Omit = omit,
         request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"] | Omit = omit,
+        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -248,6 +255,7 @@ class AsyncUploadResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._post(
             "/scan/v3/upload",
             body=await async_maybe_transform(

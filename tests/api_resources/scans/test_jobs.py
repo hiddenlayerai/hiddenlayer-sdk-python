@@ -36,6 +36,7 @@ class TestJobs:
         job = client.scans.jobs.retrieve(
             scan_id="00000000-0000-0000-0000-000000000000",
             has_detections=True,
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(ScanReport, job, path=["response"])
 
@@ -101,6 +102,7 @@ class TestJobs:
             source={"eq": "adhoc"},
             start_time=parse_datetime("2019-12-27T18:11:19.117Z"),
             status=["string"],
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(JobListResponse, job, path=["response"])
 
@@ -214,6 +216,7 @@ class TestAsyncJobs:
         job = await async_client.scans.jobs.retrieve(
             scan_id="00000000-0000-0000-0000-000000000000",
             has_detections=True,
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(ScanReport, job, path=["response"])
 
@@ -279,6 +282,7 @@ class TestAsyncJobs:
             source={"eq": "adhoc"},
             start_time=parse_datetime("2019-12-27T18:11:19.117Z"),
             status=["string"],
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(JobListResponse, job, path=["response"])
 

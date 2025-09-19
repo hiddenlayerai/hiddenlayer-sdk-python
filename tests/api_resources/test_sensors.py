@@ -40,6 +40,7 @@ class TestSensors:
             adhoc=True,
             tags={"foo": "bar"},
             version=0,
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
@@ -73,7 +74,16 @@ class TestSensors:
     @parametrize
     def test_method_retrieve(self, client: HiddenLayer) -> None:
         sensor = client.sensors.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+        )
+        assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_retrieve_with_all_params(self, client: HiddenLayer) -> None:
+        sensor = client.sensors.retrieve(
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
@@ -81,7 +91,7 @@ class TestSensors:
     @parametrize
     def test_raw_response_retrieve(self, client: HiddenLayer) -> None:
         response = client.sensors.with_raw_response.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
 
         assert response.is_closed is True
@@ -93,7 +103,7 @@ class TestSensors:
     @parametrize
     def test_streaming_response_retrieve(self, client: HiddenLayer) -> None:
         with client.sensors.with_streaming_response.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -108,7 +118,7 @@ class TestSensors:
     def test_path_params_retrieve(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `sensor_id` but received ''"):
             client.sensors.with_raw_response.retrieve(
-                "",
+                sensor_id="",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
@@ -127,6 +137,7 @@ class TestSensors:
             active=True,
             plaintext_name="plaintext_name",
             tags={"foo": "bar"},
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(SensorUpdateResponse, sensor, path=["response"])
 
@@ -168,7 +179,16 @@ class TestSensors:
     @parametrize
     def test_method_delete(self, client: HiddenLayer) -> None:
         sensor = client.sensors.delete(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+        )
+        assert sensor is None
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_delete_with_all_params(self, client: HiddenLayer) -> None:
+        sensor = client.sensors.delete(
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert sensor is None
 
@@ -176,7 +196,7 @@ class TestSensors:
     @parametrize
     def test_raw_response_delete(self, client: HiddenLayer) -> None:
         response = client.sensors.with_raw_response.delete(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
 
         assert response.is_closed is True
@@ -188,7 +208,7 @@ class TestSensors:
     @parametrize
     def test_streaming_response_delete(self, client: HiddenLayer) -> None:
         with client.sensors.with_streaming_response.delete(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -203,7 +223,7 @@ class TestSensors:
     def test_path_params_delete(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `sensor_id` but received ''"):
             client.sensors.with_raw_response.delete(
-                "",
+                sensor_id="",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
@@ -228,6 +248,7 @@ class TestSensors:
             order_dir="asc",
             page_number=0,
             page_size=0,
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(SensorQueryResponse, sensor, path=["response"])
 
@@ -276,6 +297,7 @@ class TestAsyncSensors:
             adhoc=True,
             tags={"foo": "bar"},
             version=0,
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
@@ -309,7 +331,16 @@ class TestAsyncSensors:
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         sensor = await async_client.sensors.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+        )
+        assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_retrieve_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
+        sensor = await async_client.sensors.retrieve(
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
@@ -317,7 +348,7 @@ class TestAsyncSensors:
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.sensors.with_raw_response.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
 
         assert response.is_closed is True
@@ -329,7 +360,7 @@ class TestAsyncSensors:
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.sensors.with_streaming_response.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -344,7 +375,7 @@ class TestAsyncSensors:
     async def test_path_params_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `sensor_id` but received ''"):
             await async_client.sensors.with_raw_response.retrieve(
-                "",
+                sensor_id="",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
@@ -363,6 +394,7 @@ class TestAsyncSensors:
             active=True,
             plaintext_name="plaintext_name",
             tags={"foo": "bar"},
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(SensorUpdateResponse, sensor, path=["response"])
 
@@ -404,7 +436,16 @@ class TestAsyncSensors:
     @parametrize
     async def test_method_delete(self, async_client: AsyncHiddenLayer) -> None:
         sensor = await async_client.sensors.delete(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+        )
+        assert sensor is None
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_delete_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
+        sensor = await async_client.sensors.delete(
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert sensor is None
 
@@ -412,7 +453,7 @@ class TestAsyncSensors:
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.sensors.with_raw_response.delete(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
 
         assert response.is_closed is True
@@ -424,7 +465,7 @@ class TestAsyncSensors:
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.sensors.with_streaming_response.delete(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -439,7 +480,7 @@ class TestAsyncSensors:
     async def test_path_params_delete(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `sensor_id` but received ''"):
             await async_client.sensors.with_raw_response.delete(
-                "",
+                sensor_id="",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
@@ -464,6 +505,7 @@ class TestAsyncSensors:
             order_dir="asc",
             page_number=0,
             page_size=0,
+            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(SensorQueryResponse, sensor, path=["response"])
 
