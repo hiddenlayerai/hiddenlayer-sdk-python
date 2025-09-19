@@ -102,6 +102,7 @@ class JobsResource(SyncAPIResource):
         model_name: job_list_params.ModelName | Omit = omit,
         model_version_ids: SequenceNotStr[str] | Omit = omit,
         offset: int | Omit = omit,
+        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] | Omit = omit,
         scanner_version: str | Omit = omit,
         severity: SequenceNotStr[str] | Omit = omit,
         sort: str | Omit = omit,
@@ -133,6 +134,8 @@ class JobsResource(SyncAPIResource):
           model_name: filter by the model name
 
           model_version_ids: Model Version IDs
+
+          request_source: Filter by request source using a comma-separated list
 
           scanner_version: filter by version of the scanner
 
@@ -175,6 +178,7 @@ class JobsResource(SyncAPIResource):
                         "model_name": model_name,
                         "model_version_ids": model_version_ids,
                         "offset": offset,
+                        "request_source": request_source,
                         "scanner_version": scanner_version,
                         "severity": severity,
                         "sort": sort,
@@ -305,6 +309,7 @@ class AsyncJobsResource(AsyncAPIResource):
         model_name: job_list_params.ModelName | Omit = omit,
         model_version_ids: SequenceNotStr[str] | Omit = omit,
         offset: int | Omit = omit,
+        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] | Omit = omit,
         scanner_version: str | Omit = omit,
         severity: SequenceNotStr[str] | Omit = omit,
         sort: str | Omit = omit,
@@ -336,6 +341,8 @@ class AsyncJobsResource(AsyncAPIResource):
           model_name: filter by the model name
 
           model_version_ids: Model Version IDs
+
+          request_source: Filter by request source using a comma-separated list
 
           scanner_version: filter by version of the scanner
 
@@ -378,6 +385,7 @@ class AsyncJobsResource(AsyncAPIResource):
                         "model_name": model_name,
                         "model_version_ids": model_version_ids,
                         "offset": offset,
+                        "request_source": request_source,
                         "scanner_version": scanner_version,
                         "severity": severity,
                         "sort": sort,
