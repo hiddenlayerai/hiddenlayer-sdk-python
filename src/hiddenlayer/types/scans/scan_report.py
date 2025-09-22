@@ -249,8 +249,8 @@ class FileResultDetection(BaseModel):
     rule_id: str
     """unique identifier for the rule that sourced the detection"""
 
-    severity: Literal["low", "medium", "high", "critical"]
-    """detection severity"""
+    severity: Literal["critical", "high", "medium", "low"]
+    """The severity of the detection."""
 
     rule_details: Optional[List[FileResultDetectionRuleDetail]] = None
 
@@ -304,8 +304,12 @@ class Summary(BaseModel):
     files_with_detections_count: Optional[int] = None
     """number of files that contain detections"""
 
-    severity: Optional[Literal["low", "medium", "high", "critical", "safe", "unknown"]] = None
-    """highest severity level found across all detections"""
+    severity: Optional[Literal["critical", "high", "medium", "low", "safe", "unknown"]] = None
+    """The severity of the detection.
+
+    Use ScanDetectionSeverity (without safe) or ScanDetectionSeverityWithNone
+    instead.
+    """
 
     unknown_files: Optional[int] = None
     """number of files with unknown file type"""
@@ -352,8 +356,12 @@ class ScanReport(BaseModel):
     has_genealogy: Optional[bool] = None
     """if there is model geneaology info available"""
 
-    severity: Optional[Literal["low", "medium", "high", "critical", "safe", "unknown"]] = None
-    """detection severity"""
+    severity: Optional[Literal["critical", "high", "medium", "low", "safe", "unknown"]] = None
+    """The severity of the detection.
+
+    Use ScanDetectionSeverity (without safe) or ScanDetectionSeverityWithNone
+    instead.
+    """
 
     summary: Optional[Summary] = None
     """aggregated summary statistics for the scan"""

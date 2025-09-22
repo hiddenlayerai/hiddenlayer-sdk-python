@@ -73,9 +73,13 @@ class CardsResource(SyncAPIResource):
         Args:
           aidr_status: filter by aidr enabled
 
+          limit: Limit the number of items returned
+
           model_created: match on models created between dates
 
           model_name: substring match on model name
+
+          offset: Begin returning the results from this offset
 
           sort: allow sorting by model name or created at timestamp, ascending (+) or the
               default descending (-)
@@ -168,9 +172,13 @@ class AsyncCardsResource(AsyncAPIResource):
         Args:
           aidr_status: filter by aidr enabled
 
+          limit: Limit the number of items returned
+
           model_created: match on models created between dates
 
           model_name: substring match on model name
+
+          offset: Begin returning the results from this offset
 
           sort: allow sorting by model name or created at timestamp, ascending (+) or the
               default descending (-)
