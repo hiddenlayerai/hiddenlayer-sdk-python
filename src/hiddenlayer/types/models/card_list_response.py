@@ -20,26 +20,26 @@ class SecurityPosture(BaseModel):
 
 
 class CardListResponse(BaseModel):
+    active_version_count: int
+
+    attack_monitoring_threat_level: Literal["safe", "unsafe", "suspicious", "not available"]
+
     created_at: int
     """Unix Nano Epoch Timestamp"""
 
-    model_id: str
-
-    plaintext_name: str
-
-    source: str
-
-    active_version_count: Optional[int] = None
-
-    attack_monitoring_threat_level: Optional[Literal["safe", "unsafe", "suspicious", "not available"]] = None
-
-    has_genealogy: Optional[bool] = None
+    has_genealogy: bool
     """
     A value of `true` indicates that one or more versions of this model have
     associated model genealogy information.
     """
 
-    model_scan_threat_level: Optional[Literal["safe", "unsafe", "suspicious", "not available"]] = None
+    model_id: str
+
+    model_scan_threat_level: Literal["safe", "unsafe", "suspicious", "not available"]
+
+    plaintext_name: str
+
+    source: str
 
     security_posture: Optional[SecurityPosture] = None
 
