@@ -1,5 +1,5 @@
 [project]
-name = "hiddenlayer"
+name = "hiddenlayer-sdk"
 version = "0.1.0-alpha.33"
 description = "The official Python library for the hiddenlayer API"
 dynamic = ["readme"]
