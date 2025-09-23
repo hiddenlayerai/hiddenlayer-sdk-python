@@ -18,6 +18,7 @@ class CardListParams(TypedDict, total=False):
     """filter by aidr enabled"""
 
     limit: int
+    """Limit the number of items returned"""
 
     model_created: ModelCreated
     """match on models created between dates"""
@@ -30,6 +31,7 @@ class CardListParams(TypedDict, total=False):
     modscan_status: Literal["ENABLED", "DISABLED", "ANY"]
 
     offset: int
+    """Begin returning the results from this offset"""
 
     provider: List[Literal["AZURE", "ADHOC"]]
 

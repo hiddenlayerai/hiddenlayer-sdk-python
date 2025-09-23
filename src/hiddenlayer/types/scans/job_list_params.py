@@ -38,6 +38,9 @@ class JobListParams(TypedDict, total=False):
 
     offset: int
 
+    request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]]
+    """Filter by request source using a comma-separated list"""
+
     scanner_version: str
     """filter by version of the scanner"""
 

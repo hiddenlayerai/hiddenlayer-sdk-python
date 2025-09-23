@@ -22,44 +22,41 @@ class InteractionAnalyzeParams(TypedDict, total=False):
     x_correlation_id: Annotated[str, PropertyInfo(alias="X-Correlation-Id")]
 
 
-class MetadataTyped(TypedDict, total=False):
+class Metadata(TypedDict, total=False):
     model: Required[str]
+    """The language model for the interactions."""
 
     requester_id: Required[str]
+    """The identifier for the entity making the interactions."""
 
     provider: str
+    """The provider of the language model."""
 
 
-Metadata: TypeAlias = Union[MetadataTyped, Dict[str, object]]
-
-
-class InputMessageTyped(TypedDict, total=False):
+class InputMessage(TypedDict, total=False):
     content: Required[str]
+    """The textual content of the message."""
 
     role: str
-
-
-InputMessage: TypeAlias = Union[InputMessageTyped, Dict[str, object]]
+    """The role of the message sender (e.g., user, assistant, system)."""
 
 
 class InputTyped(TypedDict, total=False):
     messages: Iterable[InputMessage]
+    """The list of messages as input to a language model."""
 
 
 Input: TypeAlias = Union[InputTyped, Dict[str, object]]
 
 
-class OutputMessageTyped(TypedDict, total=False):
+class OutputMessage(TypedDict, total=False):
     content: Required[str]
+    """The textual content of the message."""
 
     role: str
+    """The role of the message sender (e.g., user, assistant, system)."""
 
 
-OutputMessage: TypeAlias = Union[OutputMessageTyped, Dict[str, object]]
-
-
-class OutputTyped(TypedDict, total=False):
+class Output(TypedDict, total=False):
     messages: Iterable[OutputMessage]
-
-
-Output: TypeAlias = Union[OutputTyped, Dict[str, object]]
+    """The list of messages as output from a language model."""

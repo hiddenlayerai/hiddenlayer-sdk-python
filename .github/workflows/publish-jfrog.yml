@@ -5,9 +5,6 @@ name: Publish to JFrog
 on:
   workflow_dispatch:
 
-  release:
-    types: [published]
-
 jobs:
   publish:
     name: publish
