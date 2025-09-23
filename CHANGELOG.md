@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0 (2025-09-23)
+
+Full Changelog: [v0.1.0-alpha.33...v3.0.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v0.1.0-alpha.33...v3.0.0)
+
+### Chores
+
+* update SDK settings ([d72d6b1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/d72d6b163b84905c9772a97c73acf93a0b14e850))
+
 ## 0.1.0-alpha.33 (2025-09-23)
 
 Full Changelog: [v0.1.0-alpha.32...v0.1.0-alpha.33](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v0.1.0-alpha.32...v0.1.0-alpha.33)
