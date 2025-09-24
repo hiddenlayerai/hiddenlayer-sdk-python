@@ -44,7 +44,7 @@ class JobListParams(TypedDict, total=False):
     scanner_version: str
     """filter by version of the scanner"""
 
-    severity: SequenceNotStr[str]
+    severity: Literal["critical", "high", "medium", "low", "none", "not available", "safe", "unknown"]
     """Severities"""
 
     sort: str
