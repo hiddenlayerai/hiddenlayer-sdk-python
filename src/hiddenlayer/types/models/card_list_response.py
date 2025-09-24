@@ -35,6 +35,9 @@ class CardListResponse(BaseModel):
 
     model_id: str
 
+    model_scan_severity: Literal["critical", "high", "medium", "low", "none", "not available"]
+    """The highest severity of any detections on the scan."""
+
     model_scan_threat_level: Literal["safe", "unsafe", "suspicious", "not available"]
 
     plaintext_name: str

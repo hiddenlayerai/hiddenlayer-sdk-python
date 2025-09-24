@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List
+from typing import List, Union, Iterable
 from typing_extensions import Literal
 
 import httpx
@@ -53,7 +53,14 @@ class CardsResource(SyncAPIResource):
         limit: int | Omit = omit,
         model_created: card_list_params.ModelCreated | Omit = omit,
         model_name: card_list_params.ModelName | Omit = omit,
-        modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]] | Omit = omit,
+        modscan_severity: Iterable[
+            Union[
+                Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"],
+                Literal["critical", "high", "medium", "low"],
+                Literal["none", "not available"],
+            ]
+        ]
+        | Omit = omit,
         modscan_status: Literal["ENABLED", "DISABLED", "ANY"] | Omit = omit,
         offset: int | Omit = omit,
         provider: List[Literal["AZURE", "ADHOC"]] | Omit = omit,
@@ -152,7 +159,14 @@ class AsyncCardsResource(AsyncAPIResource):
         limit: int | Omit = omit,
         model_created: card_list_params.ModelCreated | Omit = omit,
         model_name: card_list_params.ModelName | Omit = omit,
-        modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]] | Omit = omit,
+        modscan_severity: Iterable[
+            Union[
+                Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"],
+                Literal["critical", "high", "medium", "low"],
+                Literal["none", "not available"],
+            ]
+        ]
+        | Omit = omit,
         modscan_status: Literal["ENABLED", "DISABLED", "ANY"] | Omit = omit,
         offset: int | Omit = omit,
         provider: List[Literal["AZURE", "ADHOC"]] | Omit = omit,

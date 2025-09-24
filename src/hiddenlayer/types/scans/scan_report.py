@@ -304,11 +304,13 @@ class Summary(BaseModel):
     files_with_detections_count: Optional[int] = None
     """number of files that contain detections"""
 
-    severity: Optional[Literal["critical", "high", "medium", "low", "safe", "unknown"]] = None
-    """The severity of the detection.
+    highest_severity: Optional[Literal["critical", "high", "medium", "low", "none", "not available"]] = None
+    """The highest severity of any detections on the scan."""
 
-    Use ScanDetectionSeverity (without safe) or ScanDetectionSeverityWithNone
-    instead.
+    severity: Optional[Literal["critical", "high", "medium", "low", "safe", "unknown"]] = None
+    """The highest severity of any detections on the scan.
+
+    Use ScanHighestDetectionSeverity instead.
     """
 
     unknown_files: Optional[int] = None
@@ -356,11 +358,13 @@ class ScanReport(BaseModel):
     has_genealogy: Optional[bool] = None
     """if there is model geneaology info available"""
 
-    severity: Optional[Literal["critical", "high", "medium", "low", "safe", "unknown"]] = None
-    """The severity of the detection.
+    highest_severity: Optional[Literal["critical", "high", "medium", "low", "none", "not available"]] = None
+    """The highest severity of any detections on the scan."""
 
-    Use ScanDetectionSeverity (without safe) or ScanDetectionSeverityWithNone
-    instead.
+    severity: Optional[Literal["critical", "high", "medium", "low", "safe", "unknown"]] = None
+    """The highest severity of any detections on the scan.
+
+    Use ScanHighestDetectionSeverity instead.
     """
 
     summary: Optional[Summary] = None
