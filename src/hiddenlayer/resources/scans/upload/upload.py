@@ -99,7 +99,8 @@ class UploadResource(SyncAPIResource):
         requesting_entity: str,
         location_alias: str | Omit = omit,
         origin: str | Omit = omit,
-        request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"] | Omit = omit,
+        request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]
+        | Omit = omit,
         x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -221,7 +222,8 @@ class AsyncUploadResource(AsyncAPIResource):
         requesting_entity: str,
         location_alias: str | Omit = omit,
         origin: str | Omit = omit,
-        request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"] | Omit = omit,
+        request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]
+        | Omit = omit,
         x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
