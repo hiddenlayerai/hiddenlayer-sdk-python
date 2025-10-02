@@ -45,5 +45,5 @@ class Inventory(TypedDict, total=False):
     scanned
     """
 
-    request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]
+    request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]
     """Identifies the system that requested the scan"""
