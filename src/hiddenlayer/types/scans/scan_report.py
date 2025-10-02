@@ -49,9 +49,7 @@ class InventoryScanModelDetailsV3(BaseModel):
     scanned
     """
 
-    request_source: Optional[
-        Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]
-    ] = None
+    request_source: Optional[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] = None
     """Identifies the system that requested the scan"""
 
     requesting_entity: Optional[str] = None
@@ -99,9 +97,7 @@ class InventoryScanModelComboV3(BaseModel):
     scanned
     """
 
-    request_source: Optional[
-        Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]
-    ] = None
+    request_source: Optional[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] = None
     """Identifies the system that requested the scan"""
 
     requesting_entity: Optional[str] = None

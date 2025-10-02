@@ -102,8 +102,7 @@ class JobsResource(SyncAPIResource):
         model_name: job_list_params.ModelName | Omit = omit,
         model_version_ids: SequenceNotStr[str] | Omit = omit,
         offset: int | Omit = omit,
-        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]]
-        | Omit = omit,
+        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] | Omit = omit,
         scanner_version: str | Omit = omit,
         severity: Literal["critical", "high", "medium", "low", "none", "not available", "safe", "unknown"]
         | Omit = omit,
@@ -311,8 +310,7 @@ class AsyncJobsResource(AsyncAPIResource):
         model_name: job_list_params.ModelName | Omit = omit,
         model_version_ids: SequenceNotStr[str] | Omit = omit,
         offset: int | Omit = omit,
-        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]]
-        | Omit = omit,
+        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] | Omit = omit,
         scanner_version: str | Omit = omit,
         severity: Literal["critical", "high", "medium", "low", "none", "not available", "safe", "unknown"]
         | Omit = omit,

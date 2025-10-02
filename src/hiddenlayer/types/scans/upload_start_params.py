@@ -28,7 +28,7 @@ class UploadStartParams(TypedDict, total=False):
     scanned
     """
 
-    request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]
+    request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]
     """Identifies the system that requested the scan"""
 
     x_correlation_id: Annotated[str, PropertyInfo(alias="X-Correlation-Id")]
