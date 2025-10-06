@@ -87,7 +87,7 @@ class TestUpload:
             requesting_entity="requesting_entity",
             location_alias="location_alias",
             origin="Hugging Face",
-            request_source="API Upload",
+            request_source="Hybrid Upload",
             x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(UploadStartResponse, upload, path=["response"])
@@ -198,7 +198,7 @@ class TestAsyncUpload:
             requesting_entity="requesting_entity",
             location_alias="location_alias",
             origin="Hugging Face",
-            request_source="API Upload",
+            request_source="Hybrid Upload",
             x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(UploadStartResponse, upload, path=["response"])

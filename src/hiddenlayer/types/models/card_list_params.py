@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Iterable
+from typing import List, Union
 from datetime import datetime
 from typing_extensions import Literal, Annotated, TypedDict
 
@@ -26,11 +26,20 @@ class CardListParams(TypedDict, total=False):
     model_name: ModelName
     """substring match on model name"""
 
-    modscan_severity: Iterable[
-        Union[
-            Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"],
-            Literal["critical", "high", "medium", "low"],
-            Literal["none", "not available"],
+    modscan_severity: List[
+        Literal[
+            "SAFE",
+            "UNSAFE",
+            "SUSPICIOUS",
+            "UNKNOWN",
+            "ERROR",
+            "not available",
+            "critical",
+            "high",
+            "medium",
+            "low",
+            "unknown",
+            "none",
         ]
     ]
 

@@ -102,9 +102,10 @@ class JobsResource(SyncAPIResource):
         model_name: job_list_params.ModelName | Omit = omit,
         model_version_ids: SequenceNotStr[str] | Omit = omit,
         offset: int | Omit = omit,
-        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] | Omit = omit,
+        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]]
+        | Omit = omit,
         scanner_version: str | Omit = omit,
-        severity: Literal["critical", "high", "medium", "low", "none", "not available", "safe", "unknown"]
+        severity: Literal["not available", "critical", "high", "medium", "low", "unknown", "none", "safe"]
         | Omit = omit,
         sort: str | Omit = omit,
         source: job_list_params.Source | Omit = omit,
@@ -310,9 +311,10 @@ class AsyncJobsResource(AsyncAPIResource):
         model_name: job_list_params.ModelName | Omit = omit,
         model_version_ids: SequenceNotStr[str] | Omit = omit,
         offset: int | Omit = omit,
-        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] | Omit = omit,
+        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]]
+        | Omit = omit,
         scanner_version: str | Omit = omit,
-        severity: Literal["critical", "high", "medium", "low", "none", "not available", "safe", "unknown"]
+        severity: Literal["not available", "critical", "high", "medium", "low", "unknown", "none", "safe"]
         | Omit = omit,
         sort: str | Omit = omit,
         source: job_list_params.Source | Omit = omit,
