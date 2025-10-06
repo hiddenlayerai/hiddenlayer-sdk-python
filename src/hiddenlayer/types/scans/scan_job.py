@@ -28,7 +28,9 @@ class Inventory(BaseModel):
     scanned
     """
 
-    request_source: Optional[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] = None
+    request_source: Optional[
+        Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]
+    ] = None
     """Identifies the system that requested the scan"""
 
     if not PYDANTIC_V1:
