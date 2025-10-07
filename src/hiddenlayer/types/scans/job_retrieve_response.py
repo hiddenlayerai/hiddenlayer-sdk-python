@@ -10,10 +10,9 @@ from ..._compat import PYDANTIC_V1, ConfigDict
 from ..._models import BaseModel
 
 __all__ = [
-    "ScanReport",
+    "JobRetrieveResponse",
     "Inventory",
-    "InventoryScanModelDetailsV3",
-    "InventoryScanModelIDsV3",
+    "Summary",
     "Compliance",
     "FileResult",
     "FileResultDetails",
@@ -25,13 +24,18 @@ __all__ = [
     "FileResultDetection",
     "FileResultDetectionMitreAtlas",
     "FileResultDetectionRuleDetail",
-    "Summary",
 ]
 
 
-class InventoryScanModelDetailsV3(BaseModel):
+class Inventory(BaseModel):
+    model_id: str
+    """Unique identifier for the model"""
+
     model_name: str
     """name of the model"""
+
+    model_version_id: str
+    """unique identifier for the model version"""
 
     requested_scan_location: str
     """Location to be scanned"""
@@ -61,19 +65,33 @@ class InventoryScanModelDetailsV3(BaseModel):
         model_config = ConfigDict(protected_namespaces=tuple())
 
 
-class InventoryScanModelIDsV3(BaseModel):
-    model_id: str
-    """Unique identifier for the model"""
+class Summary(BaseModel):
+    detection_categories: Optional[List[str]] = None
+    """list of unique detection categories found"""
 
-    model_version_id: str
-    """unique identifier for the model version"""
+    detection_count: Optional[int] = None
+    """total number of detections found"""
 
-    if not PYDANTIC_V1:
-        # allow fields with a `model_` prefix
-        model_config = ConfigDict(protected_namespaces=tuple())
+    file_count: Optional[int] = None
+    """total number of files scanned"""
 
+    files_failed_to_scan: Optional[int] = None
+    """number of files that failed during scanning"""
 
-Inventory: TypeAlias = Union[InventoryScanModelDetailsV3, InventoryScanModelIDsV3]
+    files_with_detections_count: Optional[int] = None
+    """number of files that contain detections"""
+
+    highest_severity: Optional[Literal["not available", "critical", "high", "medium", "low", "unknown", "none"]] = None
+    """The highest severity of any detections on the scan."""
+
+    severity: Optional[Literal["not available", "critical", "high", "medium", "low", "unknown", "safe"]] = None
+    """The highest severity of any detections on the scan, including "safe".
+
+    Use `.summary.highest_severity` instead.
+    """
+
+    unknown_files: Optional[int] = None
+    """number of files with unknown file type"""
 
 
 class Compliance(BaseModel):
@@ -253,36 +271,7 @@ class FileResult(BaseModel):
     """Error messages returned by the scanner"""
 
 
-class Summary(BaseModel):
-    detection_categories: Optional[List[str]] = None
-    """list of unique detection categories found"""
-
-    detection_count: Optional[int] = None
-    """total number of detections found"""
-
-    file_count: Optional[int] = None
-    """total number of files scanned"""
-
-    files_failed_to_scan: Optional[int] = None
-    """number of files that failed during scanning"""
-
-    files_with_detections_count: Optional[int] = None
-    """number of files that contain detections"""
-
-    highest_severity: Optional[Literal["not available", "critical", "high", "medium", "low", "unknown", "none"]] = None
-    """The highest severity of any detections on the scan."""
-
-    severity: Optional[Literal["not available", "critical", "high", "medium", "low", "unknown", "safe"]] = None
-    """The highest severity of any detections on the scan, including "safe".
-
-    Use `.summary.highest_severity` instead.
-    """
-
-    unknown_files: Optional[int] = None
-    """number of files with unknown file type"""
-
-
-class ScanReport(BaseModel):
+class JobRetrieveResponse(BaseModel):
     detection_count: int
     """number of detections found; use `.summary.detection_count` instead"""
 
@@ -305,6 +294,8 @@ class ScanReport(BaseModel):
 
     status: Literal["pending", "running", "done", "failed", "canceled"]
     """status of the scan"""
+
+    summary: Summary
 
     version: str
     """scanner version"""
@@ -330,6 +321,3 @@ class ScanReport(BaseModel):
 
     Use `.summary.highest_severity` instead.
     """
-
-    summary: Optional[Summary] = None
-    """aggregated summary statistics for the scan"""
