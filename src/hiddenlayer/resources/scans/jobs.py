@@ -76,7 +76,6 @@ class JobsResource(SyncAPIResource):
         """
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
-        extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
         extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._get(
             f"/scan/v3/results/{scan_id}",
@@ -283,7 +282,6 @@ class AsyncJobsResource(AsyncAPIResource):
         """
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
-        extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
         extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._get(
             f"/scan/v3/results/{scan_id}",
