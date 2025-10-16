@@ -28,18 +28,7 @@ class CardListParams(TypedDict, total=False):
 
     modscan_severity: List[
         Literal[
-            "SAFE",
-            "UNSAFE",
-            "SUSPICIOUS",
-            "UNKNOWN",
-            "ERROR",
-            "not available",
-            "critical",
-            "high",
-            "medium",
-            "low",
-            "unknown",
-            "none",
+            "SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR", "critical", "high", "medium", "low", "none", "unknown"
         ]
     ]
 
