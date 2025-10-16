@@ -81,10 +81,10 @@ class Summary(BaseModel):
     files_with_detections_count: Optional[int] = None
     """number of files that contain detections"""
 
-    highest_severity: Optional[Literal["not available", "critical", "high", "medium", "low", "unknown", "none"]] = None
+    highest_severity: Optional[Literal["critical", "high", "medium", "low", "none", "unknown"]] = None
     """The highest severity of any detections on the scan."""
 
-    severity: Optional[Literal["not available", "critical", "high", "medium", "low", "unknown", "safe"]] = None
+    severity: Optional[Literal["critical", "high", "medium", "low", "unknown", "safe"]] = None
     """The highest severity of any detections on the scan, including "safe".
 
     Use `.summary.highest_severity` instead.
@@ -316,7 +316,7 @@ class JobRetrieveResponse(BaseModel):
     has_genealogy: Optional[bool] = None
     """if there is model geneaology info available"""
 
-    severity: Optional[Literal["not available", "critical", "high", "medium", "low", "unknown", "safe"]] = None
+    severity: Optional[Literal["critical", "high", "medium", "low", "unknown", "safe"]] = None
     """The highest severity of any detections on the scan, including "safe".
 
     Use `.summary.highest_severity` instead.

@@ -60,13 +60,12 @@ class CardsResource(SyncAPIResource):
                 "SUSPICIOUS",
                 "UNKNOWN",
                 "ERROR",
-                "not available",
                 "critical",
                 "high",
                 "medium",
                 "low",
-                "unknown",
                 "none",
+                "unknown",
             ]
         ]
         | Omit = omit,
@@ -175,13 +174,12 @@ class AsyncCardsResource(AsyncAPIResource):
                 "SUSPICIOUS",
                 "UNKNOWN",
                 "ERROR",
-                "not available",
                 "critical",
                 "high",
                 "medium",
                 "low",
-                "unknown",
                 "none",
+                "unknown",
             ]
         ]
         | Omit = omit,
