@@ -209,6 +209,8 @@ class JobsResource(SyncAPIResource):
         Scan a remote model
 
         Args:
+          access: Access method for the location of files associated with the scan
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -417,6 +419,8 @@ class AsyncJobsResource(AsyncAPIResource):
         Scan a remote model
 
         Args:
+          access: Access method for the location of files associated with the scan
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
