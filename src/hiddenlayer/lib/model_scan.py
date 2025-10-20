@@ -449,6 +449,7 @@ class ModelScanner:
                     part.upload_url,
                     content=part_data,
                     headers={"Content-Type": "application/octet-stream"},
+                    timeout=300.0,
                 )
                 response.raise_for_status()
 
@@ -740,7 +741,7 @@ class AsyncModelScanner:
                 if part.upload_url is None:
                     raise Exception("part.upload_url must not be None")
 
-                async with httpx.AsyncClient() as client:
+                async with httpx.AsyncClient(timeout=300.0) as client:
                     response = await client.put(
                         part.upload_url,
                         content=part_data,
