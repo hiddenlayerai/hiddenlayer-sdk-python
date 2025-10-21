@@ -18,7 +18,6 @@ __all__ = [
     "AnalyzedDataInputMessage",
     "AnalyzedDataOutput",
     "AnalyzedDataOutputMessage",
-    "Evaluation",
     "Metadata",
     "MetadataProject",
     "ModifiedData",
@@ -26,6 +25,7 @@ __all__ = [
     "ModifiedDataInputMessage",
     "ModifiedDataOutput",
     "ModifiedDataOutputMessage",
+    "Evaluation",
 ]
 
 
@@ -124,20 +124,6 @@ class AnalyzedData(BaseModel):
     output: Optional[AnalyzedDataOutput] = None
 
 
-class Evaluation(BaseModel):
-    action: Literal["Allow", "Alert", "Redact", "Block"]
-    """The action based on interaction analysis and configured tenant security rules."""
-
-    has_detections: bool
-    """Indicates if any detections were found during the analysis."""
-
-    threat_level: Literal["None", "Low", "Medium", "High", "Critical"]
-    """
-    The threat level based on interaction analysis and configured tenant security
-    rules.
-    """
-
-
 class MetadataProject(BaseModel):
     project_alias: Optional[str] = None
     """A custom alias for the Project."""
@@ -215,14 +201,25 @@ class ModifiedData(BaseModel):
     output: ModifiedDataOutput
 
 
+class Evaluation(BaseModel):
+    action: Literal["Allow", "Alert", "Redact", "Block"]
+    """The action based on interaction analysis and configured tenant security rules."""
+
+    has_detections: bool
+    """Indicates if any detections were found during the analysis."""
+
+    threat_level: Literal["None", "Low", "Medium", "High", "Critical"]
+    """
+    The threat level based on interaction analysis and configured tenant security
+    rules.
+    """
+
+
 class InteractionAnalyzeResponse(BaseModel):
     analysis: List[Analysis]
 
     analyzed_data: AnalyzedData
     """The language model input and/or output that was analyzed."""
-
-    evaluation: Evaluation
-    """The evaluation of the analysis results."""
 
     metadata: Metadata
 
@@ -231,3 +228,6 @@ class InteractionAnalyzeResponse(BaseModel):
     The potentially modified language model input and output after applying any
     redactions or modifications based on the analysis.
     """
+
+    evaluation: Optional[Evaluation] = None
+    """The evaluation of the analysis results."""
