@@ -2,6 +2,7 @@
 
 from typing import TYPE_CHECKING, Dict, List, Optional
 from datetime import datetime
+from typing_extensions import Literal
 
 from pydantic import Field as FieldInfo
 
@@ -17,6 +18,7 @@ __all__ = [
     "AnalyzedDataInputMessage",
     "AnalyzedDataOutput",
     "AnalyzedDataOutputMessage",
+    "Evaluation",
     "Metadata",
     "MetadataProject",
     "ModifiedData",
@@ -122,6 +124,20 @@ class AnalyzedData(BaseModel):
     output: Optional[AnalyzedDataOutput] = None
 
 
+class Evaluation(BaseModel):
+    action: Literal["Allow", "Alert", "Redact", "Block"]
+    """The action based on interaction analysis and configured tenant security rules."""
+
+    has_detections: bool
+    """Indicates if any detections were found during the analysis."""
+
+    threat_level: Literal["None", "Low", "Medium", "High", "Critical"]
+    """
+    The threat level based on interaction analysis and configured tenant security
+    rules.
+    """
+
+
 class MetadataProject(BaseModel):
     project_alias: Optional[str] = None
     """A custom alias for the Project."""
@@ -204,6 +220,9 @@ class InteractionAnalyzeResponse(BaseModel):
 
     analyzed_data: AnalyzedData
     """The language model input and/or output that was analyzed."""
+
+    evaluation: Evaluation
+    """The evaluation of the analysis results."""
 
     metadata: Metadata
 
