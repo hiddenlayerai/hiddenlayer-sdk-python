@@ -12,8 +12,6 @@ from fnmatch import fnmatch
 from pathlib import Path
 from typing_extensions import TYPE_CHECKING
 
-import httpx
-
 from .scan_utils import get_scan_results, wait_for_scan_results, get_scan_results_async, wait_for_scan_results_async
 
 logger = logging.getLogger(__name__)
@@ -135,8 +133,6 @@ class ModelScanner:
         )
 
         scan_id = upload_response.scan_id
-        if scan_id is None:
-            raise ValueError("scan_id must have a value")
 
         # Upload the file
         self._scan_file(scan_id=scan_id, file_path=file_path)
@@ -189,8 +185,6 @@ class ModelScanner:
         )
 
         scan_id = upload_response.scan_id
-        if scan_id is None:
-            raise ValueError("scan_id must have a value")
 
         # Prepare file patterns
         ignore_file_patterns = EXCLUDE_FILE_TYPES + ignore_file_patterns if ignore_file_patterns else EXCLUDE_FILE_TYPES
@@ -445,7 +439,7 @@ class ModelScanner:
                 if part.upload_url is None:
                     raise Exception("part.upload_url must not be None")
 
-                response = httpx.put(
+                response = self._client._client.put(
                     part.upload_url,
                     content=part_data,
                     headers={"Content-Type": "application/octet-stream"},
@@ -492,8 +486,6 @@ class AsyncModelScanner:
         )
 
         scan_id = upload_response.scan_id
-        if scan_id is None:
-            raise ValueError("scan_id must have a value")
 
         # Upload the file
         await self._scan_file(scan_id=scan_id, file_path=file_path)
@@ -537,8 +529,6 @@ class AsyncModelScanner:
         )
 
         scan_id = upload_response.scan_id
-        if scan_id is None:
-            raise ValueError("scan_id must have a value")
 
         # Prepare file patterns
         ignore_file_patterns = EXCLUDE_FILE_TYPES + ignore_file_patterns if ignore_file_patterns else EXCLUDE_FILE_TYPES
@@ -741,13 +731,12 @@ class AsyncModelScanner:
                 if part.upload_url is None:
                     raise Exception("part.upload_url must not be None")
 
-                async with httpx.AsyncClient(timeout=300.0) as client:
-                    response = await client.put(
-                        part.upload_url,
-                        content=part_data,
-                        headers={"Content-Type": "application/octet-stream"},
-                    )
-                    response.raise_for_status()
+                response = await self._client._client.put(
+                    part.upload_url,
+                    content=part_data,
+                    headers={"Content-Type": "application/octet-stream"},
+                )
+                response.raise_for_status()
 
         # Complete the file upload
         await self._client.scans.upload.file.complete(file_id=upload.upload_id, scan_id=scan_id)
