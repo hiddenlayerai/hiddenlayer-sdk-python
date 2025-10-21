@@ -21,8 +21,8 @@ from ..._response import (
 from ...types.scans import job_list_params, job_request_params, job_retrieve_params
 from ..._base_client import make_request_options
 from ...types.scans.scan_job import ScanJob
+from ...types.scans.scan_report import ScanReport
 from ...types.scans.job_list_response import JobListResponse
-from ...types.scans.job_retrieve_response import JobRetrieveResponse
 
 __all__ = ["JobsResource", "AsyncJobsResource"]
 
@@ -59,7 +59,7 @@ class JobsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> JobRetrieveResponse:
+    ) -> ScanReport:
         """
         Get scan results
 
@@ -86,7 +86,7 @@ class JobsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform({"has_detections": has_detections}, job_retrieve_params.JobRetrieveParams),
             ),
-            cast_to=JobRetrieveResponse,
+            cast_to=ScanReport,
         )
 
     def list(
@@ -266,7 +266,7 @@ class AsyncJobsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> JobRetrieveResponse:
+    ) -> ScanReport:
         """
         Get scan results
 
@@ -295,7 +295,7 @@ class AsyncJobsResource(AsyncAPIResource):
                     {"has_detections": has_detections}, job_retrieve_params.JobRetrieveParams
                 ),
             ),
-            cast_to=JobRetrieveResponse,
+            cast_to=ScanReport,
         )
 
     async def list(

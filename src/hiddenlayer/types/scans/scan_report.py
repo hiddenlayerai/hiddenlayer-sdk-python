@@ -10,7 +10,7 @@ from ..._compat import PYDANTIC_V1, ConfigDict
 from ..._models import BaseModel
 
 __all__ = [
-    "JobRetrieveResponse",
+    "ScanReport",
     "Inventory",
     "Summary",
     "Compliance",
@@ -271,7 +271,7 @@ class FileResult(BaseModel):
     """Error messages returned by the scanner"""
 
 
-class JobRetrieveResponse(BaseModel):
+class ScanReport(BaseModel):
     detection_count: int
     """number of detections found; use `.summary.detection_count` instead"""
 
