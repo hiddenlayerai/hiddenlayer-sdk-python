@@ -5,7 +5,7 @@ description = "The official Python library for the hiddenlayer API"
 dynamic = ["readme"]
 license = {text = "Apache-2.0"}
 authors = [
-{ name = "HiddenLayer", email = "contact@example.com" },
+{ name = "HiddenLayer", email = "sdks@hiddenlayer.com" },
 ]
 dependencies = [
     "httpx>=0.23.0, <1",
