@@ -443,7 +443,6 @@ class ModelScanner:
                     part.upload_url,
                     content=part_data,
                     headers={"Content-Type": "application/octet-stream"},
-                    timeout=300.0,
                 )
                 response.raise_for_status()
 

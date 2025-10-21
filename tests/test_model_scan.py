@@ -132,7 +132,6 @@ class TestModelScanner:
                 "https://example.com/upload-url",
                 content=b"test model data",
                 headers={"Content-Type": "application/octet-stream"},
-                timeout=300.0,
             )
 
         finally:
