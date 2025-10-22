@@ -1,5 +1,37 @@
 # Changelog
 
+## 3.1.0 (2025-10-22)
+
+Full Changelog: [v3.0.1...v3.1.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.0.1...v3.1.0)
+
+### Features
+
+* **api:** api update ([f9b04a6](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/f9b04a6f32744afdfafa6bac6dc8e6cc514ad735))
+* **api:** api update ([cac77ff](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/cac77ffde9e844dbaa0089e33d365fb6f01ad060))
+* **api:** api update ([a5f4aa4](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/a5f4aa47ae06afd63a0a5f476023492e23b01d87))
+* **api:** api update ([f8ea9b3](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/f8ea9b34e18900b9955ce810e396a9050a5a3683))
+* **api:** api update ([a09c23c](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/a09c23c700f049b0b20a50bd7b09737981eebe4d))
+* **api:** api update ([144ea2b](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/144ea2b7fb99d892088bc72a725fd8a0fecb0382))
+* **api:** api update ([495bc26](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/495bc26f2f5aee49e6ac239011a1e9666f9c8e58))
+* **api:** api update ([82bcadd](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/82bcaddd193d4ad155eb2651cb190a4a200800e1))
+* **api:** api update ([da69d10](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/da69d104dc5f408a04d46c0266973fe404665cf8))
+* **api:** api update ([75a179e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/75a179e93a759b83194806b4c561ad4035ae2714))
+* **api:** api update ([56ec98d](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/56ec98d2485b1ebb16a832d4eac125d05a7a1993))
+* **api:** manual updates ([7e16b74](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/7e16b749a22db9414de5faf17067f15cf37ff78a))
+* **api:** manual updates ([4a1d8af](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/4a1d8af69e44413809219221e5a3ff3b102a7637))
+* **api:** restore ScanReport ([5bba48d](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/5bba48def63831679f3f33475b9ed423c9726bbf))
+
+
+### Bug Fixes
+
+* **compat:** compat with `pydantic&lt;2.8.0` when using additional fields ([a055406](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/a055406b415d42d8b99284a200eaf0af694e14c3))
+
+
+### Chores
+
+* bump `httpx-aiohttp` version to 0.1.9 ([01ab00d](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/01ab00ddaf35da51b7c4a546c37f7d092357ffe4))
+* **internal:** detect missing future annotations with ruff ([e087ecc](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e087ecc97867d858d138af0ebb7dfd7e919c14bb))
+
 ## 3.0.1 (2025-09-23)
 
 Full Changelog: [v3.0.0...v3.0.1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.0.0...v3.0.1)
