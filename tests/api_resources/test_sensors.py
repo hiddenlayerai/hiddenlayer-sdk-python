@@ -40,7 +40,7 @@ class TestSensors:
             adhoc=True,
             tags={"foo": "bar"},
             version=0,
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
@@ -83,7 +83,7 @@ class TestSensors:
     def test_method_retrieve_with_all_params(self, client: HiddenLayer) -> None:
         sensor = client.sensors.retrieve(
             sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
@@ -137,7 +137,7 @@ class TestSensors:
             active=True,
             plaintext_name="plaintext_name",
             tags={"foo": "bar"},
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(SensorUpdateResponse, sensor, path=["response"])
 
@@ -188,7 +188,7 @@ class TestSensors:
     def test_method_delete_with_all_params(self, client: HiddenLayer) -> None:
         sensor = client.sensors.delete(
             sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert sensor is None
 
@@ -248,7 +248,7 @@ class TestSensors:
             order_dir="asc",
             page_number=0,
             page_size=0,
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(SensorQueryResponse, sensor, path=["response"])
 
@@ -297,7 +297,7 @@ class TestAsyncSensors:
             adhoc=True,
             tags={"foo": "bar"},
             version=0,
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
@@ -340,7 +340,7 @@ class TestAsyncSensors:
     async def test_method_retrieve_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         sensor = await async_client.sensors.retrieve(
             sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
@@ -394,7 +394,7 @@ class TestAsyncSensors:
             active=True,
             plaintext_name="plaintext_name",
             tags={"foo": "bar"},
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(SensorUpdateResponse, sensor, path=["response"])
 
@@ -445,7 +445,7 @@ class TestAsyncSensors:
     async def test_method_delete_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         sensor = await async_client.sensors.delete(
             sensor_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert sensor is None
 
@@ -505,7 +505,7 @@ class TestAsyncSensors:
             order_dir="asc",
             page_number=0,
             page_size=0,
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(SensorQueryResponse, sensor, path=["response"])
 

@@ -30,7 +30,7 @@ class TestModels:
     def test_method_retrieve_with_all_params(self, client: HiddenLayer) -> None:
         model = client.models.retrieve(
             model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(ModelRetrieveResponse, model, path=["response"])
 
@@ -81,7 +81,7 @@ class TestModels:
     def test_method_delete_with_all_params(self, client: HiddenLayer) -> None:
         model = client.models.delete(
             model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert model is None
 
@@ -138,7 +138,7 @@ class TestAsyncModels:
     async def test_method_retrieve_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         model = await async_client.models.retrieve(
             model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(ModelRetrieveResponse, model, path=["response"])
 
@@ -189,7 +189,7 @@ class TestAsyncModels:
     async def test_method_delete_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         model = await async_client.models.delete(
             model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert model is None
 
