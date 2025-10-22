@@ -30,7 +30,7 @@ class TestUpload:
     def test_method_complete_all_with_all_params(self, client: HiddenLayer) -> None:
         upload = client.scans.upload.complete_all(
             scan_id="00000000-0000-0000-0000-000000000000",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(UploadCompleteAllResponse, upload, path=["response"])
 
@@ -88,7 +88,7 @@ class TestUpload:
             location_alias="location_alias",
             origin="Hugging Face",
             request_source="Hybrid Upload",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(UploadStartResponse, upload, path=["response"])
 
@@ -141,7 +141,7 @@ class TestAsyncUpload:
     async def test_method_complete_all_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         upload = await async_client.scans.upload.complete_all(
             scan_id="00000000-0000-0000-0000-000000000000",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(UploadCompleteAllResponse, upload, path=["response"])
 
@@ -199,7 +199,7 @@ class TestAsyncUpload:
             location_alias="location_alias",
             origin="Hugging Face",
             request_source="Hybrid Upload",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(UploadStartResponse, upload, path=["response"])
 
