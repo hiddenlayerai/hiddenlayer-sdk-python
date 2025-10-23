@@ -34,7 +34,7 @@ class TestFile:
             scan_id="00000000-0000-0000-0000-000000000000",
             file_content_length=12345,
             file_name="exampleFile.txt",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(FileAddResponse, file, path=["response"])
 
@@ -93,7 +93,7 @@ class TestFile:
         file = client.scans.upload.file.complete(
             file_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             scan_id="00000000-0000-0000-0000-000000000000",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(FileCompleteResponse, file, path=["response"])
 
@@ -163,7 +163,7 @@ class TestAsyncFile:
             scan_id="00000000-0000-0000-0000-000000000000",
             file_content_length=12345,
             file_name="exampleFile.txt",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(FileAddResponse, file, path=["response"])
 
@@ -222,7 +222,7 @@ class TestAsyncFile:
         file = await async_client.scans.upload.file.complete(
             file_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             scan_id="00000000-0000-0000-0000-000000000000",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(FileCompleteResponse, file, path=["response"])
 

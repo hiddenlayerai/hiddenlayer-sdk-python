@@ -29,7 +29,7 @@ class TestResults:
     def test_method_sarif_with_all_params(self, client: HiddenLayer) -> None:
         result = client.scans.results.sarif(
             scan_id="00000000-0000-0000-0000-000000000000",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(str, result, path=["response"])
 
@@ -86,7 +86,7 @@ class TestAsyncResults:
     async def test_method_sarif_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         result = await async_client.scans.results.sarif(
             scan_id="00000000-0000-0000-0000-000000000000",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(str, result, path=["response"])
 

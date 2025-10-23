@@ -76,7 +76,6 @@ class JobsResource(SyncAPIResource):
         """
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
-        extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
         extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._get(
             f"/scan/v3/results/{scan_id}",
@@ -102,9 +101,10 @@ class JobsResource(SyncAPIResource):
         model_name: job_list_params.ModelName | Omit = omit,
         model_version_ids: SequenceNotStr[str] | Omit = omit,
         offset: int | Omit = omit,
-        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] | Omit = omit,
+        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]]
+        | Omit = omit,
         scanner_version: str | Omit = omit,
-        severity: SequenceNotStr[str] | Omit = omit,
+        severity: Literal["critical", "high", "medium", "low", "none", "unknown", "safe"] | Omit = omit,
         sort: str | Omit = omit,
         source: job_list_params.Source | Omit = omit,
         start_time: Union[str, datetime] | Omit = omit,
@@ -208,6 +208,8 @@ class JobsResource(SyncAPIResource):
         Scan a remote model
 
         Args:
+          access: Access method for the location of files associated with the scan
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -281,7 +283,6 @@ class AsyncJobsResource(AsyncAPIResource):
         """
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
-        extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
         extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._get(
             f"/scan/v3/results/{scan_id}",
@@ -309,9 +310,10 @@ class AsyncJobsResource(AsyncAPIResource):
         model_name: job_list_params.ModelName | Omit = omit,
         model_version_ids: SequenceNotStr[str] | Omit = omit,
         offset: int | Omit = omit,
-        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]] | Omit = omit,
+        request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]]
+        | Omit = omit,
         scanner_version: str | Omit = omit,
-        severity: SequenceNotStr[str] | Omit = omit,
+        severity: Literal["critical", "high", "medium", "low", "none", "unknown", "safe"] | Omit = omit,
         sort: str | Omit = omit,
         source: job_list_params.Source | Omit = omit,
         start_time: Union[str, datetime] | Omit = omit,
@@ -415,6 +417,8 @@ class AsyncJobsResource(AsyncAPIResource):
         Scan a remote model
 
         Args:
+          access: Access method for the location of files associated with the scan
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request

@@ -26,7 +26,11 @@ class CardListParams(TypedDict, total=False):
     model_name: ModelName
     """substring match on model name"""
 
-    modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]]
+    modscan_severity: List[
+        Literal[
+            "SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR", "critical", "high", "medium", "low", "none", "unknown"
+        ]
+    ]
 
     modscan_status: Literal["ENABLED", "DISABLED", "ANY"]
 

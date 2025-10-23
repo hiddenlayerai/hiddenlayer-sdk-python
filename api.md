@@ -80,7 +80,7 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.scans import FileScanReport, ScanReport, ResultSarifResponse
+from hiddenlayer.types.scans import ScanReport, ResultSarifResponse
 ```
 
 Methods:
@@ -92,14 +92,7 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.scans import (
-    ScanJob, 
-    ScanReport, 
-    JobListResponse,
-    JobListParams,
-    JobRequestParams,
-    JobRetrieveParams,
-)
+from hiddenlayer.types.scans import JobListResponse, ScanJob, ScanReport
 ```
 
 Methods:

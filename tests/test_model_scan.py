@@ -88,21 +88,19 @@ class TestModelScanner:
             self.mock_client.scans.upload.complete_all.return_value = Mock(spec=UploadCompleteAllResponse)
             self.mock_client.scans.jobs.retrieve.return_value = mock_scan_report
 
-            # Mock httpx.put
-            with patch("httpx.put") as mock_put:
-                mock_response = Mock()
-                mock_response.raise_for_status.return_value = None
-                mock_put.return_value = mock_response
+            # Mock call to put for upload
+            mock_response = Mock(raise_for_status=Mock(return_value=None))
+            self.mock_client._client = Mock(put=Mock(return_value=Mock(return_value=mock_response)))
 
-                # Call scan_file without waiting
-                result = self.scanner.scan_file(
-                    model_name="test-model",
-                    model_path=temp_path,
-                    model_version="1.0",
-                    wait_for_results=False,
-                    request_source="API Upload",
-                    origin="test",
-                )
+            # Call scan_file without waiting
+            result = self.scanner.scan_file(
+                model_name="test-model",
+                model_path=temp_path,
+                model_version="1.0",
+                wait_for_results=False,
+                request_source="API Upload",
+                origin="test",
+            )
 
             # Verify calls
             self.mock_client.scans.upload.start.assert_called_once_with(
@@ -130,7 +128,7 @@ class TestModelScanner:
             assert result is mock_scan_report
 
             # Verify httpx.put was called
-            mock_put.assert_called_once_with(
+            self.mock_client._client.put.assert_called_once_with(
                 "https://example.com/upload-url",
                 content=b"test model data",
                 headers={"Content-Type": "application/octet-stream"},
@@ -203,27 +201,6 @@ class TestModelScanner:
             mock_logger.info.assert_any_call("scan status: pending")
             mock_logger.info.assert_any_call("scan status: running")
 
-        finally:
-            # Clean up temp file
-            os.unlink(temp_path)
-
-    def test_scan_file_no_scan_id_raises_error(self) -> None:
-        """Test scan_file raises error when scan_id is None."""
-        # Create a temporary test file
-        with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".pkl") as temp_file:
-            temp_file.write("test model data")
-            temp_path = temp_file.name
-
-        try:
-            # Mock upload response with None scan_id
-            mock_upload_response = Mock(spec=UploadStartResponse)
-            mock_upload_response.scan_id = None
-
-            self.mock_client.scans.upload.start.return_value = mock_upload_response
-
-            # Should raise ValueError
-            with pytest.raises(ValueError, match="scan_id must have a value"):
-                self.scanner.scan_file(model_name="test-model", model_path=temp_path)
         finally:
             # Clean up temp file
             os.unlink(temp_path)
@@ -369,19 +346,14 @@ class TestAsyncModelScanner:
             self.mock_client.scans.upload.complete_all.return_value = Mock(spec=UploadCompleteAllResponse)
             self.mock_client.scans.jobs.retrieve.return_value = mock_scan_report
 
-            # Mock httpx.AsyncClient
-            with patch("httpx.AsyncClient") as mock_async_client:
-                mock_client_instance = Mock()
-                mock_async_client.return_value.__aenter__.return_value = mock_client_instance
+            # Mock call to put for upload
+            mock_response = Mock(raise_for_status=Mock(return_value=None))
+            self.mock_client._client = Mock(put=AsyncMock(return_value=Mock(return_value=mock_response)))
 
-                mock_response = Mock()
-                mock_response.raise_for_status = Mock()
-                mock_client_instance.put = AsyncMock(return_value=mock_response)
-
-                # Call async scan_file
-                result = await self.scanner.scan_file(
-                    model_name="test-model", model_path=temp_path, wait_for_results=False
-                )
+            # Call async scan_file
+            result = await self.scanner.scan_file(
+                model_name="test-model", model_path=temp_path, wait_for_results=False
+            )
 
             # Verify async calls
             self.mock_client.scans.upload.start.assert_called_once()

@@ -36,7 +36,7 @@ class TestJobs:
         job = client.scans.jobs.retrieve(
             scan_id="00000000-0000-0000-0000-000000000000",
             has_detections=True,
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(ScanReport, job, path=["response"])
 
@@ -96,14 +96,14 @@ class TestJobs:
             },
             model_version_ids=["182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"],
             offset=0,
-            request_source=["API Upload"],
+            request_source=["Hybrid Upload"],
             scanner_version="891.0.97194",
-            severity=["string"],
+            severity="critical",
             sort="-start_time",
             source={"eq": "adhoc"},
             start_time=parse_datetime("2019-12-27T18:11:19.117Z"),
             status=["string"],
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(JobListResponse, job, path=["response"])
 
@@ -137,7 +137,6 @@ class TestJobs:
             inventory={
                 "model_name": "some-model",
                 "model_version": "",
-                "requested_scan_location": "owner/repo",
                 "requesting_entity": "some-user@example.com",
             },
         )
@@ -151,10 +150,18 @@ class TestJobs:
             inventory={
                 "model_name": "some-model",
                 "model_version": "",
-                "requested_scan_location": "owner/repo",
                 "requesting_entity": "some-user@example.com",
                 "origin": "Hugging Face",
-                "request_source": "API Upload",
+                "request_source": "Hybrid Upload",
+                "requested_scan_location": "owner/repo",
+                "scan_target": {
+                    "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B",
+                    "provider_model": {
+                        "model_id": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                        "provider": "AWS_BEDROCK",
+                        "model_arn": "arn:aws:bedrock:us-east-1:123456789012:provisioned-model/my-custom-model",
+                    },
+                },
             },
         )
         assert_matches_type(ScanJob, job, path=["response"])
@@ -167,7 +174,6 @@ class TestJobs:
             inventory={
                 "model_name": "some-model",
                 "model_version": "",
-                "requested_scan_location": "owner/repo",
                 "requesting_entity": "some-user@example.com",
             },
         )
@@ -185,7 +191,6 @@ class TestJobs:
             inventory={
                 "model_name": "some-model",
                 "model_version": "",
-                "requested_scan_location": "owner/repo",
                 "requesting_entity": "some-user@example.com",
             },
         ) as response:
@@ -217,7 +222,7 @@ class TestAsyncJobs:
         job = await async_client.scans.jobs.retrieve(
             scan_id="00000000-0000-0000-0000-000000000000",
             has_detections=True,
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(ScanReport, job, path=["response"])
 
@@ -277,14 +282,14 @@ class TestAsyncJobs:
             },
             model_version_ids=["182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"],
             offset=0,
-            request_source=["API Upload"],
+            request_source=["Hybrid Upload"],
             scanner_version="891.0.97194",
-            severity=["string"],
+            severity="critical",
             sort="-start_time",
             source={"eq": "adhoc"},
             start_time=parse_datetime("2019-12-27T18:11:19.117Z"),
             status=["string"],
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(JobListResponse, job, path=["response"])
 
@@ -318,7 +323,6 @@ class TestAsyncJobs:
             inventory={
                 "model_name": "some-model",
                 "model_version": "",
-                "requested_scan_location": "owner/repo",
                 "requesting_entity": "some-user@example.com",
             },
         )
@@ -332,10 +336,18 @@ class TestAsyncJobs:
             inventory={
                 "model_name": "some-model",
                 "model_version": "",
-                "requested_scan_location": "owner/repo",
                 "requesting_entity": "some-user@example.com",
                 "origin": "Hugging Face",
-                "request_source": "API Upload",
+                "request_source": "Hybrid Upload",
+                "requested_scan_location": "owner/repo",
+                "scan_target": {
+                    "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B",
+                    "provider_model": {
+                        "model_id": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                        "provider": "AWS_BEDROCK",
+                        "model_arn": "arn:aws:bedrock:us-east-1:123456789012:provisioned-model/my-custom-model",
+                    },
+                },
             },
         )
         assert_matches_type(ScanJob, job, path=["response"])
@@ -348,7 +360,6 @@ class TestAsyncJobs:
             inventory={
                 "model_name": "some-model",
                 "model_version": "",
-                "requested_scan_location": "owner/repo",
                 "requesting_entity": "some-user@example.com",
             },
         )
@@ -366,7 +377,6 @@ class TestAsyncJobs:
             inventory={
                 "model_name": "some-model",
                 "model_version": "",
-                "requested_scan_location": "owner/repo",
                 "requesting_entity": "some-user@example.com",
             },
         ) as response:
