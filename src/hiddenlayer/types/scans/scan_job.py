@@ -1,12 +1,35 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import List, Optional
 from typing_extensions import Literal
 
 from ..._compat import PYDANTIC_V1, ConfigDict
 from ..._models import BaseModel
 
-__all__ = ["ScanJob", "Inventory", "InventoryScanTarget", "InventoryScanTargetProviderModel"]
+__all__ = [
+    "ScanJob",
+    "Inventory",
+    "InventoryScanTarget",
+    "InventoryScanTargetDeepScan",
+    "InventoryScanTargetDeepScanFile",
+    "InventoryScanTargetProviderModel",
+]
+
+
+class InventoryScanTargetDeepScanFile(BaseModel):
+    file_location: str
+    """URL or path to the specific file"""
+
+    file_name_alias: Optional[str] = None
+    """Optional alias for the file name"""
+
+
+class InventoryScanTargetDeepScan(BaseModel):
+    file_location: Optional[str] = None
+    """URL or path to the model files"""
+
+    files: Optional[List[InventoryScanTargetDeepScanFile]] = None
+    """List of specific files to scan"""
 
 
 class InventoryScanTargetProviderModel(BaseModel):
@@ -31,8 +54,7 @@ class InventoryScanTargetProviderModel(BaseModel):
 
 
 class InventoryScanTarget(BaseModel):
-    file_location: Optional[str] = None
-    """URL or path to the model files"""
+    deep_scan: Optional[InventoryScanTargetDeepScan] = None
 
     provider_model: Optional[InventoryScanTargetProviderModel] = None
 
@@ -68,7 +90,8 @@ class Inventory(BaseModel):
     scan_target: Optional[InventoryScanTarget] = None
     """Specifies what to scan.
 
-    Must provide at least one of: file_location, provider_model, or both.
+    Must provide at least one of: deep_scan with file location details,
+    provider_model, or both.
     """
 
     if not PYDANTIC_V1:

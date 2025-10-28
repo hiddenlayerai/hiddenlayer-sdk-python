@@ -155,7 +155,15 @@ class TestJobs:
                 "request_source": "Hybrid Upload",
                 "requested_scan_location": "owner/repo",
                 "scan_target": {
-                    "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B",
+                    "deep_scan": {
+                        "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B",
+                        "files": [
+                            {
+                                "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B/resolve/main/config.json",
+                                "file_name_alias": "model-config.json",
+                            }
+                        ],
+                    },
                     "provider_model": {
                         "model_id": "anthropic.claude-3-5-sonnet-20241022-v2:0",
                         "provider": "AWS_BEDROCK",
@@ -341,7 +349,15 @@ class TestAsyncJobs:
                 "request_source": "Hybrid Upload",
                 "requested_scan_location": "owner/repo",
                 "scan_target": {
-                    "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B",
+                    "deep_scan": {
+                        "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B",
+                        "files": [
+                            {
+                                "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B/resolve/main/config.json",
+                                "file_name_alias": "model-config.json",
+                            }
+                        ],
+                    },
                     "provider_model": {
                         "model_id": "anthropic.claude-3-5-sonnet-20241022-v2:0",
                         "provider": "AWS_BEDROCK",
