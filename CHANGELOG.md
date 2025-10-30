@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.2.0 (2025-10-30)
+
+Full Changelog: [v3.1.0...v3.2.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.1.0...v3.2.0)
+
+### Features
+
+* **api:** api update ([4531c76](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/4531c76a0badbbee8c2fedf10a23871b9ad8fb10))
+
+
+### Bug Fixes
+
+* **client:** close streams without requiring full consumption ([c6dcaab](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/c6dcaab8858c9a20470d98d0c0d1523466d83570))
+
+
+### Chores
+
+* **internal/tests:** avoid race condition with implicit client cleanup ([8181a06](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/8181a06f0f483e25e6db869e12294da5a6966a3a))
+
 ## 3.1.0 (2025-10-22)
 
 Full Changelog: [v3.0.1...v3.1.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.0.1...v3.1.0)
