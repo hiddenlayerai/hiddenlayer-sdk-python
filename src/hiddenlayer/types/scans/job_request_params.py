@@ -2,9 +2,18 @@
 
 from __future__ import annotations
 
+from typing import Iterable
 from typing_extensions import Literal, Required, TypedDict
 
-__all__ = ["JobRequestParams", "Access", "Inventory", "InventoryScanTarget", "InventoryScanTargetProviderModel"]
+__all__ = [
+    "JobRequestParams",
+    "Access",
+    "Inventory",
+    "InventoryScanTarget",
+    "InventoryScanTargetDeepScan",
+    "InventoryScanTargetDeepScanFile",
+    "InventoryScanTargetProviderModel",
+]
 
 
 class JobRequestParams(TypedDict, total=False):
@@ -28,6 +37,22 @@ class Access(TypedDict, total=False):
     ]
 
 
+class InventoryScanTargetDeepScanFile(TypedDict, total=False):
+    file_location: Required[str]
+    """URL or path to the specific file"""
+
+    file_name_alias: str
+    """Optional alias for the file name"""
+
+
+class InventoryScanTargetDeepScan(TypedDict, total=False):
+    file_location: str
+    """URL or path to the model files"""
+
+    files: Iterable[InventoryScanTargetDeepScanFile]
+    """List of specific files to scan"""
+
+
 class InventoryScanTargetProviderModel(TypedDict, total=False):
     model_id: Required[str]
     """The provider's unique identifier for the model. Examples:
@@ -46,8 +71,7 @@ class InventoryScanTargetProviderModel(TypedDict, total=False):
 
 
 class InventoryScanTarget(TypedDict, total=False):
-    file_location: str
-    """URL or path to the model files"""
+    deep_scan: InventoryScanTargetDeepScan
 
     provider_model: InventoryScanTargetProviderModel
 
@@ -81,5 +105,6 @@ class Inventory(TypedDict, total=False):
     scan_target: InventoryScanTarget
     """Specifies what to scan.
 
-    Must provide at least one of: file_location, provider_model, or both.
+    Must provide at least one of: deep_scan with file location details,
+    provider_model, or both.
     """
