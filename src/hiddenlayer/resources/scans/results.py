@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import strip_not_given
+from ..._types import Body, Query, Headers, NotGiven, not_given
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -43,7 +42,6 @@ class ResultsResource(SyncAPIResource):
         self,
         scan_id: str,
         *,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -66,7 +64,6 @@ class ResultsResource(SyncAPIResource):
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         extra_headers = {"Accept": "application/sarif+json", **(extra_headers or {})}
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._get(
             f"/scan/v3/results/{scan_id}/sarif",
             options=make_request_options(
@@ -100,7 +97,6 @@ class AsyncResultsResource(AsyncAPIResource):
         self,
         scan_id: str,
         *,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -123,7 +119,6 @@ class AsyncResultsResource(AsyncAPIResource):
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         extra_headers = {"Accept": "application/sarif+json", **(extra_headers or {})}
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._get(
             f"/scan/v3/results/{scan_id}/sarif",
             options=make_request_options(

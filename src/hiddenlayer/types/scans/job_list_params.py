@@ -69,8 +69,6 @@ class JobListParams(TypedDict, total=False):
     status: SequenceNotStr[str]
     """Statuses"""
 
-    x_correlation_id: Annotated[str, PropertyInfo(alias="X-Correlation-Id")]
-
 
 class ModelName(TypedDict, total=False):
     contains: str

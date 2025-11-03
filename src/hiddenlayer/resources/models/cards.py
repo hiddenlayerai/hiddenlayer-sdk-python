@@ -8,7 +8,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import maybe_transform, strip_not_given
+from ..._utils import maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -74,7 +74,6 @@ class CardsResource(SyncAPIResource):
         provider: List[Literal["AZURE", "ADHOC"]] | Omit = omit,
         sort: str | Omit = omit,
         source: card_list_params.Source | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -109,7 +108,6 @@ class CardsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._get_api_list(
             "/models/v4/cards",
             page=SyncOffsetPage[CardListResponse],
@@ -188,7 +186,6 @@ class AsyncCardsResource(AsyncAPIResource):
         provider: List[Literal["AZURE", "ADHOC"]] | Omit = omit,
         sort: str | Omit = omit,
         source: card_list_params.Source | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -223,7 +220,6 @@ class AsyncCardsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._get_api_list(
             "/models/v4/cards",
             page=AsyncOffsetPage[CardListResponse],
