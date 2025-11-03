@@ -16,6 +16,13 @@ class JobListParams(TypedDict, total=False):
     compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]]
     """A comma separated list of rule set evaluation statuses to include"""
 
+    deep_scan: bool
+    """When true, returns only scans that with files.
+
+    When false, returns only scans without files. When not provided, returns all
+    scans.
+    """
+
     detection_category: str
     """filter by a single detection category"""
 
