@@ -48,8 +48,6 @@ class CardListParams(TypedDict, total=False):
     source: Source
     """substring and full match on model source"""
 
-    x_correlation_id: Annotated[str, PropertyInfo(alias="X-Correlation-Id")]
-
 
 class ModelCreated(TypedDict, total=False):
     gte: Annotated[Union[str, datetime], PropertyInfo(format="iso8601")]

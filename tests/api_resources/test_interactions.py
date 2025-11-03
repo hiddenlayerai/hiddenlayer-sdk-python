@@ -54,7 +54,6 @@ class TestInteractions:
                 ]
             },
             hl_project_id="internal-search-chatbot",
-            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(InteractionAnalyzeResponse, interaction, path=["response"])
 
@@ -133,7 +132,6 @@ class TestAsyncInteractions:
                 ]
             },
             hl_project_id="internal-search-chatbot",
-            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(InteractionAnalyzeResponse, interaction, path=["response"])
 
