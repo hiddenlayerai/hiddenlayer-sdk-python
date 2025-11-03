@@ -93,6 +93,7 @@ class JobsResource(SyncAPIResource):
         self,
         *,
         compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]] | Omit = omit,
+        deep_scan: bool | Omit = omit,
         detection_category: str | Omit = omit,
         end_time: Union[str, datetime] | Omit = omit,
         latest_per_model_version_only: bool | Omit = omit,
@@ -122,6 +123,9 @@ class JobsResource(SyncAPIResource):
 
         Args:
           compliance_status: A comma separated list of rule set evaluation statuses to include
+
+          deep_scan: When true, returns only scans that with files. When false, returns only scans
+              without files. When not provided, returns all scans.
 
           detection_category: filter by a single detection category
 
@@ -170,6 +174,7 @@ class JobsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "compliance_status": compliance_status,
+                        "deep_scan": deep_scan,
                         "detection_category": detection_category,
                         "end_time": end_time,
                         "latest_per_model_version_only": latest_per_model_version_only,
@@ -302,6 +307,7 @@ class AsyncJobsResource(AsyncAPIResource):
         self,
         *,
         compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]] | Omit = omit,
+        deep_scan: bool | Omit = omit,
         detection_category: str | Omit = omit,
         end_time: Union[str, datetime] | Omit = omit,
         latest_per_model_version_only: bool | Omit = omit,
@@ -331,6 +337,9 @@ class AsyncJobsResource(AsyncAPIResource):
 
         Args:
           compliance_status: A comma separated list of rule set evaluation statuses to include
+
+          deep_scan: When true, returns only scans that with files. When false, returns only scans
+              without files. When not provided, returns all scans.
 
           detection_category: filter by a single detection category
 
@@ -379,6 +388,7 @@ class AsyncJobsResource(AsyncAPIResource):
                 query=await async_maybe_transform(
                     {
                         "compliance_status": compliance_status,
+                        "deep_scan": deep_scan,
                         "detection_category": detection_category,
                         "end_time": end_time,
                         "latest_per_model_version_only": latest_per_model_version_only,

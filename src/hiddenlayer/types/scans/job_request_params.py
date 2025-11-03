@@ -12,7 +12,7 @@ __all__ = [
     "InventoryScanTarget",
     "InventoryScanTargetDeepScan",
     "InventoryScanTargetDeepScanFile",
-    "InventoryScanTargetProviderModel",
+    "InventoryScanTargetProviderDetails",
 ]
 
 
@@ -53,15 +53,15 @@ class InventoryScanTargetDeepScan(TypedDict, total=False):
     """List of specific files to scan"""
 
 
-class InventoryScanTargetProviderModel(TypedDict, total=False):
-    model_id: Required[str]
+class InventoryScanTargetProviderDetails(TypedDict, total=False):
+    provider: Required[Literal["AWS_BEDROCK", "AZURE_AI_FOUNDRY", "AWS_SAGEMAKER"]]
+
+    provider_model_id: Required[str]
     """The provider's unique identifier for the model. Examples:
 
     - AWS Bedrock: "anthropic.claude-3-5-sonnet-20241022-v2:0"
     - Azure AI Foundry: "Claude-3-5-Sonnet"
     """
-
-    provider: Required[Literal["AWS_BEDROCK", "AZURE_AI_FOUNDRY", "AWS_SAGEMAKER"]]
 
     model_arn: str
     """
@@ -73,7 +73,7 @@ class InventoryScanTargetProviderModel(TypedDict, total=False):
 class InventoryScanTarget(TypedDict, total=False):
     deep_scan: InventoryScanTargetDeepScan
 
-    provider_model: InventoryScanTargetProviderModel
+    provider_details: InventoryScanTargetProviderDetails
 
 
 class Inventory(TypedDict, total=False):
@@ -106,5 +106,5 @@ class Inventory(TypedDict, total=False):
     """Specifies what to scan.
 
     Must provide at least one of: deep_scan with file location details,
-    provider_model, or both.
+    provider_details, or both.
     """
