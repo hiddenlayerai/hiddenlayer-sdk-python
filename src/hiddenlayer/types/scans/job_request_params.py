@@ -71,6 +71,9 @@ class InventoryScanTargetProviderDetails(TypedDict, total=False):
 
 
 class InventoryScanTarget(TypedDict, total=False):
+    asset_region: str
+    """region of the discovered asset"""
+
     deep_scan: InventoryScanTargetDeepScan
 
     provider_details: InventoryScanTargetProviderDetails

@@ -46,6 +46,9 @@ class ItemInventory(BaseModel):
     requested_scan_location: str
     """Location to be scanned"""
 
+    asset_region: Optional[str] = None
+    """Region of discovered asset"""
+
     file_location: Optional[str] = None
     """URL or path to the model files, if available"""
 
