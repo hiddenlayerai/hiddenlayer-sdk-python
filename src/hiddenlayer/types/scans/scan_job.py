@@ -54,6 +54,9 @@ class InventoryScanTargetProviderDetails(BaseModel):
 
 
 class InventoryScanTarget(BaseModel):
+    asset_region: Optional[str] = None
+    """region of the discovered asset"""
+
     deep_scan: Optional[InventoryScanTargetDeepScan] = None
 
     provider_details: Optional[InventoryScanTargetProviderDetails] = None
