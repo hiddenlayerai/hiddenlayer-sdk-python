@@ -44,6 +44,8 @@ class CardListResponse(BaseModel):
 
     source: str
 
+    aidr_threat_level: Optional[Literal["high", "medium", "low", "none", "not available"]] = None
+
     model_scan_has_error: Optional[bool] = None
     """True if the model's latest scan has an error"""
 
