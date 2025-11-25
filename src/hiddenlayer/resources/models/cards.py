@@ -85,6 +85,8 @@ class CardsResource(SyncAPIResource):
         List Model Cards
 
         Args:
+          aidr_severity: Deprecated - use ModelCardAIDRThreatLevel(aidr_threat_level) instead
+
           aidr_status: filter by aidr enabled
 
           limit: Limit the number of items returned
@@ -197,6 +199,8 @@ class AsyncCardsResource(AsyncAPIResource):
         List Model Cards
 
         Args:
+          aidr_severity: Deprecated - use ModelCardAIDRThreatLevel(aidr_threat_level) instead
+
           aidr_status: filter by aidr enabled
 
           limit: Limit the number of items returned

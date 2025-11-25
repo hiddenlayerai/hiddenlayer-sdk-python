@@ -13,6 +13,7 @@ __all__ = ["CardListParams", "ModelCreated", "ModelName", "Source"]
 
 class CardListParams(TypedDict, total=False):
     aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]]
+    """Deprecated - use ModelCardAIDRThreatLevel(aidr_threat_level) instead"""
 
     aidr_status: Literal["ENABLED", "DISABLED", "ANY"]
     """filter by aidr enabled"""

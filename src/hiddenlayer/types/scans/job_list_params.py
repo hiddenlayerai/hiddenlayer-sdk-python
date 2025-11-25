@@ -45,6 +45,12 @@ class JobListParams(TypedDict, total=False):
 
     offset: int
 
+    provider: SequenceNotStr[str]
+    """Filter by model provider name"""
+
+    region: SequenceNotStr[str]
+    """Filter by region of the discovered asset"""
+
     request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]]
     """Filter by request source using a comma-separated list"""
 
@@ -56,8 +62,8 @@ class JobListParams(TypedDict, total=False):
 
     sort: str
     """
-    allow sorting by model name, status, severity or created at, ascending (+) or
-    the default descending (-)
+    allow sorting by model name, status, severity, scan start time, asset region, or
+    model provider ascending (+) or the default descending (-)
     """
 
     source: Source
