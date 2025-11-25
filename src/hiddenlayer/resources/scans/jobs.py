@@ -100,6 +100,8 @@ class JobsResource(SyncAPIResource):
         model_name: job_list_params.ModelName | Omit = omit,
         model_version_ids: SequenceNotStr[str] | Omit = omit,
         offset: int | Omit = omit,
+        provider: SequenceNotStr[str] | Omit = omit,
+        region: SequenceNotStr[str] | Omit = omit,
         request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]]
         | Omit = omit,
         scanner_version: str | Omit = omit,
@@ -136,14 +138,18 @@ class JobsResource(SyncAPIResource):
 
           model_version_ids: Model Version IDs
 
+          provider: Filter by model provider name
+
+          region: Filter by region of the discovered asset
+
           request_source: Filter by request source using a comma-separated list
 
           scanner_version: filter by version of the scanner
 
           severity: Severities
 
-          sort: allow sorting by model name, status, severity or created at, ascending (+) or
-              the default descending (-)
+          sort: allow sorting by model name, status, severity, scan start time, asset region, or
+              model provider ascending (+) or the default descending (-)
 
           source: source of model related to scans
 
@@ -179,6 +185,8 @@ class JobsResource(SyncAPIResource):
                         "model_name": model_name,
                         "model_version_ids": model_version_ids,
                         "offset": offset,
+                        "provider": provider,
+                        "region": region,
                         "request_source": request_source,
                         "scanner_version": scanner_version,
                         "severity": severity,
@@ -310,6 +318,8 @@ class AsyncJobsResource(AsyncAPIResource):
         model_name: job_list_params.ModelName | Omit = omit,
         model_version_ids: SequenceNotStr[str] | Omit = omit,
         offset: int | Omit = omit,
+        provider: SequenceNotStr[str] | Omit = omit,
+        region: SequenceNotStr[str] | Omit = omit,
         request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]]
         | Omit = omit,
         scanner_version: str | Omit = omit,
@@ -346,14 +356,18 @@ class AsyncJobsResource(AsyncAPIResource):
 
           model_version_ids: Model Version IDs
 
+          provider: Filter by model provider name
+
+          region: Filter by region of the discovered asset
+
           request_source: Filter by request source using a comma-separated list
 
           scanner_version: filter by version of the scanner
 
           severity: Severities
 
-          sort: allow sorting by model name, status, severity or created at, ascending (+) or
-              the default descending (-)
+          sort: allow sorting by model name, status, severity, scan start time, asset region, or
+              model provider ascending (+) or the default descending (-)
 
           source: source of model related to scans
 
@@ -389,6 +403,8 @@ class AsyncJobsResource(AsyncAPIResource):
                         "model_name": model_name,
                         "model_version_ids": model_version_ids,
                         "offset": offset,
+                        "provider": provider,
+                        "region": region,
                         "request_source": request_source,
                         "scanner_version": scanner_version,
                         "severity": severity,
