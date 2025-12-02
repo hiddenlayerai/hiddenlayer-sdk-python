@@ -443,6 +443,7 @@ class ModelScanner:
                     part.upload_url,
                     content=part_data,
                     headers={"Content-Type": "application/octet-stream"},
+                    timeout=self._client.timeout,
                 )
                 response.raise_for_status()
 
@@ -734,6 +735,7 @@ class AsyncModelScanner:
                     part.upload_url,
                     content=part_data,
                     headers={"Content-Type": "application/octet-stream"},
+                    timeout=self._client.timeout,
                 )
                 response.raise_for_status()
 
