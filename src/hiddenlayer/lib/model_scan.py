@@ -87,6 +87,14 @@ def filter_path_objects(
 
         yield item
 
+DISALLOWED_CHARACTERS = "&$@=;:+,? {}[]<>^%`\"~#|"
+_SANITIZE_TRANSLATION_TABLE = str.maketrans("", "", DISALLOWED_CHARACTERS)
+
+def sanitize_path(path: Union[str, os.PathLike[str]]) -> str:
+    """Sanitize a path by removing characters that model scanner doesn't support."""
+
+    return str(path).translate(_SANITIZE_TRANSLATION_TABLE)
+
 
 class ModelScanner:
     """
@@ -418,7 +426,7 @@ class ModelScanner:
 
         # Initiate multipart upload for this file
         upload = self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
+            scan_id=scan_id, file_name=sanitize_path(str(file_path)), file_content_length=filesize
         )
 
         # Upload each part
@@ -710,7 +718,7 @@ class AsyncModelScanner:
 
         # Initiate multipart upload for this file
         upload = await self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
+            scan_id=scan_id, file_name=sanitize_path(str(file_path)), file_content_length=filesize
         )
 
         # Upload each part
