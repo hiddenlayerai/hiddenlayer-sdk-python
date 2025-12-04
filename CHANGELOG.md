@@ -1,5 +1,34 @@
 # Changelog
 
+## 3.2.0 (2025-12-04)
+
+Full Changelog: [v3.1.0...v3.2.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.1.0...v3.2.0)
+
+### Features
+
+* **api:** api update ([6526012](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/6526012dd2f88ad1e42daf6111cc45cea1c0f3af))
+* **api:** api update ([f240a44](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/f240a447c1409192586e2dd19d37ff5e9e7ff18f))
+* **api:** api update ([82355df](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/82355df0b06543f86991b8219152f59895e03a9c))
+* **api:** api update ([c6bdab7](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/c6bdab747bce2549021cc03f0beaac490e539928))
+* **api:** api update ([91e4095](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/91e40959b4c85f8d01205389c9b7410cc008b79f))
+* **api:** api update ([4531c76](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/4531c76a0badbbee8c2fedf10a23871b9ad8fb10))
+
+
+### Bug Fixes
+
+* **client:** close streams without requiring full consumption ([c6dcaab](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/c6dcaab8858c9a20470d98d0c0d1523466d83570))
+* compat with Python 3.14 ([a26a44c](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/a26a44c343765da9bd9f58dcf29a7af49738c605))
+* **compat:** update signatures of `model_dump` and `model_dump_json` for Pydantic v1 ([1ef085f](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/1ef085f82040b406b8aa9501f2a6cafb5819c8fc))
+* ensure streams are always closed ([0690ffd](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/0690ffd5784f3118199f4901a4272fd0e5a71dda))
+
+
+### Chores
+
+* **internal/tests:** avoid race condition with implicit client cleanup ([8181a06](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/8181a06f0f483e25e6db869e12294da5a6966a3a))
+* **internal:** codegen related update ([45bc981](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/45bc98170b1ba23b6de8edba2e50d5f96b2ec40f))
+* **internal:** grammar fix (it's -&gt; its) ([20dbdf5](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/20dbdf5377db585e380c061a2194a57fcbe28907))
+* **package:** drop Python 3.8 support ([4115a5c](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/4115a5c863431d2c1af697c9e9a20f5d46f41d54))
+
 ## 3.1.0 (2025-10-22)
 
 Full Changelog: [v3.0.1...v3.1.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.0.1...v3.1.0)
