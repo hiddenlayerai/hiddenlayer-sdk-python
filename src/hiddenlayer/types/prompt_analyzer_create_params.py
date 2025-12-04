@@ -18,6 +18,4 @@ class PromptAnalyzerCreateParams(TypedDict, total=False):
 
     hl_project_id: Annotated[str, PropertyInfo(alias="HL-Project-Id")]
 
-    x_correlation_id: Annotated[str, PropertyInfo(alias="X-Correlation-Id")]
-
     x_requester_id: Annotated[str, PropertyInfo(alias="X-Requester-Id")]

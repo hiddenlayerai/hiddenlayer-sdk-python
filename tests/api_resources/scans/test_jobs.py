@@ -36,7 +36,6 @@ class TestJobs:
         job = client.scans.jobs.retrieve(
             scan_id="00000000-0000-0000-0000-000000000000",
             has_detections=True,
-            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(ScanReport, job, path=["response"])
 
@@ -85,6 +84,7 @@ class TestJobs:
     def test_method_list_with_all_params(self, client: HiddenLayer) -> None:
         job = client.scans.jobs.list(
             compliance_status=["COMPLIANT"],
+            deep_scan=True,
             detection_category="detection_category",
             end_time=parse_datetime("2019-12-27T18:11:19.117Z"),
             latest_per_model_version_only=True,
@@ -96,14 +96,15 @@ class TestJobs:
             },
             model_version_ids=["182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"],
             offset=0,
+            provider=["string"],
+            region=["string"],
             request_source=["Hybrid Upload"],
             scanner_version="891.0.97194",
             severity="critical",
-            sort="-start_time",
+            sort="-region",
             source={"eq": "adhoc"},
             start_time=parse_datetime("2019-12-27T18:11:19.117Z"),
             status=["string"],
-            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(JobListResponse, job, path=["response"])
 
@@ -155,10 +156,19 @@ class TestJobs:
                 "request_source": "Hybrid Upload",
                 "requested_scan_location": "owner/repo",
                 "scan_target": {
-                    "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B",
-                    "provider_model": {
-                        "model_id": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                    "asset_region": "us-east-1",
+                    "deep_scan": {
+                        "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B",
+                        "files": [
+                            {
+                                "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B/resolve/main/config.json",
+                                "file_name_alias": "model-config.json",
+                            }
+                        ],
+                    },
+                    "provider_details": {
                         "provider": "AWS_BEDROCK",
+                        "provider_model_id": "anthropic.claude-3-5-sonnet-20241022-v2:0",
                         "model_arn": "arn:aws:bedrock:us-east-1:123456789012:provisioned-model/my-custom-model",
                     },
                 },
@@ -222,7 +232,6 @@ class TestAsyncJobs:
         job = await async_client.scans.jobs.retrieve(
             scan_id="00000000-0000-0000-0000-000000000000",
             has_detections=True,
-            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(ScanReport, job, path=["response"])
 
@@ -271,6 +280,7 @@ class TestAsyncJobs:
     async def test_method_list_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         job = await async_client.scans.jobs.list(
             compliance_status=["COMPLIANT"],
+            deep_scan=True,
             detection_category="detection_category",
             end_time=parse_datetime("2019-12-27T18:11:19.117Z"),
             latest_per_model_version_only=True,
@@ -282,14 +292,15 @@ class TestAsyncJobs:
             },
             model_version_ids=["182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"],
             offset=0,
+            provider=["string"],
+            region=["string"],
             request_source=["Hybrid Upload"],
             scanner_version="891.0.97194",
             severity="critical",
-            sort="-start_time",
+            sort="-region",
             source={"eq": "adhoc"},
             start_time=parse_datetime("2019-12-27T18:11:19.117Z"),
             status=["string"],
-            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(JobListResponse, job, path=["response"])
 
@@ -341,10 +352,19 @@ class TestAsyncJobs:
                 "request_source": "Hybrid Upload",
                 "requested_scan_location": "owner/repo",
                 "scan_target": {
-                    "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B",
-                    "provider_model": {
-                        "model_id": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                    "asset_region": "us-east-1",
+                    "deep_scan": {
+                        "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B",
+                        "files": [
+                            {
+                                "file_location": "https://huggingface.co/meta-llama/Llama-3.1-8B/resolve/main/config.json",
+                                "file_name_alias": "model-config.json",
+                            }
+                        ],
+                    },
+                    "provider_details": {
                         "provider": "AWS_BEDROCK",
+                        "provider_model_id": "anthropic.claude-3-5-sonnet-20241022-v2:0",
                         "model_arn": "arn:aws:bedrock:us-east-1:123456789012:provisioned-model/my-custom-model",
                     },
                 },

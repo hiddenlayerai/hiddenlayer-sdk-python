@@ -12,6 +12,7 @@ from ..._models import BaseModel
 __all__ = [
     "ScanReport",
     "Inventory",
+    "InventoryProviderDetails",
     "Summary",
     "Compliance",
     "FileResult",
@@ -27,6 +28,27 @@ __all__ = [
 ]
 
 
+class InventoryProviderDetails(BaseModel):
+    provider: Literal["AWS_BEDROCK", "AZURE_AI_FOUNDRY", "AWS_SAGEMAKER"]
+
+    provider_model_id: str
+    """The provider's unique identifier for the model. Examples:
+
+    - AWS Bedrock: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+    - Azure AI Foundry: "Claude-3-5-Sonnet"
+    """
+
+    model_arn: Optional[str] = None
+    """
+    Optional full ARN or resource identifier for the model. Used for provisioned
+    models, custom deployments, or cross-account access.
+    """
+
+    if not PYDANTIC_V1:
+        # allow fields with a `model_` prefix
+        model_config = ConfigDict(protected_namespaces=tuple())
+
+
 class Inventory(BaseModel):
     model_id: str
     """Unique identifier for the model"""
@@ -40,6 +62,12 @@ class Inventory(BaseModel):
     requested_scan_location: str
     """Location to be scanned"""
 
+    asset_region: Optional[str] = None
+    """Region of discovered asset"""
+
+    file_location: Optional[str] = None
+    """URL or path to the model files, if available"""
+
     model_source: Optional[str] = None
     """source (provider) info"""
 
@@ -51,6 +79,8 @@ class Inventory(BaseModel):
     Specifies the platform or service where the model originated before being
     scanned
     """
+
+    provider_details: Optional[InventoryProviderDetails] = None
 
     request_source: Optional[
         Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]

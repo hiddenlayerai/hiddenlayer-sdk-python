@@ -29,17 +29,6 @@ class TestFile:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_add_with_all_params(self, client: HiddenLayer) -> None:
-        file = client.scans.upload.file.add(
-            scan_id="00000000-0000-0000-0000-000000000000",
-            file_content_length=12345,
-            file_name="exampleFile.txt",
-            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
-        )
-        assert_matches_type(FileAddResponse, file, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
     def test_raw_response_add(self, client: HiddenLayer) -> None:
         response = client.scans.upload.file.with_raw_response.add(
             scan_id="00000000-0000-0000-0000-000000000000",
@@ -84,16 +73,6 @@ class TestFile:
         file = client.scans.upload.file.complete(
             file_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             scan_id="00000000-0000-0000-0000-000000000000",
-        )
-        assert_matches_type(FileCompleteResponse, file, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_complete_with_all_params(self, client: HiddenLayer) -> None:
-        file = client.scans.upload.file.complete(
-            file_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            scan_id="00000000-0000-0000-0000-000000000000",
-            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(FileCompleteResponse, file, path=["response"])
 
@@ -158,17 +137,6 @@ class TestAsyncFile:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_add_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
-        file = await async_client.scans.upload.file.add(
-            scan_id="00000000-0000-0000-0000-000000000000",
-            file_content_length=12345,
-            file_name="exampleFile.txt",
-            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
-        )
-        assert_matches_type(FileAddResponse, file, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
     async def test_raw_response_add(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.scans.upload.file.with_raw_response.add(
             scan_id="00000000-0000-0000-0000-000000000000",
@@ -213,16 +181,6 @@ class TestAsyncFile:
         file = await async_client.scans.upload.file.complete(
             file_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             scan_id="00000000-0000-0000-0000-000000000000",
-        )
-        assert_matches_type(FileCompleteResponse, file, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_complete_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
-        file = await async_client.scans.upload.file.complete(
-            file_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            scan_id="00000000-0000-0000-0000-000000000000",
-            x_correlation_id="6f22d397-6ca2-4359-8074-3318ab471fdf",
         )
         assert_matches_type(FileCompleteResponse, file, path=["response"])
 

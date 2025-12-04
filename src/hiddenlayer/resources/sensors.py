@@ -9,7 +9,7 @@ import httpx
 
 from ..types import sensor_query_params, sensor_create_params, sensor_update_params
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from .._utils import maybe_transform, strip_not_given, async_maybe_transform
+from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -55,7 +55,6 @@ class SensorsResource(SyncAPIResource):
         adhoc: bool | Omit = omit,
         tags: Dict[str, object] | Omit = omit,
         version: int | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -75,7 +74,6 @@ class SensorsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._post(
             "/api/v2/sensors/create",
             body=maybe_transform(
@@ -98,7 +96,6 @@ class SensorsResource(SyncAPIResource):
         self,
         sensor_id: str,
         *,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -120,7 +117,6 @@ class SensorsResource(SyncAPIResource):
         """
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._get(
             f"/api/v2/sensors/{sensor_id}",
             options=make_request_options(
@@ -136,7 +132,6 @@ class SensorsResource(SyncAPIResource):
         active: bool | Omit = omit,
         plaintext_name: str | Omit = omit,
         tags: Dict[str, object] | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -158,7 +153,6 @@ class SensorsResource(SyncAPIResource):
         """
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._put(
             f"/api/v2/sensors/{sensor_id}",
             body=maybe_transform(
@@ -179,7 +173,6 @@ class SensorsResource(SyncAPIResource):
         self,
         sensor_id: str,
         *,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -202,7 +195,6 @@ class SensorsResource(SyncAPIResource):
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._delete(
             f"/api/v2/sensors/{sensor_id}",
             options=make_request_options(
@@ -219,7 +211,6 @@ class SensorsResource(SyncAPIResource):
         order_dir: Literal["asc", "desc"] | Omit = omit,
         page_number: int | Omit = omit,
         page_size: int | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -239,7 +230,6 @@ class SensorsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._post(
             "/api/v2/sensors/query",
             body=maybe_transform(
@@ -287,7 +277,6 @@ class AsyncSensorsResource(AsyncAPIResource):
         adhoc: bool | Omit = omit,
         tags: Dict[str, object] | Omit = omit,
         version: int | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -307,7 +296,6 @@ class AsyncSensorsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._post(
             "/api/v2/sensors/create",
             body=await async_maybe_transform(
@@ -330,7 +318,6 @@ class AsyncSensorsResource(AsyncAPIResource):
         self,
         sensor_id: str,
         *,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -352,7 +339,6 @@ class AsyncSensorsResource(AsyncAPIResource):
         """
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._get(
             f"/api/v2/sensors/{sensor_id}",
             options=make_request_options(
@@ -368,7 +354,6 @@ class AsyncSensorsResource(AsyncAPIResource):
         active: bool | Omit = omit,
         plaintext_name: str | Omit = omit,
         tags: Dict[str, object] | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -390,7 +375,6 @@ class AsyncSensorsResource(AsyncAPIResource):
         """
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._put(
             f"/api/v2/sensors/{sensor_id}",
             body=await async_maybe_transform(
@@ -411,7 +395,6 @@ class AsyncSensorsResource(AsyncAPIResource):
         self,
         sensor_id: str,
         *,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -434,7 +417,6 @@ class AsyncSensorsResource(AsyncAPIResource):
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._delete(
             f"/api/v2/sensors/{sensor_id}",
             options=make_request_options(
@@ -451,7 +433,6 @@ class AsyncSensorsResource(AsyncAPIResource):
         order_dir: Literal["asc", "desc"] | Omit = omit,
         page_number: int | Omit = omit,
         page_size: int | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -471,7 +452,6 @@ class AsyncSensorsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._post(
             "/api/v2/sensors/query",
             body=await async_maybe_transform(

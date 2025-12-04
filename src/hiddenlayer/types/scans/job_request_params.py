@@ -2,9 +2,18 @@
 
 from __future__ import annotations
 
+from typing import Iterable
 from typing_extensions import Literal, Required, TypedDict
 
-__all__ = ["JobRequestParams", "Access", "Inventory", "InventoryScanTarget", "InventoryScanTargetProviderModel"]
+__all__ = [
+    "JobRequestParams",
+    "Access",
+    "Inventory",
+    "InventoryScanTarget",
+    "InventoryScanTargetDeepScan",
+    "InventoryScanTargetDeepScanFile",
+    "InventoryScanTargetProviderDetails",
+]
 
 
 class JobRequestParams(TypedDict, total=False):
@@ -28,15 +37,31 @@ class Access(TypedDict, total=False):
     ]
 
 
-class InventoryScanTargetProviderModel(TypedDict, total=False):
-    model_id: Required[str]
+class InventoryScanTargetDeepScanFile(TypedDict, total=False):
+    file_location: Required[str]
+    """URL or path to the specific file"""
+
+    file_name_alias: str
+    """Optional alias for the file name"""
+
+
+class InventoryScanTargetDeepScan(TypedDict, total=False):
+    file_location: str
+    """URL or path to the model files"""
+
+    files: Iterable[InventoryScanTargetDeepScanFile]
+    """List of specific files to scan"""
+
+
+class InventoryScanTargetProviderDetails(TypedDict, total=False):
+    provider: Required[Literal["AWS_BEDROCK", "AZURE_AI_FOUNDRY", "AWS_SAGEMAKER"]]
+
+    provider_model_id: Required[str]
     """The provider's unique identifier for the model. Examples:
 
     - AWS Bedrock: "anthropic.claude-3-5-sonnet-20241022-v2:0"
     - Azure AI Foundry: "Claude-3-5-Sonnet"
     """
-
-    provider: Required[Literal["AWS_BEDROCK", "AZURE_AI_FOUNDRY", "AWS_SAGEMAKER"]]
 
     model_arn: str
     """
@@ -46,10 +71,12 @@ class InventoryScanTargetProviderModel(TypedDict, total=False):
 
 
 class InventoryScanTarget(TypedDict, total=False):
-    file_location: str
-    """URL or path to the model files"""
+    asset_region: str
+    """region of the discovered asset"""
 
-    provider_model: InventoryScanTargetProviderModel
+    deep_scan: InventoryScanTargetDeepScan
+
+    provider_details: InventoryScanTargetProviderDetails
 
 
 class Inventory(TypedDict, total=False):
@@ -81,5 +108,6 @@ class Inventory(TypedDict, total=False):
     scan_target: InventoryScanTarget
     """Specifies what to scan.
 
-    Must provide at least one of: file_location, provider_model, or both.
+    Must provide at least one of: deep_scan with file location details,
+    provider_details, or both.
     """

@@ -9,7 +9,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
-from ..._utils import maybe_transform, strip_not_given, async_maybe_transform
+from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -52,7 +52,6 @@ class JobsResource(SyncAPIResource):
         scan_id: str,
         *,
         has_detections: bool | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -76,7 +75,6 @@ class JobsResource(SyncAPIResource):
         """
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._get(
             f"/scan/v3/results/{scan_id}",
             options=make_request_options(
@@ -93,6 +91,7 @@ class JobsResource(SyncAPIResource):
         self,
         *,
         compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]] | Omit = omit,
+        deep_scan: bool | Omit = omit,
         detection_category: str | Omit = omit,
         end_time: Union[str, datetime] | Omit = omit,
         latest_per_model_version_only: bool | Omit = omit,
@@ -101,6 +100,8 @@ class JobsResource(SyncAPIResource):
         model_name: job_list_params.ModelName | Omit = omit,
         model_version_ids: SequenceNotStr[str] | Omit = omit,
         offset: int | Omit = omit,
+        provider: SequenceNotStr[str] | Omit = omit,
+        region: SequenceNotStr[str] | Omit = omit,
         request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]]
         | Omit = omit,
         scanner_version: str | Omit = omit,
@@ -109,7 +110,6 @@ class JobsResource(SyncAPIResource):
         source: job_list_params.Source | Omit = omit,
         start_time: Union[str, datetime] | Omit = omit,
         status: SequenceNotStr[str] | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -123,6 +123,9 @@ class JobsResource(SyncAPIResource):
         Args:
           compliance_status: A comma separated list of rule set evaluation statuses to include
 
+          deep_scan: When true, returns only scans that with files. When false, returns only scans
+              without files. When not provided, returns all scans.
+
           detection_category: filter by a single detection category
 
           end_time: End Time
@@ -135,14 +138,18 @@ class JobsResource(SyncAPIResource):
 
           model_version_ids: Model Version IDs
 
+          provider: Filter by model provider name
+
+          region: Filter by region of the discovered asset
+
           request_source: Filter by request source using a comma-separated list
 
           scanner_version: filter by version of the scanner
 
           severity: Severities
 
-          sort: allow sorting by model name, status, severity or created at, ascending (+) or
-              the default descending (-)
+          sort: allow sorting by model name, status, severity, scan start time, asset region, or
+              model provider ascending (+) or the default descending (-)
 
           source: source of model related to scans
 
@@ -159,7 +166,6 @@ class JobsResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._get(
             "/scan/v3/results",
             options=make_request_options(
@@ -170,6 +176,7 @@ class JobsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "compliance_status": compliance_status,
+                        "deep_scan": deep_scan,
                         "detection_category": detection_category,
                         "end_time": end_time,
                         "latest_per_model_version_only": latest_per_model_version_only,
@@ -178,6 +185,8 @@ class JobsResource(SyncAPIResource):
                         "model_name": model_name,
                         "model_version_ids": model_version_ids,
                         "offset": offset,
+                        "provider": provider,
+                        "region": region,
                         "request_source": request_source,
                         "scanner_version": scanner_version,
                         "severity": severity,
@@ -259,7 +268,6 @@ class AsyncJobsResource(AsyncAPIResource):
         scan_id: str,
         *,
         has_detections: bool | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -283,7 +291,6 @@ class AsyncJobsResource(AsyncAPIResource):
         """
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._get(
             f"/scan/v3/results/{scan_id}",
             options=make_request_options(
@@ -302,6 +309,7 @@ class AsyncJobsResource(AsyncAPIResource):
         self,
         *,
         compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]] | Omit = omit,
+        deep_scan: bool | Omit = omit,
         detection_category: str | Omit = omit,
         end_time: Union[str, datetime] | Omit = omit,
         latest_per_model_version_only: bool | Omit = omit,
@@ -310,6 +318,8 @@ class AsyncJobsResource(AsyncAPIResource):
         model_name: job_list_params.ModelName | Omit = omit,
         model_version_ids: SequenceNotStr[str] | Omit = omit,
         offset: int | Omit = omit,
+        provider: SequenceNotStr[str] | Omit = omit,
+        region: SequenceNotStr[str] | Omit = omit,
         request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]]
         | Omit = omit,
         scanner_version: str | Omit = omit,
@@ -318,7 +328,6 @@ class AsyncJobsResource(AsyncAPIResource):
         source: job_list_params.Source | Omit = omit,
         start_time: Union[str, datetime] | Omit = omit,
         status: SequenceNotStr[str] | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -332,6 +341,9 @@ class AsyncJobsResource(AsyncAPIResource):
         Args:
           compliance_status: A comma separated list of rule set evaluation statuses to include
 
+          deep_scan: When true, returns only scans that with files. When false, returns only scans
+              without files. When not provided, returns all scans.
+
           detection_category: filter by a single detection category
 
           end_time: End Time
@@ -344,14 +356,18 @@ class AsyncJobsResource(AsyncAPIResource):
 
           model_version_ids: Model Version IDs
 
+          provider: Filter by model provider name
+
+          region: Filter by region of the discovered asset
+
           request_source: Filter by request source using a comma-separated list
 
           scanner_version: filter by version of the scanner
 
           severity: Severities
 
-          sort: allow sorting by model name, status, severity or created at, ascending (+) or
-              the default descending (-)
+          sort: allow sorting by model name, status, severity, scan start time, asset region, or
+              model provider ascending (+) or the default descending (-)
 
           source: source of model related to scans
 
@@ -368,7 +384,6 @@ class AsyncJobsResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._get(
             "/scan/v3/results",
             options=make_request_options(
@@ -379,6 +394,7 @@ class AsyncJobsResource(AsyncAPIResource):
                 query=await async_maybe_transform(
                     {
                         "compliance_status": compliance_status,
+                        "deep_scan": deep_scan,
                         "detection_category": detection_category,
                         "end_time": end_time,
                         "latest_per_model_version_only": latest_per_model_version_only,
@@ -387,6 +403,8 @@ class AsyncJobsResource(AsyncAPIResource):
                         "model_name": model_name,
                         "model_version_ids": model_version_ids,
                         "offset": offset,
+                        "provider": provider,
+                        "region": region,
                         "request_source": request_source,
                         "scanner_version": scanner_version,
                         "severity": severity,

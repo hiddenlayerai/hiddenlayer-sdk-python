@@ -16,6 +16,13 @@ class JobListParams(TypedDict, total=False):
     compliance_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]]
     """A comma separated list of rule set evaluation statuses to include"""
 
+    deep_scan: bool
+    """When true, returns only scans that with files.
+
+    When false, returns only scans without files. When not provided, returns all
+    scans.
+    """
+
     detection_category: str
     """filter by a single detection category"""
 
@@ -38,6 +45,12 @@ class JobListParams(TypedDict, total=False):
 
     offset: int
 
+    provider: SequenceNotStr[str]
+    """Filter by model provider name"""
+
+    region: SequenceNotStr[str]
+    """Filter by region of the discovered asset"""
+
     request_source: List[Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]]
     """Filter by request source using a comma-separated list"""
 
@@ -49,8 +62,8 @@ class JobListParams(TypedDict, total=False):
 
     sort: str
     """
-    allow sorting by model name, status, severity or created at, ascending (+) or
-    the default descending (-)
+    allow sorting by model name, status, severity, scan start time, asset region, or
+    model provider ascending (+) or the default descending (-)
     """
 
     source: Source
@@ -61,8 +74,6 @@ class JobListParams(TypedDict, total=False):
 
     status: SequenceNotStr[str]
     """Statuses"""
-
-    x_correlation_id: Annotated[str, PropertyInfo(alias="X-Correlation-Id")]
 
 
 class ModelName(TypedDict, total=False):
