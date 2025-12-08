@@ -77,10 +77,14 @@ class JobListParams(TypedDict, total=False):
 
 
 class ModelName(TypedDict, total=False):
+    """filter by the model name"""
+
     contains: str
 
     eq: str
 
 
 class Source(TypedDict, total=False):
+    """source of model related to scans"""
+
     eq: Literal["adhoc"]

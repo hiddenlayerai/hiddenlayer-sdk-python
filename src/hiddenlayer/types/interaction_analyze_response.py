@@ -38,6 +38,8 @@ class AnalysisFindingsFramework(BaseModel):
 
 
 class AnalysisFindings(BaseModel):
+    """The frameworks and associated findings for the analysis."""
+
     frameworks: Dict[str, List[AnalysisFindingsFramework]]
     """The taxonomies for the detections."""
 
@@ -119,6 +121,8 @@ class AnalyzedDataOutput(BaseModel):
 
 
 class AnalyzedData(BaseModel):
+    """The language model input and/or output that was analyzed."""
+
     input: AnalyzedDataInput
 
     output: Optional[AnalyzedDataOutput] = None
@@ -196,12 +200,18 @@ class ModifiedDataOutput(BaseModel):
 
 
 class ModifiedData(BaseModel):
+    """
+    The potentially modified language model input and output after applying any redactions or modifications based on the analysis.
+    """
+
     input: ModifiedDataInput
 
     output: ModifiedDataOutput
 
 
 class Evaluation(BaseModel):
+    """The evaluation of the analysis results."""
+
     action: Literal["Allow", "Alert", "Redact", "Block"]
     """The action based on interaction analysis and configured tenant security rules."""
 

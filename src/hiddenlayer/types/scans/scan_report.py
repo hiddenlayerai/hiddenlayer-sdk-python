@@ -302,6 +302,8 @@ class FileResult(BaseModel):
 
 
 class ScanReport(BaseModel):
+    """A scan report with all of its details."""
+
     detection_count: int
     """number of detections found; use `.summary.detection_count` instead"""
 

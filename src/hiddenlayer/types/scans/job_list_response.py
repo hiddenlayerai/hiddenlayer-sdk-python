@@ -119,6 +119,8 @@ class ItemCompliance(BaseModel):
 
 
 class Item(BaseModel):
+    """A scan report without any file results."""
+
     detection_count: int
     """number of detections found; use `.summary.detection_count` instead"""
 

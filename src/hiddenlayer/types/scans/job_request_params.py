@@ -24,6 +24,8 @@ class JobRequestParams(TypedDict, total=False):
 
 
 class Access(TypedDict, total=False):
+    """Access method for the location of files associated with the scan"""
+
     source: Literal[
         "LOCAL",
         "AWS_PRESIGNED",
@@ -71,6 +73,12 @@ class InventoryScanTargetProviderDetails(TypedDict, total=False):
 
 
 class InventoryScanTarget(TypedDict, total=False):
+    """Specifies what to scan.
+
+    Must provide at least one of:
+    deep_scan with file location details, provider_details, or both.
+    """
+
     asset_region: str
     """region of the discovered asset"""
 
