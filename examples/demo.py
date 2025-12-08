@@ -284,5 +284,53 @@ def scan_community_example(
         print(f"Highest severity: {scan_result.summary.highest_severity}")
 
 
+# =============================================================================
+# Main Entry Point
+# =============================================================================
+
+def main() -> None:
+    """Run the demo examples."""
+    # Create the client
+    # client = create_client()
+    
+    # Example 1: Scan a local file
+    # Uncomment and update the path to run:
+    # scan_file_example(client, "/path/to/your/model.pkl")
+    
+    # Example 2: Scan a folder
+    # Uncomment and update the path to run:
+    # scan_folder_example(client, "/path/to/your/models/folder")
+    
+    # Example 3: Scan a HuggingFace model
+    # Uncomment to run (requires huggingface_hub package):
+    # scan_huggingface_example(client, "bert-base-uncased")
+    
+    # Example 4: Scan from S3
+    # Uncomment to run (requires boto3 package):
+    # scan_s3_example(client, "my-bucket", "models/my-model.pkl")
+    
+    # Example 5: Scan from Azure Blob Storage
+    # Uncomment to run (requires azure packages):
+    # scan_azure_blob_example(
+    #     client,
+    #     "https://mystorageaccount.blob.core.windows.net",
+    #     "my-container",
+    #     "models/my-model.pkl",
+    # )
+    
+    # Example 6: Community Scanner - Scan from remote location
+    # Uncomment to run with your model details:
+    # scan_community_example(
+    #     client,
+    #     model_name="my-remote-model",
+    #     model_path="https://my-presigned-s3-url.com/model.pkl",
+    #     model_source="AWS_PRESIGNED",  # or HUGGING_FACE, AZURE_BLOB_SAS, etc.
+    #     model_version="v1.0",
+    # )
+    
+    print("\nDemo complete! Uncomment the examples you want to run.")
+    print("Make sure to update file paths and credentials as needed.")
+
+
 if __name__ == "__main__":
     main()
