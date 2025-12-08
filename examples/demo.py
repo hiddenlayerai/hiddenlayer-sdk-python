@@ -10,7 +10,6 @@ Prerequisites:
        - HIDDENLAYER_CLIENT_ID and HIDDENLAYER_CLIENT_SECRET (OAuth2)
 """
 
-import os
 
 from hiddenlayer import HiddenLayer
 
