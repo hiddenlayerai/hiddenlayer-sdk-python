@@ -54,6 +54,12 @@ class InventoryScanTargetProviderDetails(BaseModel):
 
 
 class InventoryScanTarget(BaseModel):
+    """Specifies what to scan.
+
+    Must provide at least one of:
+    deep_scan with file location details, provider_details, or both.
+    """
+
     asset_region: Optional[str] = None
     """region of the discovered asset"""
 

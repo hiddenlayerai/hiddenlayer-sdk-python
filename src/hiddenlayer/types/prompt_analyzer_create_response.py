@@ -33,6 +33,8 @@ __all__ = [
 
 
 class Categories(BaseModel):
+    """The analysis detection categories"""
+
     guardrail: Optional[bool] = None
     """The input activated the upstream guardrails"""
 
@@ -65,6 +67,8 @@ class Categories(BaseModel):
 
 
 class FrameworksMitre(BaseModel):
+    """The MITRE Atlas framework labels identified during analysis"""
+
     label: Optional[str] = None
     """The label of the MITRE Atlas framework label"""
 
@@ -73,6 +77,8 @@ class FrameworksMitre(BaseModel):
 
 
 class FrameworksOwasp(BaseModel):
+    """The OWASP framework labels identified during analysis"""
+
     label: Optional[str] = None
     """The label of the OWASP framework label"""
 
@@ -81,6 +87,8 @@ class FrameworksOwasp(BaseModel):
 
 
 class FrameworksOwasp2025(BaseModel):
+    """The OWASP:2025 framework labels identified during analysis"""
+
     label: Optional[str] = None
     """The label of the OWASP:2025 framework label"""
 
@@ -89,6 +97,8 @@ class FrameworksOwasp2025(BaseModel):
 
 
 class Frameworks(BaseModel):
+    """The framework labels identified during analysis"""
+
     mitre: Optional[List[FrameworksMitre]] = None
 
     owasp: Optional[List[FrameworksOwasp]] = None
@@ -97,6 +107,8 @@ class Frameworks(BaseModel):
 
 
 class Policy(BaseModel):
+    """The policy used during analysis"""
+
     block_guardrail_detection: Optional[bool] = None
     """Block guardrail detection"""
 
@@ -188,6 +200,8 @@ class Response(BaseModel):
 
 
 class ResultsGuardrailResultsRefusalClassifierResults(BaseModel):
+    """The refusal classifier results"""
+
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the refusal classifier"""
 
@@ -201,6 +215,8 @@ class ResultsGuardrailResultsRefusalClassifierResults(BaseModel):
 
 
 class ResultsGuardrailResults(BaseModel):
+    """The guardrail results"""
+
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the guardrail"""
 
@@ -212,6 +228,8 @@ class ResultsGuardrailResults(BaseModel):
 
 
 class ResultsInputBlockListResults(BaseModel):
+    """The input block list results"""
+
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the input block list"""
 
@@ -222,6 +240,8 @@ class ResultsInputBlockListResults(BaseModel):
 
 
 class ResultsInputCodeResults(BaseModel):
+    """The input code results"""
+
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the input code"""
 
@@ -230,6 +250,8 @@ class ResultsInputCodeResults(BaseModel):
 
 
 class ResultsInputDosResults(BaseModel):
+    """The input denial of service results"""
+
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the input denial of service"""
 
@@ -241,6 +263,8 @@ class ResultsInputDosResults(BaseModel):
 
 
 class ResultsInputLanguageResults(BaseModel):
+    """The input language results"""
+
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the input language detection"""
 
@@ -252,6 +276,8 @@ class ResultsInputLanguageResults(BaseModel):
 
 
 class ResultsInputPiiResults(BaseModel):
+    """The input personally identifiable information results"""
+
     elapsed_ms: Optional[float] = None
     """
     The time in milliseconds it took to process the input personally identifiable
@@ -265,6 +291,8 @@ class ResultsInputPiiResults(BaseModel):
 
 
 class ResultsInputURLResults(BaseModel):
+    """The input URL results"""
+
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the guardrail"""
 
@@ -272,6 +300,8 @@ class ResultsInputURLResults(BaseModel):
 
 
 class ResultsOutputCodeResults(BaseModel):
+    """The output code results"""
+
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the output code"""
 
@@ -280,6 +310,8 @@ class ResultsOutputCodeResults(BaseModel):
 
 
 class ResultsOutputPiiResults(BaseModel):
+    """The output personally identifiable information results"""
+
     elapsed_ms: Optional[float] = None
     """
     The time in milliseconds it took to process the output personally identifiable
@@ -293,6 +325,8 @@ class ResultsOutputPiiResults(BaseModel):
 
 
 class ResultsOutputURLResults(BaseModel):
+    """The output URL results"""
+
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the guardrail"""
 
@@ -319,6 +353,8 @@ class ResultsPromptInjectionClassifierResult(BaseModel):
 
 
 class Results(BaseModel):
+    """The analysis results"""
+
     guardrail_results: Optional[ResultsGuardrailResults] = None
     """The guardrail results"""
 
