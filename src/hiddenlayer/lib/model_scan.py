@@ -7,7 +7,7 @@ including scan_file and scan_folder methods with multipart upload functionality.
 
 import os
 import logging
-from typing import Set, List, Union, Literal, Optional, Generator, cast
+from typing import Any, Set, Dict, List, Union, Literal, Optional, Generator, cast
 from fnmatch import fnmatch
 from pathlib import Path
 from typing_extensions import TYPE_CHECKING
@@ -38,7 +38,11 @@ PathInputType = Union[str, os.PathLike[str]]
 
 def is_duplicate_file_error(exc: BadRequestError) -> bool:
     """Check if a BadRequestError is due to duplicate files being detected."""
-    return isinstance(exc.body, dict) and "duplicate" in exc.body.get("detail", "").lower()
+    if not isinstance(exc.body, dict):
+        return False
+    body = cast(Dict[str, Any], exc.body)
+    detail = body.get("detail", "")
+    return isinstance(detail, str) and "duplicate" in detail.lower()
 
 
 def filter_path_objects(
