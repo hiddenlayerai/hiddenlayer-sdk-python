@@ -7,12 +7,13 @@ including scan_file and scan_folder methods with multipart upload functionality.
 
 import os
 import logging
-from typing import List, Union, Literal, Optional, Generator, cast
+from typing import List, Set, Union, Literal, Optional, Generator, cast
 from fnmatch import fnmatch
 from pathlib import Path
 from typing_extensions import TYPE_CHECKING
 
 from .scan_utils import get_scan_results, wait_for_scan_results, get_scan_results_async, wait_for_scan_results_async
+from .._exceptions import BadRequestError
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +34,11 @@ EXCLUDE_FILE_TYPES = [
 ]
 
 PathInputType = Union[str, os.PathLike[str]]
+
+
+def is_duplicate_file_error(exc: BadRequestError) -> bool:
+    """Check if a BadRequestError is due to duplicate files being detected."""
+    return isinstance(exc.body, dict) and "duplicate" in exc.body.get("detail", "").lower()
 
 
 def filter_path_objects(
@@ -69,6 +75,7 @@ def filter_path_objects(
             return item
         raise ValueError("Objects must be string or Pathlike.")
 
+    # Track resolved canonical paths to detect duplicates (handles symlinks and path normalization)
     seen: Set[str] = set()
 
     key = _identity  # Items must be `str` or `Path`, otherwise raise ValueError
@@ -76,13 +83,22 @@ def filter_path_objects(
     for item in items:
         path: Path = key(item)
 
-        if str(path) in seen:
-            continue
-
-        seen.add(str(path))
-
         if path.is_dir():
             continue
+
+        # Resolve to canonical path (follows symlinks, normalizes . and ..)
+        try:
+            resolved = str(path.resolve())
+        except OSError:
+            # Skip broken symlinks or files we can't access
+            logger.debug("Skipping inaccessible path: %s", path)
+            continue
+
+        if resolved in seen:
+            logger.debug("Skipping duplicate file (same resolved path): %s", path)
+            continue
+
+        seen.add(resolved)
 
         # Skip if there's an allowlist and path doesn't match any
         if allow_patterns is not None and not any(fnmatch(str(path), r) for r in allow_patterns):
@@ -204,7 +220,13 @@ class ModelScanner:
 
         # Upload each file
         for file in files:
-            self._scan_file(scan_id=scan_id, file_path=Path(file))
+            try:
+                self._scan_file(scan_id=scan_id, file_path=Path(file))
+            except BadRequestError as e:
+                if is_duplicate_file_error(e):
+                    logger.warning("Duplicate file detected during folder scan, skipping: %s", file)
+                    continue
+                raise
 
         # Complete the upload
         self._client.scans.upload.complete_all(scan_id=scan_id)
@@ -548,7 +570,13 @@ class AsyncModelScanner:
 
         # Upload each file
         for file in files:
-            await self._scan_file(scan_id=scan_id, file_path=Path(file))
+            try:
+                await self._scan_file(scan_id=scan_id, file_path=Path(file))
+            except BadRequestError as e:
+                if is_duplicate_file_error(e):
+                    logger.warning("Duplicate file detected during folder scan, skipping: %s", file)
+                    continue
+                raise
 
         # Complete the upload
         await self._client.scans.upload.complete_all(scan_id=scan_id)
