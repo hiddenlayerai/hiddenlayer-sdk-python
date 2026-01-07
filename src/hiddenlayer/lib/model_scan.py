@@ -38,10 +38,10 @@ PathInputType = Union[str, os.PathLike[str]]
 
 def is_duplicate_file_error(exc: BadRequestError) -> bool:
     """Check if a BadRequestError is due to duplicate files being detected."""
-    if not isinstance(exc.body, dict):
+    body: object = exc.body
+    if not isinstance(body, dict):
         return False
-    body = cast(Dict[str, Any], exc.body)
-    detail = body.get("detail", "")
+    detail = cast(Dict[str, Any], body).get("detail", "")
     return isinstance(detail, str) and "duplicate" in detail.lower()
 
 
