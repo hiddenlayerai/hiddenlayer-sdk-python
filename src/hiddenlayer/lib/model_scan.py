@@ -69,10 +69,17 @@ def filter_path_objects(
             return item
         raise ValueError("Objects must be string or Pathlike.")
 
+    seen: Set[str] = set()
+
     key = _identity  # Items must be `str` or `Path`, otherwise raise ValueError
 
     for item in items:
         path: Path = key(item)
+
+        if str(path) in seen:
+            continue
+
+        seen.add(str(path))
 
         if path.is_dir():
             continue
@@ -86,15 +93,6 @@ def filter_path_objects(
             continue
 
         yield item
-
-DISALLOWED_CHARACTERS = "&$@=;:+,? {}[]<>^%`\"~#|"
-_SANITIZE_TRANSLATION_TABLE = str.maketrans("", "", DISALLOWED_CHARACTERS)
-
-def sanitize_path(path: Union[str, os.PathLike[str]]) -> str:
-    """Sanitize a path by removing characters that model scanner doesn't support."""
-
-    return str(path).translate(_SANITIZE_TRANSLATION_TABLE)
-
 
 class ModelScanner:
     """
@@ -426,7 +424,7 @@ class ModelScanner:
 
         # Initiate multipart upload for this file
         upload = self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=sanitize_path(str(file_path)), file_content_length=filesize
+            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
         )
 
         # Upload each part
