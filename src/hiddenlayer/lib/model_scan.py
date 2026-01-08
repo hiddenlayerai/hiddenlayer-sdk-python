@@ -7,12 +7,13 @@ including scan_file and scan_folder methods with multipart upload functionality.
 
 import os
 import logging
-from typing import List, Union, Literal, Optional, Generator, cast
+from typing import Any, Set, Dict, List, Union, Literal, Optional, Generator, cast
 from fnmatch import fnmatch
 from pathlib import Path
 from typing_extensions import TYPE_CHECKING
 
 from .scan_utils import get_scan_results, wait_for_scan_results, get_scan_results_async, wait_for_scan_results_async
+from .._exceptions import BadRequestError
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +34,15 @@ EXCLUDE_FILE_TYPES = [
 ]
 
 PathInputType = Union[str, os.PathLike[str]]
+
+
+def is_duplicate_file_error(exc: BadRequestError) -> bool:
+    """Check if a BadRequestError is due to duplicate files being detected."""
+    body: object = exc.body
+    if not isinstance(body, dict):
+        return False
+    detail = cast(Dict[str, Any], body).get("detail", "")
+    return isinstance(detail, str) and "duplicate" in detail.lower()
 
 
 def filter_path_objects(
@@ -69,6 +79,9 @@ def filter_path_objects(
             return item
         raise ValueError("Objects must be string or Pathlike.")
 
+    # Track resolved canonical paths to detect duplicates (handles symlinks and path normalization)
+    seen: Set[str] = set()
+
     key = _identity  # Items must be `str` or `Path`, otherwise raise ValueError
 
     for item in items:
@@ -76,6 +89,20 @@ def filter_path_objects(
 
         if path.is_dir():
             continue
+
+        # Resolve to canonical path (follows symlinks, normalizes . and ..)
+        try:
+            resolved = str(path.resolve())
+        except OSError:
+            # Skip broken symlinks or files we can't access
+            logger.debug("Skipping inaccessible path: %s", path)
+            continue
+
+        if resolved in seen:
+            logger.debug("Skipping duplicate file (same resolved path): %s", path)
+            continue
+
+        seen.add(resolved)
 
         # Skip if there's an allowlist and path doesn't match any
         if allow_patterns is not None and not any(fnmatch(str(path), r) for r in allow_patterns):
@@ -86,15 +113,6 @@ def filter_path_objects(
             continue
 
         yield item
-
-DISALLOWED_CHARACTERS = "&$@=;:+,? {}[]<>^%`\"~#|"
-_SANITIZE_TRANSLATION_TABLE = str.maketrans("", "", DISALLOWED_CHARACTERS)
-
-def sanitize_path(path: Union[str, os.PathLike[str]]) -> str:
-    """Sanitize a path by removing characters that model scanner doesn't support."""
-
-    return str(path).translate(_SANITIZE_TRANSLATION_TABLE)
-
 
 class ModelScanner:
     """
@@ -206,7 +224,13 @@ class ModelScanner:
 
         # Upload each file
         for file in files:
-            self._scan_file(scan_id=scan_id, file_path=Path(file))
+            try:
+                self._scan_file(scan_id=scan_id, file_path=Path(file))
+            except BadRequestError as e:
+                if is_duplicate_file_error(e):
+                    logger.warning("Duplicate file detected during folder scan, skipping: %s", file)
+                    continue
+                raise
 
         # Complete the upload
         self._client.scans.upload.complete_all(scan_id=scan_id)
@@ -426,7 +450,7 @@ class ModelScanner:
 
         # Initiate multipart upload for this file
         upload = self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=sanitize_path(str(file_path)), file_content_length=filesize
+            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
         )
 
         # Upload each part
@@ -550,7 +574,13 @@ class AsyncModelScanner:
 
         # Upload each file
         for file in files:
-            await self._scan_file(scan_id=scan_id, file_path=Path(file))
+            try:
+                await self._scan_file(scan_id=scan_id, file_path=Path(file))
+            except BadRequestError as e:
+                if is_duplicate_file_error(e):
+                    logger.warning("Duplicate file detected during folder scan, skipping: %s", file)
+                    continue
+                raise
 
         # Complete the upload
         await self._client.scans.upload.complete_all(scan_id=scan_id)
@@ -718,7 +748,7 @@ class AsyncModelScanner:
 
         # Initiate multipart upload for this file
         upload = await self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=sanitize_path(str(file_path)), file_content_length=filesize
+            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
         )
 
         # Upload each part
