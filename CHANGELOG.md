@@ -1,5 +1,29 @@
 # Changelog
 
+## 3.2.1 (2026-01-09)
+
+Full Changelog: [v3.2.0...v3.2.1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.2.0...v3.2.1)
+
+### Bug Fixes
+
+* **types:** allow pyright to infer TypedDict types within SequenceNotStr ([edaab09](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/edaab09f6ae593763951d5167ea9bd3296917a8d))
+* use async_to_httpx_files in patch method ([d19fe1b](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/d19fe1bb26b29e5d524ff1ed2604f364dc101411))
+
+
+### Chores
+
+* add missing docstrings ([a003642](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/a003642e26bbbb022dc14fc8904496ddfdea6a92))
+* **deps:** mypy 1.18.1 has a regression, pin to 1.17 ([38c130d](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/38c130d0a716a10c3e2c210a1ae8754b25be4096))
+* **internal:** add `--fix` argument to lint script ([c64b851](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/c64b851f4ca661550ecc8177f3713e2f1044be51))
+* **internal:** add missing files argument to base client ([b02afa8](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/b02afa86a0292e7af08f187afec2b962c9bb91e9))
+* **internal:** codegen related update ([6ad2609](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/6ad260961a7da75a7052b7692b3d952399efb214))
+* update lockfile ([79a938e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/79a938eb5e985ee98181a489c3fc0003891f82b4))
+
+
+### Documentation
+
+* add more examples ([139e807](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/139e8077775666aeeb935984de40d3d9d4044d32))
+
 ## 3.2.0 (2025-12-04)
 
 Full Changelog: [v3.1.0...v3.2.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.1.0...v3.2.0)
