@@ -51,18 +51,24 @@ class CardListParams(TypedDict, total=False):
 
 
 class ModelCreated(TypedDict, total=False):
+    """match on models created between dates"""
+
     gte: Annotated[Union[str, datetime], PropertyInfo(format="iso8601")]
 
     lte: Annotated[Union[str, datetime], PropertyInfo(format="iso8601")]
 
 
 class ModelName(TypedDict, total=False):
+    """substring match on model name"""
+
     contains: str
 
     eq: str
 
 
 class Source(TypedDict, total=False):
+    """substring and full match on model source"""
+
     contains: str
 
     eq: str
