@@ -9,6 +9,7 @@ import os
 import logging
 from typing import Any, Set, Dict, List, Union, Literal, Optional, Generator, cast
 from fnmatch import fnmatch
+from urllib.parse import quote
 from pathlib import Path
 from typing_extensions import TYPE_CHECKING
 
@@ -450,7 +451,7 @@ class ModelScanner:
 
         # Initiate multipart upload for this file
         upload = self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
+            scan_id=scan_id, file_name=quote(str(file_path)), file_content_length=filesize
         )
 
         # Upload each part
@@ -748,7 +749,7 @@ class AsyncModelScanner:
 
         # Initiate multipart upload for this file
         upload = await self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
+            scan_id=scan_id, file_name=quote(str(file_path)), file_content_length=filesize
         )
 
         # Upload each part
