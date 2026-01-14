@@ -5,22 +5,21 @@ This module provides the model scanning methods that were available in the old S
 including scan_file and scan_folder methods with multipart upload functionality.
 """
 
-import logging
 import os
+import logging
+from typing import Any, Set, Dict, List, Union, Literal, Optional, Generator, cast
 from fnmatch import fnmatch
 from pathlib import Path
-from typing import Any, Dict, Generator, List, Literal, Optional, Set, Union, cast
 from urllib.parse import quote
-
 from typing_extensions import TYPE_CHECKING
 
-from .._exceptions import BadRequestError
 from .scan_utils import (
     get_scan_results,
-    get_scan_results_async,
     wait_for_scan_results,
+    get_scan_results_async,
     wait_for_scan_results_async,
 )
+from .._exceptions import BadRequestError
 
 logger = logging.getLogger(__name__)
 

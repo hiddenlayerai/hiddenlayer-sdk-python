@@ -3,8 +3,8 @@ from __future__ import annotations
 import os
 import tempfile
 from pathlib import Path
-from unittest.mock import Mock, AsyncMock, patch
 from urllib.parse import quote, unquote
+from unittest.mock import Mock, AsyncMock, patch
 
 import pytest
 
@@ -475,15 +475,15 @@ class TestUnicodeFilenameEncoding:
         self.scanner = ModelScanner(self.mock_client)
 
     @pytest.mark.parametrize(
-        "unicode_suffix,description",
+        "unicode_suffix",
         [
-            ("\u2002", "en space"),
-            ("\u00e9", "e with acute accent"),
-            ("\u4e2d\u6587", "Chinese characters"),
-            ("\u0440\u0443\u0441\u0441\u043a\u0438\u0439", "Cyrillic characters"),
+            pytest.param("\u2002", id="en_space"),
+            pytest.param("\u00e9", id="accented"),
+            pytest.param("\u4e2d\u6587", id="chinese"),
+            pytest.param("\u0440\u0443\u0441\u0441\u043a\u0438\u0439", id="cyrillic"),
         ],
     )
-    def test_unicode_filename_is_encoded(self, unicode_suffix: str, description: str) -> None:
+    def test_unicode_filename_is_encoded(self, unicode_suffix: str) -> None:
         """Test that Unicode filenames are percent-encoded when passed to file.add()."""
         # Create a temporary directory
         with tempfile.TemporaryDirectory() as temp_dir:
