@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from urllib.parse import quote
+
 import httpx
 
 from ...._types import Body, Query, Headers, NotGiven, not_given
@@ -69,7 +71,7 @@ class FileResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         extra_headers = {
             "file-content-length": str(file_content_length),
-            "file-name": file_name,
+            "file-name": quote(file_name),
             **(extra_headers or {}),
         }
         return self._post(
@@ -166,7 +168,7 @@ class AsyncFileResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         extra_headers = {
             "file-content-length": str(file_content_length),
-            "file-name": file_name,
+            "file-name": quote(file_name),
             **(extra_headers or {}),
         }
         return await self._post(

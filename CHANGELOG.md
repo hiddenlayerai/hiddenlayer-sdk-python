@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.2.2 (2026-01-14)
+
+Full Changelog: [v3.2.1...v3.2.2](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.2.1...v3.2.2)
+
+### Features
+
+* **client:** add support for binary request streaming ([26da19b](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/26da19b273d4955338b7243caf3f2d7b4087c2d4))
+
 ## 3.2.1 (2026-01-09)
 
 Full Changelog: [v3.2.0...v3.2.1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.2.0...v3.2.1)
