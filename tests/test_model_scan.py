@@ -4,6 +4,7 @@ import os
 import tempfile
 from pathlib import Path
 from unittest.mock import Mock, AsyncMock, patch
+from urllib.parse import quote, unquote
 
 import pytest
 
@@ -463,3 +464,149 @@ class TestExcludeFileTypes:
 
         for pattern in expected_patterns:
             assert pattern in EXCLUDE_FILE_TYPES
+
+
+class TestUnicodeFilenameEncoding:
+    """Test that filenames with Unicode characters are properly encoded for HTTP headers."""
+
+    def setup_method(self) -> None:
+        """Set up test fixtures."""
+        self.mock_client = Mock()
+        self.scanner = ModelScanner(self.mock_client)
+
+    @pytest.mark.parametrize(
+        "unicode_suffix,description",
+        [
+            ("\u2002", "en space"),
+            ("\u00e9", "e with acute accent"),
+            ("\u4e2d\u6587", "Chinese characters"),
+            ("\u0440\u0443\u0441\u0441\u043a\u0438\u0439", "Cyrillic characters"),
+        ],
+    )
+    def test_unicode_filename_is_encoded(self, unicode_suffix: str, description: str) -> None:
+        """Test that Unicode filenames are percent-encoded when passed to file.add()."""
+        # Create a temporary directory
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Create a file with Unicode in the name
+            unicode_filename = f"model{unicode_suffix}.bin"
+            file_path = Path(temp_dir) / unicode_filename
+            file_path.write_bytes(b"test data")
+
+            # Mock responses
+            mock_upload_response = Mock()
+            mock_upload_response.scan_id = "test-scan-id"
+
+            mock_part = Mock()
+            mock_part.start_offset = 0
+            mock_part.end_offset = None
+            mock_part.upload_url = "https://example.com/upload"
+
+            mock_file_add_response = Mock()
+            mock_file_add_response.parts = [mock_part]
+            mock_file_add_response.upload_id = "upload-123"
+
+            mock_scan_report = Mock()
+            mock_scan_report.status = "done"
+
+            # Set up mocks
+            self.mock_client.scans.upload.start.return_value = mock_upload_response
+            self.mock_client.scans.upload.file.add.return_value = mock_file_add_response
+            self.mock_client.scans.upload.file.complete.return_value = Mock()
+            self.mock_client.scans.upload.complete_all.return_value = Mock()
+            self.mock_client.scans.jobs.retrieve.return_value = mock_scan_report
+
+            mock_response = Mock(raise_for_status=Mock(return_value=None))
+            self.mock_client._client = Mock(put=Mock(return_value=mock_response))
+
+            # Call scan_file
+            self.scanner.scan_file(
+                model_name="test-model",
+                model_path=file_path,
+                wait_for_results=False,
+            )
+
+            # Verify file.add was called with encoded filename
+            call_kwargs = self.mock_client.scans.upload.file.add.call_args.kwargs
+            encoded_filename = call_kwargs["file_name"]
+
+            # The filename should be ASCII-safe (percent-encoded)
+            assert encoded_filename.isascii(), f"Filename should be ASCII-safe for HTTP headers: {encoded_filename}"
+
+            # The filename should decode back to the original
+            assert unquote(encoded_filename) == str(file_path), f"Encoded filename should decode to original path"
+
+    def test_ascii_filename_unchanged(self) -> None:
+        """Test that ASCII-only filenames pass through quote() unchanged."""
+        ascii_filename = "/path/to/model_v1.bin"
+        assert quote(ascii_filename) == ascii_filename.replace("/", "%2F") or quote(ascii_filename, safe="/") == ascii_filename
+
+    def test_en_space_encoding(self) -> None:
+        """Test specific encoding of en space character (original bug report)."""
+        # The en space character \u2002 encodes to %E2%80%82 in UTF-8
+        filename = "model\u2002file.bin"
+        encoded = quote(filename)
+
+        assert "\u2002" not in encoded, "Unicode en space should be encoded"
+        assert "%E2%80%82" in encoded, "En space should encode to %E2%80%82"
+        assert unquote(encoded) == filename, "Should decode back to original"
+
+
+class TestAsyncUnicodeFilenameEncoding:
+    """Test async scanner handles Unicode filenames correctly."""
+
+    def setup_method(self) -> None:
+        """Set up test fixtures."""
+        self.mock_client = AsyncMock()
+        self.scanner = AsyncModelScanner(self.mock_client)
+
+    @pytest.mark.asyncio
+    async def test_async_unicode_filename_is_encoded(self) -> None:
+        """Test that async scanner encodes Unicode filenames."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Create a file with Unicode en space
+            unicode_filename = "model\u2002file.bin"
+            file_path = Path(temp_dir) / unicode_filename
+            file_path.write_bytes(b"test data")
+
+            # Mock responses
+            mock_upload_response = Mock()
+            mock_upload_response.scan_id = "test-scan-id"
+
+            mock_part = Mock()
+            mock_part.start_offset = 0
+            mock_part.end_offset = None
+            mock_part.upload_url = "https://example.com/upload"
+
+            mock_file_add_response = Mock()
+            mock_file_add_response.parts = [mock_part]
+            mock_file_add_response.upload_id = "upload-123"
+
+            mock_scan_report = Mock()
+            mock_scan_report.status = "done"
+
+            # Set up mocks
+            self.mock_client.scans.upload.start.return_value = mock_upload_response
+            self.mock_client.scans.upload.file.add.return_value = mock_file_add_response
+            self.mock_client.scans.upload.file.complete.return_value = Mock()
+            self.mock_client.scans.upload.complete_all.return_value = Mock()
+            self.mock_client.scans.jobs.retrieve.return_value = mock_scan_report
+
+            mock_response = Mock(raise_for_status=Mock(return_value=None))
+            self.mock_client._client = Mock(put=AsyncMock(return_value=mock_response))
+
+            # Call async scan_file
+            await self.scanner.scan_file(
+                model_name="test-model",
+                model_path=file_path,
+                wait_for_results=False,
+            )
+
+            # Verify file.add was called with encoded filename
+            call_kwargs = self.mock_client.scans.upload.file.add.call_args.kwargs
+            encoded_filename = call_kwargs["file_name"]
+
+            # The filename should be ASCII-safe
+            assert encoded_filename.isascii(), f"Filename should be ASCII-safe: {encoded_filename}"
+
+            # Should decode back to original
+            assert unquote(encoded_filename) == str(file_path)
