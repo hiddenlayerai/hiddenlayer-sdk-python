@@ -10,9 +10,15 @@ import logging
 from typing import Any, Set, Dict, List, Union, Literal, Optional, Generator, cast
 from fnmatch import fnmatch
 from pathlib import Path
+from urllib.parse import quote
 from typing_extensions import TYPE_CHECKING
 
-from .scan_utils import get_scan_results, wait_for_scan_results, get_scan_results_async, wait_for_scan_results_async
+from .scan_utils import (
+    get_scan_results,
+    wait_for_scan_results,
+    get_scan_results_async,
+    wait_for_scan_results_async,
+)
 from .._exceptions import BadRequestError
 
 logger = logging.getLogger(__name__)
@@ -450,7 +456,7 @@ class ModelScanner:
 
         # Initiate multipart upload for this file
         upload = self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
+            scan_id=scan_id, file_name=quote(str(file_path)), file_content_length=filesize
         )
 
         # Upload each part
@@ -748,7 +754,7 @@ class AsyncModelScanner:
 
         # Initiate multipart upload for this file
         upload = await self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
+            scan_id=scan_id, file_name=quote(str(file_path)), file_content_length=filesize
         )
 
         # Upload each part
