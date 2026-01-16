@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.3.0 (2026-01-16)
+
+Full Changelog: [v3.2.2...v3.3.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.2.2...v3.3.0)
+
+### Features
+
+* **api:** api update ([c9f395b](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/c9f395b31376da8d2799bf5bcaa785065e821f18))
+
+
+### Chores
+
+* **internal:** update `actions/checkout` version ([4aaddb5](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/4aaddb537aa2187a7ef0388ea43e61042ab61f29))
+
 ## 3.2.2 (2026-01-14)
 
 Full Changelog: [v3.2.1...v3.2.2](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.2.1...v3.2.2)
