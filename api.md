@@ -25,6 +25,30 @@ Methods:
 
 - <code title="get /models/v4/cards">client.models.cards.<a href="./src/hiddenlayer/resources/models/cards.py">list</a>(\*\*<a href="src/hiddenlayer/types/models/card_list_params.py">params</a>) -> <a href="./src/hiddenlayer/types/models/card_list_response.py">SyncOffsetPage[CardListResponse]</a></code>
 
+# Evaluations
+
+## RedTeam
+
+Types:
+
+```python
+from hiddenlayer.types.evaluations import (
+    RedTeamCreateResponse,
+    RedTeamRetrieveNextActionResponse,
+    RedTeamRetrieveStatusResponse,
+    RedTeamSubmitTargetResponseResponse,
+    RedTeamTerminateResponse,
+)
+```
+
+Methods:
+
+- <code title="post /evaluations/v1-beta/red-team">client.evaluations.red_team.<a href="./src/hiddenlayer/resources/evaluations/red_team.py">create</a>(\*\*<a href="src/hiddenlayer/types/evaluations/red_team_create_params.py">params</a>) -> <a href="./src/hiddenlayer/types/evaluations/red_team_create_response.py">RedTeamCreateResponse</a></code>
+- <code title="get /evaluations/v1-beta/red-team/{workflow_id}/next-action">client.evaluations.red_team.<a href="./src/hiddenlayer/resources/evaluations/red_team.py">retrieve_next_action</a>(workflow_id) -> <a href="./src/hiddenlayer/types/evaluations/red_team_retrieve_next_action_response.py">RedTeamRetrieveNextActionResponse</a></code>
+- <code title="get /evaluations/v1-beta/red-team/{workflow_id}/status">client.evaluations.red_team.<a href="./src/hiddenlayer/resources/evaluations/red_team.py">retrieve_status</a>(workflow_id) -> <a href="./src/hiddenlayer/types/evaluations/red_team_retrieve_status_response.py">RedTeamRetrieveStatusResponse</a></code>
+- <code title="post /evaluations/v1-beta/red-team/{workflow_id}/target-response">client.evaluations.red_team.<a href="./src/hiddenlayer/resources/evaluations/red_team.py">submit_target_response</a>(workflow_id, \*\*<a href="src/hiddenlayer/types/evaluations/red_team_submit_target_response_params.py">params</a>) -> <a href="./src/hiddenlayer/types/evaluations/red_team_submit_target_response_response.py">RedTeamSubmitTargetResponseResponse</a></code>
+- <code title="post /evaluations/v1-beta/red-team/terminations/{workflow_id}">client.evaluations.red_team.<a href="./src/hiddenlayer/resources/evaluations/red_team.py">terminate</a>(workflow_id) -> <a href="./src/hiddenlayer/types/evaluations/red_team_terminate_response.py">Optional[RedTeamTerminateResponse]</a></code>
+
 # PromptAnalyzer
 
 Types:
