@@ -1,5 +1,22 @@
 # Changelog
 
+## 3.3.0 (2026-01-30)
+
+Full Changelog: [v3.2.2...v3.3.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.2.2...v3.3.0)
+
+### Features
+
+* **api:** api update ([6fba9a3](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/6fba9a328358bf0d2b8d3f33d8dc4051cd38d878))
+* **api:** api update ([c9f395b](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/c9f395b31376da8d2799bf5bcaa785065e821f18))
+* **client:** add custom JSON encoder for extended type support ([e108e39](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e108e39cbf807e7d690f1c72ac32229b2269962a))
+
+
+### Chores
+
+* **ci:** upgrade `actions/github-script` ([3b4df21](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/3b4df21b705214ad6246aa0be2fcc75d8e7e5a7f))
+* configure Dependabot to target next branch ([#165](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/165)) ([71dc626](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/71dc626806e43c668f112ff65dc21a47676bc8cb))
+* **internal:** update `actions/checkout` version ([4aaddb5](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/4aaddb537aa2187a7ef0388ea43e61042ab61f29))
+
 ## 3.2.2 (2026-01-14)
 
 Full Changelog: [v3.2.1...v3.2.2](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.2.1...v3.2.2)
