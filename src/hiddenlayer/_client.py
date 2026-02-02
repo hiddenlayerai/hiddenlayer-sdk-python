@@ -38,6 +38,7 @@ if TYPE_CHECKING:
     from .lib.community_scan import CommunityScanner, AsyncCommunityScanner
     from .resources.scans.scans import ScansResource, AsyncScansResource
     from .resources.interactions import InteractionsResource, AsyncInteractionsResource
+    from .lib.evaluation_sessions import EvaluationSessionsResource, AsyncEvaluationSessionsResource
     from .resources.models.models import ModelsResource, AsyncModelsResource
     from .resources.prompt_analyzer import PromptAnalyzerResource, AsyncPromptAnalyzerResource
     from .resources.evaluations.evaluations import EvaluationsResource, AsyncEvaluationsResource
@@ -161,6 +162,12 @@ class HiddenLayer(SyncAPIClient):
         from .resources.evaluations import EvaluationsResource
 
         return EvaluationsResource(self)
+
+    @cached_property
+    def evaluation_sessions(self) -> EvaluationSessionsResource:
+        from .lib.evaluation_sessions import EvaluationSessionsResource
+
+        return EvaluationSessionsResource(self)
 
     @cached_property
     def prompt_analyzer(self) -> PromptAnalyzerResource:
@@ -442,6 +449,12 @@ class AsyncHiddenLayer(AsyncAPIClient):
         from .resources.evaluations import AsyncEvaluationsResource
 
         return AsyncEvaluationsResource(self)
+
+    @cached_property
+    def evaluation_sessions(self) -> AsyncEvaluationSessionsResource:
+        from .lib.evaluation_sessions import AsyncEvaluationSessionsResource
+
+        return AsyncEvaluationSessionsResource(self)
 
     @cached_property
     def prompt_analyzer(self) -> AsyncPromptAnalyzerResource:
