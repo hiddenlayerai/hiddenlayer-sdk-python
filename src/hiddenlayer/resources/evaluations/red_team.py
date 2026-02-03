@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import httpx
 
-from ..._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
+from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -19,7 +17,6 @@ from ..._response import (
 from ..._base_client import make_request_options
 from ...types.evaluations import red_team_create_params, red_team_submit_target_response_params
 from ...types.evaluations.red_team_create_response import RedTeamCreateResponse
-from ...types.evaluations.red_team_terminate_response import RedTeamTerminateResponse
 from ...types.evaluations.red_team_retrieve_status_response import RedTeamRetrieveStatusResponse
 from ...types.evaluations.red_team_retrieve_next_action_response import RedTeamRetrieveNextActionResponse
 from ...types.evaluations.red_team_submit_target_response_response import RedTeamSubmitTargetResponseResponse
@@ -286,7 +283,7 @@ class RedTeamResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Optional[RedTeamTerminateResponse]:
+    ) -> None:
         """
         Terminate a running workflow.
 
@@ -303,12 +300,13 @@ class RedTeamResource(SyncAPIResource):
         """
         if not workflow_id:
             raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._post(
             f"/evaluations/v1-beta/red-team/terminations/{workflow_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=RedTeamTerminateResponse,
+            cast_to=NoneType,
         )
 
 
@@ -571,7 +569,7 @@ class AsyncRedTeamResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> Optional[RedTeamTerminateResponse]:
+    ) -> None:
         """
         Terminate a running workflow.
 
@@ -588,12 +586,13 @@ class AsyncRedTeamResource(AsyncAPIResource):
         """
         if not workflow_id:
             raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._post(
             f"/evaluations/v1-beta/red-team/terminations/{workflow_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=RedTeamTerminateResponse,
+            cast_to=NoneType,
         )
 
 
