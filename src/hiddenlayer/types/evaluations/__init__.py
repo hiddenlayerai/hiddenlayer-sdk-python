@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from .red_team_create_params import RedTeamCreateParams as RedTeamCreateParams
 from .red_team_create_response import RedTeamCreateResponse as RedTeamCreateResponse
-from .red_team_terminate_response import RedTeamTerminateResponse as RedTeamTerminateResponse
 from .red_team_retrieve_status_response import RedTeamRetrieveStatusResponse as RedTeamRetrieveStatusResponse
 from .red_team_retrieve_next_action_response import (
     RedTeamRetrieveNextActionResponse as RedTeamRetrieveNextActionResponse,

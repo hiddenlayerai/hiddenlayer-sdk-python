@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Optional, cast
+from typing import Any, cast
 
 import pytest
 
@@ -11,7 +11,6 @@ from hiddenlayer import HiddenLayer, AsyncHiddenLayer
 from tests.utils import assert_matches_type
 from hiddenlayer.types.evaluations import (
     RedTeamCreateResponse,
-    RedTeamTerminateResponse,
     RedTeamRetrieveStatusResponse,
     RedTeamRetrieveNextActionResponse,
     RedTeamSubmitTargetResponseResponse,
@@ -223,7 +222,7 @@ class TestRedTeam:
         red_team = client.evaluations.red_team.terminate(
             "workflow_id",
         )
-        assert_matches_type(Optional[RedTeamTerminateResponse], red_team, path=["response"])
+        assert red_team is None
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -235,7 +234,7 @@ class TestRedTeam:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         red_team = response.parse()
-        assert_matches_type(Optional[RedTeamTerminateResponse], red_team, path=["response"])
+        assert red_team is None
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -247,7 +246,7 @@ class TestRedTeam:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             red_team = response.parse()
-            assert_matches_type(Optional[RedTeamTerminateResponse], red_team, path=["response"])
+            assert red_team is None
 
         assert cast(Any, response.is_closed) is True
 
@@ -465,7 +464,7 @@ class TestAsyncRedTeam:
         red_team = await async_client.evaluations.red_team.terminate(
             "workflow_id",
         )
-        assert_matches_type(Optional[RedTeamTerminateResponse], red_team, path=["response"])
+        assert red_team is None
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -477,7 +476,7 @@ class TestAsyncRedTeam:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         red_team = await response.parse()
-        assert_matches_type(Optional[RedTeamTerminateResponse], red_team, path=["response"])
+        assert red_team is None
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -489,7 +488,7 @@ class TestAsyncRedTeam:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             red_team = await response.parse()
-            assert_matches_type(Optional[RedTeamTerminateResponse], red_team, path=["response"])
+            assert red_team is None
 
         assert cast(Any, response.is_closed) is True
 
