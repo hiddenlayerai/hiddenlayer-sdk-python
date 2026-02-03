@@ -87,11 +87,8 @@ class OAuth2ClientCredentials(httpx.Auth):
         return httpx.Request(
             "POST",
             self._token_url,
-            content=b"grant_type=client_credentials",
-            headers={
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": f"Basic {encoded_credentials}",
-            },
+            params={"grant_type": "client_credentials"},
+            headers={"Authorization": f"Basic {encoded_credentials}"},
         )
 
     def token_is_expired(self) -> bool:
