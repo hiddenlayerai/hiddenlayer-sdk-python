@@ -14,6 +14,7 @@ from hiddenlayer.types.evaluations import (
     RedTeamRetrieveStatusResponse,
     RedTeamRetrieveNextActionResponse,
     RedTeamSubmitTargetResponseResponse,
+    RedTeamRetrieveEvaluationResultsResponse,
 )
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -81,6 +82,48 @@ class TestRedTeam:
             assert_matches_type(RedTeamCreateResponse, red_team, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_retrieve_evaluation_results(self, client: HiddenLayer) -> None:
+        red_team = client.evaluations.red_team.retrieve_evaluation_results(
+            "workflow_id",
+        )
+        assert_matches_type(RedTeamRetrieveEvaluationResultsResponse, red_team, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_retrieve_evaluation_results(self, client: HiddenLayer) -> None:
+        response = client.evaluations.red_team.with_raw_response.retrieve_evaluation_results(
+            "workflow_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        red_team = response.parse()
+        assert_matches_type(RedTeamRetrieveEvaluationResultsResponse, red_team, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_retrieve_evaluation_results(self, client: HiddenLayer) -> None:
+        with client.evaluations.red_team.with_streaming_response.retrieve_evaluation_results(
+            "workflow_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            red_team = response.parse()
+            assert_matches_type(RedTeamRetrieveEvaluationResultsResponse, red_team, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_path_params_retrieve_evaluation_results(self, client: HiddenLayer) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `workflow_id` but received ''"):
+            client.evaluations.red_team.with_raw_response.retrieve_evaluation_results(
+                "",
+            )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -323,6 +366,48 @@ class TestAsyncRedTeam:
             assert_matches_type(RedTeamCreateResponse, red_team, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_retrieve_evaluation_results(self, async_client: AsyncHiddenLayer) -> None:
+        red_team = await async_client.evaluations.red_team.retrieve_evaluation_results(
+            "workflow_id",
+        )
+        assert_matches_type(RedTeamRetrieveEvaluationResultsResponse, red_team, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_retrieve_evaluation_results(self, async_client: AsyncHiddenLayer) -> None:
+        response = await async_client.evaluations.red_team.with_raw_response.retrieve_evaluation_results(
+            "workflow_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        red_team = await response.parse()
+        assert_matches_type(RedTeamRetrieveEvaluationResultsResponse, red_team, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_retrieve_evaluation_results(self, async_client: AsyncHiddenLayer) -> None:
+        async with async_client.evaluations.red_team.with_streaming_response.retrieve_evaluation_results(
+            "workflow_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            red_team = await response.parse()
+            assert_matches_type(RedTeamRetrieveEvaluationResultsResponse, red_team, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_path_params_retrieve_evaluation_results(self, async_client: AsyncHiddenLayer) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `workflow_id` but received ''"):
+            await async_client.evaluations.red_team.with_raw_response.retrieve_evaluation_results(
+                "",
+            )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize

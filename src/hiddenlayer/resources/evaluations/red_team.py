@@ -20,6 +20,7 @@ from ...types.evaluations.red_team_create_response import RedTeamCreateResponse
 from ...types.evaluations.red_team_retrieve_status_response import RedTeamRetrieveStatusResponse
 from ...types.evaluations.red_team_retrieve_next_action_response import RedTeamRetrieveNextActionResponse
 from ...types.evaluations.red_team_submit_target_response_response import RedTeamSubmitTargetResponseResponse
+from ...types.evaluations.red_team_retrieve_evaluation_results_response import RedTeamRetrieveEvaluationResultsResponse
 
 __all__ = ["RedTeamResource", "AsyncRedTeamResource"]
 
@@ -143,6 +144,41 @@ class RedTeamResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=RedTeamCreateResponse,
+        )
+
+    def retrieve_evaluation_results(
+        self,
+        workflow_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> RedTeamRetrieveEvaluationResultsResponse:
+        """
+        Get the complete result of a red team workflow.
+
+        Args:
+          workflow_id: The workflow identifier
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not workflow_id:
+            raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
+        return self._get(
+            f"/evaluations/v1-beta/red-team/{workflow_id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=RedTeamRetrieveEvaluationResultsResponse,
         )
 
     def retrieve_next_action(
@@ -431,6 +467,41 @@ class AsyncRedTeamResource(AsyncAPIResource):
             cast_to=RedTeamCreateResponse,
         )
 
+    async def retrieve_evaluation_results(
+        self,
+        workflow_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> RedTeamRetrieveEvaluationResultsResponse:
+        """
+        Get the complete result of a red team workflow.
+
+        Args:
+          workflow_id: The workflow identifier
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not workflow_id:
+            raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
+        return await self._get(
+            f"/evaluations/v1-beta/red-team/{workflow_id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=RedTeamRetrieveEvaluationResultsResponse,
+        )
+
     async def retrieve_next_action(
         self,
         workflow_id: str,
@@ -603,6 +674,9 @@ class RedTeamResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             red_team.create,
         )
+        self.retrieve_evaluation_results = to_raw_response_wrapper(
+            red_team.retrieve_evaluation_results,
+        )
         self.retrieve_next_action = to_raw_response_wrapper(
             red_team.retrieve_next_action,
         )
@@ -623,6 +697,9 @@ class AsyncRedTeamResourceWithRawResponse:
 
         self.create = async_to_raw_response_wrapper(
             red_team.create,
+        )
+        self.retrieve_evaluation_results = async_to_raw_response_wrapper(
+            red_team.retrieve_evaluation_results,
         )
         self.retrieve_next_action = async_to_raw_response_wrapper(
             red_team.retrieve_next_action,
@@ -645,6 +722,9 @@ class RedTeamResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             red_team.create,
         )
+        self.retrieve_evaluation_results = to_streamed_response_wrapper(
+            red_team.retrieve_evaluation_results,
+        )
         self.retrieve_next_action = to_streamed_response_wrapper(
             red_team.retrieve_next_action,
         )
@@ -665,6 +745,9 @@ class AsyncRedTeamResourceWithStreamingResponse:
 
         self.create = async_to_streamed_response_wrapper(
             red_team.create,
+        )
+        self.retrieve_evaluation_results = async_to_streamed_response_wrapper(
+            red_team.retrieve_evaluation_results,
         )
         self.retrieve_next_action = async_to_streamed_response_wrapper(
             red_team.retrieve_next_action,
