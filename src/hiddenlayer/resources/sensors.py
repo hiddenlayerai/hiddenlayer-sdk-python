@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import typing_extensions
 from typing import Dict
 from typing_extensions import Literal
 
@@ -47,6 +48,7 @@ class SensorsResource(SyncAPIResource):
         """
         return SensorsResourceWithStreamingResponse(self)
 
+    @typing_extensions.deprecated("deprecated")
     def create(
         self,
         *,
@@ -63,7 +65,7 @@ class SensorsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorCreateResponse:
         """
-        Create Sensor Record
+        ⚠️ **DEPRECATED**: This endpoint will be removed after April 13, 2026.
 
         Args:
           extra_headers: Send extra headers
@@ -92,6 +94,7 @@ class SensorsResource(SyncAPIResource):
             cast_to=SensorCreateResponse,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def retrieve(
         self,
         sensor_id: str,
@@ -104,7 +107,7 @@ class SensorsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorRetrieveResponse:
         """
-        Get Sensor
+        ⚠️ **DEPRECATED**: This endpoint will be removed after April 13, 2026.
 
         Args:
           extra_headers: Send extra headers
@@ -125,6 +128,7 @@ class SensorsResource(SyncAPIResource):
             cast_to=SensorRetrieveResponse,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def update(
         self,
         sensor_id: str,
@@ -140,7 +144,7 @@ class SensorsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorUpdateResponse:
         """
-        Update Sensor
+        ⚠️ **DEPRECATED**: This endpoint will be removed after April 13, 2026.
 
         Args:
           extra_headers: Send extra headers
@@ -169,6 +173,7 @@ class SensorsResource(SyncAPIResource):
             cast_to=SensorUpdateResponse,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def delete(
         self,
         sensor_id: str,
@@ -181,7 +186,7 @@ class SensorsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
-        Remove an Adhoc Sensor
+        ⚠️ **DEPRECATED**: This endpoint will be removed after April 13, 2026.
 
         Args:
           extra_headers: Send extra headers
@@ -203,6 +208,7 @@ class SensorsResource(SyncAPIResource):
             cast_to=NoneType,
         )
 
+    @typing_extensions.deprecated("deprecated")
     def query(
         self,
         *,
@@ -219,7 +225,7 @@ class SensorsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorQueryResponse:
         """
-        Query Sensors
+        ⚠️ **DEPRECATED**: This endpoint will be removed after April 13, 2026.
 
         Args:
           extra_headers: Send extra headers
@@ -269,6 +275,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         """
         return AsyncSensorsResourceWithStreamingResponse(self)
 
+    @typing_extensions.deprecated("deprecated")
     async def create(
         self,
         *,
@@ -285,7 +292,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorCreateResponse:
         """
-        Create Sensor Record
+        ⚠️ **DEPRECATED**: This endpoint will be removed after April 13, 2026.
 
         Args:
           extra_headers: Send extra headers
@@ -314,6 +321,7 @@ class AsyncSensorsResource(AsyncAPIResource):
             cast_to=SensorCreateResponse,
         )
 
+    @typing_extensions.deprecated("deprecated")
     async def retrieve(
         self,
         sensor_id: str,
@@ -326,7 +334,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorRetrieveResponse:
         """
-        Get Sensor
+        ⚠️ **DEPRECATED**: This endpoint will be removed after April 13, 2026.
 
         Args:
           extra_headers: Send extra headers
@@ -347,6 +355,7 @@ class AsyncSensorsResource(AsyncAPIResource):
             cast_to=SensorRetrieveResponse,
         )
 
+    @typing_extensions.deprecated("deprecated")
     async def update(
         self,
         sensor_id: str,
@@ -362,7 +371,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorUpdateResponse:
         """
-        Update Sensor
+        ⚠️ **DEPRECATED**: This endpoint will be removed after April 13, 2026.
 
         Args:
           extra_headers: Send extra headers
@@ -391,6 +400,7 @@ class AsyncSensorsResource(AsyncAPIResource):
             cast_to=SensorUpdateResponse,
         )
 
+    @typing_extensions.deprecated("deprecated")
     async def delete(
         self,
         sensor_id: str,
@@ -403,7 +413,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
-        Remove an Adhoc Sensor
+        ⚠️ **DEPRECATED**: This endpoint will be removed after April 13, 2026.
 
         Args:
           extra_headers: Send extra headers
@@ -425,6 +435,7 @@ class AsyncSensorsResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
+    @typing_extensions.deprecated("deprecated")
     async def query(
         self,
         *,
@@ -441,7 +452,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SensorQueryResponse:
         """
-        Query Sensors
+        ⚠️ **DEPRECATED**: This endpoint will be removed after April 13, 2026.
 
         Args:
           extra_headers: Send extra headers
@@ -475,20 +486,30 @@ class SensorsResourceWithRawResponse:
     def __init__(self, sensors: SensorsResource) -> None:
         self._sensors = sensors
 
-        self.create = to_raw_response_wrapper(
-            sensors.create,
+        self.create = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                sensors.create,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.retrieve = to_raw_response_wrapper(
-            sensors.retrieve,
+        self.retrieve = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                sensors.retrieve,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.update = to_raw_response_wrapper(
-            sensors.update,
+        self.update = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                sensors.update,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.delete = to_raw_response_wrapper(
-            sensors.delete,
+        self.delete = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                sensors.delete,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.query = to_raw_response_wrapper(
-            sensors.query,
+        self.query = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                sensors.query,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -496,20 +517,30 @@ class AsyncSensorsResourceWithRawResponse:
     def __init__(self, sensors: AsyncSensorsResource) -> None:
         self._sensors = sensors
 
-        self.create = async_to_raw_response_wrapper(
-            sensors.create,
+        self.create = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                sensors.create,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.retrieve = async_to_raw_response_wrapper(
-            sensors.retrieve,
+        self.retrieve = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                sensors.retrieve,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.update = async_to_raw_response_wrapper(
-            sensors.update,
+        self.update = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                sensors.update,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.delete = async_to_raw_response_wrapper(
-            sensors.delete,
+        self.delete = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                sensors.delete,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.query = async_to_raw_response_wrapper(
-            sensors.query,
+        self.query = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                sensors.query,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -517,20 +548,30 @@ class SensorsResourceWithStreamingResponse:
     def __init__(self, sensors: SensorsResource) -> None:
         self._sensors = sensors
 
-        self.create = to_streamed_response_wrapper(
-            sensors.create,
+        self.create = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                sensors.create,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.retrieve = to_streamed_response_wrapper(
-            sensors.retrieve,
+        self.retrieve = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                sensors.retrieve,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.update = to_streamed_response_wrapper(
-            sensors.update,
+        self.update = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                sensors.update,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.delete = to_streamed_response_wrapper(
-            sensors.delete,
+        self.delete = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                sensors.delete,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.query = to_streamed_response_wrapper(
-            sensors.query,
+        self.query = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                sensors.query,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -538,18 +579,28 @@ class AsyncSensorsResourceWithStreamingResponse:
     def __init__(self, sensors: AsyncSensorsResource) -> None:
         self._sensors = sensors
 
-        self.create = async_to_streamed_response_wrapper(
-            sensors.create,
+        self.create = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                sensors.create,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.retrieve = async_to_streamed_response_wrapper(
-            sensors.retrieve,
+        self.retrieve = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                sensors.retrieve,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.update = async_to_streamed_response_wrapper(
-            sensors.update,
+        self.update = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                sensors.update,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.delete = async_to_streamed_response_wrapper(
-            sensors.delete,
+        self.delete = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                sensors.delete,  # pyright: ignore[reportDeprecated],
+            )
         )
-        self.query = async_to_streamed_response_wrapper(
-            sensors.query,
+        self.query = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                sensors.query,  # pyright: ignore[reportDeprecated],
+            )
         )

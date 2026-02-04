@@ -32,14 +32,16 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import scans, models, sensors, interactions, prompt_analyzer
+    from .resources import scans, models, sensors, evaluations, interactions, prompt_analyzer
     from .lib.model_scan import ModelScanner, AsyncModelScanner
     from .resources.sensors import SensorsResource, AsyncSensorsResource
     from .lib.community_scan import CommunityScanner, AsyncCommunityScanner
     from .resources.scans.scans import ScansResource, AsyncScansResource
     from .resources.interactions import InteractionsResource, AsyncInteractionsResource
+    from .lib.evaluation_sessions import EvaluationSessionsResource, AsyncEvaluationSessionsResource
     from .resources.models.models import ModelsResource, AsyncModelsResource
     from .resources.prompt_analyzer import PromptAnalyzerResource, AsyncPromptAnalyzerResource
+    from .resources.evaluations.evaluations import EvaluationsResource, AsyncEvaluationsResource
 
 __all__ = [
     "ENVIRONMENTS",
@@ -154,6 +156,18 @@ class HiddenLayer(SyncAPIClient):
         from .resources.models import ModelsResource
 
         return ModelsResource(self)
+
+    @cached_property
+    def evaluations(self) -> EvaluationsResource:
+        from .resources.evaluations import EvaluationsResource
+
+        return EvaluationsResource(self)
+
+    @cached_property
+    def evaluation_sessions(self) -> EvaluationSessionsResource:
+        from .lib.evaluation_sessions import EvaluationSessionsResource
+
+        return EvaluationSessionsResource(self)
 
     @cached_property
     def prompt_analyzer(self) -> PromptAnalyzerResource:
@@ -431,6 +445,18 @@ class AsyncHiddenLayer(AsyncAPIClient):
         return AsyncModelsResource(self)
 
     @cached_property
+    def evaluations(self) -> AsyncEvaluationsResource:
+        from .resources.evaluations import AsyncEvaluationsResource
+
+        return AsyncEvaluationsResource(self)
+
+    @cached_property
+    def evaluation_sessions(self) -> AsyncEvaluationSessionsResource:
+        from .lib.evaluation_sessions import AsyncEvaluationSessionsResource
+
+        return AsyncEvaluationSessionsResource(self)
+
+    @cached_property
     def prompt_analyzer(self) -> AsyncPromptAnalyzerResource:
         from .resources.prompt_analyzer import AsyncPromptAnalyzerResource
 
@@ -621,6 +647,12 @@ class HiddenLayerWithRawResponse:
         return ModelsResourceWithRawResponse(self._client.models)
 
     @cached_property
+    def evaluations(self) -> evaluations.EvaluationsResourceWithRawResponse:
+        from .resources.evaluations import EvaluationsResourceWithRawResponse
+
+        return EvaluationsResourceWithRawResponse(self._client.evaluations)
+
+    @cached_property
     def prompt_analyzer(self) -> prompt_analyzer.PromptAnalyzerResourceWithRawResponse:
         from .resources.prompt_analyzer import PromptAnalyzerResourceWithRawResponse
 
@@ -656,6 +688,12 @@ class AsyncHiddenLayerWithRawResponse:
         from .resources.models import AsyncModelsResourceWithRawResponse
 
         return AsyncModelsResourceWithRawResponse(self._client.models)
+
+    @cached_property
+    def evaluations(self) -> evaluations.AsyncEvaluationsResourceWithRawResponse:
+        from .resources.evaluations import AsyncEvaluationsResourceWithRawResponse
+
+        return AsyncEvaluationsResourceWithRawResponse(self._client.evaluations)
 
     @cached_property
     def prompt_analyzer(self) -> prompt_analyzer.AsyncPromptAnalyzerResourceWithRawResponse:
@@ -695,6 +733,12 @@ class HiddenLayerWithStreamedResponse:
         return ModelsResourceWithStreamingResponse(self._client.models)
 
     @cached_property
+    def evaluations(self) -> evaluations.EvaluationsResourceWithStreamingResponse:
+        from .resources.evaluations import EvaluationsResourceWithStreamingResponse
+
+        return EvaluationsResourceWithStreamingResponse(self._client.evaluations)
+
+    @cached_property
     def prompt_analyzer(self) -> prompt_analyzer.PromptAnalyzerResourceWithStreamingResponse:
         from .resources.prompt_analyzer import PromptAnalyzerResourceWithStreamingResponse
 
@@ -730,6 +774,12 @@ class AsyncHiddenLayerWithStreamedResponse:
         from .resources.models import AsyncModelsResourceWithStreamingResponse
 
         return AsyncModelsResourceWithStreamingResponse(self._client.models)
+
+    @cached_property
+    def evaluations(self) -> evaluations.AsyncEvaluationsResourceWithStreamingResponse:
+        from .resources.evaluations import AsyncEvaluationsResourceWithStreamingResponse
+
+        return AsyncEvaluationsResourceWithStreamingResponse(self._client.evaluations)
 
     @cached_property
     def prompt_analyzer(self) -> prompt_analyzer.AsyncPromptAnalyzerResourceWithStreamingResponse:
