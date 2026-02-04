@@ -14,3 +14,6 @@ from .red_team_submit_target_response_params import (
 from .red_team_submit_target_response_response import (
     RedTeamSubmitTargetResponseResponse as RedTeamSubmitTargetResponseResponse,
 )
+from .red_team_retrieve_evaluation_results_response import (
+    RedTeamRetrieveEvaluationResultsResponse as RedTeamRetrieveEvaluationResultsResponse,
+)
