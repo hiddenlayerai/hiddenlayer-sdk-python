@@ -7,14 +7,13 @@ including scan_file and scan_folder methods with multipart upload functionality.
 
 import os
 import logging
-from typing import List, Union, Literal, Optional, Generator, cast
+from typing import Any, Set, Dict, List, Union, Literal, Optional, Generator, cast
 from fnmatch import fnmatch
 from pathlib import Path
 from typing_extensions import TYPE_CHECKING
 
-import httpx
-
 from .scan_utils import get_scan_results, wait_for_scan_results, get_scan_results_async, wait_for_scan_results_async
+from .._exceptions import BadRequestError
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +34,15 @@ EXCLUDE_FILE_TYPES = [
 ]
 
 PathInputType = Union[str, os.PathLike[str]]
+
+
+def is_duplicate_file_error(exc: BadRequestError) -> bool:
+    """Check if a BadRequestError is due to duplicate files being detected."""
+    body: object = exc.body
+    if not isinstance(body, dict):
+        return False
+    detail = cast(Dict[str, Any], body).get("detail", "")
+    return isinstance(detail, str) and "duplicate" in detail.lower()
 
 
 def filter_path_objects(
@@ -71,6 +79,9 @@ def filter_path_objects(
             return item
         raise ValueError("Objects must be string or Pathlike.")
 
+    # Track resolved canonical paths to detect duplicates (handles symlinks and path normalization)
+    seen: Set[str] = set()
+
     key = _identity  # Items must be `str` or `Path`, otherwise raise ValueError
 
     for item in items:
@@ -78,6 +89,20 @@ def filter_path_objects(
 
         if path.is_dir():
             continue
+
+        # Resolve to canonical path (follows symlinks, normalizes . and ..)
+        try:
+            resolved = str(path.resolve())
+        except OSError:
+            # Skip broken symlinks or files we can't access
+            logger.debug("Skipping inaccessible path: %s", path)
+            continue
+
+        if resolved in seen:
+            logger.debug("Skipping duplicate file (same resolved path): %s", path)
+            continue
+
+        seen.add(resolved)
 
         # Skip if there's an allowlist and path doesn't match any
         if allow_patterns is not None and not any(fnmatch(str(path), r) for r in allow_patterns):
@@ -88,7 +113,6 @@ def filter_path_objects(
             continue
 
         yield item
-
 
 class ModelScanner:
     """
@@ -135,8 +159,6 @@ class ModelScanner:
         )
 
         scan_id = upload_response.scan_id
-        if scan_id is None:
-            raise ValueError("scan_id must have a value")
 
         # Upload the file
         self._scan_file(scan_id=scan_id, file_path=file_path)
@@ -189,8 +211,6 @@ class ModelScanner:
         )
 
         scan_id = upload_response.scan_id
-        if scan_id is None:
-            raise ValueError("scan_id must have a value")
 
         # Prepare file patterns
         ignore_file_patterns = EXCLUDE_FILE_TYPES + ignore_file_patterns if ignore_file_patterns else EXCLUDE_FILE_TYPES
@@ -204,7 +224,13 @@ class ModelScanner:
 
         # Upload each file
         for file in files:
-            self._scan_file(scan_id=scan_id, file_path=Path(file))
+            try:
+                self._scan_file(scan_id=scan_id, file_path=Path(file))
+            except BadRequestError as e:
+                if is_duplicate_file_error(e):
+                    logger.warning("Duplicate file detected during folder scan, skipping: %s", file)
+                    continue
+                raise
 
         # Complete the upload
         self._client.scans.upload.complete_all(scan_id=scan_id)
@@ -445,10 +471,11 @@ class ModelScanner:
                 if part.upload_url is None:
                     raise Exception("part.upload_url must not be None")
 
-                response = httpx.put(
+                response = self._client._client.put(
                     part.upload_url,
                     content=part_data,
                     headers={"Content-Type": "application/octet-stream"},
+                    timeout=self._client.timeout,
                 )
                 response.raise_for_status()
 
@@ -491,8 +518,6 @@ class AsyncModelScanner:
         )
 
         scan_id = upload_response.scan_id
-        if scan_id is None:
-            raise ValueError("scan_id must have a value")
 
         # Upload the file
         await self._scan_file(scan_id=scan_id, file_path=file_path)
@@ -536,8 +561,6 @@ class AsyncModelScanner:
         )
 
         scan_id = upload_response.scan_id
-        if scan_id is None:
-            raise ValueError("scan_id must have a value")
 
         # Prepare file patterns
         ignore_file_patterns = EXCLUDE_FILE_TYPES + ignore_file_patterns if ignore_file_patterns else EXCLUDE_FILE_TYPES
@@ -551,7 +574,13 @@ class AsyncModelScanner:
 
         # Upload each file
         for file in files:
-            await self._scan_file(scan_id=scan_id, file_path=Path(file))
+            try:
+                await self._scan_file(scan_id=scan_id, file_path=Path(file))
+            except BadRequestError as e:
+                if is_duplicate_file_error(e):
+                    logger.warning("Duplicate file detected during folder scan, skipping: %s", file)
+                    continue
+                raise
 
         # Complete the upload
         await self._client.scans.upload.complete_all(scan_id=scan_id)
@@ -740,13 +769,13 @@ class AsyncModelScanner:
                 if part.upload_url is None:
                     raise Exception("part.upload_url must not be None")
 
-                async with httpx.AsyncClient() as client:
-                    response = await client.put(
-                        part.upload_url,
-                        content=part_data,
-                        headers={"Content-Type": "application/octet-stream"},
-                    )
-                    response.raise_for_status()
+                response = await self._client._client.put(
+                    part.upload_url,
+                    content=part_data,
+                    headers={"Content-Type": "application/octet-stream"},
+                    timeout=self._client.timeout,
+                )
+                response.raise_for_status()
 
         # Complete the file upload
         await self._client.scans.upload.file.complete(file_id=upload.upload_id, scan_id=scan_id)

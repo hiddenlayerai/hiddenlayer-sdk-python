@@ -31,7 +31,7 @@ class TestCards:
         card = client.models.cards.list(
             aidr_severity=["SAFE"],
             aidr_status="ENABLED",
-            limit=1,
+            limit=50,
             model_created={
                 "gte": parse_datetime("2019-12-27T18:11:19.117Z"),
                 "lte": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -42,14 +42,14 @@ class TestCards:
             },
             modscan_severity=["SAFE"],
             modscan_status="ENABLED",
-            offset=0,
+            offset=250,
+            policy_status=["COMPLIANT"],
             provider=["AZURE"],
             sort="-model_name",
             source={
                 "contains": "contains",
                 "eq": "eq",
             },
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(SyncOffsetPage[CardListResponse], card, path=["response"])
 
@@ -93,7 +93,7 @@ class TestAsyncCards:
         card = await async_client.models.cards.list(
             aidr_severity=["SAFE"],
             aidr_status="ENABLED",
-            limit=1,
+            limit=50,
             model_created={
                 "gte": parse_datetime("2019-12-27T18:11:19.117Z"),
                 "lte": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -104,14 +104,14 @@ class TestAsyncCards:
             },
             modscan_severity=["SAFE"],
             modscan_status="ENABLED",
-            offset=0,
+            offset=250,
+            policy_status=["COMPLIANT"],
             provider=["AZURE"],
             sort="-model_name",
             source={
                 "contains": "contains",
                 "eq": "eq",
             },
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(AsyncOffsetPage[CardListResponse], card, path=["response"])
 

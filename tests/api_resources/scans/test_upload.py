@@ -21,16 +21,7 @@ class TestUpload:
     @parametrize
     def test_method_complete_all(self, client: HiddenLayer) -> None:
         upload = client.scans.upload.complete_all(
-            scan_id="00000000-0000-0000-0000-000000000000",
-        )
-        assert_matches_type(UploadCompleteAllResponse, upload, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_complete_all_with_all_params(self, client: HiddenLayer) -> None:
-        upload = client.scans.upload.complete_all(
-            scan_id="00000000-0000-0000-0000-000000000000",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            "00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(UploadCompleteAllResponse, upload, path=["response"])
 
@@ -38,7 +29,7 @@ class TestUpload:
     @parametrize
     def test_raw_response_complete_all(self, client: HiddenLayer) -> None:
         response = client.scans.upload.with_raw_response.complete_all(
-            scan_id="00000000-0000-0000-0000-000000000000",
+            "00000000-0000-0000-0000-000000000000",
         )
 
         assert response.is_closed is True
@@ -50,7 +41,7 @@ class TestUpload:
     @parametrize
     def test_streaming_response_complete_all(self, client: HiddenLayer) -> None:
         with client.scans.upload.with_streaming_response.complete_all(
-            scan_id="00000000-0000-0000-0000-000000000000",
+            "00000000-0000-0000-0000-000000000000",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -65,7 +56,7 @@ class TestUpload:
     def test_path_params_complete_all(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `scan_id` but received ''"):
             client.scans.upload.with_raw_response.complete_all(
-                scan_id="",
+                "",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
@@ -87,8 +78,7 @@ class TestUpload:
             requesting_entity="requesting_entity",
             location_alias="location_alias",
             origin="Hugging Face",
-            request_source="API Upload",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            request_source="Hybrid Upload",
         )
         assert_matches_type(UploadStartResponse, upload, path=["response"])
 
@@ -132,16 +122,7 @@ class TestAsyncUpload:
     @parametrize
     async def test_method_complete_all(self, async_client: AsyncHiddenLayer) -> None:
         upload = await async_client.scans.upload.complete_all(
-            scan_id="00000000-0000-0000-0000-000000000000",
-        )
-        assert_matches_type(UploadCompleteAllResponse, upload, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_complete_all_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
-        upload = await async_client.scans.upload.complete_all(
-            scan_id="00000000-0000-0000-0000-000000000000",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            "00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(UploadCompleteAllResponse, upload, path=["response"])
 
@@ -149,7 +130,7 @@ class TestAsyncUpload:
     @parametrize
     async def test_raw_response_complete_all(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.scans.upload.with_raw_response.complete_all(
-            scan_id="00000000-0000-0000-0000-000000000000",
+            "00000000-0000-0000-0000-000000000000",
         )
 
         assert response.is_closed is True
@@ -161,7 +142,7 @@ class TestAsyncUpload:
     @parametrize
     async def test_streaming_response_complete_all(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.scans.upload.with_streaming_response.complete_all(
-            scan_id="00000000-0000-0000-0000-000000000000",
+            "00000000-0000-0000-0000-000000000000",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -176,7 +157,7 @@ class TestAsyncUpload:
     async def test_path_params_complete_all(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `scan_id` but received ''"):
             await async_client.scans.upload.with_raw_response.complete_all(
-                scan_id="",
+                "",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
@@ -198,8 +179,7 @@ class TestAsyncUpload:
             requesting_entity="requesting_entity",
             location_alias="location_alias",
             origin="Hugging Face",
-            request_source="API Upload",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            request_source="Hybrid Upload",
         )
         assert_matches_type(UploadStartResponse, upload, path=["response"])
 

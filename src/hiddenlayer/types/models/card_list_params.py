@@ -13,11 +13,13 @@ __all__ = ["CardListParams", "ModelCreated", "ModelName", "Source"]
 
 class CardListParams(TypedDict, total=False):
     aidr_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS"]]
+    """Deprecated - use ModelCardAIDRThreatLevel(aidr_threat_level) instead"""
 
     aidr_status: Literal["ENABLED", "DISABLED", "ANY"]
     """filter by aidr enabled"""
 
     limit: int
+    """Limit the number of items returned"""
 
     model_created: ModelCreated
     """match on models created between dates"""
@@ -25,11 +27,18 @@ class CardListParams(TypedDict, total=False):
     model_name: ModelName
     """substring match on model name"""
 
-    modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]]
+    modscan_severity: List[
+        Literal[
+            "SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR", "critical", "high", "medium", "low", "none", "unknown"
+        ]
+    ]
 
     modscan_status: Literal["ENABLED", "DISABLED", "ANY"]
 
     offset: int
+    """Begin returning the results from this offset"""
+
+    policy_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]]
 
     provider: List[Literal["AZURE", "ADHOC"]]
 
@@ -42,22 +51,26 @@ class CardListParams(TypedDict, total=False):
     source: Source
     """substring and full match on model source"""
 
-    x_correlation_id: Annotated[str, PropertyInfo(alias="X-Correlation-Id")]
-
 
 class ModelCreated(TypedDict, total=False):
+    """match on models created between dates"""
+
     gte: Annotated[Union[str, datetime], PropertyInfo(format="iso8601")]
 
     lte: Annotated[Union[str, datetime], PropertyInfo(format="iso8601")]
 
 
 class ModelName(TypedDict, total=False):
+    """substring match on model name"""
+
     contains: str
 
     eq: str
 
 
 class Source(TypedDict, total=False):
+    """substring and full match on model source"""
+
     contains: str
 
     eq: str

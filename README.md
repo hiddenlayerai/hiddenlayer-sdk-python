@@ -3,7 +3,7 @@
 <!-- prettier-ignore -->
 [![PyPI version](https://img.shields.io/pypi/v/hiddenlayer-sdk.svg?label=pypi%20(stable))](https://pypi.org/project/hiddenlayer-sdk/)
 
-The HiddenLayer Python library provides convenient access to the HiddenLayer REST API from any Python 3.8+
+The HiddenLayer Python library provides convenient access to the HiddenLayer REST API from any Python 3.9+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
@@ -16,12 +16,9 @@ The REST API documentation can be found on [dev.hiddenlayer.ai](https://dev.hidd
 ## Installation
 
 ```sh
-# install from the production repo
-pip install git+ssh://git@github.com/hiddenlayer-engineering/hiddenlayer-sdk-python.git
+# install from PyPI
+pip install hiddenlayer-sdk
 ```
-
-> [!NOTE]
-> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install --pre hiddenlayer-sdk`
 
 ## Usage
 
@@ -35,10 +32,21 @@ client = HiddenLayer(
     environment="prod-eu",
 )
 
-sensor = client.sensors.create(
-    plaintext_name="REPLACE_ME",
+response = client.interactions.analyze(
+    metadata={
+        "model": "REPLACE_ME",
+        "requester_id": "REPLACE_ME",
+    },
+    input={
+        "messages": [
+            {
+                "role": "user",
+                "content": "REPLACE_ME",
+            }
+        ]
+    },
 )
-print(sensor.model_id)
+print(response.analysis)
 ```
 
 While you can provide a `bearer_token` keyword argument,
@@ -61,10 +69,21 @@ client = AsyncHiddenLayer(
 
 
 async def main() -> None:
-    sensor = await client.sensors.create(
-        plaintext_name="REPLACE_ME",
+    response = await client.interactions.analyze(
+        metadata={
+            "model": "REPLACE_ME",
+            "requester_id": "REPLACE_ME",
+        },
+        input={
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "REPLACE_ME",
+                }
+            ]
+        },
     )
-    print(sensor.model_id)
+    print(response.analysis)
 
 
 asyncio.run(main())
@@ -79,8 +98,8 @@ By default, the async client uses `httpx` for HTTP requests. However, for improv
 You can enable this by installing `aiohttp`:
 
 ```sh
-# install from the production repo
-pip install 'hiddenlayer[aiohttp] @ git+ssh://git@github.com/hiddenlayer-engineering/hiddenlayer-sdk-python.git'
+# install from PyPI
+pip install hiddenlayer-sdk[aiohttp]
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
@@ -95,10 +114,21 @@ async def main() -> None:
     async with AsyncHiddenLayer(
         http_client=DefaultAioHttpClient(),
     ) as client:
-        sensor = await client.sensors.create(
-            plaintext_name="REPLACE_ME",
+        response = await client.interactions.analyze(
+            metadata={
+                "model": "REPLACE_ME",
+                "requester_id": "REPLACE_ME",
+            },
+            input={
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": "REPLACE_ME",
+                    }
+                ]
+            },
         )
-        print(sensor.model_id)
+        print(response.analysis)
 
 
 asyncio.run(main())
@@ -113,6 +143,67 @@ Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typ
 
 Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
 
+## Pagination
+
+List methods in the HiddenLayer API are paginated.
+
+This library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:
+
+```python
+from hiddenlayer import HiddenLayer
+
+client = HiddenLayer()
+
+all_cards = []
+# Automatically fetches more pages as needed.
+for card in client.models.cards.list():
+    # Do something with card here
+    all_cards.append(card)
+print(all_cards)
+```
+
+Or, asynchronously:
+
+```python
+import asyncio
+from hiddenlayer import AsyncHiddenLayer
+
+client = AsyncHiddenLayer()
+
+
+async def main() -> None:
+    all_cards = []
+    # Iterate through items across all pages, issuing requests as needed.
+    async for card in client.models.cards.list():
+        all_cards.append(card)
+    print(all_cards)
+
+
+asyncio.run(main())
+```
+
+Alternatively, you can use the `.has_next_page()`, `.next_page_info()`, or `.get_next_page()` methods for more granular control working with pages:
+
+```python
+first_page = await client.models.cards.list()
+if first_page.has_next_page():
+    print(f"will fetch next page using these details: {first_page.next_page_info()}")
+    next_page = await first_page.get_next_page()
+    print(f"number of items we just fetched: {len(next_page.results)}")
+
+# Remove `await` for non-async usage.
+```
+
+Or just work directly with the returned data:
+
+```python
+first_page = await client.models.cards.list()
+for card in first_page.results:
+    print(card.model_id)
+
+# Remove `await` for non-async usage.
+```
+
 ## Nested params
 
 Nested parameters are dictionaries, typed using `TypedDict`, for example:
@@ -122,10 +213,14 @@ from hiddenlayer import HiddenLayer
 
 client = HiddenLayer()
 
-page = client.models.cards.list(
-    model_created={},
+response = client.interactions.analyze(
+    metadata={
+        "model": "gpt-5",
+        "requester_id": "user-1234",
+        "provider": "openai",
+    },
 )
-print(page.results)
+print(response.metadata)
 ```
 
 ## Handling errors
@@ -144,8 +239,19 @@ from hiddenlayer import HiddenLayer
 client = HiddenLayer()
 
 try:
-    client.sensors.create(
-        plaintext_name="REPLACE_ME",
+    client.interactions.analyze(
+        metadata={
+            "model": "REPLACE_ME",
+            "requester_id": "REPLACE_ME",
+        },
+        input={
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "REPLACE_ME",
+                }
+            ]
+        },
     )
 except hiddenlayer.APIConnectionError as e:
     print("The server could not be reached")
@@ -189,8 +295,19 @@ client = HiddenLayer(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).sensors.create(
-    plaintext_name="REPLACE_ME",
+client.with_options(max_retries=5).interactions.analyze(
+    metadata={
+        "model": "REPLACE_ME",
+        "requester_id": "REPLACE_ME",
+    },
+    input={
+        "messages": [
+            {
+                "role": "user",
+                "content": "REPLACE_ME",
+            }
+        ]
+    },
 )
 ```
 
@@ -214,8 +331,19 @@ client = HiddenLayer(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).sensors.create(
-    plaintext_name="REPLACE_ME",
+client.with_options(timeout=5.0).interactions.analyze(
+    metadata={
+        "model": "REPLACE_ME",
+        "requester_id": "REPLACE_ME",
+    },
+    input={
+        "messages": [
+            {
+                "role": "user",
+                "content": "REPLACE_ME",
+            }
+        ]
+    },
 )
 ```
 
@@ -257,18 +385,27 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from hiddenlayer import HiddenLayer
 
 client = HiddenLayer()
-response = client.sensors.with_raw_response.create(
-    plaintext_name="REPLACE_ME",
+response = client.interactions.with_raw_response.analyze(
+    metadata={
+        "model": "REPLACE_ME",
+        "requester_id": "REPLACE_ME",
+    },
+    input={
+        "messages": [{
+            "role": "user",
+            "content": "REPLACE_ME",
+        }]
+    },
 )
 print(response.headers.get('X-My-Header'))
 
-sensor = response.parse()  # get the object that `sensors.create()` would have returned
-print(sensor.model_id)
+interaction = response.parse()  # get the object that `interactions.analyze()` would have returned
+print(interaction.analysis)
 ```
 
-These methods return an [`APIResponse`](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -277,8 +414,19 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.sensors.with_streaming_response.create(
-    plaintext_name="REPLACE_ME",
+with client.interactions.with_streaming_response.analyze(
+    metadata={
+        "model": "REPLACE_ME",
+        "requester_id": "REPLACE_ME",
+    },
+    input={
+        "messages": [
+            {
+                "role": "user",
+                "content": "REPLACE_ME",
+            }
+        ]
+    },
 ) as response:
     print(response.headers.get("X-My-Header"))
 
@@ -374,7 +522,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python/issues) with questions, bugs, or suggestions.
 
 ### Determining the installed version
 
@@ -389,7 +537,7 @@ print(hiddenlayer.__version__)
 
 ## Requirements
 
-Python 3.8 or higher.
+Python 3.9 or higher.
 
 ## Contributing
 

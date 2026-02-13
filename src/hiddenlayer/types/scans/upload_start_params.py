@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal, Required, Annotated, TypedDict
-
-from ..._utils import PropertyInfo
+from typing_extensions import Literal, Required, TypedDict
 
 __all__ = ["UploadStartParams"]
 
@@ -28,7 +26,5 @@ class UploadStartParams(TypedDict, total=False):
     scanned
     """
 
-    request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload"]
+    request_source: Literal["Hybrid Upload", "API Upload", "Integration", "UI Upload", "AI Asset Discovery"]
     """Identifies the system that requested the scan"""
-
-    x_correlation_id: Annotated[str, PropertyInfo(alias="X-Correlation-Id")]

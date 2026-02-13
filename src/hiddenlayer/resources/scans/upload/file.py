@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from urllib.parse import quote
+
 import httpx
 
-from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ...._utils import strip_not_given
+from ...._types import Body, Query, Headers, NotGiven, not_given
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -28,7 +29,7 @@ class FileResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
         """
         return FileResourceWithRawResponse(self)
 
@@ -37,7 +38,7 @@ class FileResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#with_streaming_response
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#with_streaming_response
         """
         return FileResourceWithStreamingResponse(self)
 
@@ -47,7 +48,6 @@ class FileResource(SyncAPIResource):
         *,
         file_content_length: int,
         file_name: str,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -70,13 +70,8 @@ class FileResource(SyncAPIResource):
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         extra_headers = {
-            **strip_not_given(
-                {
-                    "file-content-length": str(file_content_length),
-                    "file-name": file_name,
-                    "X-Correlation-Id": x_correlation_id,
-                }
-            ),
+            "file-content-length": str(file_content_length),
+            "file-name": quote(file_name),
             **(extra_headers or {}),
         }
         return self._post(
@@ -92,7 +87,6 @@ class FileResource(SyncAPIResource):
         file_id: str,
         *,
         scan_id: str,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -116,7 +110,6 @@ class FileResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         if not file_id:
             raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._patch(
             f"/scan/v3/upload/{scan_id}/file/{file_id}",
             options=make_request_options(
@@ -133,7 +126,7 @@ class AsyncFileResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
         """
         return AsyncFileResourceWithRawResponse(self)
 
@@ -142,7 +135,7 @@ class AsyncFileResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#with_streaming_response
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#with_streaming_response
         """
         return AsyncFileResourceWithStreamingResponse(self)
 
@@ -152,7 +145,6 @@ class AsyncFileResource(AsyncAPIResource):
         *,
         file_content_length: int,
         file_name: str,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -175,13 +167,8 @@ class AsyncFileResource(AsyncAPIResource):
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         extra_headers = {
-            **strip_not_given(
-                {
-                    "file-content-length": str(file_content_length),
-                    "file-name": file_name,
-                    "X-Correlation-Id": x_correlation_id,
-                }
-            ),
+            "file-content-length": str(file_content_length),
+            "file-name": quote(file_name),
             **(extra_headers or {}),
         }
         return await self._post(
@@ -197,7 +184,6 @@ class AsyncFileResource(AsyncAPIResource):
         file_id: str,
         *,
         scan_id: str,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -221,7 +207,6 @@ class AsyncFileResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         if not file_id:
             raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return await self._patch(
             f"/scan/v3/upload/{scan_id}/file/{file_id}",
             options=make_request_options(

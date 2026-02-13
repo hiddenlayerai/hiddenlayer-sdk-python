@@ -21,16 +21,7 @@ class TestModels:
     @parametrize
     def test_method_retrieve(self, client: HiddenLayer) -> None:
         model = client.models.retrieve(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-        )
-        assert_matches_type(ModelRetrieveResponse, model, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_retrieve_with_all_params(self, client: HiddenLayer) -> None:
-        model = client.models.retrieve(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
         assert_matches_type(ModelRetrieveResponse, model, path=["response"])
 
@@ -38,7 +29,7 @@ class TestModels:
     @parametrize
     def test_raw_response_retrieve(self, client: HiddenLayer) -> None:
         response = client.models.with_raw_response.retrieve(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
 
         assert response.is_closed is True
@@ -50,7 +41,7 @@ class TestModels:
     @parametrize
     def test_streaming_response_retrieve(self, client: HiddenLayer) -> None:
         with client.models.with_streaming_response.retrieve(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -65,23 +56,14 @@ class TestModels:
     def test_path_params_retrieve(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_id` but received ''"):
             client.models.with_raw_response.retrieve(
-                model_id="",
+                "",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_delete(self, client: HiddenLayer) -> None:
         model = client.models.delete(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-        )
-        assert model is None
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_delete_with_all_params(self, client: HiddenLayer) -> None:
-        model = client.models.delete(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
         assert model is None
 
@@ -89,7 +71,7 @@ class TestModels:
     @parametrize
     def test_raw_response_delete(self, client: HiddenLayer) -> None:
         response = client.models.with_raw_response.delete(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
 
         assert response.is_closed is True
@@ -101,7 +83,7 @@ class TestModels:
     @parametrize
     def test_streaming_response_delete(self, client: HiddenLayer) -> None:
         with client.models.with_streaming_response.delete(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -116,7 +98,7 @@ class TestModels:
     def test_path_params_delete(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_id` but received ''"):
             client.models.with_raw_response.delete(
-                model_id="",
+                "",
             )
 
 
@@ -129,16 +111,7 @@ class TestAsyncModels:
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         model = await async_client.models.retrieve(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-        )
-        assert_matches_type(ModelRetrieveResponse, model, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_retrieve_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
-        model = await async_client.models.retrieve(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
         assert_matches_type(ModelRetrieveResponse, model, path=["response"])
 
@@ -146,7 +119,7 @@ class TestAsyncModels:
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.models.with_raw_response.retrieve(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
 
         assert response.is_closed is True
@@ -158,7 +131,7 @@ class TestAsyncModels:
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.models.with_streaming_response.retrieve(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -173,23 +146,14 @@ class TestAsyncModels:
     async def test_path_params_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_id` but received ''"):
             await async_client.models.with_raw_response.retrieve(
-                model_id="",
+                "",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_delete(self, async_client: AsyncHiddenLayer) -> None:
         model = await async_client.models.delete(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-        )
-        assert model is None
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_delete_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
-        model = await async_client.models.delete(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
         assert model is None
 
@@ -197,7 +161,7 @@ class TestAsyncModels:
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.models.with_raw_response.delete(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
 
         assert response.is_closed is True
@@ -209,7 +173,7 @@ class TestAsyncModels:
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.models.with_streaming_response.delete(
-            model_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -224,5 +188,5 @@ class TestAsyncModels:
     async def test_path_params_delete(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `model_id` but received ''"):
             await async_client.models.with_raw_response.delete(
-                model_id="",
+                "",
             )

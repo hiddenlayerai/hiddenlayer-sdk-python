@@ -8,7 +8,7 @@ from typing_extensions import Literal
 import httpx
 
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import maybe_transform, strip_not_given
+from ..._utils import maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -32,7 +32,7 @@ class CardsResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
         """
         return CardsResourceWithRawResponse(self)
 
@@ -41,7 +41,7 @@ class CardsResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#with_streaming_response
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#with_streaming_response
         """
         return CardsResourceWithStreamingResponse(self)
 
@@ -53,13 +53,28 @@ class CardsResource(SyncAPIResource):
         limit: int | Omit = omit,
         model_created: card_list_params.ModelCreated | Omit = omit,
         model_name: card_list_params.ModelName | Omit = omit,
-        modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]] | Omit = omit,
+        modscan_severity: List[
+            Literal[
+                "SAFE",
+                "UNSAFE",
+                "SUSPICIOUS",
+                "UNKNOWN",
+                "ERROR",
+                "critical",
+                "high",
+                "medium",
+                "low",
+                "none",
+                "unknown",
+            ]
+        ]
+        | Omit = omit,
         modscan_status: Literal["ENABLED", "DISABLED", "ANY"] | Omit = omit,
         offset: int | Omit = omit,
+        policy_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]] | Omit = omit,
         provider: List[Literal["AZURE", "ADHOC"]] | Omit = omit,
         sort: str | Omit = omit,
         source: card_list_params.Source | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -71,11 +86,17 @@ class CardsResource(SyncAPIResource):
         List Model Cards
 
         Args:
+          aidr_severity: Deprecated - use ModelCardAIDRThreatLevel(aidr_threat_level) instead
+
           aidr_status: filter by aidr enabled
+
+          limit: Limit the number of items returned
 
           model_created: match on models created between dates
 
           model_name: substring match on model name
+
+          offset: Begin returning the results from this offset
 
           sort: allow sorting by model name or created at timestamp, ascending (+) or the
               default descending (-)
@@ -90,7 +111,6 @@ class CardsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._get_api_list(
             "/models/v4/cards",
             page=SyncOffsetPage[CardListResponse],
@@ -109,6 +129,7 @@ class CardsResource(SyncAPIResource):
                         "modscan_severity": modscan_severity,
                         "modscan_status": modscan_status,
                         "offset": offset,
+                        "policy_status": policy_status,
                         "provider": provider,
                         "sort": sort,
                         "source": source,
@@ -127,7 +148,7 @@ class AsyncCardsResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
         """
         return AsyncCardsResourceWithRawResponse(self)
 
@@ -136,7 +157,7 @@ class AsyncCardsResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#with_streaming_response
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#with_streaming_response
         """
         return AsyncCardsResourceWithStreamingResponse(self)
 
@@ -148,13 +169,28 @@ class AsyncCardsResource(AsyncAPIResource):
         limit: int | Omit = omit,
         model_created: card_list_params.ModelCreated | Omit = omit,
         model_name: card_list_params.ModelName | Omit = omit,
-        modscan_severity: List[Literal["SAFE", "UNSAFE", "SUSPICIOUS", "UNKNOWN", "ERROR"]] | Omit = omit,
+        modscan_severity: List[
+            Literal[
+                "SAFE",
+                "UNSAFE",
+                "SUSPICIOUS",
+                "UNKNOWN",
+                "ERROR",
+                "critical",
+                "high",
+                "medium",
+                "low",
+                "none",
+                "unknown",
+            ]
+        ]
+        | Omit = omit,
         modscan_status: Literal["ENABLED", "DISABLED", "ANY"] | Omit = omit,
         offset: int | Omit = omit,
+        policy_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]] | Omit = omit,
         provider: List[Literal["AZURE", "ADHOC"]] | Omit = omit,
         sort: str | Omit = omit,
         source: card_list_params.Source | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -166,11 +202,17 @@ class AsyncCardsResource(AsyncAPIResource):
         List Model Cards
 
         Args:
+          aidr_severity: Deprecated - use ModelCardAIDRThreatLevel(aidr_threat_level) instead
+
           aidr_status: filter by aidr enabled
+
+          limit: Limit the number of items returned
 
           model_created: match on models created between dates
 
           model_name: substring match on model name
+
+          offset: Begin returning the results from this offset
 
           sort: allow sorting by model name or created at timestamp, ascending (+) or the
               default descending (-)
@@ -185,7 +227,6 @@ class AsyncCardsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {**strip_not_given({"X-Correlation-Id": x_correlation_id}), **(extra_headers or {})}
         return self._get_api_list(
             "/models/v4/cards",
             page=AsyncOffsetPage[CardListResponse],
@@ -204,6 +245,7 @@ class AsyncCardsResource(AsyncAPIResource):
                         "modscan_severity": modscan_severity,
                         "modscan_status": modscan_status,
                         "offset": offset,
+                        "policy_status": policy_status,
                         "provider": provider,
                         "sort": sort,
                         "source": source,

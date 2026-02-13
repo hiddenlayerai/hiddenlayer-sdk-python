@@ -22,8 +22,8 @@ class TestInteractions:
     def test_method_analyze(self, client: HiddenLayer) -> None:
         interaction = client.interactions.analyze(
             metadata={
-                "model": "model",
-                "requester_id": "requester_id",
+                "model": "gpt-5",
+                "requester_id": "user-1234",
             },
         )
         assert_matches_type(InteractionAnalyzeResponse, interaction, path=["response"])
@@ -33,28 +33,27 @@ class TestInteractions:
     def test_method_analyze_with_all_params(self, client: HiddenLayer) -> None:
         interaction = client.interactions.analyze(
             metadata={
-                "model": "model",
-                "requester_id": "requester_id",
-                "provider": "provider",
+                "model": "gpt-5",
+                "requester_id": "user-1234",
+                "provider": "openai",
             },
             input={
                 "messages": [
                     {
-                        "content": "content",
-                        "role": "role",
+                        "content": "What the largest moon of jupiter?",
+                        "role": "user",
                     }
                 ]
             },
             output={
                 "messages": [
                     {
-                        "content": "content",
-                        "role": "role",
+                        "content": "The largest moon of Jupiter is Ganymede.",
+                        "role": "assistant",
                     }
                 ]
             },
             hl_project_id="internal-search-chatbot",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(InteractionAnalyzeResponse, interaction, path=["response"])
 
@@ -63,8 +62,8 @@ class TestInteractions:
     def test_raw_response_analyze(self, client: HiddenLayer) -> None:
         response = client.interactions.with_raw_response.analyze(
             metadata={
-                "model": "model",
-                "requester_id": "requester_id",
+                "model": "gpt-5",
+                "requester_id": "user-1234",
             },
         )
 
@@ -78,8 +77,8 @@ class TestInteractions:
     def test_streaming_response_analyze(self, client: HiddenLayer) -> None:
         with client.interactions.with_streaming_response.analyze(
             metadata={
-                "model": "model",
-                "requester_id": "requester_id",
+                "model": "gpt-5",
+                "requester_id": "user-1234",
             },
         ) as response:
             assert not response.is_closed
@@ -101,8 +100,8 @@ class TestAsyncInteractions:
     async def test_method_analyze(self, async_client: AsyncHiddenLayer) -> None:
         interaction = await async_client.interactions.analyze(
             metadata={
-                "model": "model",
-                "requester_id": "requester_id",
+                "model": "gpt-5",
+                "requester_id": "user-1234",
             },
         )
         assert_matches_type(InteractionAnalyzeResponse, interaction, path=["response"])
@@ -112,28 +111,27 @@ class TestAsyncInteractions:
     async def test_method_analyze_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         interaction = await async_client.interactions.analyze(
             metadata={
-                "model": "model",
-                "requester_id": "requester_id",
-                "provider": "provider",
+                "model": "gpt-5",
+                "requester_id": "user-1234",
+                "provider": "openai",
             },
             input={
                 "messages": [
                     {
-                        "content": "content",
-                        "role": "role",
+                        "content": "What the largest moon of jupiter?",
+                        "role": "user",
                     }
                 ]
             },
             output={
                 "messages": [
                     {
-                        "content": "content",
-                        "role": "role",
+                        "content": "The largest moon of Jupiter is Ganymede.",
+                        "role": "assistant",
                     }
                 ]
             },
             hl_project_id="internal-search-chatbot",
-            x_correlation_id="00000000-0000-0000-0000-000000000000",
         )
         assert_matches_type(InteractionAnalyzeResponse, interaction, path=["response"])
 
@@ -142,8 +140,8 @@ class TestAsyncInteractions:
     async def test_raw_response_analyze(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.interactions.with_raw_response.analyze(
             metadata={
-                "model": "model",
-                "requester_id": "requester_id",
+                "model": "gpt-5",
+                "requester_id": "user-1234",
             },
         )
 
@@ -157,8 +155,8 @@ class TestAsyncInteractions:
     async def test_streaming_response_analyze(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.interactions.with_streaming_response.analyze(
             metadata={
-                "model": "model",
-                "requester_id": "requester_id",
+                "model": "gpt-5",
+                "requester_id": "user-1234",
             },
         ) as response:
             assert not response.is_closed

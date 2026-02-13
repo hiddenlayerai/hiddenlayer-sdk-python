@@ -1,33 +1,35 @@
 [project]
-name = "hiddenlayer"
-version = "0.1.0-alpha.32"
+name = "hiddenlayer-sdk"
+version = "3.3.0"
 description = "The official Python library for the hiddenlayer API"
 dynamic = ["readme"]
 license = {text = "Apache-2.0"}
 authors = [
-{ name = "HiddenLayer", email = "dev-feedback@hiddenlayer-sdk.com" },
+{ name = "HiddenLayer", email = "sdks@hiddenlayer.com" },
 ]
+
 dependencies = [
-    "httpx>=0.23.0, <1",
-    "pydantic>=1.9.0, <3",
-    "typing-extensions>=4.10, <5",
-    "anyio>=3.5.0, <5",
-    "distro>=1.7.0, <2",
-    "sniffio",
+  "httpx>=0.23.0, <1",
+  "pydantic>=1.9.0, <3",
+  "typing-extensions>=4.10, <5",
+  "anyio>=3.5.0, <5",
+  "distro>=1.7.0, <2",
+  "sniffio",
     "requests>=2.32.4",
     "requests-auth>=8.0.0",
     "types-requests>=2.32.0.20241016",
 ]
-requires-python = ">= 3.8"
+
+requires-python = ">= 3.9"
 classifiers = [
   "Typing :: Typed",
   "Intended Audience :: Developers",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Operating System :: OS Independent",
   "Operating System :: POSIX",
   "Operating System :: MacOS",
@@ -38,18 +40,18 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python"
-Repository = "https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python"
+Homepage = "https://github.com/hiddenlayerai/hiddenlayer-sdk-python"
+Repository = "https://github.com/hiddenlayerai/hiddenlayer-sdk-python"
 
 [project.optional-dependencies]
-aiohttp = ["aiohttp", "httpx_aiohttp>=0.1.8"]
+aiohttp = ["aiohttp", "httpx_aiohttp>=0.1.9"]
 
 [tool.rye]
 managed = true
 # version pins are in requirements-dev.lock
 dev-dependencies = [
     "pyright==1.1.399",
-    "mypy",
+    "mypy==1.17",
     "respx",
     "pytest",
     "pytest-asyncio",
@@ -70,7 +72,7 @@ format = { chain = [
   # run formatting again to fix any inconsistencies when imports are stripped
   "format:ruff",
 ]}
-"format:docs" = "python scripts/utils/ruffen-docs.py README.md api.md"
+"format:docs" = "bash -c 'python scripts/utils/ruffen-docs.py README.md $(find . -type f -name api.md)'"
 "format:ruff" = "ruff format"
 
 "lint" = { chain = [
@@ -129,7 +131,7 @@ path = "README.md"
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 # replace relative links with absolute links
 pattern = '\[(.+?)\]\(((?!https?://)\S+?)\)'
-replacement = '[\1](https://github.com/hiddenlayer-engineering/hiddenlayer-sdk-python/tree/main/\g<2>)'
+replacement = '[\1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/tree/main/\g<2>)'
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -146,7 +148,7 @@ filterwarnings = [
 # there are a couple of flags that are still disabled by
 # default in strict mode as they are experimental and niche.
 typeCheckingMode = "strict"
-pythonVersion = "3.8"
+pythonVersion = "3.9"
 
 exclude = [
     "_dev",
@@ -229,6 +231,8 @@ select = [
   "B",
   # remove unused imports
   "F401",
+  # check for missing future annotations
+  "FA102",
   # bare except statements
   "E722",
   # unused arguments
@@ -250,6 +254,8 @@ unfixable = [
   "T201",
   "T203",
 ]
+
+extend-safe-fixes = ["FA102"]
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "functools.lru_cache".msg = "This function does not retain type information for the wrapped function's arguments; The `lru_cache` function from `_utils` should be used instead"

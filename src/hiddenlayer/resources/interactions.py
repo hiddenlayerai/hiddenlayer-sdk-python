@@ -28,7 +28,7 @@ class InteractionsResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
         """
         return InteractionsResourceWithRawResponse(self)
 
@@ -37,7 +37,7 @@ class InteractionsResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#with_streaming_response
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#with_streaming_response
         """
         return InteractionsResourceWithStreamingResponse(self)
 
@@ -48,7 +48,6 @@ class InteractionsResource(SyncAPIResource):
         input: interaction_analyze_params.Input | Omit = omit,
         output: interaction_analyze_params.Output | Omit = omit,
         hl_project_id: str | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -69,15 +68,7 @@ class InteractionsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {
-            **strip_not_given(
-                {
-                    "HL-Project-Id": hl_project_id,
-                    "X-Correlation-Id": x_correlation_id,
-                }
-            ),
-            **(extra_headers or {}),
-        }
+        extra_headers = {**strip_not_given({"HL-Project-Id": hl_project_id}), **(extra_headers or {})}
         return self._post(
             "/detection/v1/interactions",
             body=maybe_transform(
@@ -102,7 +93,7 @@ class AsyncInteractionsResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
         """
         return AsyncInteractionsResourceWithRawResponse(self)
 
@@ -111,7 +102,7 @@ class AsyncInteractionsResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/hiddenlayer-engineering/hiddenlayer-sdk-python#with_streaming_response
+        For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#with_streaming_response
         """
         return AsyncInteractionsResourceWithStreamingResponse(self)
 
@@ -122,7 +113,6 @@ class AsyncInteractionsResource(AsyncAPIResource):
         input: interaction_analyze_params.Input | Omit = omit,
         output: interaction_analyze_params.Output | Omit = omit,
         hl_project_id: str | Omit = omit,
-        x_correlation_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -143,15 +133,7 @@ class AsyncInteractionsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {
-            **strip_not_given(
-                {
-                    "HL-Project-Id": hl_project_id,
-                    "X-Correlation-Id": x_correlation_id,
-                }
-            ),
-            **(extra_headers or {}),
-        }
+        extra_headers = {**strip_not_given({"HL-Project-Id": hl_project_id}), **(extra_headers or {})}
         return await self._post(
             "/detection/v1/interactions",
             body=await async_maybe_transform(
