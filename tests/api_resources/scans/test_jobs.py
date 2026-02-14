@@ -169,6 +169,7 @@ class TestJobs:
                     "provider_details": {
                         "provider": "AWS_BEDROCK",
                         "provider_model_id": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                        "country": "US",
                         "model_arn": "arn:aws:bedrock:us-east-1:123456789012:provisioned-model/my-custom-model",
                     },
                 },
@@ -365,6 +366,7 @@ class TestAsyncJobs:
                     "provider_details": {
                         "provider": "AWS_BEDROCK",
                         "provider_model_id": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                        "country": "US",
                         "model_arn": "arn:aws:bedrock:us-east-1:123456789012:provisioned-model/my-custom-model",
                     },
                 },

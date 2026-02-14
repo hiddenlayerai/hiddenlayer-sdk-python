@@ -25,6 +25,9 @@ __all__ = [
     "FileResultDetection",
     "FileResultDetectionMitreAtlas",
     "FileResultDetectionRuleDetail",
+    "Intelligence",
+    "IntelligenceLicense",
+    "IntelligenceUsagePolicy",
 ]
 
 
@@ -36,6 +39,12 @@ class InventoryProviderDetails(BaseModel):
 
     - AWS Bedrock: "anthropic.claude-3-5-sonnet-20241022-v2:0"
     - Azure AI Foundry: "Claude-3-5-Sonnet"
+    """
+
+    country: Optional[str] = None
+    """
+    Optional country code (ISO 3166-1 alpha-2) for the location where the model
+    provider is primarily based.
     """
 
     model_arn: Optional[str] = None
@@ -301,6 +310,44 @@ class FileResult(BaseModel):
     """Error messages returned by the scanner"""
 
 
+class IntelligenceLicense(BaseModel):
+    """License information for a model"""
+
+    name: str
+    """Name of the license"""
+
+    sha256: str
+    """SHA256 hash of the license file"""
+
+
+class IntelligenceUsagePolicy(BaseModel):
+    """Usage policy information for a model"""
+
+    name: str
+    """Name of the usage policy"""
+
+    sha256: str
+    """SHA256 hash of the policy document"""
+
+
+class Intelligence(BaseModel):
+    """
+    Intelligence metadata about a model including origin, licensing, and usage policies
+    """
+
+    contributor_trust_level: Optional[str] = None
+    """Trust level of the model contributor"""
+
+    country_of_origin: Optional[List[str]] = None
+    """List of countries where the model originated"""
+
+    licenses: Optional[List[IntelligenceLicense]] = None
+    """List of licenses associated with the model"""
+
+    usage_policies: Optional[List[IntelligenceUsagePolicy]] = None
+    """List of usage policies associated with the model"""
+
+
 class ScanReport(BaseModel):
     """A scan report with all of its details."""
 
@@ -347,6 +394,12 @@ class ScanReport(BaseModel):
 
     has_genealogy: Optional[bool] = None
     """if there is model geneaology info available"""
+
+    intelligence: Optional[Intelligence] = None
+    """
+    Intelligence metadata about a model including origin, licensing, and usage
+    policies
+    """
 
     severity: Optional[Literal["critical", "high", "medium", "low", "unknown", "safe"]] = None
     """The highest severity of any detections on the scan, including "safe".

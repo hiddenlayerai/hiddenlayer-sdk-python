@@ -65,6 +65,12 @@ class InventoryScanTargetProviderDetails(TypedDict, total=False):
     - Azure AI Foundry: "Claude-3-5-Sonnet"
     """
 
+    country: str
+    """
+    Optional country code (ISO 3166-1 alpha-2) for the location where the model
+    provider is primarily based.
+    """
+
     model_arn: str
     """
     Optional full ARN or resource identifier for the model. Used for provisioned
