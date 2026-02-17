@@ -10,12 +10,12 @@ from typing import Union, Literal, cast
 from typing_extensions import TYPE_CHECKING
 
 from .scan_utils import (
+    ScanResultMixin,
+    AsyncScanResultMixin,
     get_scan_results,
     wait_for_scan_results,
     get_scan_results_async,
     wait_for_scan_results_async,
-    ScanResultMixin,
-    AsyncScanResultMixin,
 )
 
 logger = logging.getLogger(__name__)
