@@ -12,7 +12,14 @@ from fnmatch import fnmatch
 from pathlib import Path
 from typing_extensions import TYPE_CHECKING
 
-from .scan_utils import get_scan_results, wait_for_scan_results, get_scan_results_async, wait_for_scan_results_async
+from .scan_utils import (
+    get_scan_results,
+    wait_for_scan_results,
+    get_scan_results_async,
+    wait_for_scan_results_async,
+    ScanResultMixin,
+    AsyncScanResultMixin,
+)
 from .._exceptions import BadRequestError
 
 logger = logging.getLogger(__name__)
@@ -114,7 +121,7 @@ def filter_path_objects(
 
         yield item
 
-class ModelScanner:
+class ModelScanner(ScanResultMixin):
     """
     Model scanner that provides file and folder scanning functionality.
 
@@ -483,7 +490,7 @@ class ModelScanner:
         self._client.scans.upload.file.complete(file_id=upload.upload_id, scan_id=scan_id)
 
 
-class AsyncModelScanner:
+class AsyncModelScanner(AsyncScanResultMixin):
     """
     Async version of ModelScanner for use with AsyncHiddenLayer client.
     """
