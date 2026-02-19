@@ -17,7 +17,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestPromptAnalyzer:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create(self, client: HiddenLayer) -> None:
         prompt_analyzer = client.prompt_analyzer.create(
@@ -25,7 +25,7 @@ class TestPromptAnalyzer:
         )
         assert_matches_type(PromptAnalyzerCreateResponse, prompt_analyzer, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_with_all_params(self, client: HiddenLayer) -> None:
         prompt_analyzer = client.prompt_analyzer.create(
@@ -37,7 +37,7 @@ class TestPromptAnalyzer:
         )
         assert_matches_type(PromptAnalyzerCreateResponse, prompt_analyzer, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: HiddenLayer) -> None:
         response = client.prompt_analyzer.with_raw_response.create(
@@ -49,7 +49,7 @@ class TestPromptAnalyzer:
         prompt_analyzer = response.parse()
         assert_matches_type(PromptAnalyzerCreateResponse, prompt_analyzer, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: HiddenLayer) -> None:
         with client.prompt_analyzer.with_streaming_response.create(
@@ -69,7 +69,7 @@ class TestAsyncPromptAnalyzer:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncHiddenLayer) -> None:
         prompt_analyzer = await async_client.prompt_analyzer.create(
@@ -77,7 +77,7 @@ class TestAsyncPromptAnalyzer:
         )
         assert_matches_type(PromptAnalyzerCreateResponse, prompt_analyzer, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         prompt_analyzer = await async_client.prompt_analyzer.create(
@@ -89,7 +89,7 @@ class TestAsyncPromptAnalyzer:
         )
         assert_matches_type(PromptAnalyzerCreateResponse, prompt_analyzer, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.prompt_analyzer.with_raw_response.create(
@@ -101,7 +101,7 @@ class TestAsyncPromptAnalyzer:
         prompt_analyzer = await response.parse()
         assert_matches_type(PromptAnalyzerCreateResponse, prompt_analyzer, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.prompt_analyzer.with_streaming_response.create(

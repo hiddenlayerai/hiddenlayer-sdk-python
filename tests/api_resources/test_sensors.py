@@ -25,7 +25,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestSensors:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -35,7 +35,7 @@ class TestSensors:
 
         assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_with_all_params(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -49,7 +49,7 @@ class TestSensors:
 
         assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -62,7 +62,7 @@ class TestSensors:
         sensor = response.parse()
         assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -77,7 +77,7 @@ class TestSensors:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_retrieve(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -87,7 +87,7 @@ class TestSensors:
 
         assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_retrieve(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -100,7 +100,7 @@ class TestSensors:
         sensor = response.parse()
         assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_retrieve(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -115,7 +115,7 @@ class TestSensors:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_retrieve(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -124,7 +124,7 @@ class TestSensors:
                     "",
                 )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_update(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -134,7 +134,7 @@ class TestSensors:
 
         assert_matches_type(SensorUpdateResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_update_with_all_params(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -147,7 +147,7 @@ class TestSensors:
 
         assert_matches_type(SensorUpdateResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_update(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -160,7 +160,7 @@ class TestSensors:
         sensor = response.parse()
         assert_matches_type(SensorUpdateResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_update(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -175,7 +175,7 @@ class TestSensors:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_update(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -184,7 +184,7 @@ class TestSensors:
                     sensor_id="",
                 )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_delete(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -194,7 +194,7 @@ class TestSensors:
 
         assert sensor is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_delete(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -207,7 +207,7 @@ class TestSensors:
         sensor = response.parse()
         assert sensor is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_delete(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -222,7 +222,7 @@ class TestSensors:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_delete(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -231,7 +231,7 @@ class TestSensors:
                     "",
                 )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_query(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -239,7 +239,7 @@ class TestSensors:
 
         assert_matches_type(SensorQueryResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_query_with_all_params(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -260,7 +260,7 @@ class TestSensors:
 
         assert_matches_type(SensorQueryResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_query(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -271,7 +271,7 @@ class TestSensors:
         sensor = response.parse()
         assert_matches_type(SensorQueryResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_query(self, client: HiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -290,7 +290,7 @@ class TestAsyncSensors:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -300,7 +300,7 @@ class TestAsyncSensors:
 
         assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -314,7 +314,7 @@ class TestAsyncSensors:
 
         assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -327,7 +327,7 @@ class TestAsyncSensors:
         sensor = await response.parse()
         assert_matches_type(SensorCreateResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -342,7 +342,7 @@ class TestAsyncSensors:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -352,7 +352,7 @@ class TestAsyncSensors:
 
         assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -365,7 +365,7 @@ class TestAsyncSensors:
         sensor = await response.parse()
         assert_matches_type(SensorRetrieveResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -380,7 +380,7 @@ class TestAsyncSensors:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_retrieve(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -389,7 +389,7 @@ class TestAsyncSensors:
                     "",
                 )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_update(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -399,7 +399,7 @@ class TestAsyncSensors:
 
         assert_matches_type(SensorUpdateResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_update_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -412,7 +412,7 @@ class TestAsyncSensors:
 
         assert_matches_type(SensorUpdateResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_update(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -425,7 +425,7 @@ class TestAsyncSensors:
         sensor = await response.parse()
         assert_matches_type(SensorUpdateResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_update(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -440,7 +440,7 @@ class TestAsyncSensors:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_update(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -449,7 +449,7 @@ class TestAsyncSensors:
                     sensor_id="",
                 )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_delete(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -459,7 +459,7 @@ class TestAsyncSensors:
 
         assert sensor is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -472,7 +472,7 @@ class TestAsyncSensors:
         sensor = await response.parse()
         assert sensor is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -487,7 +487,7 @@ class TestAsyncSensors:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_delete(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -496,7 +496,7 @@ class TestAsyncSensors:
                     "",
                 )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_query(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -504,7 +504,7 @@ class TestAsyncSensors:
 
         assert_matches_type(SensorQueryResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_query_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -525,7 +525,7 @@ class TestAsyncSensors:
 
         assert_matches_type(SensorQueryResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_query(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
@@ -536,7 +536,7 @@ class TestAsyncSensors:
         sensor = await response.parse()
         assert_matches_type(SensorQueryResponse, sensor, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_query(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.warns(DeprecationWarning):
