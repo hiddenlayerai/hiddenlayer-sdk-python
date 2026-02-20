@@ -338,7 +338,7 @@ class Intelligence(BaseModel):
     contributor_trust_level: Optional[str] = None
     """Trust level of the model contributor"""
 
-    country_of_origin: Optional[List[str]] = None
+    geographic_footprint: Optional[List[str]] = None
     """List of countries where the model originated"""
 
     licenses: Optional[List[IntelligenceLicense]] = None
