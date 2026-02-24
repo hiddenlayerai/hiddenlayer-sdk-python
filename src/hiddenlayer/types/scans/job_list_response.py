@@ -22,6 +22,12 @@ class ItemInventoryProviderDetails(BaseModel):
     - Azure AI Foundry: "Claude-3-5-Sonnet"
     """
 
+    country: Optional[str] = None
+    """
+    Optional country code (ISO 3166-1 alpha-2) for the location where the model
+    provider is primarily based.
+    """
+
     model_arn: Optional[str] = None
     """
     Optional full ARN or resource identifier for the model. Used for provisioned

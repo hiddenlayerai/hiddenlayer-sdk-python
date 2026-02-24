@@ -1,5 +1,26 @@
 # Changelog
 
+## 3.4.0 (2026-02-14)
+
+Full Changelog: [v3.3.0...v3.4.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.3.0...v3.4.0)
+
+### Features
+
+* **api:** api update ([a1c0278](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/a1c0278363b3be694895f157bab4da233de753bb))
+* **api:** api update ([4b1ef5b](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/4b1ef5b5c16dd67e5a7756acf871acae5f11512a))
+
+
+### Bug Fixes
+
+* **client/oauth:** send grant_type in request body per RFC 6749 ([#173](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/173)) ([2b4c58d](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/2b4c58dc1fb3ad586e9a8fab90f3b900f59446c0))
+
+
+### Chores
+
+* format all `api.md` files ([829c616](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/829c616b17455c59641976e0c29702dfbba50e8e))
+* **internal:** bump dependencies ([bfb6489](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/bfb6489bb4b627f40fcf62c8ff06bd5946882b5b))
+* **internal:** fix lint error on Python 3.14 ([e83496c](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e83496cc463b59eabd0e415d657fed751365b9f4))
+
 ## 3.3.0 (2026-02-04)
 
 Full Changelog: [v3.2.2...v3.3.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.2.2...v3.3.0)
