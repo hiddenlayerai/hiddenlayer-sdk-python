@@ -203,6 +203,98 @@ CommunityScanSource.GOOGLE_OAUTH = "GOOGLE_OAUTH"
 CommunityScanSource.HUGGING_FACE = "HUGGING_FACE"
 ```
 
+## RedTeamSessions
+
+High-level session management for red team evaluations. Wraps the low-level `client.evaluations.red_team.*` API into a stateful session abstraction with polling, iteration, and callback-driven execution.
+
+```python
+from hiddenlayer.lib import EvaluationSessionsResource, AsyncEvaluationSessionsResource
+from hiddenlayer.lib.red_team_exceptions import (
+    RedTeamSessionError,
+    PollTimeoutError,
+    WorkflowNotFoundError,
+    InvalidSessionError,
+)
+```
+
+### Session Manager
+
+Accessed via `client.evaluation_sessions.red_team`.
+
+Methods:
+
+- **start_session(name, target_model, target_system_prompt="", max_turns=3, execution_strategy_type="random", attacker_max_generation_attempts=2, n_random_techniques=1, max_parallel_techniques=1, prompt_set_id="", hiddenlayer_project_id=None, poll_interval=2.0, poll_max_wait=None, sessions_per_technique=1) -> RedTeamSession**  
+  Start a new red team session. Returns a `RedTeamSession` (sync) or `AsyncRedTeamSession` (async).
+  Uses adaptive multi-objective evaluation: each session runs to `max_turns` (no short-circuit),
+  tests all objectives, and maintains cross-session state for adaptive attacks.
+  `sessions_per_technique` controls how many sessions run per technique (default 1).
+
+- **resume_session(workflow_id, poll_interval=2.0, poll_max_wait=None, max_parallel_techniques=None) -> RedTeamSession**  
+  Reconnect to a previously started workflow by its ID.
+
+- **terminate_session(workflow_id) -> None**  
+  Stop a running workflow.
+
+### Session Object
+
+Returned by `start_session()` and `resume_session()`. Available as `RedTeamSession` (sync) and `AsyncRedTeamSession` (async).
+
+Properties:
+
+- **workflow_id -> str**  
+  The workflow ID for this session.
+
+- **name -> str**  
+  The session name.
+
+Methods:
+
+- **get_next_action(block=True) -> RedTeamRetrieveNextActionResponse**  
+  Poll the server for the next action. When `block=True`, waits until an action is ready.
+
+- **wait_for_completion(poll_interval=3.0, max_wait=300.0, verbose=False) -> None**  
+  Poll status until the workflow reaches a terminal state (COMPLETED, FAILED, CANCELLED, TERMINATED, or TIMED_OUT). Automatically called by `run_with_callback()` and `run_with_callback_parallel()`.
+
+- **iterate_actions() -> Iterator[RedTeamRetrieveNextActionResponse]**  
+  Yield `attack_task` actions until the workflow completes or fails. Use with `for`/`async for`.
+
+- **run_with_callback(handler) -> None**  
+  Drive the full session sequentially. The handler receives `(attack_prompt, history, session_id, target_system_prompt)` and returns the target model's response string. Waits for workflow completion before returning.
+
+### Async-Only Session Methods
+
+These methods are only available on `AsyncRedTeamSession`:
+
+- **get_available_actions(max_actions=10) -> list[RedTeamRetrieveNextActionResponse]**  
+  Non-blocking batch fetch of up to `max_actions` currently ready actions.
+
+- **run_with_callback_parallel(handler, max_parallel=None, poll_batch_interval=0.5) -> None**  
+  Drive the session with parallel action processing. When `max_parallel` is None, uses the `max_parallel_techniques` value from session config.
+
+### Exceptions
+
+```python
+from hiddenlayer.lib.red_team_exceptions import (
+    RedTeamSessionError,
+    PollTimeoutError,
+    WorkflowNotFoundError,
+    InvalidSessionError,
+)
+```
+
+- **RedTeamSessionError** -- Base exception for red team session errors.
+- **PollTimeoutError** -- Raised when polling exceeds `max_wait`.
+- **WorkflowNotFoundError** -- Raised when a workflow ID does not exist (HTTP 404).
+- **InvalidSessionError** -- Raised when a session ID is invalid during response submission (HTTP 400).
+
+### Execution Strategies
+
+Available values for `start_session(execution_strategy_type=...)`:
+
+- `"single"` -- Single technique execution
+- `"random"` -- Random technique selection (default)
+- `"static_prompt_set"` -- Static prompt set evaluation (requires `prompt_set_id`)
+
 # Client Usage
 
 ## Authentication Methods
