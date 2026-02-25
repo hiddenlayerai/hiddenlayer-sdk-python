@@ -223,12 +223,11 @@ Accessed via `client.evaluation_sessions.red_team`.
 
 Methods:
 
-- **start_session(name, target_model, objective_ids=None, target_system_prompt="", refusal_judge_model=None, objective_judge_model=None, attacker_model=None, evaluation_report_model=None, max_turns=3, execution_strategy_type="random", attacker_max_generation_attempts=2, n_random_techniques=1, max_parallel_techniques=1, prompt_set_id="", hiddenlayer_project_id=None, poll_interval=2.0, poll_max_wait=None, sessions_per_technique=1) -> RedTeamSession**  
+- **start_session(name, target_model, target_system_prompt="", max_turns=3, execution_strategy_type="random", attacker_max_generation_attempts=2, n_random_techniques=1, max_parallel_techniques=1, prompt_set_id="", hiddenlayer_project_id=None, poll_interval=2.0, poll_max_wait=None, sessions_per_technique=1) -> RedTeamSession**  
   Start a new red team session. Returns a `RedTeamSession` (sync) or `AsyncRedTeamSession` (async).
   Uses adaptive multi-objective evaluation: each session runs to `max_turns` (no short-circuit),
-  tests all provided objectives, and maintains cross-session state for adaptive attacks.
+  tests all objectives, and maintains cross-session state for adaptive attacks.
   `sessions_per_technique` controls how many sessions run per technique (default 1).
-  When `objective_ids` is None, defaults to all available objectives.
 
 - **resume_session(workflow_id, poll_interval=2.0, poll_max_wait=None, max_parallel_techniques=None) -> RedTeamSession**  
   Reconnect to a previously started workflow by its ID.
@@ -287,18 +286,6 @@ from hiddenlayer.lib.red_team_exceptions import (
 - **PollTimeoutError** -- Raised when polling exceeds `max_wait`.
 - **WorkflowNotFoundError** -- Raised when a workflow ID does not exist (HTTP 404).
 - **InvalidSessionError** -- Raised when a session ID is invalid during response submission (HTTP 400).
-
-### Objective IDs
-
-Available objective IDs that can be passed to `start_session(objective_ids=...)`:
-
-| ID | Category |
-|----|----------|
-| `HLO.01` | Alignment Bypass / Jailbreak |
-| `HLO.02` | Task Redirection / Hijacking |
-| `HLO.03` | Context Leakage |
-| `HLO.05` | Data Leakage |
-| `HLO.07` | Reputation Damage |
 
 ### Execution Strategies
 
