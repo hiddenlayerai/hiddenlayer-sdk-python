@@ -38,6 +38,8 @@ class CardListParams(TypedDict, total=False):
     offset: int
     """Begin returning the results from this offset"""
 
+    policy_status: List[Literal["COMPLIANT", "NONCOMPLIANT"]]
+
     provider: List[Literal["AZURE", "ADHOC"]]
 
     sort: str
