@@ -714,7 +714,7 @@ class TestHiddenLayer:
 
         auth = client.custom_auth
         assert auth is not None
-        request = auth._build_token_request()
+        request = cast(httpx.Request, cast(Any, auth)._build_token_request())
 
         assert str(request.url) == "https://api.hiddenlayer.ai/oauth2/token"
         assert request.content == b"grant_type=client_credentials"
@@ -1676,7 +1676,7 @@ class TestAsyncHiddenLayer:
 
         auth = client.custom_auth
         assert auth is not None
-        request = auth._build_token_request()
+        request = cast(httpx.Request, cast(Any, auth)._build_token_request())
 
         assert str(request.url) == "https://api.hiddenlayer.ai/oauth2/token"
         assert request.content == b"grant_type=client_credentials"
