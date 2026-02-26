@@ -212,7 +212,7 @@ class HiddenLayer(SyncAPIClient):
             return make_oauth2(
                 client_id=self.client_id,
                 client_secret=self.client_secret,
-                token_url=self._prepare_url("/oauth2/token?grant_type=client_credentials"),
+                token_url=self._prepare_url("/oauth2/token"),
                 header="Authorization",
             )
         return None
@@ -480,7 +480,7 @@ class AsyncHiddenLayer(AsyncAPIClient):
             return make_oauth2(
                 client_id=self.client_id,
                 client_secret=self.client_secret,
-                token_url=self._prepare_url("/oauth2/token?grant_type=client_credentials"),
+                token_url=self._prepare_url("/oauth2/token"),
                 header="Authorization",
             )
         return None
