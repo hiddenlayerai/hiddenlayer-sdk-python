@@ -704,6 +704,24 @@ class TestHiddenLayer:
 
             client.close()
 
+    def test_oauth_token_request_uses_body_grant_type(self) -> None:
+        client = HiddenLayer(
+            base_url="https://api.hiddenlayer.ai",
+            client_id="client-id",
+            client_secret="client-secret",
+            _strict_response_validation=True,
+        )
+
+        auth = client.custom_auth
+        assert auth is not None
+        request = auth._build_token_request()
+
+        assert str(request.url) == "https://api.hiddenlayer.ai/oauth2/token"
+        assert request.content == b"grant_type=client_credentials"
+        assert "grant_type=" not in str(request.url)
+
+        client.close()
+
     @pytest.mark.parametrize(
         "client",
         [
@@ -1647,6 +1665,24 @@ class TestAsyncHiddenLayer:
             assert str(client.base_url).startswith("https://api.hiddenlayer.ai")
 
             await client.close()
+
+    async def test_oauth_token_request_uses_body_grant_type(self) -> None:
+        client = AsyncHiddenLayer(
+            base_url="https://api.hiddenlayer.ai",
+            client_id="client-id",
+            client_secret="client-secret",
+            _strict_response_validation=True,
+        )
+
+        auth = client.custom_auth
+        assert auth is not None
+        request = auth._build_token_request()
+
+        assert str(request.url) == "https://api.hiddenlayer.ai/oauth2/token"
+        assert request.content == b"grant_type=client_credentials"
+        assert "grant_type=" not in str(request.url)
+
+        await client.close()
 
     @pytest.mark.parametrize(
         "client",
