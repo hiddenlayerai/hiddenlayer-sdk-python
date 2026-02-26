@@ -23,7 +23,17 @@ class TestFile:
         file = client.scans.upload.file.add(
             scan_id="00000000-0000-0000-0000-000000000000",
             file_content_length=12345,
+        )
+        assert_matches_type(FileAddResponse, file, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_add_with_all_params(self, client: HiddenLayer) -> None:
+        file = client.scans.upload.file.add(
+            scan_id="00000000-0000-0000-0000-000000000000",
+            file_content_length=12345,
             file_name="exampleFile.txt",
+            file_name_base64="file-name-base64",
         )
         assert_matches_type(FileAddResponse, file, path=["response"])
 
@@ -33,7 +43,6 @@ class TestFile:
         response = client.scans.upload.file.with_raw_response.add(
             scan_id="00000000-0000-0000-0000-000000000000",
             file_content_length=12345,
-            file_name="exampleFile.txt",
         )
 
         assert response.is_closed is True
@@ -47,7 +56,6 @@ class TestFile:
         with client.scans.upload.file.with_streaming_response.add(
             scan_id="00000000-0000-0000-0000-000000000000",
             file_content_length=12345,
-            file_name="exampleFile.txt",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -64,7 +72,6 @@ class TestFile:
             client.scans.upload.file.with_raw_response.add(
                 scan_id="",
                 file_content_length=12345,
-                file_name="exampleFile.txt",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
@@ -131,7 +138,17 @@ class TestAsyncFile:
         file = await async_client.scans.upload.file.add(
             scan_id="00000000-0000-0000-0000-000000000000",
             file_content_length=12345,
+        )
+        assert_matches_type(FileAddResponse, file, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_add_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
+        file = await async_client.scans.upload.file.add(
+            scan_id="00000000-0000-0000-0000-000000000000",
+            file_content_length=12345,
             file_name="exampleFile.txt",
+            file_name_base64="file-name-base64",
         )
         assert_matches_type(FileAddResponse, file, path=["response"])
 
@@ -141,7 +158,6 @@ class TestAsyncFile:
         response = await async_client.scans.upload.file.with_raw_response.add(
             scan_id="00000000-0000-0000-0000-000000000000",
             file_content_length=12345,
-            file_name="exampleFile.txt",
         )
 
         assert response.is_closed is True
@@ -155,7 +171,6 @@ class TestAsyncFile:
         async with async_client.scans.upload.file.with_streaming_response.add(
             scan_id="00000000-0000-0000-0000-000000000000",
             file_content_length=12345,
-            file_name="exampleFile.txt",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -172,7 +187,6 @@ class TestAsyncFile:
             await async_client.scans.upload.file.with_raw_response.add(
                 scan_id="",
                 file_content_length=12345,
-                file_name="exampleFile.txt",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
