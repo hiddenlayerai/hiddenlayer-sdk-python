@@ -49,7 +49,9 @@ class CardListResponse(BaseModel):
     model_scan_has_error: Optional[bool] = None
     """True if the model's latest scan has an error"""
 
-    policy_status: Optional[Literal["COMPLIANT", "COMPLIANT*", "NONCOMPLIANT", "NONCOMPLIANT*"]] = None
+    policy_status: Optional[Literal["COMPLIANT", "COMPLIANT_OVERRIDDEN", "NONCOMPLIANT", "NONCOMPLIANT_OVERRIDDEN"]] = (
+        None
+    )
     """The status of the model's compliance with regard to any policies.
 
     A trailing asterisk indicates the model's status has been overridden.
