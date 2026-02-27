@@ -23,7 +23,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestRedTeam:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create(self, client: HiddenLayer) -> None:
         red_team = client.evaluations.red_team.create(
@@ -32,7 +32,7 @@ class TestRedTeam:
         )
         assert_matches_type(RedTeamCreateResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_with_all_params(self, client: HiddenLayer) -> None:
         red_team = client.evaluations.red_team.create(
@@ -55,7 +55,7 @@ class TestRedTeam:
         )
         assert_matches_type(RedTeamCreateResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: HiddenLayer) -> None:
         response = client.evaluations.red_team.with_raw_response.create(
@@ -68,7 +68,7 @@ class TestRedTeam:
         red_team = response.parse()
         assert_matches_type(RedTeamCreateResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: HiddenLayer) -> None:
         with client.evaluations.red_team.with_streaming_response.create(
@@ -83,7 +83,7 @@ class TestRedTeam:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_retrieve_evaluation_results(self, client: HiddenLayer) -> None:
         red_team = client.evaluations.red_team.retrieve_evaluation_results(
@@ -91,7 +91,7 @@ class TestRedTeam:
         )
         assert_matches_type(RedTeamRetrieveEvaluationResultsResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_retrieve_evaluation_results(self, client: HiddenLayer) -> None:
         response = client.evaluations.red_team.with_raw_response.retrieve_evaluation_results(
@@ -103,7 +103,7 @@ class TestRedTeam:
         red_team = response.parse()
         assert_matches_type(RedTeamRetrieveEvaluationResultsResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_retrieve_evaluation_results(self, client: HiddenLayer) -> None:
         with client.evaluations.red_team.with_streaming_response.retrieve_evaluation_results(
@@ -117,7 +117,7 @@ class TestRedTeam:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_retrieve_evaluation_results(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `workflow_id` but received ''"):
@@ -125,7 +125,7 @@ class TestRedTeam:
                 "",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_retrieve_next_action(self, client: HiddenLayer) -> None:
         red_team = client.evaluations.red_team.retrieve_next_action(
@@ -133,7 +133,7 @@ class TestRedTeam:
         )
         assert_matches_type(RedTeamRetrieveNextActionResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_retrieve_next_action(self, client: HiddenLayer) -> None:
         response = client.evaluations.red_team.with_raw_response.retrieve_next_action(
@@ -145,7 +145,7 @@ class TestRedTeam:
         red_team = response.parse()
         assert_matches_type(RedTeamRetrieveNextActionResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_retrieve_next_action(self, client: HiddenLayer) -> None:
         with client.evaluations.red_team.with_streaming_response.retrieve_next_action(
@@ -159,7 +159,7 @@ class TestRedTeam:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_retrieve_next_action(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `workflow_id` but received ''"):
@@ -167,7 +167,7 @@ class TestRedTeam:
                 "",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_retrieve_status(self, client: HiddenLayer) -> None:
         red_team = client.evaluations.red_team.retrieve_status(
@@ -175,7 +175,7 @@ class TestRedTeam:
         )
         assert_matches_type(RedTeamRetrieveStatusResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_retrieve_status(self, client: HiddenLayer) -> None:
         response = client.evaluations.red_team.with_raw_response.retrieve_status(
@@ -187,7 +187,7 @@ class TestRedTeam:
         red_team = response.parse()
         assert_matches_type(RedTeamRetrieveStatusResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_retrieve_status(self, client: HiddenLayer) -> None:
         with client.evaluations.red_team.with_streaming_response.retrieve_status(
@@ -201,7 +201,7 @@ class TestRedTeam:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_retrieve_status(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `workflow_id` but received ''"):
@@ -209,7 +209,7 @@ class TestRedTeam:
                 "",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_submit_target_response(self, client: HiddenLayer) -> None:
         red_team = client.evaluations.red_team.submit_target_response(
@@ -219,7 +219,7 @@ class TestRedTeam:
         )
         assert_matches_type(RedTeamSubmitTargetResponseResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_submit_target_response(self, client: HiddenLayer) -> None:
         response = client.evaluations.red_team.with_raw_response.submit_target_response(
@@ -233,7 +233,7 @@ class TestRedTeam:
         red_team = response.parse()
         assert_matches_type(RedTeamSubmitTargetResponseResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_submit_target_response(self, client: HiddenLayer) -> None:
         with client.evaluations.red_team.with_streaming_response.submit_target_response(
@@ -249,7 +249,7 @@ class TestRedTeam:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_submit_target_response(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `workflow_id` but received ''"):
@@ -259,7 +259,7 @@ class TestRedTeam:
                 target_response="target_response",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_terminate(self, client: HiddenLayer) -> None:
         red_team = client.evaluations.red_team.terminate(
@@ -267,7 +267,7 @@ class TestRedTeam:
         )
         assert red_team is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_terminate(self, client: HiddenLayer) -> None:
         response = client.evaluations.red_team.with_raw_response.terminate(
@@ -279,7 +279,7 @@ class TestRedTeam:
         red_team = response.parse()
         assert red_team is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_terminate(self, client: HiddenLayer) -> None:
         with client.evaluations.red_team.with_streaming_response.terminate(
@@ -293,7 +293,7 @@ class TestRedTeam:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_terminate(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `workflow_id` but received ''"):
@@ -307,7 +307,7 @@ class TestAsyncRedTeam:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncHiddenLayer) -> None:
         red_team = await async_client.evaluations.red_team.create(
@@ -316,7 +316,7 @@ class TestAsyncRedTeam:
         )
         assert_matches_type(RedTeamCreateResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         red_team = await async_client.evaluations.red_team.create(
@@ -339,7 +339,7 @@ class TestAsyncRedTeam:
         )
         assert_matches_type(RedTeamCreateResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.evaluations.red_team.with_raw_response.create(
@@ -352,7 +352,7 @@ class TestAsyncRedTeam:
         red_team = await response.parse()
         assert_matches_type(RedTeamCreateResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.evaluations.red_team.with_streaming_response.create(
@@ -367,7 +367,7 @@ class TestAsyncRedTeam:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_retrieve_evaluation_results(self, async_client: AsyncHiddenLayer) -> None:
         red_team = await async_client.evaluations.red_team.retrieve_evaluation_results(
@@ -375,7 +375,7 @@ class TestAsyncRedTeam:
         )
         assert_matches_type(RedTeamRetrieveEvaluationResultsResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_retrieve_evaluation_results(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.evaluations.red_team.with_raw_response.retrieve_evaluation_results(
@@ -387,7 +387,7 @@ class TestAsyncRedTeam:
         red_team = await response.parse()
         assert_matches_type(RedTeamRetrieveEvaluationResultsResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_retrieve_evaluation_results(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.evaluations.red_team.with_streaming_response.retrieve_evaluation_results(
@@ -401,7 +401,7 @@ class TestAsyncRedTeam:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_retrieve_evaluation_results(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `workflow_id` but received ''"):
@@ -409,7 +409,7 @@ class TestAsyncRedTeam:
                 "",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_retrieve_next_action(self, async_client: AsyncHiddenLayer) -> None:
         red_team = await async_client.evaluations.red_team.retrieve_next_action(
@@ -417,7 +417,7 @@ class TestAsyncRedTeam:
         )
         assert_matches_type(RedTeamRetrieveNextActionResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_retrieve_next_action(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.evaluations.red_team.with_raw_response.retrieve_next_action(
@@ -429,7 +429,7 @@ class TestAsyncRedTeam:
         red_team = await response.parse()
         assert_matches_type(RedTeamRetrieveNextActionResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_retrieve_next_action(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.evaluations.red_team.with_streaming_response.retrieve_next_action(
@@ -443,7 +443,7 @@ class TestAsyncRedTeam:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_retrieve_next_action(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `workflow_id` but received ''"):
@@ -451,7 +451,7 @@ class TestAsyncRedTeam:
                 "",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_retrieve_status(self, async_client: AsyncHiddenLayer) -> None:
         red_team = await async_client.evaluations.red_team.retrieve_status(
@@ -459,7 +459,7 @@ class TestAsyncRedTeam:
         )
         assert_matches_type(RedTeamRetrieveStatusResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_retrieve_status(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.evaluations.red_team.with_raw_response.retrieve_status(
@@ -471,7 +471,7 @@ class TestAsyncRedTeam:
         red_team = await response.parse()
         assert_matches_type(RedTeamRetrieveStatusResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_retrieve_status(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.evaluations.red_team.with_streaming_response.retrieve_status(
@@ -485,7 +485,7 @@ class TestAsyncRedTeam:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_retrieve_status(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `workflow_id` but received ''"):
@@ -493,7 +493,7 @@ class TestAsyncRedTeam:
                 "",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_submit_target_response(self, async_client: AsyncHiddenLayer) -> None:
         red_team = await async_client.evaluations.red_team.submit_target_response(
@@ -503,7 +503,7 @@ class TestAsyncRedTeam:
         )
         assert_matches_type(RedTeamSubmitTargetResponseResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_submit_target_response(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.evaluations.red_team.with_raw_response.submit_target_response(
@@ -517,7 +517,7 @@ class TestAsyncRedTeam:
         red_team = await response.parse()
         assert_matches_type(RedTeamSubmitTargetResponseResponse, red_team, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_submit_target_response(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.evaluations.red_team.with_streaming_response.submit_target_response(
@@ -533,7 +533,7 @@ class TestAsyncRedTeam:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_submit_target_response(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `workflow_id` but received ''"):
@@ -543,7 +543,7 @@ class TestAsyncRedTeam:
                 target_response="target_response",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_terminate(self, async_client: AsyncHiddenLayer) -> None:
         red_team = await async_client.evaluations.red_team.terminate(
@@ -551,7 +551,7 @@ class TestAsyncRedTeam:
         )
         assert red_team is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_terminate(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.evaluations.red_team.with_raw_response.terminate(
@@ -563,7 +563,7 @@ class TestAsyncRedTeam:
         red_team = await response.parse()
         assert red_team is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_terminate(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.evaluations.red_team.with_streaming_response.terminate(
@@ -577,7 +577,7 @@ class TestAsyncRedTeam:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_terminate(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `workflow_id` but received ''"):

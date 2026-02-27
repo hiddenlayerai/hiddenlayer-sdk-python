@@ -6,7 +6,8 @@ from urllib.parse import quote
 
 import httpx
 
-from ...._types import Body, Query, Headers, NotGiven, not_given
+from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ...._utils import strip_not_given
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -47,7 +48,8 @@ class FileResource(SyncAPIResource):
         scan_id: str,
         *,
         file_content_length: int,
-        file_name: str,
+        file_name: str | Omit = omit,
+        file_name_base64: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -70,8 +72,13 @@ class FileResource(SyncAPIResource):
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         extra_headers = {
-            "file-content-length": str(file_content_length),
-            "file-name": quote(file_name),
+            **strip_not_given(
+                {
+                    "file-content-length": str(file_content_length),
+                    "file-name": file_name,
+                    "file-name-base64": file_name_base64,
+                }
+            ),
             **(extra_headers or {}),
         }
         return self._post(
@@ -144,7 +151,8 @@ class AsyncFileResource(AsyncAPIResource):
         scan_id: str,
         *,
         file_content_length: int,
-        file_name: str,
+        file_name: str | Omit = omit,
+        file_name_base64: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -167,8 +175,13 @@ class AsyncFileResource(AsyncAPIResource):
         if not scan_id:
             raise ValueError(f"Expected a non-empty value for `scan_id` but received {scan_id!r}")
         extra_headers = {
-            "file-content-length": str(file_content_length),
-            "file-name": quote(file_name),
+            **strip_not_given(
+                {
+                    "file-content-length": str(file_content_length),
+                    "file-name": file_name,
+                    "file-name-base64": file_name_base64,
+                }
+            ),
             **(extra_headers or {}),
         }
         return await self._post(

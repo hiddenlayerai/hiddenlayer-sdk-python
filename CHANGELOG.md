@@ -1,5 +1,32 @@
 # Changelog
 
+## 3.5.0 (2026-02-27)
+
+Full Changelog: [v3.4.0...v3.5.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.4.0...v3.5.0)
+
+### Features
+
+* **api:** api update ([9eea54c](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/9eea54c2eb2727e95426a560d3df0835f7b7111c))
+* **api:** api update ([f141896](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/f141896accb0dd56c58ee9d1cc4f81efd30d25d0))
+* **api:** api update ([92f2618](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/92f26183853e9a3e540c10647520955e9d5908f0))
+* **api:** api update ([16f2a69](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/16f2a6965558821b0a15448aa53b0feb49098b0c))
+* **api:** api update ([b98638e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/b98638ef2650e5f5562fc04d7a441005a10d4486))
+* **api:** api update ([f08f968](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/f08f968be5fe2be22924a77d7ccf61c65e6f1ccb))
+
+
+### Chores
+
+* **internal:** add request options to SSE classes ([33b7597](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/33b7597bc7a36847f70dc26ebc2dfcccd6a3d15c))
+* **internal:** make `test_proxy_environment_variables` more resilient ([5d82965](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/5d82965da2550879002ffacc2b116ae9e241de3f))
+* **internal:** make `test_proxy_environment_variables` more resilient to env ([31ee619](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/31ee61956ce172605b9fe9a386b4123fca590b78))
+* **internal:** remove mock server code ([9579dbc](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/9579dbc6e8d484a84b628c2513b8d5cc12bfc19b))
+* update mock server docs ([5af4adc](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/5af4adc0dba02208929639010a9513da98d45339))
+
+
+### Documentation
+
+* add RedTeamSessions to API reference ([#176](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/176)) ([587ac08](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/587ac0868a82a6a25dc02a9639edd159fe2cb7e2))
+
 ## 3.4.0 (2026-02-14)
 
 Full Changelog: [v3.3.0...v3.4.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.3.0...v3.4.0)

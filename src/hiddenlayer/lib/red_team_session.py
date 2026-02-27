@@ -253,23 +253,14 @@ class RedTeamSessionsResource(SyncAPIResource):
     ) -> RedTeamSession:
         """Start a new red team session.
 
-        Supports two modes:
-
-        V1 Mode (objective-specific with short-circuit):
-            - Provide objective_ids (required)
-            - Do not set sessions_per_technique
-            - Each session tests one objective and short-circuits on success
-
-        V2 Mode (objective-agnostic adaptive):
-            - Set sessions_per_technique (e.g., 3)
-            - objective_ids optional (defaults to all available)
-            - Each session tests all objectives, runs to max_turns
-            - Adaptive attacker with cross-session state
+        Uses adaptive multi-objective evaluation: each session runs to
+        max_turns (no short-circuit), tests all provided objectives, and
+        maintains cross-session state for adaptive attacks.
 
         Args:
             name: Session name
-            objective_ids: List of objective IDs to test (e.g., ["HLO.03"])
-                V1: Required. V2: Optional (defaults to all available)
+            objective_ids: List of objective IDs to test (e.g., ["HLO.03"]).
+                Optional; defaults to all available objectives.
             target_model: Model identifier for the target being tested
             target_system_prompt: System prompt for the target model
             refusal_judge_model: Model to use for refusal judging
@@ -288,13 +279,13 @@ class RedTeamSessionsResource(SyncAPIResource):
             hiddenlayer_project_id: Optional HiddenLayer project ID
             poll_interval: How often to poll for actions (seconds, default: 2.0s)
             poll_max_wait: Maximum time to wait for actions (seconds)
-            sessions_per_technique: Number of sessions to run per technique (enables V2 mode)
+            sessions_per_technique: Number of sessions to run per technique
 
         Returns:
-            AsyncRedTeamSession instance
+            RedTeamSession instance
 
         Raises:
-            ValueError: If objective_ids not provided in V1 mode
+            ValueError: If execution_strategy_type is invalid
         """
         # Use defaults if not provided
         refusal_judge_model = refusal_judge_model or self._default_refusal_judge_model
@@ -302,7 +293,7 @@ class RedTeamSessionsResource(SyncAPIResource):
         attacker_model = attacker_model or self._default_attacker_model
         evaluation_report_model = evaluation_report_model or self._default_evaluation_report_model
 
-        # V2 mode: objective_ids optional (defaults to all)
+        # Default to all available objectives if not specified
         if objective_ids is None:
             objective_ids = self._available_objective_ids.copy()
 
@@ -791,23 +782,14 @@ class AsyncRedTeamSessionsResource(AsyncAPIResource):
     ) -> AsyncRedTeamSession:
         """Start a new red team session.
 
-        Supports two modes:
-
-        V1 Mode (objective-specific with short-circuit):
-            - Provide objective_ids (required)
-            - Do not set sessions_per_technique
-            - Each session tests one objective and short-circuits on success
-
-        V2 Mode (objective-agnostic adaptive):
-            - Set sessions_per_technique (e.g., 3)
-            - objective_ids optional (defaults to all available)
-            - Each session tests all objectives, runs to max_turns
-            - Adaptive attacker with cross-session state
+        Uses adaptive multi-objective evaluation: each session runs to
+        max_turns (no short-circuit), tests all provided objectives, and
+        maintains cross-session state for adaptive attacks.
 
         Args:
             name: Session name
-            objective_ids: List of objective IDs to test (e.g., ["HLO.03"])
-                V1: Required. V2: Optional (defaults to all available)
+            objective_ids: List of objective IDs to test (e.g., ["HLO.03"]).
+                Optional; defaults to all available objectives.
             target_model: Model identifier for the target being tested
             target_system_prompt: System prompt for the target model
             refusal_judge_model: Model to use for refusal judging
@@ -826,13 +808,13 @@ class AsyncRedTeamSessionsResource(AsyncAPIResource):
             hiddenlayer_project_id: Optional HiddenLayer project ID
             poll_interval: How often to poll for actions (seconds, default: 2.0s)
             poll_max_wait: Maximum time to wait for actions (seconds)
-            sessions_per_technique: Number of sessions to run per technique (enables V2 mode)
+            sessions_per_technique: Number of sessions to run per technique
 
         Returns:
             AsyncRedTeamSession instance
 
         Raises:
-            ValueError: If objective_ids not provided in V1 mode
+            ValueError: If execution_strategy_type is invalid
         """
         # Use defaults if not provided
         refusal_judge_model = refusal_judge_model or self._default_refusal_judge_model
@@ -840,7 +822,7 @@ class AsyncRedTeamSessionsResource(AsyncAPIResource):
         attacker_model = attacker_model or self._default_attacker_model
         evaluation_report_model = evaluation_report_model or self._default_evaluation_report_model
 
-        # V2 mode: objective_ids optional (defaults to all)
+        # Default to all available objectives if not specified
         if objective_ids is None:
             objective_ids = self._available_objective_ids.copy()
 
