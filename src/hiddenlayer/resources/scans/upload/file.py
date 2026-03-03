@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from urllib.parse import quote
-
 import httpx
 
 from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
