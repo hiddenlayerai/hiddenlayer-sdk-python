@@ -46,10 +46,18 @@ class CardListResponse(BaseModel):
 
     aidr_threat_level: Optional[Literal["high", "medium", "low", "none", "not available"]] = None
 
+    latest_scan_id: Optional[str] = None
+    """The ID of the most recent model scanner scan for this model's latest version.
+
+    Absent if no scan has been run.
+    """
+
     model_scan_has_error: Optional[bool] = None
     """True if the model's latest scan has an error"""
 
-    policy_status: Optional[Literal["COMPLIANT", "COMPLIANT*", "NONCOMPLIANT", "NONCOMPLIANT*"]] = None
+    policy_status: Optional[Literal["COMPLIANT", "COMPLIANT_OVERRIDDEN", "NONCOMPLIANT", "NONCOMPLIANT_OVERRIDDEN"]] = (
+        None
+    )
     """The status of the model's compliance with regard to any policies.
 
     A trailing asterisk indicates the model's status has been overridden.
