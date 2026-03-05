@@ -16,7 +16,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestResults:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_sarif(self, client: HiddenLayer) -> None:
         result = client.scans.results.sarif(
@@ -24,7 +24,7 @@ class TestResults:
         )
         assert_matches_type(str, result, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_sarif(self, client: HiddenLayer) -> None:
         response = client.scans.results.with_raw_response.sarif(
@@ -36,7 +36,7 @@ class TestResults:
         result = response.parse()
         assert_matches_type(str, result, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_sarif(self, client: HiddenLayer) -> None:
         with client.scans.results.with_streaming_response.sarif(
@@ -50,7 +50,7 @@ class TestResults:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_sarif(self, client: HiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `scan_id` but received ''"):
@@ -64,7 +64,7 @@ class TestAsyncResults:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_sarif(self, async_client: AsyncHiddenLayer) -> None:
         result = await async_client.scans.results.sarif(
@@ -72,7 +72,7 @@ class TestAsyncResults:
         )
         assert_matches_type(str, result, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_sarif(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.scans.results.with_raw_response.sarif(
@@ -84,7 +84,7 @@ class TestAsyncResults:
         result = await response.parse()
         assert_matches_type(str, result, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_sarif(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.scans.results.with_streaming_response.sarif(
@@ -98,7 +98,7 @@ class TestAsyncResults:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_sarif(self, async_client: AsyncHiddenLayer) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `scan_id` but received ''"):

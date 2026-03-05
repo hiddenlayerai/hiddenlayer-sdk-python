@@ -17,7 +17,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestInteractions:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_analyze(self, client: HiddenLayer) -> None:
         interaction = client.interactions.analyze(
@@ -28,7 +28,7 @@ class TestInteractions:
         )
         assert_matches_type(InteractionAnalyzeResponse, interaction, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_analyze_with_all_params(self, client: HiddenLayer) -> None:
         interaction = client.interactions.analyze(
@@ -57,7 +57,7 @@ class TestInteractions:
         )
         assert_matches_type(InteractionAnalyzeResponse, interaction, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_analyze(self, client: HiddenLayer) -> None:
         response = client.interactions.with_raw_response.analyze(
@@ -72,7 +72,7 @@ class TestInteractions:
         interaction = response.parse()
         assert_matches_type(InteractionAnalyzeResponse, interaction, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_analyze(self, client: HiddenLayer) -> None:
         with client.interactions.with_streaming_response.analyze(
@@ -95,7 +95,7 @@ class TestAsyncInteractions:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_analyze(self, async_client: AsyncHiddenLayer) -> None:
         interaction = await async_client.interactions.analyze(
@@ -106,7 +106,7 @@ class TestAsyncInteractions:
         )
         assert_matches_type(InteractionAnalyzeResponse, interaction, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_analyze_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         interaction = await async_client.interactions.analyze(
@@ -135,7 +135,7 @@ class TestAsyncInteractions:
         )
         assert_matches_type(InteractionAnalyzeResponse, interaction, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_analyze(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.interactions.with_raw_response.analyze(
@@ -150,7 +150,7 @@ class TestAsyncInteractions:
         interaction = await response.parse()
         assert_matches_type(InteractionAnalyzeResponse, interaction, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_analyze(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.interactions.with_streaming_response.analyze(

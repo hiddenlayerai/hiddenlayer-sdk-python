@@ -13,13 +13,19 @@ __all__ = ["JobListResponse", "Item", "ItemInventory", "ItemInventoryProviderDet
 
 
 class ItemInventoryProviderDetails(BaseModel):
-    provider: Literal["AWS_BEDROCK", "AZURE_AI_FOUNDRY", "AWS_SAGEMAKER"]
+    provider: Literal["AWS_BEDROCK", "AZURE_AI_FOUNDRY", "AWS_SAGEMAKER", "DATABRICKS"]
 
     provider_model_id: str
     """The provider's unique identifier for the model. Examples:
 
     - AWS Bedrock: "anthropic.claude-3-5-sonnet-20241022-v2:0"
     - Azure AI Foundry: "Claude-3-5-Sonnet"
+    """
+
+    country: Optional[str] = None
+    """
+    Optional country code (ISO 3166-1 alpha-2) for the location where the model
+    provider is primarily based.
     """
 
     model_arn: Optional[str] = None

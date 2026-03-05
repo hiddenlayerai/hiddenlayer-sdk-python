@@ -56,13 +56,19 @@ class InventoryScanTargetDeepScan(TypedDict, total=False):
 
 
 class InventoryScanTargetProviderDetails(TypedDict, total=False):
-    provider: Required[Literal["AWS_BEDROCK", "AZURE_AI_FOUNDRY", "AWS_SAGEMAKER"]]
+    provider: Required[Literal["AWS_BEDROCK", "AZURE_AI_FOUNDRY", "AWS_SAGEMAKER", "DATABRICKS"]]
 
     provider_model_id: Required[str]
     """The provider's unique identifier for the model. Examples:
 
     - AWS Bedrock: "anthropic.claude-3-5-sonnet-20241022-v2:0"
     - Azure AI Foundry: "Claude-3-5-Sonnet"
+    """
+
+    country: str
+    """
+    Optional country code (ISO 3166-1 alpha-2) for the location where the model
+    provider is primarily based.
     """
 
     model_arn: str
