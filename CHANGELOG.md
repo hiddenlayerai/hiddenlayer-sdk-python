@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.6.0 (2026-03-07)
+
+Full Changelog: [v3.5.0...v3.6.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.5.0...v3.6.0)
+
+### Features
+
+* **api:** api update ([98a52fa](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/98a52fad11b3e42b9b576738601743f59ad8752d))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([e901a9f](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e901a9f5a6af3b5650d0002b9dd18b7ba954c38d))
+* remove stale version comments from SHA-pinned actions ([#184](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/184)) ([cf07e32](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/cf07e322e7b4674fe3ef622e491278b0346e5e7e))
+
+
+### Refactors
+
+* **types:** use `extra_items` from PEP 728 ([e5ee89f](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e5ee89fccbefe680538b8b3b06871dfba90d1474))
+
 ## 3.5.0 (2026-03-03)
 
 Full Changelog: [v3.4.0...v3.5.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.4.0...v3.5.0)
