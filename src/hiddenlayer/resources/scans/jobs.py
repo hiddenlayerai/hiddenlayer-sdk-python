@@ -165,7 +165,6 @@ class JobsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
         return self._get(
             "/scan/v3/results",
             options=make_request_options(
@@ -383,7 +382,6 @@ class AsyncJobsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Accept": "application/json; charset=utf-8", **(extra_headers or {})}
         return await self._get(
             "/scan/v3/results",
             options=make_request_options(
