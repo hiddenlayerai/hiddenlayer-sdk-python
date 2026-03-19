@@ -5,7 +5,7 @@ from __future__ import annotations
 import httpx
 
 from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ...._utils import strip_not_given
+from ...._utils import path_template, strip_not_given
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -80,7 +80,7 @@ class FileResource(SyncAPIResource):
             **(extra_headers or {}),
         }
         return self._post(
-            f"/scan/v3/upload/{scan_id}/file",
+            path_template("/scan/v3/upload/{scan_id}/file", scan_id=scan_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -116,7 +116,7 @@ class FileResource(SyncAPIResource):
         if not file_id:
             raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
         return self._patch(
-            f"/scan/v3/upload/{scan_id}/file/{file_id}",
+            path_template("/scan/v3/upload/{scan_id}/file/{file_id}", scan_id=scan_id, file_id=file_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -183,7 +183,7 @@ class AsyncFileResource(AsyncAPIResource):
             **(extra_headers or {}),
         }
         return await self._post(
-            f"/scan/v3/upload/{scan_id}/file",
+            path_template("/scan/v3/upload/{scan_id}/file", scan_id=scan_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -219,7 +219,7 @@ class AsyncFileResource(AsyncAPIResource):
         if not file_id:
             raise ValueError(f"Expected a non-empty value for `file_id` but received {file_id!r}")
         return await self._patch(
-            f"/scan/v3/upload/{scan_id}/file/{file_id}",
+            path_template("/scan/v3/upload/{scan_id}/file/{file_id}", scan_id=scan_id, file_id=file_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
