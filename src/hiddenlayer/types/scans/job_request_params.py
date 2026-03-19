@@ -56,7 +56,7 @@ class InventoryScanTargetDeepScan(TypedDict, total=False):
 
 
 class InventoryScanTargetProviderDetails(TypedDict, total=False):
-    provider: Required[Literal["AWS_BEDROCK", "AZURE_AI_FOUNDRY", "AWS_SAGEMAKER"]]
+    provider: Required[Literal["AWS_BEDROCK", "AZURE_AI_FOUNDRY", "AWS_SAGEMAKER", "DATABRICKS"]]
 
     provider_model_id: Required[str]
     """The provider's unique identifier for the model. Examples:

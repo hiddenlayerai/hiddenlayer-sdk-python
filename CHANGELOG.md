@@ -1,5 +1,39 @@
 # Changelog
 
+## 3.6.0 (2026-03-19)
+
+Full Changelog: [v3.5.0...v3.6.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.5.0...v3.6.0)
+
+### Features
+
+* **api:** api update ([98a52fa](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/98a52fad11b3e42b9b576738601743f59ad8752d))
+
+
+### Bug Fixes
+
+* **deps:** bump minimum typing-extensions version ([53b0b0e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/53b0b0edfaf7a7dea0b097333fac0ecdc9a16bcb))
+* **pydantic:** do not pass `by_alias` unless set ([86f9db3](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/86f9db32c94ff8358bf294f14a54a460d1d7444b))
+* sanitize endpoint path params ([ea53526](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/ea5352653b0708eaa5f495a598cdf19935d26fac))
+* **tests:** correct setup of OAuth 2 Client Credentials tests ([b3887a1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/b3887a1e39f05e01d5e16c768ef96ac6ca6e98ed))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([e901a9f](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e901a9f5a6af3b5650d0002b9dd18b7ba954c38d))
+* **internal:** codegen related update ([e2b17fd](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e2b17fd099188441b0d296a1a745a930f9953665))
+* **internal:** tweak CI branches ([535faac](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/535faacf763992576b28266f92e226be1f07fb09))
+* remove stale version comments from SHA-pinned actions ([#184](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/184)) ([cf07e32](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/cf07e322e7b4674fe3ef622e491278b0346e5e7e))
+
+
+### Documentation
+
+* **readme:** add Beta APIs section ([#185](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/185)) ([b1381e3](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/b1381e389f6e7ee59ba51ff00ce84b4a43f97c35))
+
+
+### Refactors
+
+* **types:** use `extra_items` from PEP 728 ([e5ee89f](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e5ee89fccbefe680538b8b3b06871dfba90d1474))
+
 ## 3.5.0 (2026-03-03)
 
 Full Changelog: [v3.4.0...v3.5.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.4.0...v3.5.0)
