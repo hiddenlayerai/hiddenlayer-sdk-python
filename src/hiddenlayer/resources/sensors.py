@@ -10,7 +10,7 @@ import httpx
 
 from ..types import sensor_query_params, sensor_create_params, sensor_update_params
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import path_template, maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -121,7 +121,7 @@ class SensorsResource(SyncAPIResource):
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
         return self._get(
-            f"/api/v2/sensors/{sensor_id}",
+            path_template("/api/v2/sensors/{sensor_id}", sensor_id=sensor_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -158,7 +158,7 @@ class SensorsResource(SyncAPIResource):
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
         return self._put(
-            f"/api/v2/sensors/{sensor_id}",
+            path_template("/api/v2/sensors/{sensor_id}", sensor_id=sensor_id),
             body=maybe_transform(
                 {
                     "active": active,
@@ -201,7 +201,7 @@ class SensorsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._delete(
-            f"/api/v2/sensors/{sensor_id}",
+            path_template("/api/v2/sensors/{sensor_id}", sensor_id=sensor_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -348,7 +348,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
         return await self._get(
-            f"/api/v2/sensors/{sensor_id}",
+            path_template("/api/v2/sensors/{sensor_id}", sensor_id=sensor_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -385,7 +385,7 @@ class AsyncSensorsResource(AsyncAPIResource):
         if not sensor_id:
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
         return await self._put(
-            f"/api/v2/sensors/{sensor_id}",
+            path_template("/api/v2/sensors/{sensor_id}", sensor_id=sensor_id),
             body=await async_maybe_transform(
                 {
                     "active": active,
@@ -428,7 +428,7 @@ class AsyncSensorsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `sensor_id` but received {sensor_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._delete(
-            f"/api/v2/sensors/{sensor_id}",
+            path_template("/api/v2/sensors/{sensor_id}", sensor_id=sensor_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
