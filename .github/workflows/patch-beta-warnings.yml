@@ -1,0 +1,34 @@
+name: Patch Beta Warnings
+
+on:
+  push:
+    branches:
+      - next
+
+jobs:
+  patch:
+    timeout-minutes: 5
+    name: patch-beta-warnings
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run beta warning patcher
+        run: node scripts/utils/patch-beta-warnings.cjs
+
+      - name: Commit changes
+        run: |
+          git diff --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: patch beta warnings [skip ci]"
+          git push
