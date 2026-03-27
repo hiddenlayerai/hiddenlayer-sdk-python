@@ -881,30 +881,22 @@ class TestHiddenLayer:
     @mock.patch("hiddenlayer._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter, client: HiddenLayer) -> None:
-        respx_mock.post("/detection/v1/interactions").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.get("/api/v2/models/182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").mock(
+            side_effect=httpx.TimeoutException("Test timeout error")
+        )
 
         with pytest.raises(APITimeoutError):
-            client.interactions.with_streaming_response.analyze(
-                metadata={
-                    "model": "gpt-5",
-                    "requester_id": "user-1234",
-                }
-            ).__enter__()
+            client.models.with_streaming_response.retrieve("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").__enter__()
 
         assert _get_open_connections(client) == 0
 
     @mock.patch("hiddenlayer._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter, client: HiddenLayer) -> None:
-        respx_mock.post("/detection/v1/interactions").mock(return_value=httpx.Response(500))
+        respx_mock.get("/api/v2/models/182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            client.interactions.with_streaming_response.analyze(
-                metadata={
-                    "model": "gpt-5",
-                    "requester_id": "user-1234",
-                }
-            ).__enter__()
+            client.models.with_streaming_response.retrieve("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").__enter__()
         assert _get_open_connections(client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -931,14 +923,9 @@ class TestHiddenLayer:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/detection/v1/interactions").mock(side_effect=retry_handler)
+        respx_mock.get("/api/v2/models/182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").mock(side_effect=retry_handler)
 
-        response = client.interactions.with_raw_response.analyze(
-            metadata={
-                "model": "gpt-5",
-                "requester_id": "user-1234",
-            }
-        )
+        response = client.models.with_raw_response.retrieve("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -960,14 +947,10 @@ class TestHiddenLayer:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/detection/v1/interactions").mock(side_effect=retry_handler)
+        respx_mock.get("/api/v2/models/182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").mock(side_effect=retry_handler)
 
-        response = client.interactions.with_raw_response.analyze(
-            metadata={
-                "model": "gpt-5",
-                "requester_id": "user-1234",
-            },
-            extra_headers={"x-stainless-retry-count": Omit()},
+        response = client.models.with_raw_response.retrieve(
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e", extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -989,14 +972,10 @@ class TestHiddenLayer:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/detection/v1/interactions").mock(side_effect=retry_handler)
+        respx_mock.get("/api/v2/models/182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").mock(side_effect=retry_handler)
 
-        response = client.interactions.with_raw_response.analyze(
-            metadata={
-                "model": "gpt-5",
-                "requester_id": "user-1234",
-            },
-            extra_headers={"x-stainless-retry-count": "42"},
+        response = client.models.with_raw_response.retrieve(
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e", extra_headers={"x-stainless-retry-count": "42"}
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
@@ -1840,14 +1819,13 @@ class TestAsyncHiddenLayer:
     async def test_retrying_timeout_errors_doesnt_leak(
         self, respx_mock: MockRouter, async_client: AsyncHiddenLayer
     ) -> None:
-        respx_mock.post("/detection/v1/interactions").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.get("/api/v2/models/182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").mock(
+            side_effect=httpx.TimeoutException("Test timeout error")
+        )
 
         with pytest.raises(APITimeoutError):
-            await async_client.interactions.with_streaming_response.analyze(
-                metadata={
-                    "model": "gpt-5",
-                    "requester_id": "user-1234",
-                }
+            await async_client.models.with_streaming_response.retrieve(
+                "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
             ).__aenter__()
 
         assert _get_open_connections(async_client) == 0
@@ -1857,14 +1835,11 @@ class TestAsyncHiddenLayer:
     async def test_retrying_status_errors_doesnt_leak(
         self, respx_mock: MockRouter, async_client: AsyncHiddenLayer
     ) -> None:
-        respx_mock.post("/detection/v1/interactions").mock(return_value=httpx.Response(500))
+        respx_mock.get("/api/v2/models/182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await async_client.interactions.with_streaming_response.analyze(
-                metadata={
-                    "model": "gpt-5",
-                    "requester_id": "user-1234",
-                }
+            await async_client.models.with_streaming_response.retrieve(
+                "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
             ).__aenter__()
         assert _get_open_connections(async_client) == 0
 
@@ -1892,14 +1867,9 @@ class TestAsyncHiddenLayer:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/detection/v1/interactions").mock(side_effect=retry_handler)
+        respx_mock.get("/api/v2/models/182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").mock(side_effect=retry_handler)
 
-        response = await client.interactions.with_raw_response.analyze(
-            metadata={
-                "model": "gpt-5",
-                "requester_id": "user-1234",
-            }
-        )
+        response = await client.models.with_raw_response.retrieve("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1921,14 +1891,10 @@ class TestAsyncHiddenLayer:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/detection/v1/interactions").mock(side_effect=retry_handler)
+        respx_mock.get("/api/v2/models/182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").mock(side_effect=retry_handler)
 
-        response = await client.interactions.with_raw_response.analyze(
-            metadata={
-                "model": "gpt-5",
-                "requester_id": "user-1234",
-            },
-            extra_headers={"x-stainless-retry-count": Omit()},
+        response = await client.models.with_raw_response.retrieve(
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e", extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -1950,14 +1916,10 @@ class TestAsyncHiddenLayer:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/detection/v1/interactions").mock(side_effect=retry_handler)
+        respx_mock.get("/api/v2/models/182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").mock(side_effect=retry_handler)
 
-        response = await client.interactions.with_raw_response.analyze(
-            metadata={
-                "model": "gpt-5",
-                "requester_id": "user-1234",
-            },
-            extra_headers={"x-stainless-retry-count": "42"},
+        response = await client.models.with_raw_response.retrieve(
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e", extra_headers={"x-stainless-retry-count": "42"}
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
