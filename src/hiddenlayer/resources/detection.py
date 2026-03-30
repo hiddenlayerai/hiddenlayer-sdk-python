@@ -20,6 +20,7 @@ from .._response import (
 from .._base_client import make_request_options
 from ..types.detection_request_evaluation_response import DetectionRequestEvaluationResponse
 from ..types.detection_response_evaluation_response import DetectionResponseEvaluationResponse
+from ..lib._beta import warn_beta
 
 __all__ = ["DetectionResource", "AsyncDetectionResource"]
 
@@ -92,6 +93,7 @@ class DetectionResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        warn_beta("DetectionResource.request_evaluation")
         extra_headers = {
             **strip_not_given(
                 {
@@ -158,6 +160,7 @@ class DetectionResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        warn_beta("DetectionResource.response_evaluation")
         extra_headers = {
             **strip_not_given(
                 {
@@ -245,6 +248,7 @@ class AsyncDetectionResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+     warn_beta("AsyncDetectionResource.request_evaluation")
         extra_headers = {
             **strip_not_given(
                 {
@@ -313,6 +317,7 @@ class AsyncDetectionResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+     warn_beta("AsyncDetectionResource.response_evaluation")
         extra_headers = {
             **strip_not_given(
                 {
