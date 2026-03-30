@@ -32,6 +32,22 @@ from .evaluations import (
     EvaluationsResourceWithStreamingResponse,
     AsyncEvaluationsResourceWithStreamingResponse,
 )
+from .interactions import (
+    InteractionsResource,
+    AsyncInteractionsResource,
+    InteractionsResourceWithRawResponse,
+    AsyncInteractionsResourceWithRawResponse,
+    InteractionsResourceWithStreamingResponse,
+    AsyncInteractionsResourceWithStreamingResponse,
+)
+from .prompt_analyzer import (
+    PromptAnalyzerResource,
+    AsyncPromptAnalyzerResource,
+    PromptAnalyzerResourceWithRawResponse,
+    AsyncPromptAnalyzerResourceWithRawResponse,
+    PromptAnalyzerResourceWithStreamingResponse,
+    AsyncPromptAnalyzerResourceWithStreamingResponse,
+)
 
 __all__ = [
     "ModelsResource",
@@ -46,6 +62,18 @@ __all__ = [
     "AsyncEvaluationsResourceWithRawResponse",
     "EvaluationsResourceWithStreamingResponse",
     "AsyncEvaluationsResourceWithStreamingResponse",
+    "PromptAnalyzerResource",
+    "AsyncPromptAnalyzerResource",
+    "PromptAnalyzerResourceWithRawResponse",
+    "AsyncPromptAnalyzerResourceWithRawResponse",
+    "PromptAnalyzerResourceWithStreamingResponse",
+    "AsyncPromptAnalyzerResourceWithStreamingResponse",
+    "InteractionsResource",
+    "AsyncInteractionsResource",
+    "InteractionsResourceWithRawResponse",
+    "AsyncInteractionsResourceWithRawResponse",
+    "InteractionsResourceWithStreamingResponse",
+    "AsyncInteractionsResourceWithStreamingResponse",
     "SensorsResource",
     "AsyncSensorsResource",
     "SensorsResourceWithRawResponse",
