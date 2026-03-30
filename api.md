@@ -50,6 +50,30 @@ Methods:
 - <code title="post /evaluations/v1-beta/red-team/{workflow_id}/target-response">client.evaluations.red_team.<a href="./src/hiddenlayer/resources/evaluations/red_team.py">submit_target_response</a>(workflow_id, \*\*<a href="src/hiddenlayer/types/evaluations/red_team_submit_target_response_params.py">params</a>) -> <a href="./src/hiddenlayer/types/evaluations/red_team_submit_target_response_response.py">RedTeamSubmitTargetResponseResponse</a></code>
 - <code title="post /evaluations/v1-beta/red-team/terminations/{workflow_id}">client.evaluations.red_team.<a href="./src/hiddenlayer/resources/evaluations/red_team.py">terminate</a>(workflow_id) -> None</code>
 
+# PromptAnalyzer
+
+Types:
+
+```python
+from hiddenlayer.types import PromptAnalyzerCreateResponse
+```
+
+Methods:
+
+- <code title="post /api/v1/submit/prompt-analyzer">client.prompt_analyzer.<a href="./src/hiddenlayer/resources/prompt_analyzer.py">create</a>(\*\*<a href="src/hiddenlayer/types/prompt_analyzer_create_params.py">params</a>) -> <a href="./src/hiddenlayer/types/prompt_analyzer_create_response.py">PromptAnalyzerCreateResponse</a></code>
+
+# Interactions
+
+Types:
+
+```python
+from hiddenlayer.types import InteractionAnalyzeResponse
+```
+
+Methods:
+
+- <code title="post /detection/v1/interactions">client.interactions.<a href="./src/hiddenlayer/resources/interactions.py">analyze</a>(\*\*<a href="src/hiddenlayer/types/interaction_analyze_params.py">params</a>) -> <a href="./src/hiddenlayer/types/interaction_analyze_response.py">InteractionAnalyzeResponse</a></code>
+
 # Sensors
 
 Types:

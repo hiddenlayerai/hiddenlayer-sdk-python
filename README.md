@@ -39,10 +39,21 @@ client = HiddenLayer(
     environment="prod-eu",
 )
 
-model = client.models.retrieve(
-    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+response = client.interactions.analyze(
+    metadata={
+        "model": "REPLACE_ME",
+        "requester_id": "REPLACE_ME",
+    },
+    input={
+        "messages": [
+            {
+                "role": "user",
+                "content": "REPLACE_ME",
+            }
+        ]
+    },
 )
-print(model.model_id)
+print(response.analysis)
 ```
 
 While you can provide a `bearer_token` keyword argument,
@@ -65,10 +76,21 @@ client = AsyncHiddenLayer(
 
 
 async def main() -> None:
-    model = await client.models.retrieve(
-        "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+    response = await client.interactions.analyze(
+        metadata={
+            "model": "REPLACE_ME",
+            "requester_id": "REPLACE_ME",
+        },
+        input={
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "REPLACE_ME",
+                }
+            ]
+        },
     )
-    print(model.model_id)
+    print(response.analysis)
 
 
 asyncio.run(main())
@@ -99,10 +121,21 @@ async def main() -> None:
     async with AsyncHiddenLayer(
         http_client=DefaultAioHttpClient(),
     ) as client:
-        model = await client.models.retrieve(
-            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+        response = await client.interactions.analyze(
+            metadata={
+                "model": "REPLACE_ME",
+                "requester_id": "REPLACE_ME",
+            },
+            input={
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": "REPLACE_ME",
+                    }
+                ]
+            },
         )
-        print(model.model_id)
+        print(response.analysis)
 
 
 asyncio.run(main())
@@ -187,10 +220,14 @@ from hiddenlayer import HiddenLayer
 
 client = HiddenLayer()
 
-page = client.models.cards.list(
-    model_created={},
+response = client.interactions.analyze(
+    metadata={
+        "model": "gpt-5",
+        "requester_id": "user-1234",
+        "provider": "openai",
+    },
 )
-print(page.results)
+print(response.metadata)
 ```
 
 ## Handling errors
@@ -209,8 +246,19 @@ from hiddenlayer import HiddenLayer
 client = HiddenLayer()
 
 try:
-    client.models.retrieve(
-        "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+    client.interactions.analyze(
+        metadata={
+            "model": "REPLACE_ME",
+            "requester_id": "REPLACE_ME",
+        },
+        input={
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "REPLACE_ME",
+                }
+            ]
+        },
     )
 except hiddenlayer.APIConnectionError as e:
     print("The server could not be reached")
@@ -254,8 +302,19 @@ client = HiddenLayer(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).models.retrieve(
-    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+client.with_options(max_retries=5).interactions.analyze(
+    metadata={
+        "model": "REPLACE_ME",
+        "requester_id": "REPLACE_ME",
+    },
+    input={
+        "messages": [
+            {
+                "role": "user",
+                "content": "REPLACE_ME",
+            }
+        ]
+    },
 )
 ```
 
@@ -279,8 +338,19 @@ client = HiddenLayer(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).models.retrieve(
-    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+client.with_options(timeout=5.0).interactions.analyze(
+    metadata={
+        "model": "REPLACE_ME",
+        "requester_id": "REPLACE_ME",
+    },
+    input={
+        "messages": [
+            {
+                "role": "user",
+                "content": "REPLACE_ME",
+            }
+        ]
+    },
 )
 ```
 
@@ -322,13 +392,22 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from hiddenlayer import HiddenLayer
 
 client = HiddenLayer()
-response = client.models.with_raw_response.retrieve(
-    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+response = client.interactions.with_raw_response.analyze(
+    metadata={
+        "model": "REPLACE_ME",
+        "requester_id": "REPLACE_ME",
+    },
+    input={
+        "messages": [{
+            "role": "user",
+            "content": "REPLACE_ME",
+        }]
+    },
 )
 print(response.headers.get('X-My-Header'))
 
-model = response.parse()  # get the object that `models.retrieve()` would have returned
-print(model.model_id)
+interaction = response.parse()  # get the object that `interactions.analyze()` would have returned
+print(interaction.analysis)
 ```
 
 These methods return an [`APIResponse`](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) object.
@@ -342,8 +421,19 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.models.with_streaming_response.retrieve(
-    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+with client.interactions.with_streaming_response.analyze(
+    metadata={
+        "model": "REPLACE_ME",
+        "requester_id": "REPLACE_ME",
+    },
+    input={
+        "messages": [
+            {
+                "role": "user",
+                "content": "REPLACE_ME",
+            }
+        ]
+    },
 ) as response:
     print(response.headers.get("X-My-Header"))
 
