@@ -74,6 +74,22 @@ Methods:
 
 - <code title="post /detection/v1/interactions">client.interactions.<a href="./src/hiddenlayer/resources/interactions.py">analyze</a>(\*\*<a href="src/hiddenlayer/types/interaction_analyze_params.py">params</a>) -> <a href="./src/hiddenlayer/types/interaction_analyze_response.py">InteractionAnalyzeResponse</a></code>
 
+# Detection
+
+Types:
+
+```python
+from hiddenlayer.types import (
+    DetectionRequestEvaluationResponse,
+    DetectionResponseEvaluationResponse,
+)
+```
+
+Methods:
+
+- <code title="post /detection/v2/request-evaluations">client.detection.<a href="./src/hiddenlayer/resources/detection.py">request_evaluation</a>(\*\*<a href="src/hiddenlayer/types/detection_request_evaluation_params.py">params</a>) -> <a href="./src/hiddenlayer/types/detection_request_evaluation_response.py">DetectionRequestEvaluationResponse</a></code>
+- <code title="post /detection/v2/response-evaluations">client.detection.<a href="./src/hiddenlayer/resources/detection.py">response_evaluation</a>(\*\*<a href="src/hiddenlayer/types/detection_response_evaluation_params.py">params</a>) -> <a href="./src/hiddenlayer/types/detection_response_evaluation_response.py">DetectionResponseEvaluationResponse</a></code>
+
 # Sensors
 
 Types:
