@@ -37,10 +37,14 @@ if TYPE_CHECKING:
     from .resources.detection import DetectionResource, AsyncDetectionResource
     from .resources.scans.scans import ScansResource, AsyncScansResource
     from .resources.interactions import InteractionsResource, AsyncInteractionsResource
-    from .lib.evaluation_sessions import EvaluationSessionsResource, AsyncEvaluationSessionsResource
     from .resources.models.models import ModelsResource, AsyncModelsResource
     from .resources.prompt_analyzer import PromptAnalyzerResource, AsyncPromptAnalyzerResource
     from .resources.evaluations.evaluations import EvaluationsResource, AsyncEvaluationsResource
+
+if TYPE_CHECKING:
+    from .lib.model_scan import ModelScanner, AsyncModelScanner
+    from .lib.community_scan import CommunityScanner, AsyncCommunityScanner
+    from .lib.evaluation_sessions import EvaluationSessionsResource, AsyncEvaluationSessionsResource
 
 __all__ = [
     "ENVIRONMENTS",
