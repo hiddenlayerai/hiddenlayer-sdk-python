@@ -32,8 +32,9 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import scans, models, sensors, evaluations, interactions, prompt_analyzer
+    from .resources import scans, models, sensors, detection, evaluations, interactions, prompt_analyzer
     from .resources.sensors import SensorsResource, AsyncSensorsResource
+    from .resources.detection import DetectionResource, AsyncDetectionResource
     from .resources.scans.scans import ScansResource, AsyncScansResource
     from .resources.interactions import InteractionsResource, AsyncInteractionsResource
     from .resources.models.models import ModelsResource, AsyncModelsResource
@@ -171,6 +172,12 @@ class HiddenLayer(SyncAPIClient):
         from .resources.interactions import InteractionsResource
 
         return InteractionsResource(self)
+
+    @cached_property
+    def detection(self) -> DetectionResource:
+        from .resources.detection import DetectionResource
+
+        return DetectionResource(self)
 
     @cached_property
     def sensors(self) -> SensorsResource:
@@ -441,6 +448,12 @@ class AsyncHiddenLayer(AsyncAPIClient):
         return AsyncInteractionsResource(self)
 
     @cached_property
+    def detection(self) -> AsyncDetectionResource:
+        from .resources.detection import AsyncDetectionResource
+
+        return AsyncDetectionResource(self)
+
+    @cached_property
     def sensors(self) -> AsyncSensorsResource:
         from .resources.sensors import AsyncSensorsResource
 
@@ -625,6 +638,12 @@ class HiddenLayerWithRawResponse:
         return InteractionsResourceWithRawResponse(self._client.interactions)
 
     @cached_property
+    def detection(self) -> detection.DetectionResourceWithRawResponse:
+        from .resources.detection import DetectionResourceWithRawResponse
+
+        return DetectionResourceWithRawResponse(self._client.detection)
+
+    @cached_property
     def sensors(self) -> sensors.SensorsResourceWithRawResponse:
         from .resources.sensors import SensorsResourceWithRawResponse
 
@@ -666,6 +685,12 @@ class AsyncHiddenLayerWithRawResponse:
         from .resources.interactions import AsyncInteractionsResourceWithRawResponse
 
         return AsyncInteractionsResourceWithRawResponse(self._client.interactions)
+
+    @cached_property
+    def detection(self) -> detection.AsyncDetectionResourceWithRawResponse:
+        from .resources.detection import AsyncDetectionResourceWithRawResponse
+
+        return AsyncDetectionResourceWithRawResponse(self._client.detection)
 
     @cached_property
     def sensors(self) -> sensors.AsyncSensorsResourceWithRawResponse:
@@ -711,6 +736,12 @@ class HiddenLayerWithStreamedResponse:
         return InteractionsResourceWithStreamingResponse(self._client.interactions)
 
     @cached_property
+    def detection(self) -> detection.DetectionResourceWithStreamingResponse:
+        from .resources.detection import DetectionResourceWithStreamingResponse
+
+        return DetectionResourceWithStreamingResponse(self._client.detection)
+
+    @cached_property
     def sensors(self) -> sensors.SensorsResourceWithStreamingResponse:
         from .resources.sensors import SensorsResourceWithStreamingResponse
 
@@ -752,6 +783,12 @@ class AsyncHiddenLayerWithStreamedResponse:
         from .resources.interactions import AsyncInteractionsResourceWithStreamingResponse
 
         return AsyncInteractionsResourceWithStreamingResponse(self._client.interactions)
+
+    @cached_property
+    def detection(self) -> detection.AsyncDetectionResourceWithStreamingResponse:
+        from .resources.detection import AsyncDetectionResourceWithStreamingResponse
+
+        return AsyncDetectionResourceWithStreamingResponse(self._client.detection)
 
     @cached_property
     def sensors(self) -> sensors.AsyncSensorsResourceWithStreamingResponse:

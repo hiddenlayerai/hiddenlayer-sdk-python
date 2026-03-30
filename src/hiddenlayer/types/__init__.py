@@ -14,3 +14,11 @@ from .interaction_analyze_params import InteractionAnalyzeParams as InteractionA
 from .interaction_analyze_response import InteractionAnalyzeResponse as InteractionAnalyzeResponse
 from .prompt_analyzer_create_params import PromptAnalyzerCreateParams as PromptAnalyzerCreateParams
 from .prompt_analyzer_create_response import PromptAnalyzerCreateResponse as PromptAnalyzerCreateResponse
+from .detection_request_evaluation_params import DetectionRequestEvaluationParams as DetectionRequestEvaluationParams
+from .detection_response_evaluation_params import DetectionResponseEvaluationParams as DetectionResponseEvaluationParams
+from .detection_request_evaluation_response import (
+    DetectionRequestEvaluationResponse as DetectionRequestEvaluationResponse,
+)
+from .detection_response_evaluation_response import (
+    DetectionResponseEvaluationResponse as DetectionResponseEvaluationResponse,
+)

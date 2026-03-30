@@ -24,6 +24,14 @@ from .sensors import (
     SensorsResourceWithStreamingResponse,
     AsyncSensorsResourceWithStreamingResponse,
 )
+from .detection import (
+    DetectionResource,
+    AsyncDetectionResource,
+    DetectionResourceWithRawResponse,
+    AsyncDetectionResourceWithRawResponse,
+    DetectionResourceWithStreamingResponse,
+    AsyncDetectionResourceWithStreamingResponse,
+)
 from .evaluations import (
     EvaluationsResource,
     AsyncEvaluationsResource,
@@ -74,6 +82,12 @@ __all__ = [
     "AsyncInteractionsResourceWithRawResponse",
     "InteractionsResourceWithStreamingResponse",
     "AsyncInteractionsResourceWithStreamingResponse",
+    "DetectionResource",
+    "AsyncDetectionResource",
+    "DetectionResourceWithRawResponse",
+    "AsyncDetectionResourceWithRawResponse",
+    "DetectionResourceWithStreamingResponse",
+    "AsyncDetectionResourceWithStreamingResponse",
     "SensorsResource",
     "AsyncSensorsResource",
     "SensorsResourceWithRawResponse",
