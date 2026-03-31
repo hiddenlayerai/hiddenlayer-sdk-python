@@ -24,6 +24,12 @@ jobs:
       - name: Run beta warning patcher
         run: node scripts/utils/patch-beta-warnings.cjs
 
+      - name: Install Rye
+        uses: eifinger/setup-rye@v4
+
+      - name: Fix lint issues
+        run: rye run fix:ruff
+
       - name: Commit changes
         run: |
           git diff --quiet && exit 0

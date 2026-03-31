@@ -63,9 +63,10 @@ function patchFile(content, filePath) {
   classRanges.sort((a, b) => a.start - b.start);
 
   // Find all method definitions with their docstrings.
-  // Pattern: "def methodname(" followed eventually by a docstring (triple-quoted)
+  // Pattern: optional "async" then "def methodname(" followed eventually by a docstring.
+  // The leading capture group grabs only the whitespace indentation, not the "async" keyword.
   const methodPattern =
-    /( +)def\s+(\w+)\s*\([^)]*\)[^:]*:\s*\n\s+"""([\s\S]*?)"""/g;
+    /( +)(?:async\s+)?def\s+(\w+)\s*\([^)]*\)[^:]*:\s*\n\s+"""([\s\S]*?)"""/g;
 
   const edits = [];
   let match;
