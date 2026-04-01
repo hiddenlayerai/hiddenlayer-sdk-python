@@ -21,6 +21,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._compat import cached_property
+from ._models import FinalRequestOptions
 from ._oauth2 import OAuth2ClientCredentials, make_oauth2
 from ._version import __version__
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
@@ -265,6 +266,12 @@ class HiddenLayer(SyncAPIClient):
                 return True
         return super()._should_retry(response)
 
+    @override
+    def _prepare_options(self, options: FinalRequestOptions) -> FinalRequestOptions:
+        from .lib._beta import check_beta_endpoint
+
+        check_beta_endpoint(options.url)
+        return options
 
     def copy(
         self,
@@ -557,6 +564,13 @@ class AsyncHiddenLayer(AsyncAPIClient):
                 self.custom_auth.invalidate_token()
                 return True
         return super()._should_retry(response)
+
+    @override
+    async def _prepare_options(self, options: FinalRequestOptions) -> FinalRequestOptions:
+        from .lib._beta import check_beta_endpoint
+
+        check_beta_endpoint(options.url)
+        return options
 
     def copy(
         self,

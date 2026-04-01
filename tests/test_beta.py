@@ -4,7 +4,7 @@ import warnings
 
 import pytest
 
-from hiddenlayer.lib._beta import BetaWarning, warn_beta
+from hiddenlayer.lib._beta import BetaWarning, warn_beta, check_beta_endpoint
 
 
 class TestWarnBeta:
@@ -29,3 +29,25 @@ class TestWarnBeta:
         assert len(caught) == 1
         assert issubclass(caught[0].category, BetaWarning)
         assert issubclass(caught[0].category, UserWarning)
+
+
+class TestCheckBetaEndpoint:
+    def test_known_beta_url_fires_warning(self) -> None:
+        with pytest.warns(BetaWarning, match=r"\[BETA\] DetectionResource\.request_evaluation"):
+            check_beta_endpoint("/detection/v2/request-evaluations")
+
+    def test_non_beta_url_no_warning(self) -> None:
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            check_beta_endpoint("/models/v2/scan")
+
+        beta_warnings = [w for w in caught if issubclass(w.category, BetaWarning)]
+        assert len(beta_warnings) == 0
+
+    def test_warning_category_is_beta_warning(self) -> None:
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            check_beta_endpoint("/detection/v2/response-evaluations")
+
+        assert len(caught) == 1
+        assert issubclass(caught[0].category, BetaWarning)
