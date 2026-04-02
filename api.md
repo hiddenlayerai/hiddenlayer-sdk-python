@@ -74,21 +74,18 @@ Methods:
 
 - <code title="post /detection/v1/interactions">client.interactions.<a href="./src/hiddenlayer/resources/interactions.py">analyze</a>(\*\*<a href="src/hiddenlayer/types/interaction_analyze_params.py">params</a>) -> <a href="./src/hiddenlayer/types/interaction_analyze_response.py">InteractionAnalyzeResponse</a></code>
 
-# Detection
+# Runtime
 
 Types:
 
 ```python
-from hiddenlayer.types import (
-    DetectionRequestEvaluationResponse,
-    DetectionResponseEvaluationResponse,
-)
+from hiddenlayer.types import RuntimeEvaluateRequestResponse, RuntimeEvaluateResponseResponse
 ```
 
 Methods:
 
-- <code title="post /detection/v2/request-evaluations">client.detection.<a href="./src/hiddenlayer/resources/detection.py">request_evaluation</a>(\*\*<a href="src/hiddenlayer/types/detection_request_evaluation_params.py">params</a>) -> <a href="./src/hiddenlayer/types/detection_request_evaluation_response.py">DetectionRequestEvaluationResponse</a></code>
-- <code title="post /detection/v2/response-evaluations">client.detection.<a href="./src/hiddenlayer/resources/detection.py">response_evaluation</a>(\*\*<a href="src/hiddenlayer/types/detection_response_evaluation_params.py">params</a>) -> <a href="./src/hiddenlayer/types/detection_response_evaluation_response.py">DetectionResponseEvaluationResponse</a></code>
+- <code title="post /detection/v2/request-evaluations">client.runtime.<a href="./src/hiddenlayer/resources/runtime.py">evaluate_request</a>(\*\*<a href="src/hiddenlayer/types/runtime_evaluate_request_params.py">params</a>) -> <a href="./src/hiddenlayer/types/runtime_evaluate_request_response.py">RuntimeEvaluateRequestResponse</a></code>
+- <code title="post /detection/v2/response-evaluations">client.runtime.<a href="./src/hiddenlayer/resources/runtime.py">evaluate_response</a>(\*\*<a href="src/hiddenlayer/types/runtime_evaluate_response_params.py">params</a>) -> <a href="./src/hiddenlayer/types/runtime_evaluate_response_response.py">RuntimeEvaluateResponseResponse</a></code>
 
 # Sensors
 

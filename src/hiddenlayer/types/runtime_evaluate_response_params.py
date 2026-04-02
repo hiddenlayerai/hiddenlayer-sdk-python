@@ -7,10 +7,10 @@ from typing_extensions import Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
 
-__all__ = ["DetectionRequestEvaluationParams"]
+__all__ = ["RuntimeEvaluateResponseParams"]
 
 
-class DetectionRequestEvaluationParams(TypedDict, total=False):
+class RuntimeEvaluateResponseParams(TypedDict, total=False):
     body: Required[Dict[str, object]]
     """A pass-through payload in the native format of the LLM provider.
 

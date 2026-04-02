@@ -6,7 +6,7 @@ from typing import Dict
 
 import httpx
 
-from ..types import detection_request_evaluation_params, detection_response_evaluation_params
+from ..types import runtime_evaluate_request_params, runtime_evaluate_response_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform, strip_not_given, async_maybe_transform
 from .._compat import cached_property
@@ -19,33 +19,33 @@ from .._response import (
 )
 from ..lib._beta import warn_beta
 from .._base_client import make_request_options
-from ..types.detection_request_evaluation_response import DetectionRequestEvaluationResponse
-from ..types.detection_response_evaluation_response import DetectionResponseEvaluationResponse
+from ..types.runtime_evaluate_request_response import RuntimeEvaluateRequestResponse
+from ..types.runtime_evaluate_response_response import RuntimeEvaluateResponseResponse
 
-__all__ = ["DetectionResource", "AsyncDetectionResource"]
+__all__ = ["RuntimeResource", "AsyncRuntimeResource"]
 
 
-class DetectionResource(SyncAPIResource):
+class RuntimeResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> DetectionResourceWithRawResponse:
+    def with_raw_response(self) -> RuntimeResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
         """
-        return DetectionResourceWithRawResponse(self)
+        return RuntimeResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> DetectionResourceWithStreamingResponse:
+    def with_streaming_response(self) -> RuntimeResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#with_streaming_response
         """
-        return DetectionResourceWithStreamingResponse(self)
+        return RuntimeResourceWithStreamingResponse(self)
 
-    def request_evaluation(
+    def evaluate_request(
         self,
         *,
         body: Dict[str, object],
@@ -57,7 +57,7 @@ class DetectionResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> DetectionRequestEvaluationResponse:
+    ) -> RuntimeEvaluateRequestResponse:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at
         any time. Breaking changes may occur.
@@ -105,14 +105,14 @@ class DetectionResource(SyncAPIResource):
         }
         return self._post(
             "/detection/v2/request-evaluations",
-            body=maybe_transform(body, detection_request_evaluation_params.DetectionRequestEvaluationParams),
+            body=maybe_transform(body, runtime_evaluate_request_params.RuntimeEvaluateRequestParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DetectionRequestEvaluationResponse,
+            cast_to=RuntimeEvaluateRequestResponse,
         )
 
-    def response_evaluation(
+    def evaluate_response(
         self,
         *,
         body: Dict[str, object],
@@ -124,7 +124,7 @@ class DetectionResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> DetectionResponseEvaluationResponse:
+    ) -> RuntimeEvaluateResponseResponse:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at
         any time. Breaking changes may occur.
@@ -172,35 +172,35 @@ class DetectionResource(SyncAPIResource):
         }
         return self._post(
             "/detection/v2/response-evaluations",
-            body=maybe_transform(body, detection_response_evaluation_params.DetectionResponseEvaluationParams),
+            body=maybe_transform(body, runtime_evaluate_response_params.RuntimeEvaluateResponseParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DetectionResponseEvaluationResponse,
+            cast_to=RuntimeEvaluateResponseResponse,
         )
 
 
-class AsyncDetectionResource(AsyncAPIResource):
+class AsyncRuntimeResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncDetectionResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncRuntimeResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncDetectionResourceWithRawResponse(self)
+        return AsyncRuntimeResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncDetectionResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncRuntimeResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python#with_streaming_response
         """
-        return AsyncDetectionResourceWithStreamingResponse(self)
+        return AsyncRuntimeResourceWithStreamingResponse(self)
 
-    async def request_evaluation(
+    async def evaluate_request(
         self,
         *,
         body: Dict[str, object],
@@ -212,7 +212,7 @@ class AsyncDetectionResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> DetectionRequestEvaluationResponse:
+    ) -> RuntimeEvaluateRequestResponse:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at
         any time. Breaking changes may occur.
@@ -260,16 +260,14 @@ class AsyncDetectionResource(AsyncAPIResource):
         }
         return await self._post(
             "/detection/v2/request-evaluations",
-            body=await async_maybe_transform(
-                body, detection_request_evaluation_params.DetectionRequestEvaluationParams
-            ),
+            body=await async_maybe_transform(body, runtime_evaluate_request_params.RuntimeEvaluateRequestParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DetectionRequestEvaluationResponse,
+            cast_to=RuntimeEvaluateRequestResponse,
         )
 
-    async def response_evaluation(
+    async def evaluate_response(
         self,
         *,
         body: Dict[str, object],
@@ -281,7 +279,7 @@ class AsyncDetectionResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> DetectionResponseEvaluationResponse:
+    ) -> RuntimeEvaluateResponseResponse:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at
         any time. Breaking changes may occur.
@@ -329,59 +327,57 @@ class AsyncDetectionResource(AsyncAPIResource):
         }
         return await self._post(
             "/detection/v2/response-evaluations",
-            body=await async_maybe_transform(
-                body, detection_response_evaluation_params.DetectionResponseEvaluationParams
-            ),
+            body=await async_maybe_transform(body, runtime_evaluate_response_params.RuntimeEvaluateResponseParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DetectionResponseEvaluationResponse,
+            cast_to=RuntimeEvaluateResponseResponse,
         )
 
 
-class DetectionResourceWithRawResponse:
-    def __init__(self, detection: DetectionResource) -> None:
-        self._detection = detection
+class RuntimeResourceWithRawResponse:
+    def __init__(self, runtime: RuntimeResource) -> None:
+        self._runtime = runtime
 
-        self.request_evaluation = to_raw_response_wrapper(
-            detection.request_evaluation,
+        self.evaluate_request = to_raw_response_wrapper(
+            runtime.evaluate_request,
         )
-        self.response_evaluation = to_raw_response_wrapper(
-            detection.response_evaluation,
-        )
-
-
-class AsyncDetectionResourceWithRawResponse:
-    def __init__(self, detection: AsyncDetectionResource) -> None:
-        self._detection = detection
-
-        self.request_evaluation = async_to_raw_response_wrapper(
-            detection.request_evaluation,
-        )
-        self.response_evaluation = async_to_raw_response_wrapper(
-            detection.response_evaluation,
+        self.evaluate_response = to_raw_response_wrapper(
+            runtime.evaluate_response,
         )
 
 
-class DetectionResourceWithStreamingResponse:
-    def __init__(self, detection: DetectionResource) -> None:
-        self._detection = detection
+class AsyncRuntimeResourceWithRawResponse:
+    def __init__(self, runtime: AsyncRuntimeResource) -> None:
+        self._runtime = runtime
 
-        self.request_evaluation = to_streamed_response_wrapper(
-            detection.request_evaluation,
+        self.evaluate_request = async_to_raw_response_wrapper(
+            runtime.evaluate_request,
         )
-        self.response_evaluation = to_streamed_response_wrapper(
-            detection.response_evaluation,
+        self.evaluate_response = async_to_raw_response_wrapper(
+            runtime.evaluate_response,
         )
 
 
-class AsyncDetectionResourceWithStreamingResponse:
-    def __init__(self, detection: AsyncDetectionResource) -> None:
-        self._detection = detection
+class RuntimeResourceWithStreamingResponse:
+    def __init__(self, runtime: RuntimeResource) -> None:
+        self._runtime = runtime
 
-        self.request_evaluation = async_to_streamed_response_wrapper(
-            detection.request_evaluation,
+        self.evaluate_request = to_streamed_response_wrapper(
+            runtime.evaluate_request,
         )
-        self.response_evaluation = async_to_streamed_response_wrapper(
-            detection.response_evaluation,
+        self.evaluate_response = to_streamed_response_wrapper(
+            runtime.evaluate_response,
+        )
+
+
+class AsyncRuntimeResourceWithStreamingResponse:
+    def __init__(self, runtime: AsyncRuntimeResource) -> None:
+        self._runtime = runtime
+
+        self.evaluate_request = async_to_streamed_response_wrapper(
+            runtime.evaluate_request,
+        )
+        self.evaluate_response = async_to_streamed_response_wrapper(
+            runtime.evaluate_response,
         )
