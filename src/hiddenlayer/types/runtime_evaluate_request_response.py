@@ -3,6 +3,6 @@
 from typing import Dict
 from typing_extensions import TypeAlias
 
-__all__ = ["DetectionResponseEvaluationResponse"]
+__all__ = ["RuntimeEvaluateRequestResponse"]
 
-DetectionResponseEvaluationResponse: TypeAlias = Dict[str, object]
+RuntimeEvaluateRequestResponse: TypeAlias = Dict[str, object]
