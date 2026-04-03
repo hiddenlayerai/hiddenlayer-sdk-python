@@ -13,6 +13,13 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 The REST API documentation can be found on [dev.hiddenlayer.ai](https://dev.hiddenlayer.ai). The full API of this library can be found in [api.md](api.md).
 
+## Beta APIs
+
+Some HiddenLayer APIs are marked as **Beta**, meaning they are not yet generally available (GA) or production ready. Beta APIs can be used in a production environment, but at your own risk and discretion. For full details, see the [Beta API Guidelines](https://dev.hiddenlayer.ai/docs/beta-api-faq) on the developer portal.
+
+- HiddenLayer does not provide compatibility guarantees for Beta APIs. Breaking changes may occur at any time.
+- SDK functions and types associated with Beta APIs are excluded when determining semver release versions.
+
 ## Installation
 
 ```sh
