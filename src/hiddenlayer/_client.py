@@ -33,8 +33,7 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import scans, models, runtime, sensors, evaluations, interactions, prompt_analyzer
-    from .resources.runtime import RuntimeResource, AsyncRuntimeResource
+    from .resources import scans, models, sensors, evaluations, interactions, prompt_analyzer
     from .resources.sensors import SensorsResource, AsyncSensorsResource
     from .resources.scans.scans import ScansResource, AsyncScansResource
     from .resources.interactions import InteractionsResource, AsyncInteractionsResource
@@ -184,12 +183,6 @@ class HiddenLayer(SyncAPIClient):
         from .resources.interactions import InteractionsResource
 
         return InteractionsResource(self)
-
-    @cached_property
-    def runtime(self) -> RuntimeResource:
-        from .resources.runtime import RuntimeResource
-
-        return RuntimeResource(self)
 
     @cached_property
     def sensors(self) -> SensorsResource:
@@ -485,12 +478,6 @@ class AsyncHiddenLayer(AsyncAPIClient):
         return AsyncInteractionsResource(self)
 
     @cached_property
-    def runtime(self) -> AsyncRuntimeResource:
-        from .resources.runtime import AsyncRuntimeResource
-
-        return AsyncRuntimeResource(self)
-
-    @cached_property
     def sensors(self) -> AsyncSensorsResource:
         from .resources.sensors import AsyncSensorsResource
 
@@ -694,12 +681,6 @@ class HiddenLayerWithRawResponse:
         return InteractionsResourceWithRawResponse(self._client.interactions)
 
     @cached_property
-    def runtime(self) -> runtime.RuntimeResourceWithRawResponse:
-        from .resources.runtime import RuntimeResourceWithRawResponse
-
-        return RuntimeResourceWithRawResponse(self._client.runtime)
-
-    @cached_property
     def sensors(self) -> sensors.SensorsResourceWithRawResponse:
         from .resources.sensors import SensorsResourceWithRawResponse
 
@@ -741,12 +722,6 @@ class AsyncHiddenLayerWithRawResponse:
         from .resources.interactions import AsyncInteractionsResourceWithRawResponse
 
         return AsyncInteractionsResourceWithRawResponse(self._client.interactions)
-
-    @cached_property
-    def runtime(self) -> runtime.AsyncRuntimeResourceWithRawResponse:
-        from .resources.runtime import AsyncRuntimeResourceWithRawResponse
-
-        return AsyncRuntimeResourceWithRawResponse(self._client.runtime)
 
     @cached_property
     def sensors(self) -> sensors.AsyncSensorsResourceWithRawResponse:
@@ -792,12 +767,6 @@ class HiddenLayerWithStreamedResponse:
         return InteractionsResourceWithStreamingResponse(self._client.interactions)
 
     @cached_property
-    def runtime(self) -> runtime.RuntimeResourceWithStreamingResponse:
-        from .resources.runtime import RuntimeResourceWithStreamingResponse
-
-        return RuntimeResourceWithStreamingResponse(self._client.runtime)
-
-    @cached_property
     def sensors(self) -> sensors.SensorsResourceWithStreamingResponse:
         from .resources.sensors import SensorsResourceWithStreamingResponse
 
@@ -839,12 +808,6 @@ class AsyncHiddenLayerWithStreamedResponse:
         from .resources.interactions import AsyncInteractionsResourceWithStreamingResponse
 
         return AsyncInteractionsResourceWithStreamingResponse(self._client.interactions)
-
-    @cached_property
-    def runtime(self) -> runtime.AsyncRuntimeResourceWithStreamingResponse:
-        from .resources.runtime import AsyncRuntimeResourceWithStreamingResponse
-
-        return AsyncRuntimeResourceWithStreamingResponse(self._client.runtime)
 
     @cached_property
     def sensors(self) -> sensors.AsyncSensorsResourceWithStreamingResponse:
