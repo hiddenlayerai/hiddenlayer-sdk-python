@@ -72,19 +72,6 @@ Methods:
 
 - <code title="post /detection/v1/interactions">client.interactions.<a href="./src/hiddenlayer/resources/interactions.py">analyze</a>(\*\*<a href="src/hiddenlayer/types/interaction_analyze_params.py">params</a>) -> <a href="./src/hiddenlayer/types/interaction_analyze_response.py">InteractionAnalyzeResponse</a></code>
 
-# Runtime
-
-Types:
-
-```python
-from hiddenlayer.types import RuntimeEvaluateRequestResponse, RuntimeEvaluateResponseResponse
-```
-
-Methods:
-
-- <code title="post /detection/v2/request-evaluations">client.runtime.<a href="./src/hiddenlayer/resources/runtime.py">evaluate_request</a>(\*\*<a href="src/hiddenlayer/types/runtime_evaluate_request_params.py">params</a>) -> <a href="./src/hiddenlayer/types/runtime_evaluate_request_response.py">RuntimeEvaluateRequestResponse</a></code>
-- <code title="post /detection/v2/response-evaluations">client.runtime.<a href="./src/hiddenlayer/resources/runtime.py">evaluate_response</a>(\*\*<a href="src/hiddenlayer/types/runtime_evaluate_response_params.py">params</a>) -> <a href="./src/hiddenlayer/types/runtime_evaluate_response_response.py">RuntimeEvaluateResponseResponse</a></code>
-
 # Sensors
 
 Types:
