@@ -21,6 +21,7 @@ from ._types import (
 )
 from ._utils import is_given, get_async_library
 from ._compat import cached_property
+from ._models import FinalRequestOptions
 from ._oauth2 import OAuth2ClientCredentials, make_oauth2
 from ._version import __version__
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
@@ -33,15 +34,17 @@ from ._base_client import (
 
 if TYPE_CHECKING:
     from .resources import scans, models, sensors, evaluations, interactions, prompt_analyzer
-    from .lib.model_scan import ModelScanner, AsyncModelScanner
     from .resources.sensors import SensorsResource, AsyncSensorsResource
-    from .lib.community_scan import CommunityScanner, AsyncCommunityScanner
     from .resources.scans.scans import ScansResource, AsyncScansResource
     from .resources.interactions import InteractionsResource, AsyncInteractionsResource
-    from .lib.evaluation_sessions import EvaluationSessionsResource, AsyncEvaluationSessionsResource
     from .resources.models.models import ModelsResource, AsyncModelsResource
     from .resources.prompt_analyzer import PromptAnalyzerResource, AsyncPromptAnalyzerResource
     from .resources.evaluations.evaluations import EvaluationsResource, AsyncEvaluationsResource
+
+if TYPE_CHECKING:
+    from .lib.model_scan import ModelScanner, AsyncModelScanner
+    from .lib.community_scan import CommunityScanner, AsyncCommunityScanner
+    from .lib.evaluation_sessions import EvaluationSessionsResource, AsyncEvaluationSessionsResource
 
 __all__ = [
     "ENVIRONMENTS",
@@ -256,6 +259,12 @@ class HiddenLayer(SyncAPIClient):
                 return True
         return super()._should_retry(response)
 
+    @override
+    def _prepare_options(self, options: FinalRequestOptions) -> FinalRequestOptions:
+        from .lib._beta import check_beta_endpoint
+
+        check_beta_endpoint(options.url)
+        return options
 
     def copy(
         self,
@@ -542,6 +551,13 @@ class AsyncHiddenLayer(AsyncAPIClient):
                 self.custom_auth.invalidate_token()
                 return True
         return super()._should_retry(response)
+
+    @override
+    async def _prepare_options(self, options: FinalRequestOptions) -> FinalRequestOptions:
+        from .lib._beta import check_beta_endpoint
+
+        check_beta_endpoint(options.url)
+        return options
 
     def copy(
         self,

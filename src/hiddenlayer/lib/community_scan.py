@@ -9,7 +9,14 @@ import logging
 from typing import Union, Literal, cast
 from typing_extensions import TYPE_CHECKING
 
-from .scan_utils import get_scan_results, wait_for_scan_results, get_scan_results_async, wait_for_scan_results_async
+from .scan_utils import (
+    ScanResultMixin,
+    AsyncScanResultMixin,
+    get_scan_results,
+    wait_for_scan_results,
+    get_scan_results_async,
+    wait_for_scan_results_async,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +38,7 @@ class CommunityScanSource:
     HUGGING_FACE = "HUGGING_FACE"
 
 
-class CommunityScanner:
+class CommunityScanner(ScanResultMixin):
     """
     Community scanner that provides the community_scan method with polling functionality.
 
@@ -108,7 +115,7 @@ class CommunityScanner:
             return get_scan_results(self._client, scan_id=scan_id)
 
 
-class AsyncCommunityScanner:
+class AsyncCommunityScanner(AsyncScanResultMixin):
     """
     Async version of CommunityScanner for use with AsyncHiddenLayer client.
     """

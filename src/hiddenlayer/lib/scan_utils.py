@@ -140,3 +140,23 @@ async def wait_for_scan_results_async(client: "AsyncHiddenLayer", *, scan_id: st
         await asyncio.sleep(delay)
 
     return scan_results
+
+
+class ScanResultMixin:
+    """Mixin providing scan_result functionality for sync scanners."""
+
+    _client: "HiddenLayer"
+
+    def scan_result(self, *, scan_id: str) -> "ScanReport":
+        """Get the scan results for a given scan id."""
+        return get_scan_results(self._client, scan_id=scan_id)
+
+
+class AsyncScanResultMixin:
+    """Mixin providing scan_result functionality for async scanners."""
+
+    _client: "AsyncHiddenLayer"
+
+    async def scan_result(self, *, scan_id: str) -> "ScanReport":
+        """Get the scan results for a given scan id."""
+        return await get_scan_results_async(self._client, scan_id=scan_id)

@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Dict, Union, Iterable
-from typing_extensions import Required, Annotated, TypeAlias, TypedDict
+from typing import Iterable
+from typing_extensions import Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
 
@@ -39,12 +39,9 @@ class InputMessage(TypedDict, total=False):
     """The role of the message sender (e.g., user, assistant, system)."""
 
 
-class InputTyped(TypedDict, total=False):
+class Input(TypedDict, total=False, extra_items=object):  # type: ignore[call-arg]
     messages: Iterable[InputMessage]
     """The list of messages as input to a language model."""
-
-
-Input: TypeAlias = Union[InputTyped, Dict[str, object]]
 
 
 class OutputMessage(TypedDict, total=False):

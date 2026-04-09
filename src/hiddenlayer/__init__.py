@@ -3,7 +3,14 @@
 import typing as _t
 
 from . import types
-from .lib import ModelScanner, CommunityScanner, AsyncModelScanner, AsyncCommunityScanner
+from .lib import (
+    BetaWarning,
+    ModelScanner,
+    CommunityScanner,
+    AsyncModelScanner,
+    AsyncCommunityScanner,
+    warn_beta,
+)
 from ._types import NOT_GIVEN, Omit, NoneType, NotGiven, Transport, ProxiesTypes, omit, not_given
 from ._utils import file_from_path
 from ._client import (
@@ -46,6 +53,8 @@ __all__ = [
     "__version__",
     "__title__",
     "NoneType",
+    "BetaWarning",
+    "warn_beta",
     "CommunityScanner",
     "AsyncCommunityScanner",
     "ModelScanner",
