@@ -1,5 +1,62 @@
 # Changelog
 
+## 3.6.0 (2026-04-14)
+
+Full Changelog: [v3.5.0...v3.6.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.5.0...v3.6.0)
+
+### Features
+
+* add beta instability warnings for unstable SDK methods ([#186](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/186)) ([e56488a](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e56488a532201b4f6cc46c5a0be68a45614b1734))
+* **api:** add runtime security evaluations endpoints ([2433787](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/2433787d248b222da7a077b2ef1efd54f5116f7e))
+* **api:** api update ([6b894b8](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/6b894b89ab4cef087e0fc7df4a62913c4b1b1710))
+* **api:** api update ([dd91242](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/dd912420f1d2e8574454cdfa754f4817b7a2423e))
+* **api:** api update ([825a274](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/825a2742d0b674b392e37c99be54c576ff9be34c))
+* **api:** api update ([c43deaa](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/c43deaa74339cc7f3f70cb4b5e26c027fe975896))
+* **api:** api update ([716c68c](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/716c68cef3e9ae8d15631d417335c3f387bedc72))
+* **api:** api update ([98a52fa](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/98a52fad11b3e42b9b576738601743f59ad8752d))
+* **api:** finalize runtime security endpoints ([e83726c](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e83726c4a62ede87be9222e1f3acbbd0c27e1f99))
+* **internal:** implement indices array format for query and form serialization ([05135c2](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/05135c262a3688319bfd7508452b1c101d9901c4))
+
+
+### Bug Fixes
+
+* **beta:** harden CI tests against codegen churn ([#191](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/191)) ([8f85aec](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/8f85aec226a6a7278aa388d30f74d7735031b9cb))
+* **client:** preserve hardcoded query params when merging with user params ([90ad63a](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/90ad63ae4aea92158416a5e1101a3d0496a20646))
+* correct async method indentation in beta warning patcher ([2af3e63](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/2af3e6358565aaca1a3b3069868f2af090db7f92))
+* **deps:** bump minimum typing-extensions version ([53b0b0e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/53b0b0edfaf7a7dea0b097333fac0ecdc9a16bcb))
+* ensure file data are only sent as 1 parameter ([1ea7561](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/1ea756124f32f0f49ba9d73bcdc2c4d63931c649))
+* **pydantic:** do not pass `by_alias` unless set ([86f9db3](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/86f9db32c94ff8358bf294f14a54a460d1d7444b))
+* sanitize endpoint path params ([ea53526](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/ea5352653b0708eaa5f495a598cdf19935d26fac))
+* **tests:** correct setup of OAuth 2 Client Credentials tests ([b3887a1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/b3887a1e39f05e01d5e16c768ef96ac6ca6e98ed))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([803a48b](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/803a48bed50ae657bfe8efdbfce86969d57ac96d))
+* **ci:** skip uploading artifacts on stainless-internal branches ([e901a9f](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e901a9f5a6af3b5650d0002b9dd18b7ba954c38d))
+* **deps:** bump actions/setup-node from 4 to 6 ([5abc090](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/5abc090fa35bc1efd1422cd8455aa369fed72fc4))
+* **deps:** bump github/codeql-action from 4.32.6 to 4.35.1 ([6715471](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/67154712c4497ee3d90fea9aa9632d2ad6fa763d))
+* **deps:** bump step-security/harden-runner from 2.15.1 to 2.16.1 ([58738e5](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/58738e54c1dd7cfe4b710e0cc75a246598c6b9f7))
+* **internal:** codegen related update ([e2b17fd](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e2b17fd099188441b0d296a1a745a930f9953665))
+* **internal:** tweak CI branches ([535faac](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/535faacf763992576b28266f92e226be1f07fb09))
+* **internal:** update gitignore ([bf2dcbe](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/bf2dcbe99c112ab5869ecff719ae66c93cacfc15))
+* patch beta warnings [skip ci] ([ff2ae92](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/ff2ae92be61ae0838e24d28632e38aa024ad28cb))
+* regenerate beta endpoint registry [skip ci] ([5aded1f](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/5aded1f3c1b0aa3bc4ae76137faf6987a71c0db2))
+* regenerate beta endpoint registry [skip ci] ([126b13e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/126b13ea66294a7c1a2d31e8edfcd336552b245e))
+* regenerate beta endpoint registry [skip ci] ([24d568e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/24d568e9fc74b6a0c044ea9a74120e4504fe1b16))
+* remove stale version comments from SHA-pinned actions ([#184](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/184)) ([cf07e32](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/cf07e322e7b4674fe3ef622e491278b0346e5e7e))
+
+
+### Documentation
+
+* **readme:** add Beta APIs section ([#185](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/185)) ([b1381e3](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/b1381e389f6e7ee59ba51ff00ce84b4a43f97c35))
+
+
+### Refactors
+
+* **client:** move beta warnings to _prepare_options interceptor ([#190](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/190)) ([893ee22](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/893ee22fdda949ebab80d66d70b99accb79aded2))
+* **types:** use `extra_items` from PEP 728 ([e5ee89f](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e5ee89fccbefe680538b8b3b06871dfba90d1474))
+
 ## 3.5.0 (2026-03-03)
 
 Full Changelog: [v3.4.0...v3.5.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.4.0...v3.5.0)
