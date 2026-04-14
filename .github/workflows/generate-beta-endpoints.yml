@@ -1,0 +1,33 @@
+name: Generate Beta Endpoint Registry
+
+on:
+  push:
+    branches: [next]
+
+jobs:
+  generate:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate beta endpoint registry
+        run: node scripts/utils/generate-beta-endpoints.cjs
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/hiddenlayer/lib/_beta_endpoints.py
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: regenerate beta endpoint registry [skip ci]"
+            git push
+          fi

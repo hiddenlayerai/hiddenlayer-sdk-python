@@ -5,7 +5,7 @@ from __future__ import annotations
 import httpx
 
 from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -71,9 +71,11 @@ class RedTeamResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedTeamCreateResponse:
-        """Start a new red team client workflow.
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at
+        any time. Breaking changes may occur.
 
-        Auto-triggers planning phase. Client
+        Start a new red team client workflow. Auto-triggers planning phase. Client
         should then poll /next-action.
 
         Args:
@@ -118,7 +120,7 @@ class RedTeamResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._post(
-            "/evaluations/v1-beta/red-team",
+            "/evaluations/v1/red-team",
             body=maybe_transform(
                 {
                     "name": name,
@@ -158,6 +160,9 @@ class RedTeamResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedTeamRetrieveEvaluationResultsResponse:
         """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at
+        any time. Breaking changes may occur.
+
         Get the complete result of a red team workflow.
 
         Args:
@@ -174,7 +179,7 @@ class RedTeamResource(SyncAPIResource):
         if not workflow_id:
             raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
         return self._get(
-            f"/evaluations/v1-beta/red-team/{workflow_id}",
+            path_template("/evaluations/v1/red-team/{workflow_id}", workflow_id=workflow_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -193,6 +198,9 @@ class RedTeamResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedTeamRetrieveNextActionResponse:
         """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at
+        any time. Breaking changes may occur.
+
         Poll for next action - CLIENT'S MAIN POLLING ENDPOINT.
 
         This endpoint is designed to be polled repeatedly by the client. Returns
@@ -216,7 +224,7 @@ class RedTeamResource(SyncAPIResource):
         if not workflow_id:
             raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
         return self._get(
-            f"/evaluations/v1-beta/red-team/{workflow_id}/next-action",
+            path_template("/evaluations/v1/red-team/{workflow_id}/next-action", workflow_id=workflow_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -235,6 +243,9 @@ class RedTeamResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedTeamRetrieveStatusResponse:
         """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at
+        any time. Breaking changes may occur.
+
         Get current status of a red team workflow.
 
         Args:
@@ -251,7 +262,7 @@ class RedTeamResource(SyncAPIResource):
         if not workflow_id:
             raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
         return self._get(
-            f"/evaluations/v1-beta/red-team/{workflow_id}/status",
+            path_template("/evaluations/v1/red-team/{workflow_id}/status", workflow_id=workflow_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -272,6 +283,9 @@ class RedTeamResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedTeamSubmitTargetResponseResponse:
         """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at
+        any time. Breaking changes may occur.
+
         Submit target's response.
 
         This triggers the ProcessTargetResponseWorkflow child workflow for the specified
@@ -295,7 +309,7 @@ class RedTeamResource(SyncAPIResource):
         if not workflow_id:
             raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
         return self._post(
-            f"/evaluations/v1-beta/red-team/{workflow_id}/target-response",
+            path_template("/evaluations/v1/red-team/{workflow_id}/target-response", workflow_id=workflow_id),
             body=maybe_transform(
                 {
                     "session_id": session_id,
@@ -321,7 +335,10 @@ class RedTeamResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
-        Terminate a running workflow.
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at
+        any time. Breaking changes may occur.
+
+        Terminate a running workflow job.
 
         Args:
           workflow_id: The workflow identifier
@@ -338,7 +355,7 @@ class RedTeamResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._post(
-            f"/evaluations/v1-beta/red-team/terminations/{workflow_id}",
+            path_template("/evaluations/v1/jobs/{workflow_id}/termination", workflow_id=workflow_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -392,9 +409,11 @@ class AsyncRedTeamResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedTeamCreateResponse:
-        """Start a new red team client workflow.
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at
+        any time. Breaking changes may occur.
 
-        Auto-triggers planning phase. Client
+        Start a new red team client workflow. Auto-triggers planning phase. Client
         should then poll /next-action.
 
         Args:
@@ -439,7 +458,7 @@ class AsyncRedTeamResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._post(
-            "/evaluations/v1-beta/red-team",
+            "/evaluations/v1/red-team",
             body=await async_maybe_transform(
                 {
                     "name": name,
@@ -479,6 +498,9 @@ class AsyncRedTeamResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedTeamRetrieveEvaluationResultsResponse:
         """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at
+        any time. Breaking changes may occur.
+
         Get the complete result of a red team workflow.
 
         Args:
@@ -495,7 +517,7 @@ class AsyncRedTeamResource(AsyncAPIResource):
         if not workflow_id:
             raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
         return await self._get(
-            f"/evaluations/v1-beta/red-team/{workflow_id}",
+            path_template("/evaluations/v1/red-team/{workflow_id}", workflow_id=workflow_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -514,6 +536,9 @@ class AsyncRedTeamResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedTeamRetrieveNextActionResponse:
         """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at
+        any time. Breaking changes may occur.
+
         Poll for next action - CLIENT'S MAIN POLLING ENDPOINT.
 
         This endpoint is designed to be polled repeatedly by the client. Returns
@@ -537,7 +562,7 @@ class AsyncRedTeamResource(AsyncAPIResource):
         if not workflow_id:
             raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
         return await self._get(
-            f"/evaluations/v1-beta/red-team/{workflow_id}/next-action",
+            path_template("/evaluations/v1/red-team/{workflow_id}/next-action", workflow_id=workflow_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -556,6 +581,9 @@ class AsyncRedTeamResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedTeamRetrieveStatusResponse:
         """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at
+        any time. Breaking changes may occur.
+
         Get current status of a red team workflow.
 
         Args:
@@ -572,7 +600,7 @@ class AsyncRedTeamResource(AsyncAPIResource):
         if not workflow_id:
             raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
         return await self._get(
-            f"/evaluations/v1-beta/red-team/{workflow_id}/status",
+            path_template("/evaluations/v1/red-team/{workflow_id}/status", workflow_id=workflow_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -593,6 +621,9 @@ class AsyncRedTeamResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RedTeamSubmitTargetResponseResponse:
         """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at
+        any time. Breaking changes may occur.
+
         Submit target's response.
 
         This triggers the ProcessTargetResponseWorkflow child workflow for the specified
@@ -616,7 +647,7 @@ class AsyncRedTeamResource(AsyncAPIResource):
         if not workflow_id:
             raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
         return await self._post(
-            f"/evaluations/v1-beta/red-team/{workflow_id}/target-response",
+            path_template("/evaluations/v1/red-team/{workflow_id}/target-response", workflow_id=workflow_id),
             body=await async_maybe_transform(
                 {
                     "session_id": session_id,
@@ -642,7 +673,10 @@ class AsyncRedTeamResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
-        Terminate a running workflow.
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at
+        any time. Breaking changes may occur.
+
+        Terminate a running workflow job.
 
         Args:
           workflow_id: The workflow identifier
@@ -659,7 +693,7 @@ class AsyncRedTeamResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `workflow_id` but received {workflow_id!r}")
         extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._post(
-            f"/evaluations/v1-beta/red-team/terminations/{workflow_id}",
+            path_template("/evaluations/v1/jobs/{workflow_id}/termination", workflow_id=workflow_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

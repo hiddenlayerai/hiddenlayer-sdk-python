@@ -43,17 +43,11 @@ class RedTeamRetrieveStatusResponse(BaseModel):
     message: Optional[str] = None
     """Status message"""
 
-    percent_complete: Optional[float] = None
-    """Percentage complete"""
-
     phase: Optional[str] = None
     """Current workflow phase"""
 
     progress_completed: Optional[int] = None
     """Completed progress items"""
-
-    progress_percent: Optional[float] = None
-    """Progress percentage"""
 
     progress_total: Optional[int] = None
     """Total progress items"""

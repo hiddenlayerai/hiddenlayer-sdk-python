@@ -13,7 +13,7 @@ __all__ = ["JobListResponse", "Item", "ItemInventory", "ItemInventoryProviderDet
 
 
 class ItemInventoryProviderDetails(BaseModel):
-    provider: Literal["AWS_BEDROCK", "AZURE_AI_FOUNDRY", "AWS_SAGEMAKER"]
+    provider: Literal["AWS_BEDROCK", "AWS_SAGEMAKER", "AZURE_AI_FOUNDRY", "AZURE_ML", "DATABRICKS"]
 
     provider_model_id: str
     """The provider's unique identifier for the model. Examples:
