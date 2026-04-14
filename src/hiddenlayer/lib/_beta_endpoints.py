@@ -7,6 +7,5 @@ Maps URL paths to qualified method names for runtime warnings.
 from __future__ import annotations
 
 BETA_ENDPOINTS: dict[str, str] = {
-    "/detection/v2/request-evaluations": "DetectionResource.request_evaluation",
-    "/detection/v2/response-evaluations": "DetectionResource.response_evaluation",
+    "/evaluations/v1/red-team": "RedTeamResource.create",
 }
