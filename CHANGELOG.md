@@ -1,5 +1,35 @@
 # Changelog
 
+## 3.7.0 (2026-04-30)
+
+Full Changelog: [v3.6.0...v3.7.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.6.0...v3.7.0)
+
+### Features
+
+* **api:** Add Runtime Security support ([d974153](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/d97415346f44c347c013408a4552524e2def0eb6))
+* **api:** api update ([fb55302](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/fb5530272181975331d420efb5211857cdd88f20))
+* **api:** api update ([3a17f7e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/3a17f7ecfd118a577bbfaa6ec64c1c4f2404ddce))
+* support setting headers via env ([8087cc1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/8087cc193f18244f48ce846c05d91df6e895f472))
+
+
+### Bug Fixes
+
+* use correct field name format for multipart file arrays ([62a51d1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/62a51d195f6e46948c4512ad8627d05435bdda6e))
+
+
+### Performance Improvements
+
+* **client:** optimize file structure copying in multipart requests ([2f7a1e3](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/2f7a1e3322b9c05a8dbbeec9c5843e6f271b38b8))
+
+
+### Chores
+
+* **internal:** more robust bootstrap script ([141a213](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/141a213a7eb8d6b7b172b5f526e75255c077406e))
+* **internal:** reformat pyproject.toml ([717f370](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/717f3705fb21d73c7e039cbfab1b544091ce7bc7))
+* regenerate beta endpoint registry [skip ci] ([9b35247](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/9b352475216648217c9b8985ae0690ca35d91126))
+* regenerate beta endpoint registry [skip ci] ([840be8d](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/840be8d3e0543d76d1d5c8a2934440fd8e843182))
+* regenerate beta endpoint registry [skip ci] ([a17de50](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/a17de509592e4c213645322069cfa27a9a7a7226))
+
 ## 3.6.0 (2026-04-14)
 
 Full Changelog: [v3.5.0...v3.6.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.5.0...v3.6.0)
