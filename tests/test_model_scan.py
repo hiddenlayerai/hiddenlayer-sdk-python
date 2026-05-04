@@ -139,6 +139,90 @@ class TestModelScanner:
             # Clean up temp file
             os.unlink(temp_path)
 
+
+    def test_scan_file_with_base64_filename(self) -> None:
+        """Test scan_file with base64 filename."""
+        # Create a temporary test file
+        with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".pkl") as temp_file:
+            temp_file.write("test model data")
+            temp_path = temp_file.name
+
+        try:
+            # Mock the upload start response
+            mock_upload_response = Mock(spec=UploadStartResponse)
+            mock_upload_response.scan_id = "test-scan-id-123"
+
+            # Mock the file add response (multipart upload)
+            mock_part = Mock()
+            mock_part.start_offset = 0
+
+            mock_file_add_response = Mock(spec=FileAddResponse)
+            mock_file_add_response.parts = [mock_part]
+            mock_file_add_response.upload_id = "upload-123"
+
+            # Mock the scan report
+            mock_scan_report = Mock(spec=ScanReport)
+            mock_scan_report.scan_id = "test-scan-id-123"
+            mock_scan_report.status = "pending"
+
+            # Set up mocks
+            self.mock_client.scans.upload.start.return_value = mock_upload_response
+            self.mock_client.scans.upload.file.add.return_value = mock_file_add_response
+            self.mock_client.scans.upload.file.complete.return_value = Mock(spec=FileCompleteResponse)
+            self.mock_client.scans.upload.complete_all.return_value = Mock(spec=UploadCompleteAllResponse)
+            self.mock_client.scans.jobs.retrieve.return_value = mock_scan_report
+
+            # Mock call to put for upload
+            mock_response = Mock(raise_for_status=Mock(return_value=None))
+            self.mock_client._client = Mock(put=Mock(return_value=Mock(return_value=mock_response)))
+
+            # Call scan_file with base64 filename
+            result = self.scanner.scan_file(
+                model_name="test-model",
+                model_path=temp_path,
+                model_version="1.0",
+                wait_for_results=False,
+                request_source="API Upload",
+                origin="test",
+            )
+
+            # Verify calls
+            self.mock_client.scans.upload.start.assert_called_once_with(
+                model_name="test-model",
+                model_version="1.0",
+                requesting_entity="hiddenlayer-python-sdk",
+                request_source="API Upload",
+                origin="test",
+            )
+
+            self.mock_client.scans.upload.file.add.assert_called_once_with(
+                scan_id="test-scan-id-123", file_name_base64=base64.b64encode(temp_path.encode()).decode(), file_content_length=15
+            )
+
+            self.mock_client.scans.upload.file.complete.assert_called_once_with(
+                file_id="upload-123", scan_id="test-scan-id-123"
+            )
+
+            self.mock_client.scans.upload.complete_all.assert_called_once_with(scan_id="test-scan-id-123")
+
+            # Should retrieve scan once (no waiting)
+            self.mock_client.scans.jobs.retrieve.assert_called_once_with("test-scan-id-123")
+
+            # Should return the scan report
+            assert result is mock_scan_report
+
+            # Verify httpx.put was called
+            self.mock_client._client.put.assert_called_once_with(
+                "https://example.com/upload-url",
+                content=b"test model data",
+                headers={"Content-Type": "application/octet-stream"},
+                timeout=self.mock_client.timeout,
+            )
+
+        finally:
+            # Clean up temp file
+            os.unlink(temp_path)
+
     @patch("hiddenlayer.lib.scan_utils.time.sleep")
     @patch("hiddenlayer.lib.scan_utils.logger")
     def test_scan_file_with_waiting_success(self, mock_logger: Mock, mock_sleep: Mock) -> None:
@@ -259,7 +343,7 @@ class TestModelScanner:
             # Verify the files that were uploaded
             uploaded_files: list[str] = []
             for call in self.mock_client.scans.upload.file.add.call_args_list:
-                uploaded_files.append(Path(call.kwargs["file_name"]).name)
+                uploaded_files.append(Path(base64.b64decode(call.kwargs["file_name_base64"]).decode()).name)
 
             assert "model.pkl" in uploaded_files
             assert "config.json" in uploaded_files
