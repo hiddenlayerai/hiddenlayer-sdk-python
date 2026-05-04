@@ -755,7 +755,7 @@ class AsyncModelScanner(AsyncScanResultMixin):
 
         # Initiate multipart upload for this file
         upload = await self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
+            scan_id=scan_id, file_name_base64=base64.b64encode(str(file_path).encode()).decode(), file_content_length=filesize
         )
 
         # Upload each part
