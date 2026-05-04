@@ -5,6 +5,7 @@ This module provides the model scanning methods that were available in the old S
 including scan_file and scan_folder methods with multipart upload functionality.
 """
 
+import base64
 import os
 import logging
 from typing import Any, Set, Dict, List, Union, Literal, Optional, Generator, cast
