@@ -19,7 +19,11 @@ from ._types import (
     RequestOptions,
     not_given,
 )
-from ._utils import is_given, get_async_library
+from ._utils import (
+    is_given,
+    is_mapping_t,
+    get_async_library,
+)
 from ._compat import cached_property
 from ._models import FinalRequestOptions
 from ._oauth2 import OAuth2ClientCredentials, make_oauth2
@@ -33,7 +37,8 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import scans, models, sensors, evaluations, interactions, prompt_analyzer
+    from .resources import scans, models, runtime, sensors, evaluations, interactions, prompt_analyzer
+    from .resources.runtime import RuntimeResource, AsyncRuntimeResource
     from .resources.sensors import SensorsResource, AsyncSensorsResource
     from .resources.scans.scans import ScansResource, AsyncScansResource
     from .resources.interactions import InteractionsResource, AsyncInteractionsResource
@@ -143,6 +148,15 @@ class HiddenLayer(SyncAPIClient):
             except KeyError as exc:
                 raise ValueError(f"Unknown environment: {environment}") from exc
 
+        custom_headers_env = os.environ.get("HIDDENLAYER_CUSTOM_HEADERS")
+        if custom_headers_env is not None:
+            parsed: dict[str, str] = {}
+            for line in custom_headers_env.split("\n"):
+                colon = line.find(":")
+                if colon >= 0:
+                    parsed[line[:colon].strip()] = line[colon + 1 :].strip()
+            default_headers = {**parsed, **(default_headers if is_mapping_t(default_headers) else {})}
+
         super().__init__(
             version=__version__,
             base_url=base_url,
@@ -183,6 +197,12 @@ class HiddenLayer(SyncAPIClient):
         from .resources.interactions import InteractionsResource
 
         return InteractionsResource(self)
+
+    @cached_property
+    def runtime(self) -> RuntimeResource:
+        from .resources.runtime import RuntimeResource
+
+        return RuntimeResource(self)
 
     @cached_property
     def sensors(self) -> SensorsResource:
@@ -436,6 +456,15 @@ class AsyncHiddenLayer(AsyncAPIClient):
             except KeyError as exc:
                 raise ValueError(f"Unknown environment: {environment}") from exc
 
+        custom_headers_env = os.environ.get("HIDDENLAYER_CUSTOM_HEADERS")
+        if custom_headers_env is not None:
+            parsed: dict[str, str] = {}
+            for line in custom_headers_env.split("\n"):
+                colon = line.find(":")
+                if colon >= 0:
+                    parsed[line[:colon].strip()] = line[colon + 1 :].strip()
+            default_headers = {**parsed, **(default_headers if is_mapping_t(default_headers) else {})}
+
         super().__init__(
             version=__version__,
             base_url=base_url,
@@ -476,6 +505,12 @@ class AsyncHiddenLayer(AsyncAPIClient):
         from .resources.interactions import AsyncInteractionsResource
 
         return AsyncInteractionsResource(self)
+
+    @cached_property
+    def runtime(self) -> AsyncRuntimeResource:
+        from .resources.runtime import AsyncRuntimeResource
+
+        return AsyncRuntimeResource(self)
 
     @cached_property
     def sensors(self) -> AsyncSensorsResource:
@@ -681,6 +716,12 @@ class HiddenLayerWithRawResponse:
         return InteractionsResourceWithRawResponse(self._client.interactions)
 
     @cached_property
+    def runtime(self) -> runtime.RuntimeResourceWithRawResponse:
+        from .resources.runtime import RuntimeResourceWithRawResponse
+
+        return RuntimeResourceWithRawResponse(self._client.runtime)
+
+    @cached_property
     def sensors(self) -> sensors.SensorsResourceWithRawResponse:
         from .resources.sensors import SensorsResourceWithRawResponse
 
@@ -722,6 +763,12 @@ class AsyncHiddenLayerWithRawResponse:
         from .resources.interactions import AsyncInteractionsResourceWithRawResponse
 
         return AsyncInteractionsResourceWithRawResponse(self._client.interactions)
+
+    @cached_property
+    def runtime(self) -> runtime.AsyncRuntimeResourceWithRawResponse:
+        from .resources.runtime import AsyncRuntimeResourceWithRawResponse
+
+        return AsyncRuntimeResourceWithRawResponse(self._client.runtime)
 
     @cached_property
     def sensors(self) -> sensors.AsyncSensorsResourceWithRawResponse:
@@ -767,6 +814,12 @@ class HiddenLayerWithStreamedResponse:
         return InteractionsResourceWithStreamingResponse(self._client.interactions)
 
     @cached_property
+    def runtime(self) -> runtime.RuntimeResourceWithStreamingResponse:
+        from .resources.runtime import RuntimeResourceWithStreamingResponse
+
+        return RuntimeResourceWithStreamingResponse(self._client.runtime)
+
+    @cached_property
     def sensors(self) -> sensors.SensorsResourceWithStreamingResponse:
         from .resources.sensors import SensorsResourceWithStreamingResponse
 
@@ -808,6 +861,12 @@ class AsyncHiddenLayerWithStreamedResponse:
         from .resources.interactions import AsyncInteractionsResourceWithStreamingResponse
 
         return AsyncInteractionsResourceWithStreamingResponse(self._client.interactions)
+
+    @cached_property
+    def runtime(self) -> runtime.AsyncRuntimeResourceWithStreamingResponse:
+        from .resources.runtime import AsyncRuntimeResourceWithStreamingResponse
+
+        return AsyncRuntimeResourceWithStreamingResponse(self._client.runtime)
 
     @cached_property
     def sensors(self) -> sensors.AsyncSensorsResourceWithStreamingResponse:

@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.7.0 (2026-05-07)
+
+Full Changelog: [v3.6.0...v3.7.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.6.0...v3.7.0)
+
+### Features
+
+* **api:** Add Runtime Security evaluation endpoints for real-time request and response analysis ([d974153](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/d97415346f44c347c013408a4552524e2def0eb6))
+* **client:** Support setting custom request headers via environment variables ([8087cc1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/8087cc193f18244f48ce846c05d91df6e895f472))
+
+
+### Bug Fixes
+
+* **client:** Use correct field name format for multipart file arrays ([62a51d1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/62a51d195f6e46948c4512ad8627d05435bdda6e))
+
+
+### Performance Improvements
+
+* **client:** Optimize file structure copying in multipart requests ([2f7a1e3](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/2f7a1e3322b9c05a8dbbeec9c5843e6f271b38b8))
+
 ## 3.6.0 (2026-04-14)
 
 Full Changelog: [v3.5.0...v3.6.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.5.0...v3.6.0)
