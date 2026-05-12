@@ -8,6 +8,7 @@ import httpx
 import pytest
 
 from hiddenlayer import HiddenLayer, AsyncHiddenLayer
+from hiddenlayer._types import Omit
 from hiddenlayer.types.evaluations import RedTeamRetrieveNextActionResponse
 from hiddenlayer.lib.red_team_session import (
     RedTeamSession,
@@ -1314,6 +1315,30 @@ class TestRedTeamSessionsResourceStartSession:
                 execution_strategy_type="invalid_strategy",
             )
 
+    def test_start_session_omits_prompt_set_id_when_not_provided(
+        self, session_resource: RedTeamSessionsResource
+    ) -> None:
+        """prompt_set_id is a UUID server-side; forward the SDK omit sentinel when caller leaves it unset.
+
+        Regression test: previously the wrapper defaulted prompt_set_id to "" and forwarded
+        that empty string, causing the server to reject the request with "invalid UUID length: 0".
+        """
+        mock_response = Mock()
+        mock_response.workflow_id = "workflow-no-prompt-set"
+
+        session_resource._client.evaluations.red_team.create = Mock(
+            return_value=mock_response
+        )
+
+        session_resource.start_session(
+            name="test-session",
+            target_model="openai/gpt-4o",
+            objective_ids=["HLO.01"],
+        )
+
+        call_kwargs = session_resource._client.evaluations.red_team.create.call_args.kwargs
+        assert isinstance(call_kwargs["prompt_set_id"], Omit)
+
 
 class TestRedTeamSessionsResourceResumeSession:
     """Tests for RedTeamSessionsResource.resume_session method."""
@@ -1516,6 +1541,31 @@ class TestAsyncRedTeamSessionsResourceStartSession:
                 target_model="openai/gpt-4o",
                 execution_strategy_type="invalid_strategy",
             )
+
+    @pytest.mark.asyncio
+    async def test_start_session_omits_prompt_set_id_when_not_provided(
+        self, async_session_resource: AsyncRedTeamSessionsResource
+    ) -> None:
+        """prompt_set_id is a UUID server-side; forward the SDK omit sentinel when caller leaves it unset.
+
+        Regression test: previously the wrapper defaulted prompt_set_id to "" and forwarded
+        that empty string, causing the server to reject the request with "invalid UUID length: 0".
+        """
+        mock_response = Mock()
+        mock_response.workflow_id = "workflow-no-prompt-set"
+
+        async_session_resource._client.evaluations.red_team.create = AsyncMock(
+            return_value=mock_response
+        )
+
+        await async_session_resource.start_session(
+            name="test-session",
+            target_model="openai/gpt-4o",
+            objective_ids=["HLO.01"],
+        )
+
+        call_kwargs = async_session_resource._client.evaluations.red_team.create.call_args.kwargs
+        assert isinstance(call_kwargs["prompt_set_id"], Omit)
 
 
 class TestAsyncRedTeamSessionsResourceResumeSession:
