@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Any, Callable, Iterator, Awaitable, AsyncItera
 
 import httpx
 
+from .._types import Omit, omit
 from .._resource import SyncAPIResource, AsyncAPIResource
 from ..types.evaluations import RedTeamCreateResponse, RedTeamRetrieveNextActionResponse
 from .red_team_exceptions import PollTimeoutError, InvalidSessionError, RedTeamSessionError, WorkflowNotFoundError
@@ -245,7 +246,7 @@ class RedTeamSessionsResource(SyncAPIResource):
             attacker_max_generation_attempts: int = 2,
             n_random_techniques: int = 1,
             max_parallel_techniques: int = 1,
-            prompt_set_id: str = "",
+            prompt_set_id: str | Omit = omit,
             hiddenlayer_project_id: str | None = None,
             poll_interval: float = 2.0,
             poll_max_wait: float | None = None,
@@ -774,7 +775,7 @@ class AsyncRedTeamSessionsResource(AsyncAPIResource):
             attacker_max_generation_attempts: int = 2,
             n_random_techniques: int = 1,
             max_parallel_techniques: int = 1,
-            prompt_set_id: str = "",
+            prompt_set_id: str | Omit = omit,
             hiddenlayer_project_id: str | None = None,
             poll_interval: float = 2.0,
             poll_max_wait: float | None = None,
