@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.7.1 (2026-05-14)
+
+Full Changelog: [v3.7.0...v3.7.1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.7.0...v3.7.1)
+
+### Bug Fixes
+
+* **red_team_session:** Fix red team evaluation sessions failing with "invalid UUID length: 0" when `prompt_set_id` is not provided ([#198](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/198)) ([d40eb70](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/d40eb700f2496ffdefdf547ebcdf81a0d3dc7561))
+
+  The `start_session` method previously defaulted `prompt_set_id` to an empty string, which was sent to the server as-is. The server expects a UUID, so the empty string caused a 400 Bad Request error. The default is now omitted from the request body entirely when not provided by the caller.
+
 ## 3.7.0 (2026-05-07)
 
 Full Changelog: [v3.6.0...v3.7.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.6.0...v3.7.0)
