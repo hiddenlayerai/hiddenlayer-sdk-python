@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.7.1 (2026-05-14)
+
+Full Changelog: [v3.7.0...v3.7.1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.7.0...v3.7.1)
+
+### Bug Fixes
+
+* **red_team_session:** fix red team sessions failing with "invalid UUID length: 0" when prompt_set_id is not provided ([#198](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/198)) ([5e3c85e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/5e3c85e57482ffeda2011b8f7c65a67efe0a084d))
+
 ## 3.7.0 (2026-05-07)
 
 Full Changelog: [v3.6.0...v3.7.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.6.0...v3.7.0)
