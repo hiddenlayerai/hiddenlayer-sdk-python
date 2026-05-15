@@ -86,6 +86,12 @@ class ItemInventory(BaseModel):
 
 
 class ItemSummary(BaseModel):
+    advisory_categories: Optional[List[str]] = None
+    """list of unique advisory categories found"""
+
+    advisory_count: Optional[int] = None
+    """total number of advisories found"""
+
     detection_categories: Optional[List[str]] = None
     """list of unique detection categories found"""
 
