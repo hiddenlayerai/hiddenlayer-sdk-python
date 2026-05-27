@@ -79,11 +79,16 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types import RuntimeEvaluateRequestResponse, RuntimeEvaluateResponseResponse
+from hiddenlayer.types import (
+    RuntimeEvaluateInteractionResponse,
+    RuntimeEvaluateRequestResponse,
+    RuntimeEvaluateResponseResponse,
+)
 ```
 
 Methods:
 
+- <code title="post /detection/v2/interaction-evaluations">client.runtime.<a href="./src/hiddenlayer/resources/runtime.py">evaluate_interaction</a>(\*\*<a href="src/hiddenlayer/types/runtime_evaluate_interaction_params.py">params</a>) -> <a href="./src/hiddenlayer/types/runtime_evaluate_interaction_response.py">RuntimeEvaluateInteractionResponse</a></code>
 - <code title="post /detection/v2/request-evaluations">client.runtime.<a href="./src/hiddenlayer/resources/runtime.py">evaluate_request</a>(\*\*<a href="src/hiddenlayer/types/runtime_evaluate_request_params.py">params</a>) -> <a href="./src/hiddenlayer/types/runtime_evaluate_request_response.py">RuntimeEvaluateRequestResponse</a></code>
 - <code title="post /detection/v2/response-evaluations">client.runtime.<a href="./src/hiddenlayer/resources/runtime.py">evaluate_response</a>(\*\*<a href="src/hiddenlayer/types/runtime_evaluate_response_params.py">params</a>) -> <a href="./src/hiddenlayer/types/runtime_evaluate_response_response.py">RuntimeEvaluateResponseResponse</a></code>
 
