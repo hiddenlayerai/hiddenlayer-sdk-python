@@ -18,3 +18,7 @@ from .runtime_evaluate_request_params import RuntimeEvaluateRequestParams as Run
 from .runtime_evaluate_response_params import RuntimeEvaluateResponseParams as RuntimeEvaluateResponseParams
 from .runtime_evaluate_request_response import RuntimeEvaluateRequestResponse as RuntimeEvaluateRequestResponse
 from .runtime_evaluate_response_response import RuntimeEvaluateResponseResponse as RuntimeEvaluateResponseResponse
+from .runtime_evaluate_interaction_params import RuntimeEvaluateInteractionParams as RuntimeEvaluateInteractionParams
+from .runtime_evaluate_interaction_response import (
+    RuntimeEvaluateInteractionResponse as RuntimeEvaluateInteractionResponse,
+)
