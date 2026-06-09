@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from typing import Dict
+from typing_extensions import Literal
+
 import httpx
 
 from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
@@ -49,11 +52,12 @@ class RedTeamResource(SyncAPIResource):
         self,
         *,
         name: str,
-        target_model: str,
+        attacker_guidance: str | Omit = omit,
         attacker_max_generation_attempts: int | Omit = omit,
         attacker_model: str | Omit = omit,
+        config_id: str | Omit = omit,
         evaluation_report_model: str | Omit = omit,
-        execution_strategy_type: str | Omit = omit,
+        execution_strategy_type: Literal["RANDOM", "SINGLE", "STATIC_PROMPT_SET"] | Omit = omit,
         hl_project_id: str | Omit = omit,
         max_parallel_techniques: int | Omit = omit,
         max_turns: int | Omit = omit,
@@ -63,6 +67,8 @@ class RedTeamResource(SyncAPIResource):
         prompt_set_id: str | Omit = omit,
         refusal_judge_model: str | Omit = omit,
         sessions_per_technique: int | Omit = omit,
+        severity_mapping: Dict[str, Literal["CRITICAL", "HIGH", "MEDIUM", "LOW", "NONE"]] | Omit = omit,
+        target_model: str | Omit = omit,
         target_system_prompt: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -81,17 +87,31 @@ class RedTeamResource(SyncAPIResource):
         Args:
           name: Name for this evaluation
 
-          target_model: Target model identifier
+          attacker_guidance: Optional intent-only natural-language text the operator supplies to focus the
+              attacker LLM within the configured APE objectives. Example: "try to get the
+              model to recommend candy with nuts to a user who's allergic to nuts."
 
-          attacker_max_generation_attempts: Maximum generation attempts for attacker
+              Sanitized server-side: input is NFKC-normalized, trimmed, and checked against a
+              strict character whitelist (ASCII letters, digits, spaces/newlines/tabs, and
+              sentence-level punctuation `. , ? ! ' " - : ; ( )`). Inputs containing
+              XML/JSON/code/control/markdown characters are rejected with 422.
 
-          attacker_model: Model for attacker
+              No-op for the `STATIC_PROMPT_SET` execution strategy.
 
-          evaluation_report_model: Model for evaluation report
+          attacker_max_generation_attempts: Internal override; service default applies if omitted. Maximum number of
+              generation attempts for the attacker model per turn.
+
+          attacker_model: Internal override; service default applies if omitted.
+
+          config_id: Optional preset config (see /evaluations/v1/red-team/configs) to seed the
+              workflow settings. Any field also present in this body overrides the
+              corresponding value from the config.
+
+          evaluation_report_model: Internal override; service default applies if omitted.
 
           execution_strategy_type: Execution strategy type
 
-          hl_project_id: HiddenLayer project ID
+          hl_project_id: HiddenLayer project UUID or alias
 
           max_parallel_techniques: Maximum parallel techniques
 
@@ -101,13 +121,24 @@ class RedTeamResource(SyncAPIResource):
 
           objective_ids: Objective IDs to evaluate
 
-          objective_judge_model: Model for objective judging
+          objective_judge_model: Internal override; service default applies if omitted.
 
-          prompt_set_id: Prompt set ID for static prompt evaluation
+          prompt_set_id: Prompt set UUID (built-in catalog or tenant DB)
 
-          refusal_judge_model: Model for refusal judging
+          refusal_judge_model: Internal override; service default applies if omitted.
 
           sessions_per_technique: Number of sessions per technique
+
+          severity_mapping: Map from objective ID to a severity level. Determines the per-session severity
+              derived from the worst objective achieved during a red team session.
+
+              Keys must be objective IDs known to this service; unknown keys are rejected at
+              validation time. Limited to 256 entries.
+
+          target_model: Target model identifier. Freeform for the client-driven workflow: the client
+              owns and drives its own target, so this is NOT validated against the
+              servable-model catalog. (The simulated start and config presets do validate
+              against the catalog.)
 
           target_system_prompt: System prompt for the target
 
@@ -124,9 +155,10 @@ class RedTeamResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "name": name,
-                    "target_model": target_model,
+                    "attacker_guidance": attacker_guidance,
                     "attacker_max_generation_attempts": attacker_max_generation_attempts,
                     "attacker_model": attacker_model,
+                    "config_id": config_id,
                     "evaluation_report_model": evaluation_report_model,
                     "execution_strategy_type": execution_strategy_type,
                     "hl_project_id": hl_project_id,
@@ -138,6 +170,8 @@ class RedTeamResource(SyncAPIResource):
                     "prompt_set_id": prompt_set_id,
                     "refusal_judge_model": refusal_judge_model,
                     "sessions_per_technique": sessions_per_technique,
+                    "severity_mapping": severity_mapping,
+                    "target_model": target_model,
                     "target_system_prompt": target_system_prompt,
                 },
                 red_team_create_params.RedTeamCreateParams,
@@ -387,11 +421,12 @@ class AsyncRedTeamResource(AsyncAPIResource):
         self,
         *,
         name: str,
-        target_model: str,
+        attacker_guidance: str | Omit = omit,
         attacker_max_generation_attempts: int | Omit = omit,
         attacker_model: str | Omit = omit,
+        config_id: str | Omit = omit,
         evaluation_report_model: str | Omit = omit,
-        execution_strategy_type: str | Omit = omit,
+        execution_strategy_type: Literal["RANDOM", "SINGLE", "STATIC_PROMPT_SET"] | Omit = omit,
         hl_project_id: str | Omit = omit,
         max_parallel_techniques: int | Omit = omit,
         max_turns: int | Omit = omit,
@@ -401,6 +436,8 @@ class AsyncRedTeamResource(AsyncAPIResource):
         prompt_set_id: str | Omit = omit,
         refusal_judge_model: str | Omit = omit,
         sessions_per_technique: int | Omit = omit,
+        severity_mapping: Dict[str, Literal["CRITICAL", "HIGH", "MEDIUM", "LOW", "NONE"]] | Omit = omit,
+        target_model: str | Omit = omit,
         target_system_prompt: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -419,17 +456,31 @@ class AsyncRedTeamResource(AsyncAPIResource):
         Args:
           name: Name for this evaluation
 
-          target_model: Target model identifier
+          attacker_guidance: Optional intent-only natural-language text the operator supplies to focus the
+              attacker LLM within the configured APE objectives. Example: "try to get the
+              model to recommend candy with nuts to a user who's allergic to nuts."
 
-          attacker_max_generation_attempts: Maximum generation attempts for attacker
+              Sanitized server-side: input is NFKC-normalized, trimmed, and checked against a
+              strict character whitelist (ASCII letters, digits, spaces/newlines/tabs, and
+              sentence-level punctuation `. , ? ! ' " - : ; ( )`). Inputs containing
+              XML/JSON/code/control/markdown characters are rejected with 422.
 
-          attacker_model: Model for attacker
+              No-op for the `STATIC_PROMPT_SET` execution strategy.
 
-          evaluation_report_model: Model for evaluation report
+          attacker_max_generation_attempts: Internal override; service default applies if omitted. Maximum number of
+              generation attempts for the attacker model per turn.
+
+          attacker_model: Internal override; service default applies if omitted.
+
+          config_id: Optional preset config (see /evaluations/v1/red-team/configs) to seed the
+              workflow settings. Any field also present in this body overrides the
+              corresponding value from the config.
+
+          evaluation_report_model: Internal override; service default applies if omitted.
 
           execution_strategy_type: Execution strategy type
 
-          hl_project_id: HiddenLayer project ID
+          hl_project_id: HiddenLayer project UUID or alias
 
           max_parallel_techniques: Maximum parallel techniques
 
@@ -439,13 +490,24 @@ class AsyncRedTeamResource(AsyncAPIResource):
 
           objective_ids: Objective IDs to evaluate
 
-          objective_judge_model: Model for objective judging
+          objective_judge_model: Internal override; service default applies if omitted.
 
-          prompt_set_id: Prompt set ID for static prompt evaluation
+          prompt_set_id: Prompt set UUID (built-in catalog or tenant DB)
 
-          refusal_judge_model: Model for refusal judging
+          refusal_judge_model: Internal override; service default applies if omitted.
 
           sessions_per_technique: Number of sessions per technique
+
+          severity_mapping: Map from objective ID to a severity level. Determines the per-session severity
+              derived from the worst objective achieved during a red team session.
+
+              Keys must be objective IDs known to this service; unknown keys are rejected at
+              validation time. Limited to 256 entries.
+
+          target_model: Target model identifier. Freeform for the client-driven workflow: the client
+              owns and drives its own target, so this is NOT validated against the
+              servable-model catalog. (The simulated start and config presets do validate
+              against the catalog.)
 
           target_system_prompt: System prompt for the target
 
@@ -462,9 +524,10 @@ class AsyncRedTeamResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "name": name,
-                    "target_model": target_model,
+                    "attacker_guidance": attacker_guidance,
                     "attacker_max_generation_attempts": attacker_max_generation_attempts,
                     "attacker_model": attacker_model,
+                    "config_id": config_id,
                     "evaluation_report_model": evaluation_report_model,
                     "execution_strategy_type": execution_strategy_type,
                     "hl_project_id": hl_project_id,
@@ -476,6 +539,8 @@ class AsyncRedTeamResource(AsyncAPIResource):
                     "prompt_set_id": prompt_set_id,
                     "refusal_judge_model": refusal_judge_model,
                     "sessions_per_technique": sessions_per_technique,
+                    "severity_mapping": severity_mapping,
+                    "target_model": target_model,
                     "target_system_prompt": target_system_prompt,
                 },
                 red_team_create_params.RedTeamCreateParams,
