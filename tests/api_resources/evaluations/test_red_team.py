@@ -28,7 +28,6 @@ class TestRedTeam:
     def test_method_create(self, client: HiddenLayer) -> None:
         red_team = client.evaluations.red_team.create(
             name="name",
-            target_model="target_model",
         )
         assert_matches_type(RedTeamCreateResponse, red_team, path=["response"])
 
@@ -37,20 +36,23 @@ class TestRedTeam:
     def test_method_create_with_all_params(self, client: HiddenLayer) -> None:
         red_team = client.evaluations.red_team.create(
             name="name",
-            target_model="target_model",
-            attacker_max_generation_attempts=0,
+            attacker_guidance="attacker_guidance",
+            attacker_max_generation_attempts=1,
             attacker_model="attacker_model",
+            config_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             evaluation_report_model="evaluation_report_model",
-            execution_strategy_type="execution_strategy_type",
+            execution_strategy_type="RANDOM",
             hl_project_id="hl_project_id",
             max_parallel_techniques=0,
             max_turns=0,
             n_random_techniques=0,
             objective_ids=["string"],
             objective_judge_model="objective_judge_model",
-            prompt_set_id="prompt_set_id",
+            prompt_set_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             refusal_judge_model="refusal_judge_model",
-            sessions_per_technique=0,
+            sessions_per_technique=1,
+            severity_mapping={"foo": "CRITICAL"},
+            target_model="target_model",
             target_system_prompt="target_system_prompt",
         )
         assert_matches_type(RedTeamCreateResponse, red_team, path=["response"])
@@ -60,7 +62,6 @@ class TestRedTeam:
     def test_raw_response_create(self, client: HiddenLayer) -> None:
         response = client.evaluations.red_team.with_raw_response.create(
             name="name",
-            target_model="target_model",
         )
 
         assert response.is_closed is True
@@ -73,7 +74,6 @@ class TestRedTeam:
     def test_streaming_response_create(self, client: HiddenLayer) -> None:
         with client.evaluations.red_team.with_streaming_response.create(
             name="name",
-            target_model="target_model",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -312,7 +312,6 @@ class TestAsyncRedTeam:
     async def test_method_create(self, async_client: AsyncHiddenLayer) -> None:
         red_team = await async_client.evaluations.red_team.create(
             name="name",
-            target_model="target_model",
         )
         assert_matches_type(RedTeamCreateResponse, red_team, path=["response"])
 
@@ -321,20 +320,23 @@ class TestAsyncRedTeam:
     async def test_method_create_with_all_params(self, async_client: AsyncHiddenLayer) -> None:
         red_team = await async_client.evaluations.red_team.create(
             name="name",
-            target_model="target_model",
-            attacker_max_generation_attempts=0,
+            attacker_guidance="attacker_guidance",
+            attacker_max_generation_attempts=1,
             attacker_model="attacker_model",
+            config_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             evaluation_report_model="evaluation_report_model",
-            execution_strategy_type="execution_strategy_type",
+            execution_strategy_type="RANDOM",
             hl_project_id="hl_project_id",
             max_parallel_techniques=0,
             max_turns=0,
             n_random_techniques=0,
             objective_ids=["string"],
             objective_judge_model="objective_judge_model",
-            prompt_set_id="prompt_set_id",
+            prompt_set_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             refusal_judge_model="refusal_judge_model",
-            sessions_per_technique=0,
+            sessions_per_technique=1,
+            severity_mapping={"foo": "CRITICAL"},
+            target_model="target_model",
             target_system_prompt="target_system_prompt",
         )
         assert_matches_type(RedTeamCreateResponse, red_team, path=["response"])
@@ -344,7 +346,6 @@ class TestAsyncRedTeam:
     async def test_raw_response_create(self, async_client: AsyncHiddenLayer) -> None:
         response = await async_client.evaluations.red_team.with_raw_response.create(
             name="name",
-            target_model="target_model",
         )
 
         assert response.is_closed is True
@@ -357,7 +358,6 @@ class TestAsyncRedTeam:
     async def test_streaming_response_create(self, async_client: AsyncHiddenLayer) -> None:
         async with async_client.evaluations.red_team.with_streaming_response.create(
             name="name",
-            target_model="target_model",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
