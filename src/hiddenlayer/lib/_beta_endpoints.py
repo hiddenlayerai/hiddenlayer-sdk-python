@@ -10,5 +10,4 @@ BETA_ENDPOINTS: dict[str, str] = {
     "/detection/v2/interaction-evaluations": "RuntimeResource.evaluate_interaction",
     "/detection/v2/request-evaluations": "RuntimeResource.evaluate_request",
     "/detection/v2/response-evaluations": "RuntimeResource.evaluate_response",
-    "/evaluations/v1/red-team": "RedTeamResource.create",
 }
