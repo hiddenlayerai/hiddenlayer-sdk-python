@@ -82,6 +82,9 @@ class InteractionCanonicalInteractionMessageContentToolResultPart(TypedDict, tot
     type: Required[Literal["tool_result"]]
     """Content part type for tool result."""
 
+    success: bool
+    """Whether the tool execution succeeded."""
+
 
 InteractionCanonicalInteractionMessageContent: TypeAlias = Union[
     InteractionCanonicalInteractionMessageContentTextPart,
