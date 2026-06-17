@@ -75,6 +75,9 @@ class EvaluatedInteractionMessageContentToolResultPart(BaseModel):
     type: Literal["tool_result"]
     """Content part type for tool result."""
 
+    success: Optional[bool] = None
+    """Whether the tool execution succeeded."""
+
 
 EvaluatedInteractionMessageContent: TypeAlias = Annotated[
     Union[
@@ -297,6 +300,9 @@ class OutcomeEffectiveInteractionCanonicalInteractionMessageContentToolResultPar
 
     type: Literal["tool_result"]
     """Content part type for tool result."""
+
+    success: Optional[bool] = None
+    """Whether the tool execution succeeded."""
 
 
 OutcomeEffectiveInteractionCanonicalInteractionMessageContent: TypeAlias = Annotated[
