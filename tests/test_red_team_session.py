@@ -1259,7 +1259,7 @@ class TestRedTeamSessionsResourceStartSession:
         assert call_kwargs["severity_mapping"] == {"HLO.01": "HIGH", "HLO.03": "CRITICAL"}
         assert call_kwargs["config_id"] == "config-abc-123"
         assert call_kwargs["max_turns"] == 7
-        assert call_kwargs["execution_strategy_type"] == "random"
+        assert call_kwargs["execution_strategy_type"] == "RANDOM"
         assert call_kwargs["attacker_max_generation_attempts"] == 3
         assert call_kwargs["n_random_techniques"] == 2
         assert call_kwargs["max_parallel_techniques"] == 4
@@ -1515,7 +1515,7 @@ class TestAsyncRedTeamSessionsResourceStartSession:
         assert call_kwargs["severity_mapping"] == {"HLO.01": "HIGH", "HLO.03": "CRITICAL"}
         assert call_kwargs["config_id"] == "config-abc-123"
         assert call_kwargs["max_turns"] == 7
-        assert call_kwargs["execution_strategy_type"] == "random"
+        assert call_kwargs["execution_strategy_type"] == "RANDOM"
         assert call_kwargs["attacker_max_generation_attempts"] == 3
         assert call_kwargs["n_random_techniques"] == 2
         assert call_kwargs["max_parallel_techniques"] == 4

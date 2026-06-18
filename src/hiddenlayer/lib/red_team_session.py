@@ -3,7 +3,7 @@ from __future__ import annotations
 import time
 import asyncio
 import logging
-from typing import TYPE_CHECKING, Any, Dict, Callable, Iterator, Awaitable, AsyncIterator
+from typing import TYPE_CHECKING, Any, Dict, Callable, Iterator, Awaitable, AsyncIterator, cast
 from typing_extensions import Literal
 
 import httpx
@@ -285,6 +285,11 @@ class RedTeamSessionsResource(SyncAPIResource):
             raise ValueError(
                 "execution_strategy_type must be 'single', 'random', or 'static_prompt_set'."
             )
+        # The API enum is UPPER_SNAKE_CASE; callers may pass lowercase.
+        wire_execution_strategy_type = cast(
+            Literal["RANDOM", "SINGLE", "STATIC_PROMPT_SET"],
+            execution_strategy_type.upper(),
+        )
 
         resp: RedTeamCreateResponse = self._client.evaluations.red_team.create(
             name=name,
@@ -298,7 +303,7 @@ class RedTeamSessionsResource(SyncAPIResource):
             attacker_guidance=attacker_guidance,
             severity_mapping=severity_mapping,
             config_id=config_id,
-            execution_strategy_type=execution_strategy_type,
+            execution_strategy_type=wire_execution_strategy_type,
             max_turns=max_turns,
             attacker_max_generation_attempts=attacker_max_generation_attempts,
             n_random_techniques=n_random_techniques,
@@ -779,6 +784,11 @@ class AsyncRedTeamSessionsResource(AsyncAPIResource):
             raise ValueError(
                 "execution_strategy_type must be 'single', 'random', or 'static_prompt_set'."
             )
+        # The API enum is UPPER_SNAKE_CASE; callers may pass lowercase.
+        wire_execution_strategy_type = cast(
+            Literal["RANDOM", "SINGLE", "STATIC_PROMPT_SET"],
+            execution_strategy_type.upper(),
+        )
 
         resp: RedTeamCreateResponse = await self._client.evaluations.red_team.create(
             name=name,
@@ -792,7 +802,7 @@ class AsyncRedTeamSessionsResource(AsyncAPIResource):
             attacker_guidance=attacker_guidance,
             severity_mapping=severity_mapping,
             config_id=config_id,
-            execution_strategy_type=execution_strategy_type,
+            execution_strategy_type=wire_execution_strategy_type,
             max_turns=max_turns,
             attacker_max_generation_attempts=attacker_max_generation_attempts,
             n_random_techniques=n_random_techniques,
