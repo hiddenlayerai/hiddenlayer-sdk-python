@@ -85,6 +85,9 @@ class InventoryScanTarget(TypedDict, total=False):
     deep_scan with file location details, provider_details, or both.
     """
 
+    asset_id: str
+    """identifier of the discovered asset"""
+
     asset_region: str
     """region of the discovered asset"""
 

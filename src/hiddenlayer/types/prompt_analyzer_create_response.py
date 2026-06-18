@@ -334,11 +334,14 @@ class ResultsOutputURLResults(BaseModel):
 
 
 class ResultsPromptInjectionClassifierResult(BaseModel):
-    allow_override: Optional[str] = None
-    """The allow override applied to the prompt"""
+    allow_overrides: Optional[List[str]] = None
+    """The list of allow overrides applied to the prompt"""
 
-    block_override: Optional[str] = None
-    """The block override applied to the prompt"""
+    appeal: Optional[object] = None
+    """Appeal details for the prompt injection decision, if any"""
+
+    block_overrides: Optional[List[str]] = None
+    """The list of block overrides applied to the prompt"""
 
     elapsed_ms: Optional[float] = None
     """The time in milliseconds it took to process the prompt injection classifier"""
