@@ -26,6 +26,8 @@ shows scoping a run to a project via `hiddenlayer_project_id`.
 | [`red_team_http_api.ipynb`](./red_team_http_api.ipynb) | A custom LLM app/agent behind an HTTP/REST endpoint |
 | [`red_team_playwright.ipynb`](./red_team_playwright.ipynb) | A web chat UI driven via Playwright browser automation |
 | [`red_team_static_prompts.ipynb`](./red_team_static_prompts.ipynb) | A target tested with a pre-written static prompt set |
+| [`red_team_webhook.ipynb`](./red_team_webhook.ipynb) | A target that replies asynchronously via webhook callback (includes a self-contained mock target) |
+| [`red_team_websocket.ipynb`](./red_team_websocket.ipynb) | A target reached over a persistent WebSocket connection (includes a self-contained mock target) |
 | [`red_team_template.ipynb`](./red_team_template.ipynb) | Generic skeleton — drop in any target |
 
 ## Setup
@@ -35,9 +37,16 @@ pip install hiddenlayer-sdk jupyter
 
 # Per-notebook extras:
 pip install openai        # red_team_openai.ipynb
+pip install aiohttp       # red_team_webhook.ipynb, red_team_websocket.ipynb
 pip install playwright    # red_team_playwright.ipynb
 playwright install chromium
 ```
+
+`red_team_webhook.ipynb` targets a service that replies **asynchronously** via a
+webhook callback. It runs a small in-notebook receiver and ships with a
+self-contained mock target so it works out of the box; for a real external
+target, expose the receiver with a tunnel (e.g. ngrok / cloudflared) and set
+`PUBLIC_CALLBACK_URL` accordingly.
 
 Provide credentials via environment variables (read automatically by the SDK):
 
