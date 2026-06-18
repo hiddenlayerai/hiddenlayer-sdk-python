@@ -1221,12 +1221,16 @@ class TestRedTeamSessionsResourceStartSession:
             objective_judge_model="anthropic/claude-opus-4-1",
             attacker_model="openai/gpt-5",
             evaluation_report_model="openai/gpt-5-mini",
+            attacker_guidance="try to get the model to leak its system prompt",
+            severity_mapping={"HLO.01": "HIGH", "HLO.03": "CRITICAL"},
+            config_id="config-abc-123",
             max_turns=7,
             execution_strategy_type="random",
             attacker_max_generation_attempts=3,
             n_random_techniques=2,
             max_parallel_techniques=4,
             prompt_set_id="prompt-set-123",
+            hiddenlayer_project_id="project-xyz",
             poll_interval=1.5,
             poll_max_wait=90.0,
             sessions_per_technique=3,
@@ -1251,17 +1255,22 @@ class TestRedTeamSessionsResourceStartSession:
         assert call_kwargs["objective_judge_model"] == "anthropic/claude-opus-4-1"
         assert call_kwargs["attacker_model"] == "openai/gpt-5"
         assert call_kwargs["evaluation_report_model"] == "openai/gpt-5-mini"
+        assert call_kwargs["attacker_guidance"] == "try to get the model to leak its system prompt"
+        assert call_kwargs["severity_mapping"] == {"HLO.01": "HIGH", "HLO.03": "CRITICAL"}
+        assert call_kwargs["config_id"] == "config-abc-123"
         assert call_kwargs["max_turns"] == 7
-        assert call_kwargs["execution_strategy_type"] == "random"
+        assert call_kwargs["execution_strategy_type"] == "RANDOM"
         assert call_kwargs["attacker_max_generation_attempts"] == 3
         assert call_kwargs["n_random_techniques"] == 2
         assert call_kwargs["max_parallel_techniques"] == 4
         assert call_kwargs["prompt_set_id"] == "prompt-set-123"
+        assert call_kwargs["hl_project_id"] == "project-xyz"
+        assert call_kwargs["sessions_per_technique"] == 3
 
-    def test_start_session_uses_all_objectives_when_none_provided(
+    def test_start_session_omits_objectives_when_none_provided(
         self, session_resource: RedTeamSessionsResource
     ) -> None:
-        """Test that start_session uses all available objectives when objective_ids is None."""
+        """start_session forwards omit for objective_ids so the service decides."""
         mock_response = Mock()
         mock_response.workflow_id = "workflow-default-objectives"
 
@@ -1272,17 +1281,16 @@ class TestRedTeamSessionsResourceStartSession:
         session_resource.start_session(
             name="test-session",
             target_model="openai/gpt-4o",
-            # objective_ids not provided - should default to all available
+            # objective_ids not provided - should forward omit
         )
 
-        # Verify API was called with all available objectives
         call_kwargs = session_resource._client.evaluations.red_team.create.call_args.kwargs
-        assert call_kwargs["objective_ids"] == ["HLO.01", "HLO.02", "HLO.03", "HLO.05", "HLO.07"]
+        assert isinstance(call_kwargs["objective_ids"], Omit)
 
-    def test_start_session_uses_default_models_when_not_provided(
+    def test_start_session_omits_models_when_not_provided(
         self, session_resource: RedTeamSessionsResource
     ) -> None:
-        """Test that start_session uses default models when not explicitly provided."""
+        """start_session forwards omit for judge/attacker models so the service defaults apply."""
         mock_response = Mock()
         mock_response.workflow_id = "workflow-default-models"
 
@@ -1294,15 +1302,39 @@ class TestRedTeamSessionsResourceStartSession:
             name="test-session",
             target_model="openai/gpt-4o",
             objective_ids=["HLO.01"],
-            # Model parameters not provided - should use defaults
+            # Model parameters not provided - should forward omit
         )
 
-        # Verify API was called with default models
         call_kwargs = session_resource._client.evaluations.red_team.create.call_args.kwargs
-        assert call_kwargs["refusal_judge_model"] == "openai/gpt-5-mini"
-        assert call_kwargs["objective_judge_model"] == "openai/gpt-5"
-        assert call_kwargs["attacker_model"] == "openai/gpt-5"
-        assert call_kwargs["evaluation_report_model"] == "openai/gpt-5"
+        assert isinstance(call_kwargs["refusal_judge_model"], Omit)
+        assert isinstance(call_kwargs["objective_judge_model"], Omit)
+        assert isinstance(call_kwargs["attacker_model"], Omit)
+        assert isinstance(call_kwargs["evaluation_report_model"], Omit)
+
+    def test_start_session_omits_optional_params_when_not_provided(
+        self, session_resource: RedTeamSessionsResource
+    ) -> None:
+        """New optional params and hl_project_id forward omit when the caller leaves them unset."""
+        mock_response = Mock()
+        mock_response.workflow_id = "workflow-omit-optional"
+
+        session_resource._client.evaluations.red_team.create = Mock(
+            return_value=mock_response
+        )
+
+        session_resource.start_session(
+            name="test-session",
+            target_model="openai/gpt-4o",
+            objective_ids=["HLO.01"],
+            sessions_per_technique=None,
+        )
+
+        call_kwargs = session_resource._client.evaluations.red_team.create.call_args.kwargs
+        assert isinstance(call_kwargs["attacker_guidance"], Omit)
+        assert isinstance(call_kwargs["severity_mapping"], Omit)
+        assert isinstance(call_kwargs["config_id"], Omit)
+        assert isinstance(call_kwargs["hl_project_id"], Omit)
+        assert isinstance(call_kwargs["sessions_per_technique"], Omit)
 
     def test_start_session_raises_on_invalid_execution_strategy(
         self, session_resource: RedTeamSessionsResource
@@ -1445,12 +1477,16 @@ class TestAsyncRedTeamSessionsResourceStartSession:
             objective_judge_model="anthropic/claude-opus-4-1",
             attacker_model="openai/gpt-5",
             evaluation_report_model="openai/gpt-5-mini",
+            attacker_guidance="try to get the model to leak its system prompt",
+            severity_mapping={"HLO.01": "HIGH", "HLO.03": "CRITICAL"},
+            config_id="config-abc-123",
             max_turns=7,
             execution_strategy_type="random",
             attacker_max_generation_attempts=3,
             n_random_techniques=2,
             max_parallel_techniques=4,
             prompt_set_id="prompt-set-123",
+            hiddenlayer_project_id="project-xyz",
             poll_interval=1.5,
             poll_max_wait=90.0,
             sessions_per_technique=3,
@@ -1475,18 +1511,23 @@ class TestAsyncRedTeamSessionsResourceStartSession:
         assert call_kwargs["objective_judge_model"] == "anthropic/claude-opus-4-1"
         assert call_kwargs["attacker_model"] == "openai/gpt-5"
         assert call_kwargs["evaluation_report_model"] == "openai/gpt-5-mini"
+        assert call_kwargs["attacker_guidance"] == "try to get the model to leak its system prompt"
+        assert call_kwargs["severity_mapping"] == {"HLO.01": "HIGH", "HLO.03": "CRITICAL"}
+        assert call_kwargs["config_id"] == "config-abc-123"
         assert call_kwargs["max_turns"] == 7
-        assert call_kwargs["execution_strategy_type"] == "random"
+        assert call_kwargs["execution_strategy_type"] == "RANDOM"
         assert call_kwargs["attacker_max_generation_attempts"] == 3
         assert call_kwargs["n_random_techniques"] == 2
         assert call_kwargs["max_parallel_techniques"] == 4
         assert call_kwargs["prompt_set_id"] == "prompt-set-123"
+        assert call_kwargs["hl_project_id"] == "project-xyz"
+        assert call_kwargs["sessions_per_technique"] == 3
 
     @pytest.mark.asyncio
-    async def test_start_session_uses_all_objectives_when_none_provided(
+    async def test_start_session_omits_objectives_when_none_provided(
         self, async_session_resource: AsyncRedTeamSessionsResource
     ) -> None:
-        """Test that start_session uses all available objectives when objective_ids is None."""
+        """start_session forwards omit for objective_ids so the service decides."""
         mock_response = Mock()
         mock_response.workflow_id = "workflow-default-objectives"
 
@@ -1497,18 +1538,17 @@ class TestAsyncRedTeamSessionsResourceStartSession:
         await async_session_resource.start_session(
             name="test-session",
             target_model="openai/gpt-4o",
-            # objective_ids not provided - should default to all available
+            # objective_ids not provided - should forward omit
         )
 
-        # Verify API was called with all available objectives
         call_kwargs = async_session_resource._client.evaluations.red_team.create.call_args.kwargs
-        assert call_kwargs["objective_ids"] == ["HLO.01", "HLO.02", "HLO.03", "HLO.05", "HLO.07"]
+        assert isinstance(call_kwargs["objective_ids"], Omit)
 
     @pytest.mark.asyncio
-    async def test_start_session_uses_default_models_when_not_provided(
+    async def test_start_session_omits_models_when_not_provided(
         self, async_session_resource: AsyncRedTeamSessionsResource
     ) -> None:
-        """Test that start_session uses default models when not explicitly provided."""
+        """start_session forwards omit for judge/attacker models so the service defaults apply."""
         mock_response = Mock()
         mock_response.workflow_id = "workflow-default-models"
 
@@ -1520,15 +1560,40 @@ class TestAsyncRedTeamSessionsResourceStartSession:
             name="test-session",
             target_model="openai/gpt-4o",
             objective_ids=["HLO.01"],
-            # Model parameters not provided - should use defaults
+            # Model parameters not provided - should forward omit
         )
 
-        # Verify API was called with default models
         call_kwargs = async_session_resource._client.evaluations.red_team.create.call_args.kwargs
-        assert call_kwargs["refusal_judge_model"] == "openai/gpt-5-mini"
-        assert call_kwargs["objective_judge_model"] == "openai/gpt-5"
-        assert call_kwargs["attacker_model"] == "openai/gpt-5"
-        assert call_kwargs["evaluation_report_model"] == "openai/gpt-5"
+        assert isinstance(call_kwargs["refusal_judge_model"], Omit)
+        assert isinstance(call_kwargs["objective_judge_model"], Omit)
+        assert isinstance(call_kwargs["attacker_model"], Omit)
+        assert isinstance(call_kwargs["evaluation_report_model"], Omit)
+
+    @pytest.mark.asyncio
+    async def test_start_session_omits_optional_params_when_not_provided(
+        self, async_session_resource: AsyncRedTeamSessionsResource
+    ) -> None:
+        """New optional params and hl_project_id forward omit when the caller leaves them unset."""
+        mock_response = Mock()
+        mock_response.workflow_id = "workflow-omit-optional"
+
+        async_session_resource._client.evaluations.red_team.create = AsyncMock(
+            return_value=mock_response
+        )
+
+        await async_session_resource.start_session(
+            name="test-session",
+            target_model="openai/gpt-4o",
+            objective_ids=["HLO.01"],
+            sessions_per_technique=None,
+        )
+
+        call_kwargs = async_session_resource._client.evaluations.red_team.create.call_args.kwargs
+        assert isinstance(call_kwargs["attacker_guidance"], Omit)
+        assert isinstance(call_kwargs["severity_mapping"], Omit)
+        assert isinstance(call_kwargs["config_id"], Omit)
+        assert isinstance(call_kwargs["hl_project_id"], Omit)
+        assert isinstance(call_kwargs["sessions_per_technique"], Omit)
 
     @pytest.mark.asyncio
     async def test_start_session_raises_on_invalid_execution_strategy(
