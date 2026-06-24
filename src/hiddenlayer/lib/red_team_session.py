@@ -3,7 +3,8 @@ from __future__ import annotations
 import time
 import asyncio
 import logging
-from typing import TYPE_CHECKING, Any, Callable, Iterator, Awaitable, AsyncIterator
+from typing import TYPE_CHECKING, Any, Dict, Callable, Iterator, Awaitable, AsyncIterator, cast
+from typing_extensions import Literal
 
 import httpx
 
@@ -212,35 +213,23 @@ class RedTeamSession:
 
 
 class RedTeamSessionsResource(SyncAPIResource):
-    _available_objective_ids = ["HLO.01", "HLO.02", "HLO.03", "HLO.05", "HLO.07"]
-
-    def __init__(
-            self,
-            client: HiddenLayer,
-            *,
-            default_refusal_judge_model: str = "openai/gpt-5-mini",
-            default_objective_judge_model: str = "openai/gpt-5",
-            default_attacker_model: str = "openai/gpt-5",
-            default_evaluation_report_model: str = "openai/gpt-5",
-    ):
-        # Default models for red team evaluations
-        self._default_refusal_judge_model = default_refusal_judge_model
-        self._default_objective_judge_model = default_objective_judge_model
-        self._default_attacker_model = default_attacker_model
-        self._default_evaluation_report_model = default_evaluation_report_model
+    def __init__(self, client: HiddenLayer):
         super().__init__(client)
 
     def start_session(
             self,
             *,
             name: str,
-            objective_ids: list[str] | None = None,
+            objective_ids: list[str] | Omit = omit,
             target_model: str,
             target_system_prompt: str = "",
-            refusal_judge_model: str | None = None,
-            objective_judge_model: str | None = None,
-            attacker_model: str | None = None,
-            evaluation_report_model: str | None = None,
+            refusal_judge_model: str | Omit = omit,
+            objective_judge_model: str | Omit = omit,
+            attacker_model: str | Omit = omit,
+            evaluation_report_model: str | Omit = omit,
+            attacker_guidance: str | Omit = omit,
+            severity_mapping: Dict[str, Literal["CRITICAL", "HIGH", "MEDIUM", "LOW", "NONE"]] | Omit = omit,
+            config_id: str | Omit = omit,
             max_turns: int = 3,
             execution_strategy_type: str = "random",
             attacker_max_generation_attempts: int = 2,
@@ -260,17 +249,20 @@ class RedTeamSessionsResource(SyncAPIResource):
 
         Args:
             name: Session name
-            objective_ids: List of objective IDs to test (e.g., ["HLO.03"]).
-                Optional; defaults to all available objectives.
+            objective_ids: List of objective IDs to test (e.g., ["HLO.03"])
             target_model: Model identifier for the target being tested
             target_system_prompt: System prompt for the target model
             refusal_judge_model: Model to use for refusal judging
-                (defaults to client default)
             objective_judge_model: Model to use for objective judging
-                (defaults to client default)
-            attacker_model: Model to use for generating attacks (defaults to client default)
+            attacker_model: Model to use for generating attacks
             evaluation_report_model: Model to use for evaluation reports
-                (defaults to client default)
+            attacker_guidance: Optional intent-only natural-language text to focus the
+                attacker LLM within the configured objectives. No-op for the
+                static_prompt_set strategy.
+            severity_mapping: Map from objective ID to a severity level, used to derive
+                the per-session severity from the worst objective achieved.
+            config_id: Optional preset config to seed the workflow settings. Any field
+                also passed here overrides the corresponding value from the config.
             max_turns: Maximum conversation turns per session
             execution_strategy_type: Strategy type ("single", "random", or "static_prompt_set")
             attacker_max_generation_attempts: Max attempts for attacker to generate prompts
@@ -288,42 +280,16 @@ class RedTeamSessionsResource(SyncAPIResource):
         Raises:
             ValueError: If execution_strategy_type is invalid
         """
-        # Use defaults if not provided
-        refusal_judge_model = refusal_judge_model or self._default_refusal_judge_model
-        objective_judge_model = objective_judge_model or self._default_objective_judge_model
-        attacker_model = attacker_model or self._default_attacker_model
-        evaluation_report_model = evaluation_report_model or self._default_evaluation_report_model
-
-        # Default to all available objectives if not specified
-        if objective_ids is None:
-            objective_ids = self._available_objective_ids.copy()
-
         # Validate execution strategy
         if execution_strategy_type not in ["single", "random", "static_prompt_set"]:
             raise ValueError(
                 "execution_strategy_type must be 'single', 'random', or 'static_prompt_set'."
             )
-
-        payload = {
-            "name": name,
-            "target_system_prompt": target_system_prompt,
-            "objective_ids": objective_ids,
-            "target_model": target_model,
-            "refusal_judge_model": refusal_judge_model,
-            "objective_judge_model": objective_judge_model,
-            "attacker_model": attacker_model,
-            "evaluation_report_model": evaluation_report_model,
-            "execution_strategy_type": execution_strategy_type,
-            "max_turns": max_turns,
-            "attacker_max_generation_attempts": attacker_max_generation_attempts,
-            "n_random_techniques": n_random_techniques,
-            "max_parallel_techniques": max_parallel_techniques,
-            "prompt_set_id": prompt_set_id,
-        }
-        if hiddenlayer_project_id is not None:
-            payload["hl_project_id"] = hiddenlayer_project_id
-        if sessions_per_technique is not None:
-            payload["sessions_per_technique"] = sessions_per_technique
+        # The API enum is UPPER_SNAKE_CASE; callers may pass lowercase.
+        wire_execution_strategy_type = cast(
+            Literal["RANDOM", "SINGLE", "STATIC_PROMPT_SET"],
+            execution_strategy_type.upper(),
+        )
 
         resp: RedTeamCreateResponse = self._client.evaluations.red_team.create(
             name=name,
@@ -334,12 +300,17 @@ class RedTeamSessionsResource(SyncAPIResource):
             objective_judge_model=objective_judge_model,
             attacker_model=attacker_model,
             evaluation_report_model=evaluation_report_model,
-            execution_strategy_type=execution_strategy_type,
+            attacker_guidance=attacker_guidance,
+            severity_mapping=severity_mapping,
+            config_id=config_id,
+            execution_strategy_type=wire_execution_strategy_type,
             max_turns=max_turns,
             attacker_max_generation_attempts=attacker_max_generation_attempts,
             n_random_techniques=n_random_techniques,
             max_parallel_techniques=max_parallel_techniques,
+            hl_project_id=hiddenlayer_project_id if hiddenlayer_project_id is not None else omit,
             prompt_set_id=prompt_set_id,
+            sessions_per_technique=sessions_per_technique if sessions_per_technique is not None else omit,
         )
         return RedTeamSession(
             client=self._client,
@@ -741,35 +712,23 @@ class AsyncRedTeamSession:
 
 
 class AsyncRedTeamSessionsResource(AsyncAPIResource):
-    _available_objective_ids = ["HLO.01", "HLO.02", "HLO.03", "HLO.05", "HLO.07"]
-
-    def __init__(
-            self,
-            client: AsyncHiddenLayer,
-            *,
-            default_refusal_judge_model: str = "openai/gpt-5-mini",
-            default_objective_judge_model: str = "openai/gpt-5",
-            default_attacker_model: str = "openai/gpt-5",
-            default_evaluation_report_model: str = "openai/gpt-5",
-    ):
-        # Default models for red team evaluations
-        self._default_refusal_judge_model = default_refusal_judge_model
-        self._default_objective_judge_model = default_objective_judge_model
-        self._default_attacker_model = default_attacker_model
-        self._default_evaluation_report_model = default_evaluation_report_model
+    def __init__(self, client: AsyncHiddenLayer):
         super().__init__(client)
 
     async def start_session(
             self,
             *,
             name: str,
-            objective_ids: list[str] | None = None,
+            objective_ids: list[str] | Omit = omit,
             target_model: str,
             target_system_prompt: str = "",
-            refusal_judge_model: str | None = None,
-            objective_judge_model: str | None = None,
-            attacker_model: str | None = None,
-            evaluation_report_model: str | None = None,
+            refusal_judge_model: str | Omit = omit,
+            objective_judge_model: str | Omit = omit,
+            attacker_model: str | Omit = omit,
+            evaluation_report_model: str | Omit = omit,
+            attacker_guidance: str | Omit = omit,
+            severity_mapping: Dict[str, Literal["CRITICAL", "HIGH", "MEDIUM", "LOW", "NONE"]] | Omit = omit,
+            config_id: str | Omit = omit,
             max_turns: int = 3,
             execution_strategy_type: str = "random",
             attacker_max_generation_attempts: int = 2,
@@ -789,17 +748,20 @@ class AsyncRedTeamSessionsResource(AsyncAPIResource):
 
         Args:
             name: Session name
-            objective_ids: List of objective IDs to test (e.g., ["HLO.03"]).
-                Optional; defaults to all available objectives.
+            objective_ids: List of objective IDs to test (e.g., ["HLO.03"])
             target_model: Model identifier for the target being tested
             target_system_prompt: System prompt for the target model
             refusal_judge_model: Model to use for refusal judging
-                (defaults to client default)
             objective_judge_model: Model to use for objective judging
-                (defaults to client default)
-            attacker_model: Model to use for generating attacks (defaults to client default)
+            attacker_model: Model to use for generating attacks
             evaluation_report_model: Model to use for evaluation reports
-                (defaults to client default)
+            attacker_guidance: Optional intent-only natural-language text to focus the
+                attacker LLM within the configured objectives. No-op for the
+                static_prompt_set strategy.
+            severity_mapping: Map from objective ID to a severity level, used to derive
+                the per-session severity from the worst objective achieved.
+            config_id: Optional preset config to seed the workflow settings. Any field
+                also passed here overrides the corresponding value from the config.
             max_turns: Maximum conversation turns per session
             execution_strategy_type: Strategy type ("single", "random", or "static_prompt_set")
             attacker_max_generation_attempts: Max attempts for attacker to generate prompts
@@ -817,42 +779,16 @@ class AsyncRedTeamSessionsResource(AsyncAPIResource):
         Raises:
             ValueError: If execution_strategy_type is invalid
         """
-        # Use defaults if not provided
-        refusal_judge_model = refusal_judge_model or self._default_refusal_judge_model
-        objective_judge_model = objective_judge_model or self._default_objective_judge_model
-        attacker_model = attacker_model or self._default_attacker_model
-        evaluation_report_model = evaluation_report_model or self._default_evaluation_report_model
-
-        # Default to all available objectives if not specified
-        if objective_ids is None:
-            objective_ids = self._available_objective_ids.copy()
-
         # Validate execution strategy
         if execution_strategy_type not in ["single", "random", "static_prompt_set"]:
             raise ValueError(
                 "execution_strategy_type must be 'single', 'random', or 'static_prompt_set'."
             )
-
-        payload = {
-            "name": name,
-            "target_system_prompt": target_system_prompt,
-            "objective_ids": objective_ids,
-            "target_model": target_model,
-            "refusal_judge_model": refusal_judge_model,
-            "objective_judge_model": objective_judge_model,
-            "attacker_model": attacker_model,
-            "evaluation_report_model": evaluation_report_model,
-            "execution_strategy_type": execution_strategy_type,
-            "max_turns": max_turns,
-            "attacker_max_generation_attempts": attacker_max_generation_attempts,
-            "n_random_techniques": n_random_techniques,
-            "max_parallel_techniques": max_parallel_techniques,
-            "prompt_set_id": prompt_set_id,
-        }
-        if hiddenlayer_project_id is not None:
-            payload["hl_project_id"] = hiddenlayer_project_id
-        if sessions_per_technique is not None:
-            payload["sessions_per_technique"] = sessions_per_technique
+        # The API enum is UPPER_SNAKE_CASE; callers may pass lowercase.
+        wire_execution_strategy_type = cast(
+            Literal["RANDOM", "SINGLE", "STATIC_PROMPT_SET"],
+            execution_strategy_type.upper(),
+        )
 
         resp: RedTeamCreateResponse = await self._client.evaluations.red_team.create(
             name=name,
@@ -863,12 +799,17 @@ class AsyncRedTeamSessionsResource(AsyncAPIResource):
             objective_judge_model=objective_judge_model,
             attacker_model=attacker_model,
             evaluation_report_model=evaluation_report_model,
-            execution_strategy_type=execution_strategy_type,
+            attacker_guidance=attacker_guidance,
+            severity_mapping=severity_mapping,
+            config_id=config_id,
+            execution_strategy_type=wire_execution_strategy_type,
             max_turns=max_turns,
             attacker_max_generation_attempts=attacker_max_generation_attempts,
             n_random_techniques=n_random_techniques,
             max_parallel_techniques=max_parallel_techniques,
+            hl_project_id=hiddenlayer_project_id if hiddenlayer_project_id is not None else omit,
             prompt_set_id=prompt_set_id,
+            sessions_per_technique=sessions_per_technique if sessions_per_technique is not None else omit,
         )
         return AsyncRedTeamSession(
             client=self._client,

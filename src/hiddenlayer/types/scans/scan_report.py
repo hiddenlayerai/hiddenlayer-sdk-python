@@ -25,6 +25,7 @@ __all__ = [
     "FileResultDetection",
     "FileResultDetectionMitreAtlas",
     "FileResultDetectionRuleDetail",
+    "FileResultAdvisory",
     "Intelligence",
     "IntelligenceLicense",
     "IntelligenceUsagePolicy",
@@ -71,6 +72,9 @@ class Inventory(BaseModel):
     requested_scan_location: str
     """Location to be scanned"""
 
+    asset_id: Optional[str] = None
+    """Identifier of discovered asset"""
+
     asset_region: Optional[str] = None
     """Region of discovered asset"""
 
@@ -105,6 +109,12 @@ class Inventory(BaseModel):
 
 
 class Summary(BaseModel):
+    advisory_categories: Optional[List[str]] = None
+    """list of unique advisory categories found"""
+
+    advisory_count: Optional[int] = None
+    """total number of advisories found"""
+
     detection_categories: Optional[List[str]] = None
     """list of unique detection categories found"""
 
@@ -283,6 +293,27 @@ class FileResultDetection(BaseModel):
     """Hiddenlayer Technical Blog URLs for the detection"""
 
 
+class FileResultAdvisory(BaseModel):
+    """An informational advisory associated with a file.
+
+    Advisories carry guidance about
+    a property of the model (e.g. tokenizer family) that may matter to a downstream
+    consumer, but do not represent a concrete detection.
+    """
+
+    advisory_id: str
+    """unique identifier for the advisory"""
+
+    category: str
+    """category for the advisory"""
+
+    description: str
+    """advisory description"""
+
+    rule_id: str
+    """unique identifier for the rule that sourced the advisory"""
+
+
 class FileResult(BaseModel):
     details: FileResultDetails
 
@@ -305,6 +336,9 @@ class FileResult(BaseModel):
 
     status: Literal["skipped", "pending", "running", "done", "failed", "canceled"]
     """status of the scan"""
+
+    advisories: Optional[List[FileResultAdvisory]] = None
+    """informational advisories associated with this file (e.g. tokenizer family)"""
 
     file_error: Optional[List[str]] = None
     """Error messages returned by the scanner"""

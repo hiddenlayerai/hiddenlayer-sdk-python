@@ -52,6 +52,9 @@ class ItemInventory(BaseModel):
     requested_scan_location: str
     """Location to be scanned"""
 
+    asset_id: Optional[str] = None
+    """Identifier of discovered asset"""
+
     asset_region: Optional[str] = None
     """Region of discovered asset"""
 
@@ -86,6 +89,12 @@ class ItemInventory(BaseModel):
 
 
 class ItemSummary(BaseModel):
+    advisory_categories: Optional[List[str]] = None
+    """list of unique advisory categories found"""
+
+    advisory_count: Optional[int] = None
+    """total number of advisories found"""
+
     detection_categories: Optional[List[str]] = None
     """list of unique detection categories found"""
 

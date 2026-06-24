@@ -66,6 +66,9 @@ class InventoryScanTarget(BaseModel):
     deep_scan with file location details, provider_details, or both.
     """
 
+    asset_id: Optional[str] = None
+    """identifier of the discovered asset"""
+
     asset_region: Optional[str] = None
     """region of the discovered asset"""
 

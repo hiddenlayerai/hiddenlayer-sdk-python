@@ -1,5 +1,35 @@
 # Changelog
 
+## 3.8.0 (2026-06-24)
+
+Full Changelog: [v3.7.1...v3.8.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.7.1...v3.8.0)
+
+### Features
+
+* **api:** api update ([4fd0d62](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/4fd0d62737e1273a0558bf66017fa054e39d1f87))
+* **api:** api update ([c53a283](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/c53a2836f987b7dac46aa1c5677a945f45d21c2a))
+* **api:** api update ([67dccee](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/67dcceea5e111f16a30688efb33bc0e0f06ca12c))
+* **api:** api update ([8f00ab1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/8f00ab1201dcda0488ca47abcf4cd4a2d4718da7))
+* **api:** api update ([e612915](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/e6129151ba357559bb291bfe0dc6a3d3e81f3dff))
+* **red-team:** forward all start_session params and drop hardcoded defaults ([#206](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/206)) ([45ee409](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/45ee40985d82db175e48140c2a82b9713ea8a83c))
+
+
+### Bug Fixes
+
+* **client:** add missing f-string prefix in file type error message ([3405322](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/3405322c1f1b379b50d464842607bdfa8c3c080f))
+
+
+### Chores
+
+* **internal:** codegen related update ([bb8153f](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/bb8153fc39bdb5dfc962908caad4e3eaeb9fd249))
+* regenerate beta endpoint registry [skip ci] ([89009da](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/89009dab82686744fb693a7e47de13c01ac9909e))
+* regenerate beta endpoint registry [skip ci] ([c08dc03](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/c08dc0341664260b09dc40e021e5c4fba0a00cf7))
+
+
+### Documentation
+
+* **examples:** add red team evaluation notebooks ([#205](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/205)) ([5a1229b](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/5a1229b5cf3930e3a0b1665d97fdb4ea134b83da))
+
 ## 3.7.1 (2026-05-14)
 
 Full Changelog: [v3.7.0...v3.7.1](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.7.0...v3.7.1)

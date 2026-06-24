@@ -1,6 +1,6 @@
 [project]
 name = "hiddenlayer-sdk"
-version = "3.7.1"
+version = "3.8.0"
 description = "The official Python library for the hiddenlayer API"
 dynamic = ["readme"]
 license = {text = "Apache-2.0"}
@@ -273,3 +273,4 @@ known-first-party = ["hiddenlayer", "tests"]
 "scripts/**.py" = ["T201", "T203"]
 "tests/**.py" = ["T201", "T203"]
 "examples/**.py" = ["T201", "T203"]
+"examples/**.ipynb" = ["T201", "T203", "ARG001"]

@@ -79,11 +79,16 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types import RuntimeEvaluateRequestResponse, RuntimeEvaluateResponseResponse
+from hiddenlayer.types import (
+    RuntimeEvaluateInteractionResponse,
+    RuntimeEvaluateRequestResponse,
+    RuntimeEvaluateResponseResponse,
+)
 ```
 
 Methods:
 
+- <code title="post /detection/v2/interaction-evaluations">client.runtime.<a href="./src/hiddenlayer/resources/runtime.py">evaluate_interaction</a>(\*\*<a href="src/hiddenlayer/types/runtime_evaluate_interaction_params.py">params</a>) -> <a href="./src/hiddenlayer/types/runtime_evaluate_interaction_response.py">RuntimeEvaluateInteractionResponse</a></code>
 - <code title="post /detection/v2/request-evaluations">client.runtime.<a href="./src/hiddenlayer/resources/runtime.py">evaluate_request</a>(\*\*<a href="src/hiddenlayer/types/runtime_evaluate_request_params.py">params</a>) -> <a href="./src/hiddenlayer/types/runtime_evaluate_request_response.py">RuntimeEvaluateRequestResponse</a></code>
 - <code title="post /detection/v2/response-evaluations">client.runtime.<a href="./src/hiddenlayer/resources/runtime.py">evaluate_response</a>(\*\*<a href="src/hiddenlayer/types/runtime_evaluate_response_params.py">params</a>) -> <a href="./src/hiddenlayer/types/runtime_evaluate_response_response.py">RuntimeEvaluateResponseResponse</a></code>
 
@@ -236,7 +241,7 @@ Accessed via `client.evaluation_sessions.red_team`.
 
 Methods:
 
-- **start_session(name, target_model, target_system_prompt="", max_turns=3, execution_strategy_type="random", attacker_max_generation_attempts=2, n_random_techniques=1, max_parallel_techniques=1, prompt_set_id="", hiddenlayer_project_id=None, poll_interval=2.0, poll_max_wait=None, sessions_per_technique=1) -> RedTeamSession**  
+- **start_session(name, target_model, target_system_prompt="", objective_ids=omit, refusal_judge_model=omit, objective_judge_model=omit, attacker_model=omit, evaluation_report_model=omit, attacker_guidance=omit, severity_mapping=omit, config_id=omit, max_turns=3, execution_strategy_type="random", attacker_max_generation_attempts=2, n_random_techniques=1, max_parallel_techniques=1, prompt_set_id=omit, hiddenlayer_project_id=None, poll_interval=2.0, poll_max_wait=None, sessions_per_technique=1) -> RedTeamSession**  
   Start a new red team session. Returns a `RedTeamSession` (sync) or `AsyncRedTeamSession` (async).
   Uses adaptive multi-objective evaluation: each session runs to `max_turns` (no short-circuit),
   tests all objectives, and maintains cross-session state for adaptive attacks.
