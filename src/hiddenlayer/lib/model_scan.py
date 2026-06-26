@@ -402,10 +402,14 @@ class ModelScanner(ScanResultMixin):
 
         Note: Requires the `huggingface_hub` pip package to be installed.
 
+        Files are downloaded individually, uploaded to HiddenLayer, and then
+        deleted immediately, avoiding the need to hold the entire repository on
+        disk at once.
+
         :param repo_id: The HuggingFace repository id.
         :param model_name: Name of the model to be shown on the HiddenLayer UI. If not provided, uses repo_id.
         :param revision: An optional Git revision id which can be a branch name, a tag, or a commit hash.
-        :param local_dir: If provided, the downloaded files will be placed under this directory.
+        :param local_dir: Directory used as the temporary download location for each file.
         :param allow_file_patterns: If provided, only files matching at least one pattern are scanned.
         :param ignore_file_patterns: If provided, files matching any of the patterns are not scanned.
         :param force_download: Whether the file should be downloaded even if it already exists in the local cache.
@@ -418,38 +422,51 @@ class ModelScanner(ScanResultMixin):
         :returns: Scan Results
         """
         try:
-            from huggingface_hub import snapshot_download  # type: ignore
+            from huggingface_hub import hf_hub_download, list_repo_files  # type: ignore
         except ImportError as err:
             raise ImportError("Python package huggingface_hub is not installed.") from err
 
         local_dir = f"/tmp/{repo_id}" if local_dir == "/tmp" else local_dir
-        ignore_file_patterns = EXCLUDE_FILE_TYPES + ignore_file_patterns if ignore_file_patterns else EXCLUDE_FILE_TYPES
+        combined_ignore = EXCLUDE_FILE_TYPES + ignore_file_patterns if ignore_file_patterns else EXCLUDE_FILE_TYPES
 
-        snapshot_download(
-            repo_id,
-            revision=revision,
-            allow_patterns=allow_file_patterns,
-            ignore_patterns=ignore_file_patterns,
-            local_dir=local_dir,
-            local_dir_use_symlinks=False,
-            cache_dir=local_dir,
-            force_download=force_download,
-            token=hf_token,
-        )
-
-        if revision is None:
-            revision = "1"
-
-        return self.scan_folder(
+        upload_response = self._client.scans.upload.start(
             model_name=model_name or repo_id,
-            model_version=revision,
-            path=local_dir,
-            allow_file_patterns=allow_file_patterns,
-            ignore_file_patterns=ignore_file_patterns,
-            wait_for_results=wait_for_results,
-            request_source=request_source,
+            model_version=revision or "1",
+            requesting_entity="hiddenlayer-python-sdk",
+            request_source=cast("Literal['Hybrid Upload', 'API Upload', 'Integration', 'UI Upload']", request_source),
             origin="Hugging Face",
         )
+        scan_id = upload_response.scan_id
+
+        for filename in list_repo_files(repo_id, revision=revision, token=hf_token):
+            if any(fnmatch(filename, p) for p in combined_ignore):
+                continue
+            if allow_file_patterns is not None and not any(fnmatch(filename, p) for p in allow_file_patterns):
+                continue
+
+            local_path = Path(hf_hub_download(
+                repo_id=repo_id,
+                filename=filename,
+                revision=revision,
+                local_dir=local_dir,
+                force_download=force_download,
+                token=hf_token,
+            ))
+            try:
+                self._scan_file(scan_id=scan_id, file_path=local_path)
+            except BadRequestError as e:
+                if is_duplicate_file_error(e):
+                    logger.warning("Duplicate file detected during HuggingFace scan, skipping: %s", filename)
+                else:
+                    raise
+            finally:
+                local_path.unlink(missing_ok=True)
+
+        self._client.scans.upload.complete_all(scan_id=scan_id)
+
+        if wait_for_results:
+            return wait_for_scan_results(self._client, scan_id=scan_id)
+        return get_scan_results(self._client, scan_id=scan_id)
 
     def _scan_file(self, *, scan_id: str, file_path: Path) -> None:
         """Upload a single file using multipart upload."""
@@ -716,38 +733,51 @@ class AsyncModelScanner(AsyncScanResultMixin):
         See ModelScanner.scan_huggingface_model for parameter documentation.
         """
         try:
-            from huggingface_hub import snapshot_download  # type: ignore
+            from huggingface_hub import hf_hub_download, list_repo_files  # type: ignore
         except ImportError as err:
             raise ImportError("Python package huggingface_hub is not installed.") from err
 
         local_dir = f"/tmp/{repo_id}" if local_dir == "/tmp" else local_dir
-        ignore_file_patterns = EXCLUDE_FILE_TYPES + ignore_file_patterns if ignore_file_patterns else EXCLUDE_FILE_TYPES
+        combined_ignore = EXCLUDE_FILE_TYPES + ignore_file_patterns if ignore_file_patterns else EXCLUDE_FILE_TYPES
 
-        snapshot_download(
-            repo_id,
-            revision=revision,
-            allow_patterns=allow_file_patterns,
-            ignore_patterns=ignore_file_patterns,
-            local_dir=local_dir,
-            local_dir_use_symlinks=False,
-            cache_dir=local_dir,
-            force_download=force_download,
-            token=hf_token,
-        )
-
-        if revision is None:
-            revision = "1"
-
-        return await self.scan_folder(
+        upload_response = await self._client.scans.upload.start(
             model_name=model_name or repo_id,
-            model_version=revision,
-            path=local_dir,
-            allow_file_patterns=allow_file_patterns,
-            ignore_file_patterns=ignore_file_patterns,
-            wait_for_results=wait_for_results,
-            request_source=request_source,
+            model_version=revision or "1",
+            requesting_entity="hiddenlayer-python-sdk",
+            request_source=cast("Literal['Hybrid Upload', 'API Upload', 'Integration', 'UI Upload']", request_source),
             origin="Hugging Face",
         )
+        scan_id = upload_response.scan_id
+
+        for filename in list_repo_files(repo_id, revision=revision, token=hf_token):
+            if any(fnmatch(filename, p) for p in combined_ignore):
+                continue
+            if allow_file_patterns is not None and not any(fnmatch(filename, p) for p in allow_file_patterns):
+                continue
+
+            local_path = Path(hf_hub_download(
+                repo_id=repo_id,
+                filename=filename,
+                revision=revision,
+                local_dir=local_dir,
+                force_download=force_download,
+                token=hf_token,
+            ))
+            try:
+                await self._scan_file(scan_id=scan_id, file_path=local_path)
+            except BadRequestError as e:
+                if is_duplicate_file_error(e):
+                    logger.warning("Duplicate file detected during HuggingFace scan, skipping: %s", filename)
+                else:
+                    raise
+            finally:
+                local_path.unlink(missing_ok=True)
+
+        await self._client.scans.upload.complete_all(scan_id=scan_id)
+
+        if wait_for_results:
+            return await wait_for_scan_results_async(self._client, scan_id=scan_id)
+        return await get_scan_results_async(self._client, scan_id=scan_id)
 
     async def _scan_file(self, *, scan_id: str, file_path: Path) -> None:
         """Async version of _scan_file."""
