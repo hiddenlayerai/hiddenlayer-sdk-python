@@ -750,6 +750,7 @@ class AsyncModelScanner(AsyncScanResultMixin):
         scan_id = upload_response.scan_id
 
         for filename in list_repo_files(repo_id, revision=revision, token=hf_token):
+            print("Downloading file: ", filename)
             if any(fnmatch(filename, p) for p in combined_ignore):
                 continue
             if allow_file_patterns is not None and not any(fnmatch(filename, p) for p in allow_file_patterns):
@@ -764,6 +765,7 @@ class AsyncModelScanner(AsyncScanResultMixin):
                 token=hf_token,
             ))
             try:
+                print("Scanning file: ", local_path)
                 await self._scan_file(scan_id=scan_id, file_path=local_path)
             except BadRequestError as e:
                 if is_duplicate_file_error(e):
@@ -773,6 +775,7 @@ class AsyncModelScanner(AsyncScanResultMixin):
             finally:
                 local_path.unlink(missing_ok=True)
 
+        print("Completing upload")
         await self._client.scans.upload.complete_all(scan_id=scan_id)
 
         if wait_for_results:
