@@ -462,7 +462,12 @@ class ModelScanner(ScanResultMixin):
                 else:
                     raise
             finally:
-                local_path.unlink(missing_ok=True)
+                if local_path.is_symlink():
+                    cached_blob = local_path.resolve()
+                    local_path.unlink(missing_ok=True)
+                    cached_blob.unlink(missing_ok=True)
+                else:
+                    local_path.unlink(missing_ok=True)
 
         logger.info("Completing upload")
         self._client.scans.upload.complete_all(scan_id=scan_id)
@@ -776,7 +781,12 @@ class AsyncModelScanner(AsyncScanResultMixin):
                 else:
                     raise
             finally:
-                local_path.unlink(missing_ok=True)
+                if local_path.is_symlink():
+                    cached_blob = local_path.resolve()
+                    local_path.unlink(missing_ok=True)
+                    cached_blob.unlink(missing_ok=True)
+                else:
+                    local_path.unlink(missing_ok=True)
 
         print("Completing upload")
         await self._client.scans.upload.complete_all(scan_id=scan_id)
