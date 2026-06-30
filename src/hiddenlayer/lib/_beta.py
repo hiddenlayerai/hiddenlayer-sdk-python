@@ -31,15 +31,25 @@ def warn_beta(qualified_name: str, *, stacklevel: int = 3) -> None:
 def check_beta_endpoint(url: str) -> None:
     """Check whether *url* is a beta endpoint and emit a warning if so.
 
+    Matching is segment-based so that endpoints with path parameters (e.g.
+    "/evaluations/v1/red-team/{workflow_id}/status") are recognized even though
+    the runtime URL has the parameter value substituted in. A registry segment
+    of None is a wildcard that matches any single path segment.
+
     Args:
         url: The URL path for the request (e.g. "/detection/v2/request-evaluations").
     """
     from ._beta_endpoints import BETA_ENDPOINTS
 
-    qualified_name = BETA_ENDPOINTS.get(url)
-    if qualified_name is not None:
-        # Called from _prepare_options, which is deeper in the stack than
-        # a direct warn_beta call from a resource method.  The higher
-        # stacklevel won't point at user code, but the message itself
-        # identifies the method.
-        warn_beta(qualified_name, stacklevel=4)
+    segments = [s for s in url.split("?", 1)[0].lstrip("/").split("/") if s]
+
+    for pattern, qualified_name in BETA_ENDPOINTS:
+        if len(pattern) != len(segments):
+            continue
+        if all(seg == actual for seg, actual in zip(pattern, segments) if seg is not None):
+            # Called from _prepare_options, which is deeper in the stack than
+            # a direct warn_beta call from a resource method.  The higher
+            # stacklevel won't point at user code, but the message itself
+            # identifies the method.
+            warn_beta(qualified_name, stacklevel=4)
+            return
