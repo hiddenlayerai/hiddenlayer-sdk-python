@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.9.0 (2026-06-30)
+
+Full Changelog: [v3.8.0...v3.9.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.8.0...v3.9.0)
+
+### Features
+
+* **api:** api update ([1dc398e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/1dc398e026e842b00a30b6a59fdab86171eea67d))
+
+
+### Bug Fixes
+
+* **types:** avoid type-checker errors on params with additional properties ([28a89a4](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/28a89a426c9d5c0af22c0a982d27dfd0e6cc53f4))
+* warn on beta endpoints with path parameters ([#208](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/208)) ([c5e3313](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/c5e33138479e3f835d8d4fcf374fd0b1a6fad335))
+
 ## 3.8.0 (2026-06-24)
 
 Full Changelog: [v3.7.1...v3.8.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.7.1...v3.8.0)
