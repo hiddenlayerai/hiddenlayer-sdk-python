@@ -9,7 +9,15 @@ from pydantic import Field as FieldInfo
 from ..._compat import PYDANTIC_V1, ConfigDict
 from ..._models import BaseModel
 
-__all__ = ["JobListResponse", "Item", "ItemInventory", "ItemInventoryProviderDetails", "ItemSummary", "ItemCompliance"]
+__all__ = [
+    "JobListResponse",
+    "Item",
+    "ItemInventory",
+    "ItemInventoryProviderDetails",
+    "ItemSummary",
+    "ItemSummaryMitreAtlas",
+    "ItemCompliance",
+]
 
 
 class ItemInventoryProviderDetails(BaseModel):
@@ -88,6 +96,14 @@ class ItemInventory(BaseModel):
         model_config = ConfigDict(protected_namespaces=tuple())
 
 
+class ItemSummaryMitreAtlas(BaseModel):
+    tactic: Optional[str] = None
+    """MITRE Atlas Tactic"""
+
+    technique: Optional[str] = None
+    """MITRE Atlas Technique"""
+
+
 class ItemSummary(BaseModel):
     advisory_categories: Optional[List[str]] = None
     """list of unique advisory categories found"""
@@ -112,6 +128,12 @@ class ItemSummary(BaseModel):
 
     highest_severity: Optional[Literal["critical", "high", "medium", "low", "none", "unknown"]] = None
     """The highest severity of any detections on the scan."""
+
+    mitre_atlas: Optional[List[ItemSummaryMitreAtlas]] = None
+    """
+    deduped list of MITRE Atlas tactic/technique pairs across all detections in the
+    scan
+    """
 
     severity: Optional[Literal["critical", "high", "medium", "low", "unknown", "safe"]] = None
     """The highest severity of any detections on the scan, including "safe".
