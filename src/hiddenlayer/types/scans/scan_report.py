@@ -14,6 +14,7 @@ __all__ = [
     "Inventory",
     "InventoryProviderDetails",
     "Summary",
+    "SummaryMitreAtlas",
     "Compliance",
     "FileResult",
     "FileResultDetails",
@@ -108,6 +109,14 @@ class Inventory(BaseModel):
         model_config = ConfigDict(protected_namespaces=tuple())
 
 
+class SummaryMitreAtlas(BaseModel):
+    tactic: Optional[str] = None
+    """MITRE Atlas Tactic"""
+
+    technique: Optional[str] = None
+    """MITRE Atlas Technique"""
+
+
 class Summary(BaseModel):
     advisory_categories: Optional[List[str]] = None
     """list of unique advisory categories found"""
@@ -132,6 +141,12 @@ class Summary(BaseModel):
 
     highest_severity: Optional[Literal["critical", "high", "medium", "low", "none", "unknown"]] = None
     """The highest severity of any detections on the scan."""
+
+    mitre_atlas: Optional[List[SummaryMitreAtlas]] = None
+    """
+    deduped list of MITRE Atlas tactic/technique pairs across all detections in the
+    scan
+    """
 
     severity: Optional[Literal["critical", "high", "medium", "low", "unknown", "safe"]] = None
     """The highest severity of any detections on the scan, including "safe".
