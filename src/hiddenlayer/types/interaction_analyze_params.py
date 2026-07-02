@@ -39,7 +39,11 @@ class InputMessage(TypedDict, total=False):
     """The role of the message sender (e.g., user, assistant, system)."""
 
 
-class Input(TypedDict, total=False, extra_items=object):  # type: ignore[call-arg]
+class Input(  # type: ignore[call-arg]
+    TypedDict,
+    total=False,
+    extra_items=object,  # pyright: ignore[reportGeneralTypeIssues]
+):
     messages: Iterable[InputMessage]
     """The list of messages as input to a language model."""
 
