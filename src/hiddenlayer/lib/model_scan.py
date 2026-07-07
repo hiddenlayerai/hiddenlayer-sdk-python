@@ -6,6 +6,7 @@ including scan_file and scan_folder methods with multipart upload functionality.
 """
 
 import os
+import base64
 import logging
 from typing import Any, Set, Dict, List, Union, Literal, Optional, Generator, cast
 from fnmatch import fnmatch
@@ -41,6 +42,21 @@ EXCLUDE_FILE_TYPES = [
 ]
 
 PathInputType = Union[str, os.PathLike[str]]
+
+
+def _file_name_kwargs(file_path: Path) -> Dict[str, str]:
+    """Return the appropriate file-name kwargs for a multipart upload request.
+
+    HTTP/1.1 header values must be ASCII (RFC 7230 §3.2.6).  When the path
+    contains non-ASCII characters (e.g. CJK or accented characters) we
+    base64-encode the UTF-8 representation and pass it via *file_name_base64*
+    so the server can recover the original name.  For purely ASCII paths we
+    pass the value directly as *file_name*.
+    """
+    path_str = str(file_path)
+    if path_str.isascii():
+        return {"file_name": path_str}
+    return {"file_name_base64": base64.b64encode(path_str.encode("utf-8")).decode("ascii")}
 
 
 def is_duplicate_file_error(exc: BadRequestError) -> bool:
@@ -457,7 +473,7 @@ class ModelScanner(ScanResultMixin):
 
         # Initiate multipart upload for this file
         upload = self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
+            scan_id=scan_id, file_content_length=filesize, **_file_name_kwargs(file_path)
         )
 
         # Upload each part
@@ -755,7 +771,7 @@ class AsyncModelScanner(AsyncScanResultMixin):
 
         # Initiate multipart upload for this file
         upload = await self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
+            scan_id=scan_id, file_content_length=filesize, **_file_name_kwargs(file_path)
         )
 
         # Upload each part
