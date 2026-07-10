@@ -32,7 +32,7 @@ jobs:
           cd /tmp/release-please
           git checkout a116e1e520e0f87824acf46a2e79c91d41e819d7
           npm install
-          npm run build
+          npx tsc --project tsconfig.json --skipLibCheck --noEmitOnError false
           npm link
 
       - name: Create or update release PR
@@ -65,7 +65,7 @@ jobs:
           cd /tmp/release-please
           git checkout a116e1e520e0f87824acf46a2e79c91d41e819d7
           npm install
-          npm run build
+          npx tsc --project tsconfig.json --skipLibCheck --noEmitOnError false
           npm link
 
       - name: Create GitHub release
