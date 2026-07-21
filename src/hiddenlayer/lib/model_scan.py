@@ -6,6 +6,7 @@ including scan_file and scan_folder methods with multipart upload functionality.
 """
 
 import os
+import base64
 import logging
 from typing import Any, Set, Dict, List, Union, Literal, Optional, Generator, cast
 from fnmatch import fnmatch
@@ -41,6 +42,8 @@ EXCLUDE_FILE_TYPES = [
 ]
 
 PathInputType = Union[str, os.PathLike[str]]
+
+
 
 
 def is_duplicate_file_error(exc: BadRequestError) -> bool:
@@ -454,11 +457,20 @@ class ModelScanner(ScanResultMixin):
     def _scan_file(self, *, scan_id: str, file_path: Path) -> None:
         """Upload a single file using multipart upload."""
         filesize = file_path.stat().st_size
+        path_str = str(file_path)
 
-        # Initiate multipart upload for this file
-        upload = self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
-        )
+        # HTTP/1.1 header values must be ASCII (RFC 7230 §3.2.6). When the path
+        # contains non-ASCII characters, base64-encode it and use file_name_base64.
+        if path_str.isascii():
+            upload = self._client.scans.upload.file.add(
+                scan_id=scan_id, file_content_length=filesize, file_name=path_str
+            )
+        else:
+            upload = self._client.scans.upload.file.add(
+                scan_id=scan_id,
+                file_content_length=filesize,
+                file_name_base64=base64.b64encode(path_str.encode("utf-8")).decode("ascii"),
+            )
 
         # Upload each part
         with open(file_path, "rb") as f:
@@ -752,11 +764,20 @@ class AsyncModelScanner(AsyncScanResultMixin):
     async def _scan_file(self, *, scan_id: str, file_path: Path) -> None:
         """Async version of _scan_file."""
         filesize = file_path.stat().st_size
+        path_str = str(file_path)
 
-        # Initiate multipart upload for this file
-        upload = await self._client.scans.upload.file.add(
-            scan_id=scan_id, file_name=str(file_path), file_content_length=filesize
-        )
+        # HTTP/1.1 header values must be ASCII (RFC 7230 §3.2.6). When the path
+        # contains non-ASCII characters, base64-encode it and use file_name_base64.
+        if path_str.isascii():
+            upload = await self._client.scans.upload.file.add(
+                scan_id=scan_id, file_content_length=filesize, file_name=path_str
+            )
+        else:
+            upload = await self._client.scans.upload.file.add(
+                scan_id=scan_id,
+                file_content_length=filesize,
+                file_name_base64=base64.b64encode(path_str.encode("utf-8")).decode("ascii"),
+            )
 
         # Upload each part
         with open(file_path, "rb") as f:

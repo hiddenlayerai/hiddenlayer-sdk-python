@@ -269,6 +269,85 @@ class TestModelScanner:
 
             assert result is mock_scan_report
 
+    def test_scan_file_unicode_filename_is_ascii_safe_in_headers(self) -> None:
+        """Test that unicode filenames are ASCII-safe when sent as HTTP headers.
+
+        HTTP headers must contain only ASCII characters. When a model file has a
+        unicode filename, the SDK must ensure the file-name header value is
+        ASCII-safe — either by omitting file_name and base64-encoding it via
+        file_name_base64, or by percent-encoding it.
+
+        This test currently FAILS because _scan_file passes the raw unicode path
+        as file_name without any encoding:
+
+            upload = self._client.scans.upload.file.add(
+                scan_id=scan_id, file_name=str(file_path), ...
+            )
+
+        The fix should detect non-ASCII characters in the filename and use the
+        file_name_base64 parameter instead.
+        """
+        import base64
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            unicode_filename = "模型_テスト.pkl"  # Chinese + Japanese characters
+            unicode_file_path = Path(temp_dir) / unicode_filename
+            unicode_file_path.write_bytes(b"test model data")
+
+            mock_upload_response = Mock(spec=UploadStartResponse)
+            mock_upload_response.scan_id = "test-scan-id-unicode"
+
+            mock_part = Mock()
+            mock_part.start_offset = 0
+            mock_part.end_offset = None
+            mock_part.upload_url = "https://example.com/upload-url"
+
+            mock_file_add_response = Mock(spec=FileAddResponse)
+            mock_file_add_response.parts = [mock_part]
+            mock_file_add_response.upload_id = "upload-unicode-123"
+
+            mock_scan_report = Mock(spec=ScanReport)
+            mock_scan_report.status = ScanStatus.DONE
+
+            self.mock_client.scans.upload.start.return_value = mock_upload_response
+            self.mock_client.scans.upload.file.add.return_value = mock_file_add_response
+            self.mock_client.scans.upload.file.complete.return_value = Mock(spec=FileCompleteResponse)
+            self.mock_client.scans.upload.complete_all.return_value = Mock(spec=UploadCompleteAllResponse)
+            self.mock_client.scans.jobs.retrieve.return_value = mock_scan_report
+
+            mock_response = Mock(raise_for_status=Mock(return_value=None))
+            self.mock_client._client = Mock(put=Mock(return_value=mock_response))
+
+            self.scanner.scan_file(
+                model_name="test-model",
+                model_path=str(unicode_file_path),
+                wait_for_results=False,
+            )
+
+            self.mock_client.scans.upload.file.add.assert_called_once()
+            call_kwargs = self.mock_client.scans.upload.file.add.call_args.kwargs
+
+            # The file_name header value must be ASCII-safe.  Non-ASCII characters
+            # are forbidden in HTTP/1.1 header values (RFC 7230 §3.2.6).
+            file_name: str = call_kwargs.get("file_name", "")
+            assert file_name.isascii(), (
+                f"file_name {file_name!r} contains non-ASCII characters that are "
+                f"invalid in HTTP headers.  Pass the filename via file_name_base64 "
+                f"when it contains non-ASCII characters."
+            )
+
+            # When the filename contains non-ASCII characters, file_name_base64
+            # must be provided so the server can recover the original name.
+            assert "file_name_base64" in call_kwargs, (
+                "file_name_base64 must be provided when the filename contains "
+                "non-ASCII characters"
+            )
+            decoded = base64.b64decode(call_kwargs["file_name_base64"]).decode("utf-8")
+            assert unicode_filename in decoded, (
+                f"base64-decoded file_name_base64 {decoded!r} does not contain "
+                f"the original unicode filename {unicode_filename!r}"
+            )
+
     def test_scan_file_upload_url_none_raises_error(self) -> None:
         """Test that None upload_url raises an error."""
         # Create a temporary test file
