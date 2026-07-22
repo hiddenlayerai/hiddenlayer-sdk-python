@@ -15,12 +15,21 @@ jobs:
   release-pr:
     if: github.repository == 'hiddenlayerai/hiddenlayer-sdk-python' && github.ref == 'refs/heads/next'
     runs-on: ubuntu-latest
+    environment: release
     steps:
+      - name: Generate App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: Iv23liEbo0PaG2pWfdGX
+          private-key: ${{ secrets.OS_EXPORTER_APP_PRIVATE_KEY }}
+          owner: hiddenlayerai
+
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
           ref: next
-          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
@@ -38,7 +47,7 @@ jobs:
 
       - name: Create or update release PR
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           release-please release-pr \
             --token "$GITHUB_TOKEN" \
@@ -49,12 +58,21 @@ jobs:
   release:
     if: github.repository == 'hiddenlayerai/hiddenlayer-sdk-python' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    environment: release
     steps:
+      - name: Generate App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: Iv23liEbo0PaG2pWfdGX
+          private-key: ${{ secrets.OS_EXPORTER_APP_PRIVATE_KEY }}
+          owner: hiddenlayerai
+
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
           ref: main
-          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
@@ -73,7 +91,7 @@ jobs:
       - name: Create GitHub release
         id: gh-release
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           output=$(release-please github-release \
             --token "$GITHUB_TOKEN" \
@@ -92,13 +110,13 @@ jobs:
       - name: Dispatch publish
         if: steps.gh-release.outputs.created == 'true'
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: gh workflow run publish-pypi.yml --ref "${{ steps.gh-release.outputs.tag }}"
 
       - name: Reset next to main
         if: steps.gh-release.outputs.created == 'true'
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           git fetch origin main next
           git checkout -B next origin/main
