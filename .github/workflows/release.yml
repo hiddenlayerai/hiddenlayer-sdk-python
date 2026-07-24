@@ -1,0 +1,105 @@
+name: Release
+on:
+  push:
+    branches: [next, main]
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-pr:
+    if: github.repository == 'hiddenlayerai/hiddenlayer-sdk-python' && github.ref == 'refs/heads/next'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          ref: next
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '20'
+
+      - name: Install release-please
+        run: |
+          git clone https://github.com/stainless-api/release-please.git /tmp/release-please
+          cd /tmp/release-please
+          git checkout a116e1e520e0f87824acf46a2e79c91d41e819d7
+          corepack enable
+          pnpm install
+          pnpm run build
+          npm link
+
+      - name: Create or update release PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+        run: |
+          release-please release-pr \
+            --token "$GITHUB_TOKEN" \
+            --repo-url "$GITHUB_REPOSITORY" \
+            --target-branch main \
+            --changes-branch next
+
+  release:
+    if: github.repository == 'hiddenlayerai/hiddenlayer-sdk-python' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          ref: main
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '20'
+
+      - name: Install release-please
+        run: |
+          git clone https://github.com/stainless-api/release-please.git /tmp/release-please
+          cd /tmp/release-please
+          git checkout a116e1e520e0f87824acf46a2e79c91d41e819d7
+          corepack enable
+          pnpm install
+          pnpm run build
+          npm link
+
+      - name: Create GitHub release
+        id: gh-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+        run: |
+          output=$(release-please github-release \
+            --token "$GITHUB_TOKEN" \
+            --repo-url "$GITHUB_REPOSITORY" \
+            --target-branch main \
+            --changes-branch next 2>&1) || true
+          echo "$output"
+          if echo "$output" | grep -q '"tagName"'; then
+            tag=$(echo "$output" | grep -oP '"tagName":\s*"\K[^"]+')
+            echo "created=true" >> "$GITHUB_OUTPUT"
+            echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          else
+            echo "created=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Dispatch publish
+        if: steps.gh-release.outputs.created == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+        run: gh workflow run publish-pypi.yml --ref "${{ steps.gh-release.outputs.tag }}"
+
+      - name: Reset next to main
+        if: steps.gh-release.outputs.created == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+        run: |
+          git fetch origin main next
+          git checkout -B next origin/main
+          git push --force-with-lease origin next
