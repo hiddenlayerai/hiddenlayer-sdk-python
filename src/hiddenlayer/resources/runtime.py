@@ -62,11 +62,9 @@ class RuntimeResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RuntimeEvaluateInteractionResponse:
-        """
-        [BETA] This endpoint is not GA or Production ready and is subject to changes at
-        any time. Breaking changes may occur.
+        """Performs synchronous security evaluation on an LLM **interaction**.
 
-        Performs synchronous security evaluation on an LLM **interaction**. The
+        The
         interaction can be a standalone user prompt, a standalone model response, a
         partial exchange, or a long multi-turn message history. The endpoint imposes no
         requirement that the messages form a complete request/response pair.
@@ -141,9 +139,6 @@ class RuntimeResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RuntimeEvaluateRequestResponse:
         """
-        [BETA] This endpoint is not GA or Production ready and is subject to changes at
-        any time. Breaking changes may occur.
-
         Analyzes an LLM request payload for security threats before it is sent to the
         model.
 
@@ -207,9 +202,6 @@ class RuntimeResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RuntimeEvaluateResponseResponse:
         """
-        [BETA] This endpoint is not GA or Production ready and is subject to changes at
-        any time. Breaking changes may occur.
-
         Analyzes an LLM response payload for security threats after it is received from
         the model.
 
@@ -293,11 +285,9 @@ class AsyncRuntimeResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RuntimeEvaluateInteractionResponse:
-        """
-        [BETA] This endpoint is not GA or Production ready and is subject to changes at
-        any time. Breaking changes may occur.
+        """Performs synchronous security evaluation on an LLM **interaction**.
 
-        Performs synchronous security evaluation on an LLM **interaction**. The
+        The
         interaction can be a standalone user prompt, a standalone model response, a
         partial exchange, or a long multi-turn message history. The endpoint imposes no
         requirement that the messages form a complete request/response pair.
@@ -372,9 +362,6 @@ class AsyncRuntimeResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RuntimeEvaluateRequestResponse:
         """
-        [BETA] This endpoint is not GA or Production ready and is subject to changes at
-        any time. Breaking changes may occur.
-
         Analyzes an LLM request payload for security threats before it is sent to the
         model.
 
@@ -438,9 +425,6 @@ class AsyncRuntimeResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> RuntimeEvaluateResponseResponse:
         """
-        [BETA] This endpoint is not GA or Production ready and is subject to changes at
-        any time. Breaking changes may occur.
-
         Analyzes an LLM response payload for security threats after it is received from
         the model.
 
