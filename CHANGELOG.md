@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.9.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.8.0...v3.9.0) (2026-08-03)
+
+
+### Features
+
+* **api:** api update ([1dc398e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/1dc398e026e842b00a30b6a59fdab86171eea67d))
+* **ci:** authenticate codegen as HL-OpenSource-Exporter App (DIS-1083) ([#225](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/225)) ([279003e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/279003e6e49a645ed646a3b94caa8b1b2a0e0236))
+
+
+### Bug Fixes
+
+* **ci:** build release-please fork from source with forced emit ([#217](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/217)) ([426770c](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/426770cf948ea0bb0469225d05d43697551ef4df))
+* **ci:** clone and build release-please fork from source ([#216](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/216)) ([2f1e925](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/2f1e9259d74418c4dbd4f33cc9f0e3d1f77f7375))
+* **ci:** run CI on all PRs, remove dead Stainless code ([#220](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/220)) ([962171a](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/962171a618b66742f31a365ef58ae19dddcae3e5))
+* **ci:** use pnpm with the fork's lockfile instead of npm ([#218](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/218)) ([13c0d89](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/13c0d89c1cacca68ae7ceacef17ee09ebdd85cd2))
+* **types:** avoid type-checker errors on params with additional properties ([28a89a4](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/28a89a426c9d5c0af22c0a982d27dfd0e6cc53f4))
+* warn on beta endpoints with path parameters ([#208](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/208)) ([c5e3313](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/c5e33138479e3f835d8d4fcf374fd0b1a6fad335))
+
 ## 3.8.0 (2026-06-24)
 
 Full Changelog: [v3.7.1...v3.8.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.7.1...v3.8.0)
