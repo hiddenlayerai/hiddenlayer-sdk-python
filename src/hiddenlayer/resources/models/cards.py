@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import typing_extensions
 from typing import List
 from typing_extensions import Literal
 
@@ -45,6 +46,7 @@ class CardsResource(SyncAPIResource):
         """
         return CardsResourceWithStreamingResponse(self)
 
+    @typing_extensions.deprecated("deprecated")
     def list(
         self,
         *,
@@ -83,7 +85,11 @@ class CardsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SyncOffsetPage[CardListResponse]:
         """
-        List Model Cards
+        Deprecated in favor of `GET /asset-inventory/v2/assets`
+        (`asset_type[in]=MODEL`), which returns the same model-card data — scan
+        status/timing and findings from the `supply-chain` annotation — alongside the
+        rest of an asset's data, with matching filters (`model_id[eq]`,
+        `scan_started_at[gt/gte/lt/lte]`) and sorts (`model_name`, `scan_started_at`).
 
         Args:
           aidr_severity: Deprecated - use ModelCardAIDRThreatLevel(aidr_threat_level) instead
@@ -161,6 +167,7 @@ class AsyncCardsResource(AsyncAPIResource):
         """
         return AsyncCardsResourceWithStreamingResponse(self)
 
+    @typing_extensions.deprecated("deprecated")
     def list(
         self,
         *,
@@ -199,7 +206,11 @@ class AsyncCardsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AsyncPaginator[CardListResponse, AsyncOffsetPage[CardListResponse]]:
         """
-        List Model Cards
+        Deprecated in favor of `GET /asset-inventory/v2/assets`
+        (`asset_type[in]=MODEL`), which returns the same model-card data — scan
+        status/timing and findings from the `supply-chain` annotation — alongside the
+        rest of an asset's data, with matching filters (`model_id[eq]`,
+        `scan_started_at[gt/gte/lt/lte]`) and sorts (`model_name`, `scan_started_at`).
 
         Args:
           aidr_severity: Deprecated - use ModelCardAIDRThreatLevel(aidr_threat_level) instead
@@ -261,8 +272,10 @@ class CardsResourceWithRawResponse:
     def __init__(self, cards: CardsResource) -> None:
         self._cards = cards
 
-        self.list = to_raw_response_wrapper(
-            cards.list,
+        self.list = (  # pyright: ignore[reportDeprecated]
+            to_raw_response_wrapper(
+                cards.list,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -270,8 +283,10 @@ class AsyncCardsResourceWithRawResponse:
     def __init__(self, cards: AsyncCardsResource) -> None:
         self._cards = cards
 
-        self.list = async_to_raw_response_wrapper(
-            cards.list,
+        self.list = (  # pyright: ignore[reportDeprecated]
+            async_to_raw_response_wrapper(
+                cards.list,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -279,8 +294,10 @@ class CardsResourceWithStreamingResponse:
     def __init__(self, cards: CardsResource) -> None:
         self._cards = cards
 
-        self.list = to_streamed_response_wrapper(
-            cards.list,
+        self.list = (  # pyright: ignore[reportDeprecated]
+            to_streamed_response_wrapper(
+                cards.list,  # pyright: ignore[reportDeprecated],
+            )
         )
 
 
@@ -288,6 +305,8 @@ class AsyncCardsResourceWithStreamingResponse:
     def __init__(self, cards: AsyncCardsResource) -> None:
         self._cards = cards
 
-        self.list = async_to_streamed_response_wrapper(
-            cards.list,
+        self.list = (  # pyright: ignore[reportDeprecated]
+            async_to_streamed_response_wrapper(
+                cards.list,  # pyright: ignore[reportDeprecated],
+            )
         )
