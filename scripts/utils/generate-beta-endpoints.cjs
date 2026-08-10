@@ -1,17 +1,19 @@
 // scripts/utils/generate-beta-endpoints.cjs
 //
-// Scans generated resource files for [BETA] docstrings and extracts
-// URL paths from self._post / _get / _put / _patch / _delete calls.
-// Produces src/hiddenlayer/lib/_beta_endpoints.py with a mapping of
-// path -> ClassName.method_name.
+// Scans generated resource files for [BETA] docstrings and extracts URL paths
+// from self._post / _get / _put / _patch / _delete calls. Produces
+// src/hiddenlayer/lib/_beta_endpoints.py with a list of (path pattern, qualified
+// method name) entries used for runtime warnings.
+//
+// Paths are stored as segment patterns rather than literal strings so that
+// endpoints with path parameters (e.g. /evaluations/v1/red-team/{workflow_id}/status)
+// are matched even though the runtime URL has the parameter value substituted in.
+// A segment of None is a wildcard matching any single path segment.
 
 const fs = require("fs");
 const path = require("path");
 
-const RESOURCES_DIR = path.resolve(
-  __dirname,
-  "../../src/hiddenlayer/resources"
-);
+const RESOURCES_DIR = path.resolve(__dirname, "../../src/hiddenlayer/resources");
 const OUTPUT_FILE = path.resolve(
   __dirname,
   "../../src/hiddenlayer/lib/_beta_endpoints.py"
@@ -39,170 +41,151 @@ function walkPythonFiles(dir) {
 // ---------------------------------------------------------------------------
 
 /**
- * Extract beta endpoint mappings from a single resource file.
+ * Convert a captured URL path into a segment pattern. Literal segments stay as
+ * strings; any segment containing a `{...}` path parameter becomes `null`, a
+ * wildcard matching any single segment at request time.
  *
- * Strategy:
- *  1. Find sync resource classes (inherits SyncAPIResource).
- *  2. For each class, find methods whose docstring contains [BETA].
- *  3. For each beta method, find the URL path in a self._<verb>("/path", ...) call.
+ * @param {string} rawPath
+ * @returns {Array<string | null>}
  */
-function extractBetaEndpoints(source) {
-  const lines = source.split("\n");
-  const entries = {}; // path -> ClassName.method_name
+function toSegments(rawPath) {
+  return rawPath
+    .replace(/^\//, "")
+    .split("/")
+    .filter((s) => s.length > 0)
+    .map((s) => (s.includes("{") ? null : s));
+}
 
+/**
+ * Collect, in document order, the sync resource methods in a file along with
+ * the line range of each method body. Only classes inheriting SyncAPIResource
+ * are considered (async classes resolve to the same paths, so one entry per
+ * path is enough).
+ *
+ * @param {string[]} lines
+ * @returns {Array<{ className: string, methodName: string, start: number, end: number }>}
+ */
+function collectSyncMethods(lines) {
+  const methods = [];
   let currentSyncClass = null;
-  let insideAsyncClass = false;
   let classIndent = 0;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
-    // Detect class declarations
-    const classMatch = line.match(
-      /^(\s*)class\s+(\w+)\((SyncAPIResource|AsyncAPIResource)\)/
-    );
+    const classMatch = line.match(/^(\s*)class\s+(\w+)\(([^)]*)\)/);
     if (classMatch) {
       const indent = classMatch[1].length;
       const className = classMatch[2];
-      const baseClass = classMatch[3];
-      if (baseClass === "AsyncAPIResource") {
-        insideAsyncClass = true;
-        currentSyncClass = null;
-        classIndent = indent;
-      } else {
-        insideAsyncClass = false;
+      const bases = classMatch[3];
+      if (/\bSyncAPIResource\b/.test(bases)) {
         currentSyncClass = className;
         classIndent = indent;
+      } else {
+        // Any other class (async resource, response wrappers, etc.) ends the
+        // current sync class context.
+        currentSyncClass = null;
       }
       continue;
     }
 
-    // If we hit another top-level class that isn't Sync/Async resource, reset
-    const otherClassMatch = line.match(/^(\s*)class\s+\w+/);
-    if (otherClassMatch && otherClassMatch[1].length <= classIndent) {
-      if (!line.match(/\((SyncAPIResource|AsyncAPIResource)\)/)) {
-        currentSyncClass = null;
-        insideAsyncClass = false;
-      }
-    }
-
-    // Skip async classes entirely
-    if (insideAsyncClass) continue;
     if (!currentSyncClass) continue;
 
-    // Detect method definitions
-    const defMatch = line.match(/^\s+(?:async\s+)?def\s+(\w+)\s*\(/);
+    const defMatch = line.match(/^(\s+)(?:async\s+)?def\s+(\w+)\s*\(/);
     if (!defMatch) continue;
-
-    const methodName = defMatch[1];
-    // Skip dunder and private methods
+    if (defMatch[1].length <= classIndent) continue; // not a method of this class
+    const methodName = defMatch[2];
     if (methodName.startsWith("_")) continue;
 
-    // Look ahead for the docstring and check for [BETA]
-    const isBeta = docstringContainsBeta(lines, i + 1);
-    if (!isBeta) continue;
-
-    // Look ahead for the URL path in self._<verb>("...")
-    const urlPath = findUrlPath(lines, i + 1);
-    if (!urlPath) continue;
-
-    entries[urlPath] = `${currentSyncClass}.${methodName}`;
+    methods.push({ className: currentSyncClass, methodName, start: i, end: lines.length });
   }
 
-  return entries;
+  // Bound each method body by the start of the next method/class.
+  for (let m = 0; m < methods.length; m++) {
+    methods[m].end = m + 1 < methods.length ? methods[m + 1].start : lines.length;
+  }
+  return methods;
+}
+
+/** @param {string[]} bodyLines */
+function bodyHasBeta(bodyLines) {
+  return bodyLines.some((l) => l.includes("[BETA]"));
 }
 
 /**
- * Starting from lineIndex, check if the next docstring contains [BETA].
- * Scans forward through the function signature and into the body looking
- * for a triple-quoted docstring. Bails if it hits another def or class.
- */
-function docstringContainsBeta(lines, startIndex) {
-  for (let i = startIndex; i < lines.length && i < startIndex + 40; i++) {
-    const trimmed = lines[i].trim();
-
-    // Stop if we hit another method def or a top-level class
-    if (i > startIndex && /^\s{4}(async\s+)?def\s/.test(lines[i])) return false;
-    if (/^class\s/.test(lines[i])) return false;
-
-    // Look for triple-quote docstring start
-    if (trimmed.startsWith('"""') || trimmed.startsWith("'''")) {
-      if (trimmed.includes("[BETA]")) return true;
-      const quote = trimmed.slice(0, 3);
-      // Single-line docstring that opened and closed on the same line
-      if (trimmed.endsWith(quote) && trimmed.length > 3) return false;
-      // Multi-line: scan until closing triple-quote
-      for (let j = i + 1; j < lines.length && j < i + 50; j++) {
-        if (lines[j].includes("[BETA]")) return true;
-        if (lines[j].trim().endsWith(quote)) return false;
-      }
-      return false;
-    }
-  }
-  return false;
-}
-
-/**
- * Starting from lineIndex, find a self._<verb>("/path", ...) call.
+ * Find the request URL path in a method body. Handles both a plain string path
+ * (`self._post("/path", ...)`) and the path_template form used for endpoints
+ * with parameters (`self._get(path_template("/path/{id}", id=id), ...)`).
  *
- * Stainless-generated code often splits self._post( and the URL onto
- * separate lines, so we handle both single-line and multi-line forms:
- *   self._post("/path", ...)          -- single line
- *   self._post(                       -- verb on one line
- *       "/path",                      -- URL on the next
+ * @param {string[]} bodyLines
+ * @returns {string | null}
  */
-function findUrlPath(lines, startIndex) {
-  const singleLinePattern =
-    /self\._(?:post|get|put|patch|delete)\(\s*"(\/[^"]+)"/;
-  const verbOpenPattern = /self\._(?:post|get|put|patch|delete)\(\s*$/;
-  const urlPattern = /^\s*"(\/[^"]+)"/;
+function findUrlPath(bodyLines) {
+  const text = bodyLines.join("\n");
+  const verb = text.match(/self\._(?:post|get|put|patch|delete)\s*\(/);
+  if (!verb) return null;
+  const after = text.slice(verb.index);
+  // First double-quoted string after the verb call, optionally wrapped in
+  // path_template(...). Both forms start the path with a leading slash.
+  const pathMatch = after.match(/(?:path_template\s*\(\s*)?"(\/[^"]*)"/);
+  return pathMatch ? pathMatch[1] : null;
+}
 
-  for (let i = startIndex; i < lines.length && i < startIndex + 80; i++) {
-    // Single-line form: self._post("/path", ...)
-    const singleMatch = lines[i].match(singleLinePattern);
-    if (singleMatch) return singleMatch[1];
+/**
+ * @param {string} source
+ * @returns {Array<{ segments: Array<string | null>, method: string }>}
+ */
+function extractBetaEndpoints(source) {
+  const lines = source.split("\n");
+  const results = [];
 
-    // Multi-line form: self._post(\n    "/path",
-    const verbMatch = lines[i].match(verbOpenPattern);
-    if (verbMatch && i + 1 < lines.length) {
-      const urlMatch = lines[i + 1].match(urlPattern);
-      if (urlMatch) return urlMatch[1];
-    }
-
-    // Stop if we hit the next def or class
-    if (
-      lines[i].match(/^\s{4}(?:async\s+)?def\s/) ||
-      lines[i].match(/^class\s/)
-    ) {
-      break;
-    }
+  for (const { className, methodName, start, end } of collectSyncMethods(lines)) {
+    const body = lines.slice(start, end);
+    if (!bodyHasBeta(body)) continue;
+    const urlPath = findUrlPath(body);
+    if (!urlPath) continue;
+    results.push({ segments: toSegments(urlPath), method: `${className}.${methodName}` });
   }
-  return null;
+
+  return results;
 }
 
 // ---------------------------------------------------------------------------
 // Output
 // ---------------------------------------------------------------------------
 
-function buildOutput(allEntries) {
-  // Sort entries by path for deterministic output
-  const sortedPaths = Object.keys(allEntries).sort();
+/** @param {Array<string | null>} segments */
+function segmentsKey(segments) {
+  return segments.map((s) => (s === null ? "*" : s)).join("/");
+}
 
-  const pairs = sortedPaths
-    .map((p) => `    "${p}": "${allEntries[p]}",`)
+function buildOutput(entries) {
+  entries.sort((a, b) => segmentsKey(a.segments).localeCompare(segmentsKey(b.segments)));
+
+  const rows = entries
+    .map((e) => {
+      const items = e.segments.map((s) => (s === null ? "None" : `"${s}"`));
+      // A single-element tuple needs a trailing comma; multi-element tuples omit
+      // it to avoid ruff's magic-trailing-comma line explosion.
+      const tuple = items.length === 1 ? `(${items[0]},)` : `(${items.join(", ")})`;
+      return `    (${tuple}, "${e.method}"),`;
+    })
     .join("\n");
 
   return `"""Auto-generated registry of beta endpoints.
 
 DO NOT EDIT -- regenerated by scripts/utils/generate-beta-endpoints.cjs
 
-Maps URL paths to qualified method names for runtime warnings.
+Each entry is a (path pattern, qualified method name) pair. A path pattern is a
+tuple of segments where a string is a literal match and None is a wildcard that
+matches any single path-parameter segment. Used for runtime beta warnings.
 """
+
 from __future__ import annotations
 
-BETA_ENDPOINTS: dict[str, str] = {
-${pairs}
-}
+BETA_ENDPOINTS: list[tuple[tuple[str | None, ...], str]] = [
+${rows}
+]
 `;
 }
 
@@ -212,19 +195,28 @@ ${pairs}
 
 function main() {
   const files = walkPythonFiles(RESOURCES_DIR);
-  const allEntries = {};
+  const all = [];
 
   for (const file of files) {
-    const source = fs.readFileSync(file, "utf-8");
-    const entries = extractBetaEndpoints(source);
-    Object.assign(allEntries, entries);
+    all.push(...extractBetaEndpoints(fs.readFileSync(file, "utf-8")));
   }
 
-  const count = Object.keys(allEntries).length;
-  const output = buildOutput(allEntries);
+  // Deduplicate by rendered pattern (sync + async classes share paths; we only
+  // scanned sync, but guard anyway).
+  const seen = new Set();
+  const unique = [];
+  for (const e of all) {
+    const key = segmentsKey(e.segments);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    unique.push(e);
+  }
 
-  fs.writeFileSync(OUTPUT_FILE, output, "utf-8");
-  console.log(`Wrote ${count} beta endpoint(s) to ${OUTPUT_FILE}`);
+  fs.writeFileSync(OUTPUT_FILE, buildOutput(unique), "utf-8");
+  console.log(`Wrote ${unique.length} beta endpoint(s) to ${OUTPUT_FILE}`);
+  for (const e of unique) {
+    console.log(`  /${segmentsKey(e.segments)} -> ${e.method}`);
+  }
 }
 
 main();
