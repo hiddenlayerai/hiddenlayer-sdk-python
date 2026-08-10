@@ -5,7 +5,7 @@
 
 ### Features
 
-* **api:** api update ([7bfb80e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/7bfb80e6220e401e10b05c05e550d257196f5a3e))
+* **scans:** add MITRE Atlas tactic/technique pairs to scan summaries ([7bfb80e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/7bfb80e6220e401e10b05c05e550d257196f5a3e))
 * **assets:** expose v2 AI Asset Inventory API ([b4aa81e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/b4aa81e2315da43dccd70f7a39b433f4eac52dbb))
 * **assets:** scope integration_id to discovered relationships, add ASSIGNED_TO ([087ad00](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/087ad007a98147216dc481388c9462f12d40daf1))
 * **runtime:** add effective_action_count, deprecate integration-limited counts ([3654047](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/365404768b647d0188e0bb544d403ceceb821670))
