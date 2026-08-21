@@ -20,6 +20,7 @@ __all__ = [
     "InteractionCanonicalInteractionMessageTimestamp",
     "InteractionCanonicalInteractionToolsAvailable",
     "Metadata",
+    "MetadataExternalSessionID",
 ]
 
 
@@ -173,6 +174,16 @@ class InteractionCanonicalInteraction(TypedDict, total=False):
 Interaction: TypeAlias = Union[InteractionCanonicalInteraction, Dict[str, object]]
 
 
+class MetadataExternalSessionID(TypedDict, total=False):
+    """An external session identifier with optional source."""
+
+    id: Required[str]
+    """The external session identifier value."""
+
+    source: str
+    """The system or client that supplied this identifier."""
+
+
 class Metadata(TypedDict, total=False):
     """Metadata about the LLM interactions being evaluated."""
 
@@ -192,4 +203,12 @@ class Metadata(TypedDict, total=False):
     """
     An externally-defined session identifier to group interactions into a single
     session. The identifier should be unique across all sessions.
+    """
+
+    external_session_ids: Iterable[MetadataExternalSessionID]
+    """External session identifier with the system that supplied it.
+
+    The entry is stored as the interaction's session alias and takes precedence over
+    `external_session_id` when both are supplied. One alias is stored per
+    interaction.
     """
