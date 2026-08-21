@@ -96,6 +96,12 @@ class TestRuntime:
                 "provider": "openai",
                 "requester_id": "user-12345",
                 "external_session_id": "sess_4b8cde94604f4c389406a0b2f806069a",
+                "external_session_ids": [
+                    {
+                        "id": "id",
+                        "source": "source",
+                    }
+                ],
             },
             hl_project_id="internal-search-chatbot",
         )
@@ -395,6 +401,12 @@ class TestAsyncRuntime:
                 "provider": "openai",
                 "requester_id": "user-12345",
                 "external_session_id": "sess_4b8cde94604f4c389406a0b2f806069a",
+                "external_session_ids": [
+                    {
+                        "id": "id",
+                        "source": "source",
+                    }
+                ],
             },
             hl_project_id="internal-search-chatbot",
         )
