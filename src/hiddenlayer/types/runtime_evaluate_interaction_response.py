@@ -13,9 +13,12 @@ __all__ = [
     "EvaluatedInteractionMessage",
     "EvaluatedInteractionMessageContent",
     "EvaluatedInteractionMessageContentTextPart",
+    "EvaluatedInteractionMessageContentTextPartAnnotation",
+    "EvaluatedInteractionMessageContentTextPartAnnotationFile",
     "EvaluatedInteractionMessageContentToolUsePart",
     "EvaluatedInteractionMessageContentToolResultPart",
     "EvaluatedInteractionMessageAnalysis",
+    "EvaluatedInteractionMessageAttachment",
     "EvaluatedInteractionMessageTimestamp",
     "EvaluatedInteractionToolsAvailable",
     "Metadata",
@@ -27,11 +30,41 @@ __all__ = [
     "OutcomeEffectiveInteractionCanonicalInteractionMessage",
     "OutcomeEffectiveInteractionCanonicalInteractionMessageContent",
     "OutcomeEffectiveInteractionCanonicalInteractionMessageContentTextPart",
+    "OutcomeEffectiveInteractionCanonicalInteractionMessageContentTextPartAnnotation",
+    "OutcomeEffectiveInteractionCanonicalInteractionMessageContentTextPartAnnotationFile",
     "OutcomeEffectiveInteractionCanonicalInteractionMessageContentToolUsePart",
     "OutcomeEffectiveInteractionCanonicalInteractionMessageContentToolResultPart",
+    "OutcomeEffectiveInteractionCanonicalInteractionMessageAttachment",
     "OutcomeEffectiveInteractionCanonicalInteractionMessageTimestamp",
     "OutcomeEffectiveInteractionCanonicalInteractionToolsAvailable",
 ]
+
+
+class EvaluatedInteractionMessageContentTextPartAnnotationFile(BaseModel):
+    """A file referenced by a message, whether attached to it or cited by its content."""
+
+    id: str
+    """Provider-assigned identifier for the file."""
+
+    name: Optional[str] = None
+    """Filename as presented to the user."""
+
+
+class EvaluatedInteractionMessageContentTextPartAnnotation(BaseModel):
+    """An external source a span of message content drew on."""
+
+    type: str
+    """The kind of source cited, as reported by the provider. Common values include:
+
+    - `url_citation`: A web page
+    - `file_citation`: A file available to the conversation
+    """
+
+    files: Optional[List[EvaluatedInteractionMessageContentTextPartAnnotationFile]] = None
+    """Files this annotation cites."""
+
+    urls: Optional[List[str]] = None
+    """URLs this annotation cites."""
 
 
 class EvaluatedInteractionMessageContentTextPart(BaseModel):
@@ -42,6 +75,9 @@ class EvaluatedInteractionMessageContentTextPart(BaseModel):
 
     type: Literal["text"]
     """Content part type for text."""
+
+    annotations: Optional[List[EvaluatedInteractionMessageContentTextPartAnnotation]] = None
+    """External sources this text drew on. Absent when the text cites nothing."""
 
 
 class EvaluatedInteractionMessageContentToolUsePart(BaseModel):
@@ -107,6 +143,16 @@ class EvaluatedInteractionMessageAnalysis(BaseModel):
     """
 
 
+class EvaluatedInteractionMessageAttachment(BaseModel):
+    """A file referenced by a message, whether attached to it or cited by its content."""
+
+    id: str
+    """Provider-assigned identifier for the file."""
+
+    name: Optional[str] = None
+    """Filename as presented to the user."""
+
+
 class EvaluatedInteractionMessageTimestamp(BaseModel):
     """Optional timestamp for when this message was created.
 
@@ -146,10 +192,22 @@ class EvaluatedInteractionMessage(BaseModel):
     `code`), each value is the opaque finding object that signal produced.
     """
 
+    attachments: Optional[List[EvaluatedInteractionMessageAttachment]] = None
+    """
+    Files supplied with the message by its author, as distinct from files its
+    content cites.
+    """
+
     timestamp: Optional[EvaluatedInteractionMessageTimestamp] = None
     """Optional timestamp for when this message was created.
 
     When supplied, `value` is required.
+    """
+
+    tools_used: Optional[List[str]] = None
+    """
+    Names of provider-hosted tools invoked while producing this message. Tools the
+    model called directly appear as `tool_use` content parts instead.
     """
 
 
@@ -260,6 +318,33 @@ class OutcomeDetection(BaseModel):
     """
 
 
+class OutcomeEffectiveInteractionCanonicalInteractionMessageContentTextPartAnnotationFile(BaseModel):
+    """A file referenced by a message, whether attached to it or cited by its content."""
+
+    id: str
+    """Provider-assigned identifier for the file."""
+
+    name: Optional[str] = None
+    """Filename as presented to the user."""
+
+
+class OutcomeEffectiveInteractionCanonicalInteractionMessageContentTextPartAnnotation(BaseModel):
+    """An external source a span of message content drew on."""
+
+    type: str
+    """The kind of source cited, as reported by the provider. Common values include:
+
+    - `url_citation`: A web page
+    - `file_citation`: A file available to the conversation
+    """
+
+    files: Optional[List[OutcomeEffectiveInteractionCanonicalInteractionMessageContentTextPartAnnotationFile]] = None
+    """Files this annotation cites."""
+
+    urls: Optional[List[str]] = None
+    """URLs this annotation cites."""
+
+
 class OutcomeEffectiveInteractionCanonicalInteractionMessageContentTextPart(BaseModel):
     """A text content part within a message."""
 
@@ -268,6 +353,9 @@ class OutcomeEffectiveInteractionCanonicalInteractionMessageContentTextPart(Base
 
     type: Literal["text"]
     """Content part type for text."""
+
+    annotations: Optional[List[OutcomeEffectiveInteractionCanonicalInteractionMessageContentTextPartAnnotation]] = None
+    """External sources this text drew on. Absent when the text cites nothing."""
 
 
 class OutcomeEffectiveInteractionCanonicalInteractionMessageContentToolUsePart(BaseModel):
@@ -315,6 +403,16 @@ OutcomeEffectiveInteractionCanonicalInteractionMessageContent: TypeAlias = Annot
 ]
 
 
+class OutcomeEffectiveInteractionCanonicalInteractionMessageAttachment(BaseModel):
+    """A file referenced by a message, whether attached to it or cited by its content."""
+
+    id: str
+    """Provider-assigned identifier for the file."""
+
+    name: Optional[str] = None
+    """Filename as presented to the user."""
+
+
 class OutcomeEffectiveInteractionCanonicalInteractionMessageTimestamp(BaseModel):
     """Optional timestamp for when this message was created.
 
@@ -346,10 +444,22 @@ class OutcomeEffectiveInteractionCanonicalInteractionMessage(BaseModel):
     - `tool`: Tool result message
     """
 
+    attachments: Optional[List[OutcomeEffectiveInteractionCanonicalInteractionMessageAttachment]] = None
+    """
+    Files supplied with the message by its author, as distinct from files its
+    content cites.
+    """
+
     timestamp: Optional[OutcomeEffectiveInteractionCanonicalInteractionMessageTimestamp] = None
     """Optional timestamp for when this message was created.
 
     When supplied, `value` is required.
+    """
+
+    tools_used: Optional[List[str]] = None
+    """
+    Names of provider-hosted tools invoked while producing this message. Tools the
+    model called directly appear as `tool_use` content parts instead.
     """
 
 

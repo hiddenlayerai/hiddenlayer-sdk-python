@@ -6,6 +6,7 @@ from typing import Dict, Union, Iterable
 from datetime import datetime
 from typing_extensions import Literal, Required, Annotated, TypeAlias, TypedDict
 
+from .._types import SequenceNotStr
 from .._utils import PropertyInfo
 
 __all__ = [
@@ -15,11 +16,15 @@ __all__ = [
     "InteractionCanonicalInteractionMessage",
     "InteractionCanonicalInteractionMessageContent",
     "InteractionCanonicalInteractionMessageContentTextPart",
+    "InteractionCanonicalInteractionMessageContentTextPartAnnotation",
+    "InteractionCanonicalInteractionMessageContentTextPartAnnotationFile",
     "InteractionCanonicalInteractionMessageContentToolUsePart",
     "InteractionCanonicalInteractionMessageContentToolResultPart",
+    "InteractionCanonicalInteractionMessageAttachment",
     "InteractionCanonicalInteractionMessageTimestamp",
     "InteractionCanonicalInteractionToolsAvailable",
     "Metadata",
+    "MetadataExternalSessionID",
 ]
 
 
@@ -41,6 +46,33 @@ class RuntimeEvaluateInteractionParams(TypedDict, total=False):
     hl_project_id: Annotated[str, PropertyInfo(alias="HL-Project-Id")]
 
 
+class InteractionCanonicalInteractionMessageContentTextPartAnnotationFile(TypedDict, total=False):
+    """A file referenced by a message, whether attached to it or cited by its content."""
+
+    id: Required[str]
+    """Provider-assigned identifier for the file."""
+
+    name: str
+    """Filename as presented to the user."""
+
+
+class InteractionCanonicalInteractionMessageContentTextPartAnnotation(TypedDict, total=False):
+    """An external source a span of message content drew on."""
+
+    type: Required[str]
+    """The kind of source cited, as reported by the provider. Common values include:
+
+    - `url_citation`: A web page
+    - `file_citation`: A file available to the conversation
+    """
+
+    files: Iterable[InteractionCanonicalInteractionMessageContentTextPartAnnotationFile]
+    """Files this annotation cites."""
+
+    urls: SequenceNotStr[str]
+    """URLs this annotation cites."""
+
+
 class InteractionCanonicalInteractionMessageContentTextPart(TypedDict, total=False):
     """A text content part within a message."""
 
@@ -49,6 +81,9 @@ class InteractionCanonicalInteractionMessageContentTextPart(TypedDict, total=Fal
 
     type: Required[Literal["text"]]
     """Content part type for text."""
+
+    annotations: Iterable[InteractionCanonicalInteractionMessageContentTextPartAnnotation]
+    """External sources this text drew on. Absent when the text cites nothing."""
 
 
 class InteractionCanonicalInteractionMessageContentToolUsePart(TypedDict, total=False):
@@ -93,6 +128,16 @@ InteractionCanonicalInteractionMessageContent: TypeAlias = Union[
 ]
 
 
+class InteractionCanonicalInteractionMessageAttachment(TypedDict, total=False):
+    """A file referenced by a message, whether attached to it or cited by its content."""
+
+    id: Required[str]
+    """Provider-assigned identifier for the file."""
+
+    name: str
+    """Filename as presented to the user."""
+
+
 class InteractionCanonicalInteractionMessageTimestamp(TypedDict, total=False):
     """Optional timestamp for when this message was created.
 
@@ -124,10 +169,22 @@ class InteractionCanonicalInteractionMessage(TypedDict, total=False):
     - `tool`: Tool result message
     """
 
+    attachments: Iterable[InteractionCanonicalInteractionMessageAttachment]
+    """
+    Files supplied with the message by its author, as distinct from files its
+    content cites.
+    """
+
     timestamp: InteractionCanonicalInteractionMessageTimestamp
     """Optional timestamp for when this message was created.
 
     When supplied, `value` is required.
+    """
+
+    tools_used: SequenceNotStr[str]
+    """
+    Names of provider-hosted tools invoked while producing this message. Tools the
+    model called directly appear as `tool_use` content parts instead.
     """
 
 
@@ -173,6 +230,16 @@ class InteractionCanonicalInteraction(TypedDict, total=False):
 Interaction: TypeAlias = Union[InteractionCanonicalInteraction, Dict[str, object]]
 
 
+class MetadataExternalSessionID(TypedDict, total=False):
+    """An external session identifier with optional source."""
+
+    id: Required[str]
+    """The external session identifier value."""
+
+    source: str
+    """The system or client that supplied this identifier."""
+
+
 class Metadata(TypedDict, total=False):
     """Metadata about the LLM interactions being evaluated."""
 
@@ -192,4 +259,12 @@ class Metadata(TypedDict, total=False):
     """
     An externally-defined session identifier to group interactions into a single
     session. The identifier should be unique across all sessions.
+    """
+
+    external_session_ids: Iterable[MetadataExternalSessionID]
+    """External session identifier with the system that supplied it.
+
+    The entry is stored as the interaction's session alias and takes precedence over
+    `external_session_id` when both are supplied. One alias is stored per
+    interaction.
     """
