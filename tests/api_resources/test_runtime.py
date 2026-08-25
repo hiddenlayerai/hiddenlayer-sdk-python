@@ -67,20 +67,58 @@ class TestRuntime:
                             {
                                 "text": "What is the capital of France?",
                                 "type": "text",
+                                "annotations": [
+                                    {
+                                        "type": "url_citation",
+                                        "files": [
+                                            {
+                                                "id": "file-abc123",
+                                                "name": "q3-revenue.pdf",
+                                            }
+                                        ],
+                                        "urls": ["https://example.com/q3-report"],
+                                    }
+                                ],
                             }
                         ],
                         "role": "user",
+                        "attachments": [
+                            {
+                                "id": "file-abc123",
+                                "name": "q3-revenue.pdf",
+                            }
+                        ],
                         "timestamp": {"value": parse_datetime("2024-02-10T12:00:00Z")},
+                        "tools_used": ["web_search"],
                     },
                     {
                         "content": [
                             {
                                 "text": "The capital of France is Paris.",
                                 "type": "text",
+                                "annotations": [
+                                    {
+                                        "type": "url_citation",
+                                        "files": [
+                                            {
+                                                "id": "file-abc123",
+                                                "name": "q3-revenue.pdf",
+                                            }
+                                        ],
+                                        "urls": ["https://example.com/q3-report"],
+                                    }
+                                ],
                             }
                         ],
                         "role": "assistant",
+                        "attachments": [
+                            {
+                                "id": "file-abc123",
+                                "name": "q3-revenue.pdf",
+                            }
+                        ],
                         "timestamp": {"value": parse_datetime("2024-02-10T12:00:00Z")},
+                        "tools_used": ["web_search"],
                     },
                 ],
                 "tools_available": [
@@ -96,6 +134,12 @@ class TestRuntime:
                 "provider": "openai",
                 "requester_id": "user-12345",
                 "external_session_id": "sess_4b8cde94604f4c389406a0b2f806069a",
+                "external_session_ids": [
+                    {
+                        "id": "id",
+                        "source": "source",
+                    }
+                ],
             },
             hl_project_id="internal-search-chatbot",
         )
@@ -366,20 +410,58 @@ class TestAsyncRuntime:
                             {
                                 "text": "What is the capital of France?",
                                 "type": "text",
+                                "annotations": [
+                                    {
+                                        "type": "url_citation",
+                                        "files": [
+                                            {
+                                                "id": "file-abc123",
+                                                "name": "q3-revenue.pdf",
+                                            }
+                                        ],
+                                        "urls": ["https://example.com/q3-report"],
+                                    }
+                                ],
                             }
                         ],
                         "role": "user",
+                        "attachments": [
+                            {
+                                "id": "file-abc123",
+                                "name": "q3-revenue.pdf",
+                            }
+                        ],
                         "timestamp": {"value": parse_datetime("2024-02-10T12:00:00Z")},
+                        "tools_used": ["web_search"],
                     },
                     {
                         "content": [
                             {
                                 "text": "The capital of France is Paris.",
                                 "type": "text",
+                                "annotations": [
+                                    {
+                                        "type": "url_citation",
+                                        "files": [
+                                            {
+                                                "id": "file-abc123",
+                                                "name": "q3-revenue.pdf",
+                                            }
+                                        ],
+                                        "urls": ["https://example.com/q3-report"],
+                                    }
+                                ],
                             }
                         ],
                         "role": "assistant",
+                        "attachments": [
+                            {
+                                "id": "file-abc123",
+                                "name": "q3-revenue.pdf",
+                            }
+                        ],
                         "timestamp": {"value": parse_datetime("2024-02-10T12:00:00Z")},
+                        "tools_used": ["web_search"],
                     },
                 ],
                 "tools_available": [
@@ -395,6 +477,12 @@ class TestAsyncRuntime:
                 "provider": "openai",
                 "requester_id": "user-12345",
                 "external_session_id": "sess_4b8cde94604f4c389406a0b2f806069a",
+                "external_session_ids": [
+                    {
+                        "id": "id",
+                        "source": "source",
+                    }
+                ],
             },
             hl_project_id="internal-search-chatbot",
         )
