@@ -58,7 +58,7 @@ __all__ = [
 ]
 
 ENVIRONMENTS: Dict[str, str] = {
-    "prod-us": "https://api.hiddenlayer.ai",
+    "prod-us": "https://api.us.hiddenlayer.ai",
     "prod-eu": "https://api.eu.hiddenlayer.ai",
 }
 
