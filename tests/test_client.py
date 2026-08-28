@@ -724,7 +724,7 @@ class TestHiddenLayer:
             client = HiddenLayer(
                 base_url=None, bearer_token=bearer_token, _strict_response_validation=True, environment="prod-us"
             )
-            assert str(client.base_url).startswith("https://api.hiddenlayer.ai")
+            assert str(client.base_url).startswith("https://api.us.hiddenlayer.ai")
 
             client.close()
 
@@ -1700,7 +1700,7 @@ class TestAsyncHiddenLayer:
             client = AsyncHiddenLayer(
                 base_url=None, bearer_token=bearer_token, _strict_response_validation=True, environment="prod-us"
             )
-            assert str(client.base_url).startswith("https://api.hiddenlayer.ai")
+            assert str(client.base_url).startswith("https://api.us.hiddenlayer.ai")
 
             await client.close()
 
