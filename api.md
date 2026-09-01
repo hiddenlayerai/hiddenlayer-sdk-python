@@ -18,7 +18,7 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.models import CardListResponse, CardListParams
+from hiddenlayer.types.models import CardListResponse
 ```
 
 Methods:
@@ -102,9 +102,6 @@ from hiddenlayer.types import (
     SensorRetrieveResponse,
     SensorUpdateResponse,
     SensorQueryResponse,
-    SensorCreateParams,
-    SensorUpdateParams,
-    SensorQueryParams,
 )
 ```
 
@@ -123,7 +120,7 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.scans import ScanReport, ResultSarifResponse
+from hiddenlayer.types.scans import FileScanReport, ScanReport, ResultSarifResponse
 ```
 
 Methods:
@@ -135,7 +132,7 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.scans import JobListResponse, ScanJob, ScanReport
+from hiddenlayer.types.scans import ScanJob, JobListResponse
 ```
 
 Methods:
@@ -149,11 +146,7 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.scans import (
-    UploadCompleteAllResponse, 
-    UploadStartResponse,
-    UploadStartParams,
-)
+from hiddenlayer.types.scans import UploadCompleteAllResponse, UploadStartResponse
 ```
 
 Methods:
