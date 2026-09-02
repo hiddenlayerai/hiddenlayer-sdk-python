@@ -53,7 +53,7 @@ def _build_scan_report(summary: Any, file_results: List[Any]) -> "ScanReport":
     """Assemble a full ScanReport from a scan summary plus its paginated file results."""
     data: Dict[str, Any] = summary.model_dump()
     data["file_results"] = [file_result.model_dump() for file_result in file_results]
-    nested_summary = data.get("summary") or {}
+    nested_summary: Dict[str, Any] = data.get("summary") or {}
     for field in _DEPRECATED_SUMMARY_MIRROR_FIELDS:
         if field not in data and field in nested_summary:
             data[field] = nested_summary[field]
