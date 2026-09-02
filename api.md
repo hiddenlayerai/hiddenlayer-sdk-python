@@ -18,7 +18,7 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.models import CardListResponse, CardListParams
+from hiddenlayer.types.models import CardListResponse
 ```
 
 Methods:
@@ -102,9 +102,6 @@ from hiddenlayer.types import (
     SensorRetrieveResponse,
     SensorUpdateResponse,
     SensorQueryResponse,
-    SensorCreateParams,
-    SensorUpdateParams,
-    SensorQueryParams,
 )
 ```
 
@@ -123,11 +120,19 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.scans import ScanReport, ResultSarifResponse
+from hiddenlayer.types.scans import (
+    FileScanReport,
+    ScanFileResult,
+    ScanReport,
+    ScanReportSummary,
+    ResultSarifResponse,
+)
 ```
 
 Methods:
 
+- <code title="get /scan/v3/results/{scan_id}/files">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">list_files</a>(scan_id, \*\*<a href="src/hiddenlayer/types/scans/result_list_files_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scans/scan_file_result.py">SyncCursorPagination[ScanFileResult]</a></code>
+- <code title="get /scan/v3/results/{scan_id}/summary">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">retrieve_summary</a>(scan_id) -> <a href="./src/hiddenlayer/types/scans/scan_report_summary.py">ScanReportSummary</a></code>
 - <code title="get /scan/v3/results/{scan_id}/sarif">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">sarif</a>(scan_id) -> str</code>
 
 ## Jobs
@@ -135,7 +140,7 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.scans import JobListResponse, ScanJob, ScanReport
+from hiddenlayer.types.scans import ScanJob, JobListResponse
 ```
 
 Methods:
@@ -149,11 +154,7 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.scans import (
-    UploadCompleteAllResponse, 
-    UploadStartResponse,
-    UploadStartParams,
-)
+from hiddenlayer.types.scans import UploadCompleteAllResponse, UploadStartResponse
 ```
 
 Methods:
@@ -171,7 +172,7 @@ from hiddenlayer.types.scans.upload import FileAddResponse, FileCompleteResponse
 
 Methods:
 
-- <code title="post /scan/v3/upload/{scan_id}/file">client.scans.upload.file.<a href="./src/hiddenlayer/resources/scans/upload/file.py">add</a>(scan_id, \*, file_content_length: int, file_name: str) -> <a href="./src/hiddenlayer/types/scans/upload/file_add_response.py">FileAddResponse</a></code>
+- <code title="post /scan/v3/upload/{scan_id}/file">client.scans.upload.file.<a href="./src/hiddenlayer/resources/scans/upload/file.py">add</a>(scan_id) -> <a href="./src/hiddenlayer/types/scans/upload/file_add_response.py">FileAddResponse</a></code>
 - <code title="patch /scan/v3/upload/{scan_id}/file/{file_id}">client.scans.upload.file.<a href="./src/hiddenlayer/resources/scans/upload/file.py">complete</a>(file_id, \*, scan_id) -> <a href="./src/hiddenlayer/types/scans/upload/file_complete_response.py">FileCompleteResponse</a></code>
 
 # Library Extensions
