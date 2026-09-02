@@ -118,11 +118,19 @@ Methods:
 Types:
 
 ```python
-from hiddenlayer.types.scans import FileScanReport, ScanReport, ResultSarifResponse
+from hiddenlayer.types.scans import (
+    FileScanReport,
+    ScanFileResult,
+    ScanReport,
+    ScanReportSummary,
+    ResultSarifResponse,
+)
 ```
 
 Methods:
 
+- <code title="get /scan/v3/results/{scan_id}/files">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">list_files</a>(scan_id, \*\*<a href="src/hiddenlayer/types/scans/result_list_files_params.py">params</a>) -> <a href="./src/hiddenlayer/types/scans/scan_file_result.py">SyncCursorPagination[ScanFileResult]</a></code>
+- <code title="get /scan/v3/results/{scan_id}/summary">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">retrieve_summary</a>(scan_id) -> <a href="./src/hiddenlayer/types/scans/scan_report_summary.py">ScanReportSummary</a></code>
 - <code title="get /scan/v3/results/{scan_id}/sarif">client.scans.results.<a href="./src/hiddenlayer/resources/scans/results.py">sarif</a>(scan_id) -> str</code>
 
 ## Jobs
