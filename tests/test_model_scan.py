@@ -8,7 +8,6 @@ from unittest.mock import Mock, AsyncMock, patch
 import pytest
 
 from hiddenlayer import HiddenLayer, AsyncHiddenLayer
-from hiddenlayer.types.scans import ScanReport
 from hiddenlayer.lib.model_scan import (
     EXCLUDE_FILE_TYPES,
     ModelScanner,
@@ -21,6 +20,24 @@ from hiddenlayer.types.scans.upload import FileAddResponse
 from hiddenlayer.types.scans.upload_start_response import UploadStartResponse
 from hiddenlayer.types.scans.upload_complete_all_response import UploadCompleteAllResponse
 from hiddenlayer.types.scans.upload.file_complete_response import FileCompleteResponse
+
+
+def _mock_report_reconstruction(mock_client: Mock, *, status: str = "done") -> None:
+    """Configure retrieve_summary + list_files so helpers can assemble a report."""
+    summary = Mock()
+    summary.status = status
+    summary.model_dump.return_value = {
+        "scan_id": "test-scan-id-123",
+        "status": status,
+        "summary": {"detection_count": 0, "file_count": 1, "files_with_detections_count": 0},
+    }
+    file_result = Mock()
+    file_result.model_dump.return_value = {"file_instance_id": "file-1", "file_location": "model.pkl"}
+    page = Mock()
+    page.items = [file_result]
+    page.has_next_page.return_value = False
+    mock_client.scans.results.retrieve_summary.return_value = summary
+    mock_client.scans.results.list_files.return_value = page
 
 
 class TestModelScannerIntegration:
@@ -76,17 +93,12 @@ class TestModelScanner:
             mock_file_add_response.parts = [mock_part]
             mock_file_add_response.upload_id = "upload-123"
 
-            # Mock the scan report
-            mock_scan_report = Mock(spec=ScanReport)
-            mock_scan_report.scan_id = "test-scan-id-123"
-            mock_scan_report.status = "pending"
-
             # Set up mocks
             self.mock_client.scans.upload.start.return_value = mock_upload_response
             self.mock_client.scans.upload.file.add.return_value = mock_file_add_response
             self.mock_client.scans.upload.file.complete.return_value = Mock(spec=FileCompleteResponse)
             self.mock_client.scans.upload.complete_all.return_value = Mock(spec=UploadCompleteAllResponse)
-            self.mock_client.scans.jobs.retrieve.return_value = mock_scan_report
+            _mock_report_reconstruction(self.mock_client, status="pending")
 
             # Mock call to put for upload
             mock_response = Mock(raise_for_status=Mock(return_value=None))
@@ -121,11 +133,14 @@ class TestModelScanner:
 
             self.mock_client.scans.upload.complete_all.assert_called_once_with(scan_id="test-scan-id-123")
 
-            # Should retrieve scan once (no waiting)
-            self.mock_client.scans.jobs.retrieve.assert_called_once_with("test-scan-id-123")
+            # Should fetch the summary once and never touch the legacy results endpoint
+            self.mock_client.scans.results.retrieve_summary.assert_called_once_with("test-scan-id-123")
+            self.mock_client.scans.jobs.retrieve.assert_not_called()
 
-            # Should return the scan report
-            assert result is mock_scan_report
+            # Should assemble the report from the summary plus file results
+            assert result.scan_id == "test-scan-id-123"
+            assert result.status == "pending"
+            assert result.file_results is not None and len(result.file_results) == 1
 
             # Verify httpx.put was called
             self.mock_client._client.put.assert_called_once_with(
@@ -163,22 +178,38 @@ class TestModelScanner:
             mock_file_add_response.parts = [mock_part]
             mock_file_add_response.upload_id = "upload-123"
 
-            # Mock scan reports - first pending, then running, then done
-            pending_report = Mock(spec=ScanReport)
-            pending_report.status = ScanStatus.PENDING
+            # Mock status summaries - first pending, then running, then done
+            pending_summary = Mock()
+            pending_summary.status = ScanStatus.PENDING
 
-            running_report = Mock(spec=ScanReport)
-            running_report.status = ScanStatus.RUNNING
+            running_summary = Mock()
+            running_summary.status = ScanStatus.RUNNING
 
-            done_report = Mock(spec=ScanReport)
-            done_report.status = ScanStatus.DONE
+            done_summary = Mock()
+            done_summary.status = ScanStatus.DONE
+            done_summary.model_dump.return_value = {
+                "scan_id": "test-scan-id-123",
+                "status": "done",
+                "summary": {"detection_count": 1, "file_count": 2, "files_with_detections_count": 1},
+            }
+
+            mock_file_result = Mock()
+            mock_file_result.model_dump.return_value = {"file_instance_id": "file-1", "file_location": "model.pkl"}
+            mock_page = Mock()
+            mock_page.items = [mock_file_result]
+            mock_page.has_next_page.return_value = False
 
             # Set up mocks
             self.mock_client.scans.upload.start.return_value = mock_upload_response
             self.mock_client.scans.upload.file.add.return_value = mock_file_add_response
             self.mock_client.scans.upload.file.complete.return_value = Mock(spec=FileCompleteResponse)
             self.mock_client.scans.upload.complete_all.return_value = Mock(spec=UploadCompleteAllResponse)
-            self.mock_client.scans.jobs.retrieve.side_effect = [pending_report, running_report, done_report]
+            self.mock_client.scans.results.retrieve_summary.side_effect = [
+                pending_summary,
+                running_summary,
+                done_summary,
+            ]
+            self.mock_client.scans.results.list_files.return_value = mock_page
 
             # Mock httpx.put
             with patch("httpx.put") as mock_put:
@@ -189,11 +220,17 @@ class TestModelScanner:
                 # Call scan_file with waiting
                 result = self.scanner.scan_file(model_name="test-model", model_path=temp_path, wait_for_results=True)
 
-            # Should retrieve scan multiple times (polling)
-            assert self.mock_client.scans.jobs.retrieve.call_count == 3
+            # Should poll the summary endpoint, then collect file results; the
+            # legacy unpaginated results endpoint is never called
+            assert self.mock_client.scans.results.retrieve_summary.call_count == 3
+            self.mock_client.scans.results.list_files.assert_called_once()
+            self.mock_client.scans.jobs.retrieve.assert_not_called()
 
-            # Should return the final scan report
-            assert result is done_report
+            # Result is assembled from the summary plus file results
+            assert result.scan_id == "test-scan-id-123"
+            assert result.status == "done"
+            assert result.file_results is not None and len(result.file_results) == 1
+            assert result.detection_count == 1
 
             # Should have slept twice (between the 3 retrievals)
             assert mock_sleep.call_count == 2
@@ -233,15 +270,12 @@ class TestModelScanner:
             mock_file_add_response.parts = [mock_part]
             mock_file_add_response.upload_id = "upload-123"
 
-            mock_scan_report = Mock(spec=ScanReport)
-            mock_scan_report.status = ScanStatus.DONE
-
             # Set up mocks
             self.mock_client.scans.upload.start.return_value = mock_upload_response
             self.mock_client.scans.upload.file.add.return_value = mock_file_add_response
             self.mock_client.scans.upload.file.complete.return_value = Mock(spec=FileCompleteResponse)
             self.mock_client.scans.upload.complete_all.return_value = Mock(spec=UploadCompleteAllResponse)
-            self.mock_client.scans.jobs.retrieve.return_value = mock_scan_report
+            _mock_report_reconstruction(self.mock_client, status="pending")
 
             # Mock httpx.put
             with patch("httpx.put") as mock_put:
@@ -267,7 +301,8 @@ class TestModelScanner:
             assert "README.md" not in uploaded_files  # Should be excluded
             assert "data.txt" not in uploaded_files  # Should be excluded
 
-            assert result is mock_scan_report
+            assert result.scan_id == "test-scan-id-123"
+            assert result.file_results is not None and len(result.file_results) == 1
 
     def test_scan_file_upload_url_none_raises_error(self) -> None:
         """Test that None upload_url raises an error."""
@@ -337,15 +372,12 @@ class TestAsyncModelScanner:
             mock_file_add_response.parts = [mock_part]
             mock_file_add_response.upload_id = "upload-123"
 
-            mock_scan_report = Mock(spec=ScanReport)
-            mock_scan_report.status = "pending"
-
             # Set up async mocks - use return_value like other working async tests
             self.mock_client.scans.upload.start.return_value = mock_upload_response
             self.mock_client.scans.upload.file.add.return_value = mock_file_add_response
             self.mock_client.scans.upload.file.complete.return_value = Mock(spec=FileCompleteResponse)
             self.mock_client.scans.upload.complete_all.return_value = Mock(spec=UploadCompleteAllResponse)
-            self.mock_client.scans.jobs.retrieve.return_value = mock_scan_report
+            _mock_report_reconstruction(self.mock_client, status="pending")
 
             # Mock call to put for upload
             mock_response = Mock(raise_for_status=Mock(return_value=None))
@@ -361,9 +393,11 @@ class TestAsyncModelScanner:
             self.mock_client.scans.upload.file.add.assert_called_once()
             self.mock_client.scans.upload.file.complete.assert_called_once()
             self.mock_client.scans.upload.complete_all.assert_called_once()
-            self.mock_client.scans.jobs.retrieve.assert_called_once()
+            self.mock_client.scans.results.retrieve_summary.assert_called_once()
+            self.mock_client.scans.jobs.retrieve.assert_not_called()
 
-            assert result is mock_scan_report
+            assert result.scan_id == "test-scan-id-123"
+            assert result.status == "pending"
 
         finally:
             # Clean up temp file

@@ -7,9 +7,27 @@ from unittest.mock import Mock, AsyncMock, patch
 import pytest
 
 from hiddenlayer import HiddenLayer, AsyncHiddenLayer
-from hiddenlayer.types.scans import ScanJob, ScanReport
+from hiddenlayer.types.scans import ScanJob
 from hiddenlayer.lib.scan_utils import ScanStatus
 from hiddenlayer.lib.community_scan import CommunityScanner, CommunityScanSource, AsyncCommunityScanner
+
+
+def _mock_report_reconstruction(mock_client: Mock, *, status: str = "done") -> None:
+    """Configure retrieve_summary + list_files so helpers can assemble a report."""
+    summary = Mock()
+    summary.status = status
+    summary.model_dump.return_value = {
+        "scan_id": "test-scan-id-123",
+        "status": status,
+        "summary": {"detection_count": 0, "file_count": 1, "files_with_detections_count": 0},
+    }
+    file_result = Mock()
+    file_result.model_dump.return_value = {"file_instance_id": "file-1", "file_location": "model.pkl"}
+    page = Mock()
+    page.items = [file_result]
+    page.has_next_page.return_value = False
+    mock_client.scans.results.retrieve_summary.return_value = summary
+    mock_client.scans.results.list_files.return_value = page
 
 
 class TestCommunityScannerIntegration:
@@ -51,11 +69,8 @@ class TestCommunityScanner:
         # Mock the jobs.request method
         self.mock_client.scans.jobs.request.return_value = mock_scan_job
 
-        # Mock the jobs.retrieve method for immediate return
-        mock_scan_report = Mock(spec=ScanReport)
-        mock_scan_report.scan_id = "test-scan-id-123"
-        mock_scan_report.status = "pending"
-        self.mock_client.scans.jobs.retrieve.return_value = mock_scan_report
+        # Mock the summary + file results used to assemble the report
+        _mock_report_reconstruction(self.mock_client, status="pending")
 
         # Call community_scan without waiting
         result = self.scanner.community_scan(
@@ -74,9 +89,12 @@ class TestCommunityScanner:
         assert call_args[1]["inventory"]["requested_scan_location"] == "https://example.com/model.pkl"
         assert call_args[1]["inventory"]["requesting_entity"] == "hiddenlayer-python-sdk"
 
-        # Should retrieve once to get current status
-        self.mock_client.scans.jobs.retrieve.assert_called_once_with("test-scan-id-123")
-        assert result is mock_scan_report
+        # Should fetch the summary once and never touch the legacy results endpoint
+        self.mock_client.scans.results.retrieve_summary.assert_called_once_with("test-scan-id-123")
+        self.mock_client.scans.jobs.retrieve.assert_not_called()
+        assert result.scan_id == "test-scan-id-123"
+        assert result.status == "pending"
+        assert result.file_results is not None and len(result.file_results) == 1
 
     @patch("hiddenlayer.lib.scan_utils.time.sleep")
     @patch("hiddenlayer.lib.scan_utils.logger")
@@ -88,14 +106,27 @@ class TestCommunityScanner:
         self.mock_client.scans.jobs.request.return_value = mock_scan_job
 
         # Mock the polling sequence: pending -> running -> done
-        mock_reports: list[Mock] = []
+        mock_summaries: list[Mock] = []
         for status in ["pending", "running", "done"]:
-            mock_report = Mock(spec=ScanReport)
-            mock_report.scan_id = "test-scan-id-123"
-            mock_report.status = status
-            mock_reports.append(mock_report)
+            mock_summary = Mock()
+            mock_summary.scan_id = "test-scan-id-123"
+            mock_summary.status = status
+            mock_summaries.append(mock_summary)
 
-        self.mock_client.scans.jobs.retrieve.side_effect = mock_reports
+        mock_summaries[-1].model_dump.return_value = {
+            "scan_id": "test-scan-id-123",
+            "status": "done",
+            "summary": {"detection_count": 1, "file_count": 2, "files_with_detections_count": 1},
+        }
+        self.mock_client.scans.results.retrieve_summary.side_effect = mock_summaries
+
+        # File results are collected from the paginated endpoint once the scan is done
+        mock_file_result = Mock()
+        mock_file_result.model_dump.return_value = {"file_instance_id": "file-1", "file_location": "model.pkl"}
+        mock_page = Mock()
+        mock_page.items = [mock_file_result]
+        mock_page.has_next_page.return_value = False
+        self.mock_client.scans.results.list_files.return_value = mock_page
 
         # Call community_scan with waiting
         result = self.scanner.community_scan(
@@ -108,8 +139,11 @@ class TestCommunityScanner:
         # Should make the request
         self.mock_client.scans.jobs.request.assert_called_once()
 
-        # Should retrieve multiple times (polling)
-        assert self.mock_client.scans.jobs.retrieve.call_count == 3
+        # Should poll the summary endpoint, then collect file results; the legacy
+        # unpaginated results endpoint is never called
+        assert self.mock_client.scans.results.retrieve_summary.call_count == 3
+        self.mock_client.scans.results.list_files.assert_called_once()
+        self.mock_client.scans.jobs.retrieve.assert_not_called()
 
         # Should have slept between polls
         assert mock_sleep.call_count == 2
@@ -117,9 +151,13 @@ class TestCommunityScanner:
         # Should have logged status updates
         assert mock_logger.info.call_count == 2
 
-        # Final result should be the "done" report
-        assert result is mock_reports[2]
+        # Final result is assembled from the summary plus file results
+        assert result.scan_id == "test-scan-id-123"
         assert result.status == "done"
+        assert result.file_results is not None and len(result.file_results) == 1
+        # Deprecated top-level counts are mirrored from the nested summary
+        assert result.detection_count == 1
+        assert result.file_count == 2
 
     def test_community_scan_no_scan_id_raises_error(self) -> None:
         """Test that missing scan_id raises ValueError."""
@@ -138,8 +176,7 @@ class TestCommunityScanner:
         mock_scan_job.scan_id = "test-scan-id-123"
         self.mock_client.scans.jobs.request.return_value = mock_scan_job
 
-        mock_scan_report = Mock(spec=ScanReport)
-        self.mock_client.scans.jobs.retrieve.return_value = mock_scan_report
+        _mock_report_reconstruction(self.mock_client)
 
         self.scanner.community_scan(
             model_name="custom-model",
@@ -182,11 +219,8 @@ class TestAsyncCommunityScanner:
         mock_scan_job.scan_id = "test-scan-id-123"
         self.mock_client.scans.jobs.request.return_value = mock_scan_job
 
-        # Mock the jobs.retrieve method for immediate return
-        mock_scan_report = Mock(spec=ScanReport)
-        mock_scan_report.scan_id = "test-scan-id-123"
-        mock_scan_report.status = "pending"
-        self.mock_client.scans.jobs.retrieve.return_value = mock_scan_report
+        # Mock the summary + file results used to assemble the report
+        _mock_report_reconstruction(self.mock_client, status="pending")
 
         # Call community_scan without waiting
         result = await self.scanner.community_scan(
@@ -203,9 +237,12 @@ class TestAsyncCommunityScanner:
         assert call_args[1]["access"]["source"] == "AWS_PRESIGNED"
         assert call_args[1]["inventory"]["model_name"] == "test-model"
 
-        # Should retrieve once to get current status
-        self.mock_client.scans.jobs.retrieve.assert_called_once_with("test-scan-id-123")
-        assert result is mock_scan_report
+        # Should fetch the summary once and never touch the legacy results endpoint
+        self.mock_client.scans.results.retrieve_summary.assert_called_once_with("test-scan-id-123")
+        self.mock_client.scans.jobs.retrieve.assert_not_called()
+        assert result.scan_id == "test-scan-id-123"
+        assert result.status == "pending"
+        assert result.file_results is not None and len(result.file_results) == 1
 
     @pytest.mark.asyncio
     @patch("hiddenlayer.lib.scan_utils.asyncio.sleep", new_callable=AsyncMock)
@@ -218,14 +255,27 @@ class TestAsyncCommunityScanner:
         self.mock_client.scans.jobs.request.return_value = mock_scan_job
 
         # Mock the polling sequence: pending -> running -> done
-        mock_reports: list[Mock] = []
+        mock_summaries: list[Mock] = []
         for status in ["pending", "running", "done"]:
-            mock_report = Mock(spec=ScanReport)
-            mock_report.scan_id = "test-scan-id-123"
-            mock_report.status = status
-            mock_reports.append(mock_report)
+            mock_summary = Mock()
+            mock_summary.scan_id = "test-scan-id-123"
+            mock_summary.status = status
+            mock_summaries.append(mock_summary)
 
-        self.mock_client.scans.jobs.retrieve.side_effect = mock_reports
+        mock_summaries[-1].model_dump.return_value = {
+            "scan_id": "test-scan-id-123",
+            "status": "done",
+            "summary": {"detection_count": 1, "file_count": 2, "files_with_detections_count": 1},
+        }
+        self.mock_client.scans.results.retrieve_summary.side_effect = mock_summaries
+
+        # File results are collected from the paginated endpoint once the scan is done
+        mock_file_result = Mock()
+        mock_file_result.model_dump.return_value = {"file_instance_id": "file-1", "file_location": "model.pkl"}
+        mock_page = Mock()
+        mock_page.items = [mock_file_result]
+        mock_page.has_next_page.return_value = False
+        self.mock_client.scans.results.list_files.return_value = mock_page
 
         # Call community_scan with waiting
         result = await self.scanner.community_scan(
@@ -238,8 +288,11 @@ class TestAsyncCommunityScanner:
         # Should make the request
         self.mock_client.scans.jobs.request.assert_called_once()
 
-        # Should retrieve multiple times (polling)
-        assert self.mock_client.scans.jobs.retrieve.call_count == 3
+        # Should poll the summary endpoint, then collect file results; the legacy
+        # unpaginated results endpoint is never called
+        assert self.mock_client.scans.results.retrieve_summary.call_count == 3
+        self.mock_client.scans.results.list_files.assert_called_once()
+        self.mock_client.scans.jobs.retrieve.assert_not_called()
 
         # Should have slept between polls
         assert mock_sleep.call_count == 2
@@ -247,9 +300,13 @@ class TestAsyncCommunityScanner:
         # Should have logged status updates
         assert mock_logger.info.call_count == 2
 
-        # Final result should be the "done" report
-        assert result is mock_reports[2]
+        # Final result is assembled from the summary plus file results
+        assert result.scan_id == "test-scan-id-123"
         assert result.status == "done"
+        assert result.file_results is not None and len(result.file_results) == 1
+        # Deprecated top-level counts are mirrored from the nested summary
+        assert result.detection_count == 1
+        assert result.file_count == 2
 
 
 class TestCommunityScanConstants:
