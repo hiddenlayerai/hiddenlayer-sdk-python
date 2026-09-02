@@ -1,31 +1,22 @@
 # Changelog
 
-## [3.9.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.8.0...v3.9.0) (2026-08-10)
+## [3.10.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.9.0...v3.10.0) (2026-09-02)
 
 
 ### Features
 
-* **scans:** add MITRE Atlas tactic/technique pairs to scan summaries ([7bfb80e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/7bfb80e6220e401e10b05c05e550d257196f5a3e))
-* **assets:** expose v2 AI Asset Inventory API ([b4aa81e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/b4aa81e2315da43dccd70f7a39b433f4eac52dbb))
-* **assets:** scope integration_id to discovered relationships, add ASSIGNED_TO ([087ad00](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/087ad007a98147216dc481388c9462f12d40daf1))
-* **runtime:** add effective_action_count, deprecate integration-limited counts ([3654047](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/365404768b647d0188e0bb544d403ceceb821670))
-* **runtime:** qualify action concepts, deprecate unqualified names ([9c709ac](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/9c709ac2e071baa6978dc547498814da8d3e9fe1))
-* **runtime:** remove beta label from v2 endpoints ([58f8cd5](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/58f8cd5b31a8f8768f9c0d3dd85c517a324c1f5f))
-* **scans:** add file upload endpoints ([60fe7d4](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/60fe7d4f6d66e4c7d0d2a9cf5d95f8ce11736c6f))
+* **hl-ai-service:** add chat completions and models endpoints ([db50a81](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/db50a81c7f2828208cc1b747d7cd2c6e3de09fe3))
+* **scans:** add scan summary and paginated file results endpoints ([#274](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/274)) ([db50a81](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/db50a81c7f2828208cc1b747d7cd2c6e3de09fe3))
 
 
 ### Bug Fixes
 
-* **assets:** align relationship docs with merged server behavior ([977f0db](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/977f0db81c133696f5f689b1c324cfbc5d07c627))
-* resolve unicode filename regression ([cc3026e](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/cc3026e5dcdeab2c75b7574bd59a3a8b1afc35cf))
-* **types:** avoid type-checker errors on params with additional properties ([47f06d0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/47f06d054b14d89dae1e661286a86c431355b4f0))
-* warn on beta endpoints with path parameters ([#208](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/208)) ([b0af129](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/b0af12979805ecb7a18bbb843077d9b3c9257fe3))
+* **ci:** use RELEASE_PLEASE_TOKEN for auto-approve ([#250](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/250)) ([b866fa9](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/b866fa9ca06f59205017a64b0abb01b002daae33))
 
 
-### Documentation
+### Reverts
 
-* define scope and length boundaries for endpoint descriptions ([3fd9115](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/3fd91157106804b07e535de2f6370cf61730b16c))
-* **runtime:** document control action alongside policy outcome ([adcb019](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/adcb019c4ac5cf522bd37f9bb1105c13c508f563))
+* restore CHANGELOG entries and generated-file alignment (reverts [#271](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/271)) ([#272](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/272)) ([8c5a995](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/8c5a9958e7fa4ab11b8ef7cfcb31d999732389c0))
 
 ## 3.8.0 (2026-06-24)
 
