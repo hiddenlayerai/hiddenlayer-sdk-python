@@ -3,19 +3,22 @@ Shared utilities for scan functionality across different scanner types.
 
 This module provides common retry logic for handling scan retrieval operations
 that may initially return 404 errors due to timing issues.
+
+Scan reports are assembled from the summary endpoint plus the cursor-paginated
+file-results endpoint; the unpaginated results endpoint is not used.
 """
 
 import time
 import random
 import asyncio
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, List
 
 from .._exceptions import NotFoundError
+from ..types.scans import ScanReport
 
 if TYPE_CHECKING:
     from .. import HiddenLayer, AsyncHiddenLayer
-    from ..types.scans import ScanReport
 
 logger = logging.getLogger(__name__)
 
@@ -30,11 +33,65 @@ class ScanStatus:
     CANCELED = "canceled"
 
 
+# Page size and inter-page delay for collecting file results. The delay
+# throttles reconstruction of massive scans (10k+ files) so the SDK never
+# hammers the API with back-to-back page reads.
+FILE_RESULTS_PAGE_SIZE = 100
+FILE_RESULTS_PAGE_DELAY_SECONDS = 0.25
+
+# Deprecated top-level report fields that mirror `.summary.*` per the API contract.
+_DEPRECATED_SUMMARY_MIRROR_FIELDS = (
+    "detection_count",
+    "file_count",
+    "files_with_detections_count",
+    "detection_categories",
+    "severity",
+)
+
+
+def _build_scan_report(summary: Any, file_results: List[Any]) -> "ScanReport":
+    """Assemble a full ScanReport from a scan summary plus its paginated file results."""
+    data: Dict[str, Any] = summary.model_dump()
+    data["file_results"] = [file_result.model_dump() for file_result in file_results]
+    nested_summary: Dict[str, Any] = data.get("summary") or {}
+    for field in _DEPRECATED_SUMMARY_MIRROR_FIELDS:
+        if field not in data and field in nested_summary:
+            data[field] = nested_summary[field]
+    return ScanReport.construct(**data)
+
+
+def _collect_file_results(client: "HiddenLayer", *, scan_id: str) -> List[Any]:
+    """Fetch every file result for a scan, throttling between page reads."""
+    page = client.scans.results.list_files(scan_id, page_size=FILE_RESULTS_PAGE_SIZE)
+    file_results: List[Any] = list(page.items or [])
+    while page.has_next_page():
+        time.sleep(FILE_RESULTS_PAGE_DELAY_SECONDS)
+        page = page.get_next_page()
+        file_results.extend(page.items or [])
+    return file_results
+
+
+async def _collect_file_results_async(client: "AsyncHiddenLayer", *, scan_id: str) -> List[Any]:
+    """Async version of _collect_file_results."""
+    page = await client.scans.results.list_files(scan_id, page_size=FILE_RESULTS_PAGE_SIZE)
+    file_results: List[Any] = list(page.items or [])
+    while page.has_next_page():
+        await asyncio.sleep(FILE_RESULTS_PAGE_DELAY_SECONDS)
+        page = await page.get_next_page()
+        file_results.extend(page.items or [])
+    return file_results
+
+
 def get_scan_results(client: "HiddenLayer", *, scan_id: str) -> "ScanReport":
     """
-    Get scan results with retry logic for 404 errors.
+    Get the scan report with retry logic for 404 errors.
 
     Used when wait_for_results=False to handle initial scan availability.
+
+    The report is assembled from the summary endpoint plus the paginated
+    file-results endpoint. If the scan is still running, the assembled report
+    is a point-in-time snapshot: paginating over an active scan may miss or
+    duplicate file entries.
     """
     retries = 0
     max_retries = 5  # Fewer retries since we're not waiting for completion
@@ -42,7 +99,9 @@ def get_scan_results(client: "HiddenLayer", *, scan_id: str) -> "ScanReport":
 
     while retries < max_retries:
         try:
-            return client.scans.jobs.retrieve(scan_id)
+            summary = client.scans.results.retrieve_summary(scan_id)
+            file_results = _collect_file_results(client, scan_id=scan_id)
+            return _build_scan_report(summary, file_results)
         except NotFoundError:
             retries += 1
             if retries >= max_retries:
@@ -59,21 +118,24 @@ def get_scan_results(client: "HiddenLayer", *, scan_id: str) -> "ScanReport":
 
 def wait_for_scan_results(client: "HiddenLayer", *, scan_id: str) -> "ScanReport":
     """
-    Wait for scan results using exponential backoff polling.
+    Wait for the scan to finish, then assemble the full report.
+
+    Polls the lightweight summary endpoint for status; once the scan reaches a
+    terminal state, the report is assembled from that summary plus the
+    paginated file-results endpoint (throttled between pages).
 
     Handles initial 404 errors when scan is not immediately available.
     """
     base_delay = 0.1  # seconds
     retries = 0
-    scan_results = None
 
     while True:
         try:
-            scan_results = client.scans.jobs.retrieve(scan_id)
+            summary = client.scans.results.retrieve_summary(scan_id)
             # If we got here, scan exists - check if it's done
-            if scan_results.status in [ScanStatus.DONE, ScanStatus.FAILED, ScanStatus.CANCELED]:
+            if summary.status in [ScanStatus.DONE, ScanStatus.FAILED, ScanStatus.CANCELED]:
                 break
-            logger.info(f"scan status: {scan_results.status}")
+            logger.info(f"scan status: {summary.status}")
         except NotFoundError:
             # Scan not found yet, treat it like any other retry condition
             logger.info(f"scan not found yet, retrying...")
@@ -83,12 +145,13 @@ def wait_for_scan_results(client: "HiddenLayer", *, scan_id: str) -> "ScanReport
         delay = min(delay, 30)  # cap at 30 seconds
         time.sleep(delay)
 
-    return scan_results
+    file_results = _collect_file_results(client, scan_id=scan_id)
+    return _build_scan_report(summary, file_results)
 
 
 async def get_scan_results_async(client: "AsyncHiddenLayer", *, scan_id: str) -> "ScanReport":
     """
-    Async version of get_scan_results with retry logic for 404 errors.
+    Async version of get_scan_results.
 
     Used when wait_for_results=False to handle initial scan availability.
     """
@@ -98,7 +161,9 @@ async def get_scan_results_async(client: "AsyncHiddenLayer", *, scan_id: str) ->
 
     while retries < max_retries:
         try:
-            return await client.scans.jobs.retrieve(scan_id)
+            summary = await client.scans.results.retrieve_summary(scan_id)
+            file_results = await _collect_file_results_async(client, scan_id=scan_id)
+            return _build_scan_report(summary, file_results)
         except NotFoundError:
             retries += 1
             if retries >= max_retries:
@@ -121,15 +186,14 @@ async def wait_for_scan_results_async(client: "AsyncHiddenLayer", *, scan_id: st
     """
     base_delay = 0.1  # seconds
     retries = 0
-    scan_results = None
 
     while True:
         try:
-            scan_results = await client.scans.jobs.retrieve(scan_id)
+            summary = await client.scans.results.retrieve_summary(scan_id)
             # If we got here, scan exists - check if it's done
-            if scan_results.status in [ScanStatus.DONE, ScanStatus.FAILED, ScanStatus.CANCELED]:
+            if summary.status in [ScanStatus.DONE, ScanStatus.FAILED, ScanStatus.CANCELED]:
                 break
-            logger.info(f"scan status: {scan_results.status}")
+            logger.info(f"scan status: {summary.status}")
         except NotFoundError:
             # Scan not found yet, treat it like any other retry condition
             logger.info(f"scan not found yet, retrying...")
@@ -139,7 +203,8 @@ async def wait_for_scan_results_async(client: "AsyncHiddenLayer", *, scan_id: st
         delay = min(delay, 30)  # cap at 30 seconds
         await asyncio.sleep(delay)
 
-    return scan_results
+    file_results = await _collect_file_results_async(client, scan_id=scan_id)
+    return _build_scan_report(summary, file_results)
 
 
 class ScanResultMixin:
@@ -148,7 +213,7 @@ class ScanResultMixin:
     _client: "HiddenLayer"
 
     def scan_result(self, *, scan_id: str) -> "ScanReport":
-        """Get the scan results for a given scan id."""
+        """Get the scan report for a given scan id."""
         return get_scan_results(self._client, scan_id=scan_id)
 
 
@@ -158,5 +223,5 @@ class AsyncScanResultMixin:
     _client: "AsyncHiddenLayer"
 
     async def scan_result(self, *, scan_id: str) -> "ScanReport":
-        """Get the scan results for a given scan id."""
+        """Get the scan report for a given scan id."""
         return await get_scan_results_async(self._client, scan_id=scan_id)
