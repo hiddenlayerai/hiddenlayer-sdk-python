@@ -51,8 +51,10 @@ _DEPRECATED_SUMMARY_MIRROR_FIELDS = (
 
 def _build_scan_report(summary: Any, file_results: List[Any]) -> "ScanReport":
     """Assemble a full ScanReport from a scan summary plus its paginated file results."""
-    data: Dict[str, Any] = summary.model_dump()
-    data["file_results"] = [file_result.model_dump() for file_result in file_results]
+    # Dump by alias so keys match the wire names `construct` resolves fields by;
+    # without it, aliased fields such as `$schema_version` are silently dropped.
+    data: Dict[str, Any] = summary.model_dump(by_alias=True)
+    data["file_results"] = [file_result.model_dump(by_alias=True) for file_result in file_results]
     nested_summary: Dict[str, Any] = data.get("summary") or {}
     for field in _DEPRECATED_SUMMARY_MIRROR_FIELDS:
         if field not in data and field in nested_summary:
