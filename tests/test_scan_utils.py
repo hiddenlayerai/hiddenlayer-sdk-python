@@ -116,3 +116,31 @@ class TestBuildScanReport:
         report = _build_scan_report(summary, [])
 
         assert report.detection_count == 7
+
+    def test_preserves_aliased_fields(self) -> None:
+        # A real model (not a Mock) so the model_dump/construct round-trip is exercised:
+        # `$schema_version` is only reachable through its alias.
+        from hiddenlayer.types.scans.scan_report_summary import ScanReportSummary
+
+        summary = ScanReportSummary.model_validate(
+            {
+                "scan_id": "scan-1",
+                "status": "done",
+                "version": "1.0.0",
+                "start_time": "2026-01-01T00:00:00Z",
+                "$schema_version": "1.2.3",
+                "inventory": {
+                    "model_id": "model-1",
+                    "model_name": "test-model",
+                    "model_version_id": "version-1",
+                    "requested_scan_location": "model.pkl",
+                },
+                "summary": {"detection_count": 3},
+            }
+        )
+
+        report = _build_scan_report(summary, [])
+
+        assert report.schema_version == "1.2.3"
+        assert report.scan_id == "scan-1"
+        assert report.detection_count == 3
