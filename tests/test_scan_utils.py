@@ -119,11 +119,12 @@ class TestBuildScanReport:
 
     def test_preserves_aliased_fields(self) -> None:
         # A real model (not a Mock) so the model_dump/construct round-trip is exercised:
-        # `$schema_version` is only reachable through its alias.
+        # `$schema_version` is only reachable through its alias. `construct` (rather than
+        # model_validate) keeps the test compatible with both pydantic v1 and v2.
         from hiddenlayer.types.scans.scan_report_summary import ScanReportSummary
 
-        summary = ScanReportSummary.model_validate(
-            {
+        summary = ScanReportSummary.construct(
+            **{
                 "scan_id": "scan-1",
                 "status": "done",
                 "version": "1.0.0",
