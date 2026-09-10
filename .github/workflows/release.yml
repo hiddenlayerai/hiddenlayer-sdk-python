@@ -28,6 +28,11 @@ jobs:
     if: github.repository == 'hiddenlayerai/hiddenlayer-sdk-python' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+
       - uses: hiddenlayerai/release-please-action@hl-v1
         id: release
         with:

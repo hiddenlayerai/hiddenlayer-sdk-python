@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.10.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.9.0...v3.10.0) (2026-09-09)
+
+
+### Features
+
+* **scans:** add scan summary and paginated file results endpoints ([#274](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/274)) ([db50a81](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/db50a81c7f2828208cc1b747d7cd2c6e3de09fe3))
+
+
+### Bug Fixes
+
+* **ci:** use RELEASE_PLEASE_TOKEN for auto-approve ([#250](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/250)) ([b866fa9](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/b866fa9ca06f59205017a64b0abb01b002daae33))
+* **scans:** fetch scan results via summary polling and paginated file reads ([#275](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/275)) ([32d6312](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/32d6312c7cf2291b86ad473103b95d037e482339))
+* **scans:** preserve aliased fields when assembling scan reports ([#276](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/276)) ([395f5ad](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/395f5ad63d178de73ecab710fd792410273a2321))
+
+
+### Reverts
+
+* restore CHANGELOG entries and generated-file alignment (reverts [#271](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/271)) ([#272](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/272)) ([8c5a995](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/8c5a9958e7fa4ab11b8ef7cfcb31d999732389c0))
+
 ## [3.9.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.8.0...v3.9.0) (2026-08-10)
 
 
