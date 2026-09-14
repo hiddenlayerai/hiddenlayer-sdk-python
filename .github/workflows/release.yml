@@ -41,12 +41,6 @@ jobs:
           changes-branch: next
           skip-github-pull-request: true
 
-      - name: Dispatch publish
-        if: steps.release.outputs.release_created == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
-        run: gh workflow run publish-pypi.yml --ref "${{ steps.release.outputs.tag_name }}"
-
       - name: Merge main back into next
         if: steps.release.outputs.release_created == 'true'
         env:
