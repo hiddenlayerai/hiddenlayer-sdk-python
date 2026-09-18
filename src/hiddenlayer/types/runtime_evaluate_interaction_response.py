@@ -78,6 +78,14 @@ class EvaluatedInteractionMessageContentToolResultPart(BaseModel):
     success: Optional[bool] = None
     """Whether the tool execution succeeded."""
 
+    tool_name: Optional[str] = None
+    """Name of the tool that produced this result.
+
+    Interaction evaluations preserve a nonempty supplied name. When omitted or
+    empty, the name may be populated from the tool invocation matching `id`; it is
+    omitted if unknown.
+    """
+
 
 EvaluatedInteractionMessageContent: TypeAlias = Annotated[
     Union[
@@ -303,6 +311,14 @@ class OutcomeEffectiveInteractionCanonicalInteractionMessageContentToolResultPar
 
     success: Optional[bool] = None
     """Whether the tool execution succeeded."""
+
+    tool_name: Optional[str] = None
+    """Name of the tool that produced this result.
+
+    Interaction evaluations preserve a nonempty supplied name. When omitted or
+    empty, the name may be populated from the tool invocation matching `id`; it is
+    omitted if unknown.
+    """
 
 
 OutcomeEffectiveInteractionCanonicalInteractionMessageContent: TypeAlias = Annotated[
