@@ -95,7 +95,7 @@ class Details(BaseModel):
     """hexadecimal md5 hash of file"""
 
     tlsh: Optional[str] = None
-    """TLSH hash of file"""
+    """TLSH hash of file, with or without the "T1" version prefix"""
 
 
 class DetectionMitreAtlas(BaseModel):
