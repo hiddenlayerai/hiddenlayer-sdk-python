@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.11.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.10.0...v3.11.0) (2026-09-20)
+
+
+### Features
+
+* **governance:** add replace_active_policy param to rule set create ([#277](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/277)) ([40f6c37](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/40f6c3743237b0345a97eb48b301523bc3507dc3))
+
+
+### Bug Fixes
+
+* **scans:** restore paginated scan helpers reverted by stale custom-code seal ([#279](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/279)) ([eace987](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/eace98793c4258fcf3c3acb17796a8f8e9f5c151))
+
+
+### Documentation
+
+* document canonical tool result names ([#281](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/281)) ([65e0f4b](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/65e0f4be9d4c1f5dbc3d210881a424a5e31b6764))
+
 ## [3.10.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.9.0...v3.10.0) (2026-09-09)
 
 
