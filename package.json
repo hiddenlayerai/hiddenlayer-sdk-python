@@ -1,5 +1,5 @@
 {
-  "name": "hiddenlayer-sdk",
+  "name": "hiddenlayer-sdk-python-ledger",
   "version": "3.10.0",
   "private": true,
   "devDependencies": {
