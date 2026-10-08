@@ -121,6 +121,11 @@ include = [
   "src/*",
   "tests/*",
 ]
+# The changesets version ledger isn't part of the Python package.
+exclude = [
+  "/package.json",
+  "/package-lock.json",
+]
 
 [tool.hatch.metadata.hooks.fancy-pypi-readme]
 content-type = "text/markdown"
