@@ -1,0 +1,6 @@
+# Files this repo owns. Fern deletes anything it does not generate unless it is listed here.
+.changeset/
+.github/
+CHANGELOG.md
+package.json
+package-lock.json
