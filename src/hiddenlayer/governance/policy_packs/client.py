@@ -10,6 +10,10 @@ from ...types.list_policy_packs_request_detection_rule_id import ListPolicyPacks
 from ...types.list_policy_packs_request_is_enabled import ListPolicyPacksRequestIsEnabled
 from ...types.list_policy_packs_request_type import ListPolicyPacksRequestType
 from ...types.policy_pack import PolicyPack
+from ...types.policy_pack_application_exposure import PolicyPackApplicationExposure
+from ...types.policy_pack_application_type import PolicyPackApplicationType
+from ...types.policy_pack_deployment_stage import PolicyPackDeploymentStage
+from ...types.policy_pack_recommendation import PolicyPackRecommendation
 from ...types.policy_pack_rule_assignment import PolicyPackRuleAssignment
 from ...types.policy_pack_summary import PolicyPackSummary
 from ...types.policy_pack_write_request_settings_item import PolicyPackWriteRequestSettingsItem
@@ -177,6 +181,56 @@ class PolicyPacksClient:
             rule_pack_ids=rule_pack_ids,
             individual_rules=individual_rules,
             redact=redact,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def recommendations(
+        self,
+        *,
+        application_type: PolicyPackApplicationType,
+        exposure: typing.Optional[PolicyPackApplicationExposure] = OMIT,
+        deployment_stage: typing.Optional[PolicyPackDeploymentStage] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PolicyPackRecommendation:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        To apply the recommendation, set the returned `id` as the project's `policy_pack_id`.
+
+        Parameters
+        ----------
+        application_type : PolicyPackApplicationType
+
+        exposure : typing.Optional[PolicyPackApplicationExposure]
+            Needed unless `application_type` is CODING_HARNESS, which ignores it; omitting it when needed returns 422
+
+        deployment_stage : typing.Optional[PolicyPackDeploymentStage]
+            Needed only when `application_type` is GENERAL and `exposure` is INTERNET_FACING, and ignored otherwise; omitting it when needed returns 422
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PolicyPackRecommendation
+            The recommended built-in policy pack
+
+        Examples
+        --------
+        from hiddenlayer import HiddenLayer
+
+        client = HiddenLayer(
+            token="YOUR_TOKEN",
+        )
+        client.governance.policy_packs.recommendations(
+            application_type="GENERAL",
+        )
+        """
+        _response = self._raw_client.recommendations(
+            application_type=application_type,
+            exposure=exposure,
+            deployment_stage=deployment_stage,
             request_options=request_options,
         )
         return _response.data
@@ -497,6 +551,64 @@ class AsyncPolicyPacksClient:
             rule_pack_ids=rule_pack_ids,
             individual_rules=individual_rules,
             redact=redact,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def recommendations(
+        self,
+        *,
+        application_type: PolicyPackApplicationType,
+        exposure: typing.Optional[PolicyPackApplicationExposure] = OMIT,
+        deployment_stage: typing.Optional[PolicyPackDeploymentStage] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> PolicyPackRecommendation:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        To apply the recommendation, set the returned `id` as the project's `policy_pack_id`.
+
+        Parameters
+        ----------
+        application_type : PolicyPackApplicationType
+
+        exposure : typing.Optional[PolicyPackApplicationExposure]
+            Needed unless `application_type` is CODING_HARNESS, which ignores it; omitting it when needed returns 422
+
+        deployment_stage : typing.Optional[PolicyPackDeploymentStage]
+            Needed only when `application_type` is GENERAL and `exposure` is INTERNET_FACING, and ignored otherwise; omitting it when needed returns 422
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PolicyPackRecommendation
+            The recommended built-in policy pack
+
+        Examples
+        --------
+        import asyncio
+
+        from hiddenlayer import AsyncHiddenLayer
+
+        client = AsyncHiddenLayer(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.governance.policy_packs.recommendations(
+                application_type="GENERAL",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.recommendations(
+            application_type=application_type,
+            exposure=exposure,
+            deployment_stage=deployment_stage,
             request_options=request_options,
         )
         return _response.data

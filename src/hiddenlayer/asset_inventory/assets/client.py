@@ -781,6 +781,8 @@ class AssetsClient:
         carries its `annotating_service` and an `attributes` property
         map holding the details that service observed.
 
+        Embedding `projects` additionally requires the `project:read` scope.
+
         Parameters
         ----------
         asset_id : str
@@ -1707,6 +1709,8 @@ class AsyncAssetsClient:
         timestamps and its current set of annotations. Each annotation
         carries its `annotating_service` and an `attributes` property
         map holding the details that service observed.
+
+        Embedding `projects` additionally requires the `project:read` scope.
 
         Parameters
         ----------

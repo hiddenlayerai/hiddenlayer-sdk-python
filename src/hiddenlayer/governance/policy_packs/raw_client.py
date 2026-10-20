@@ -24,6 +24,10 @@ from ...types.list_policy_packs_request_detection_rule_id import ListPolicyPacks
 from ...types.list_policy_packs_request_is_enabled import ListPolicyPacksRequestIsEnabled
 from ...types.list_policy_packs_request_type import ListPolicyPacksRequestType
 from ...types.policy_pack import PolicyPack
+from ...types.policy_pack_application_exposure import PolicyPackApplicationExposure
+from ...types.policy_pack_application_type import PolicyPackApplicationType
+from ...types.policy_pack_deployment_stage import PolicyPackDeploymentStage
+from ...types.policy_pack_recommendation import PolicyPackRecommendation
 from ...types.policy_pack_rule_assignment import PolicyPackRuleAssignment
 from ...types.policy_pack_summary import PolicyPackSummary
 from ...types.policy_pack_write_request_settings_item import PolicyPackWriteRequestSettingsItem
@@ -282,6 +286,125 @@ class RawPolicyPacksClient:
                 )
             if _response.status_code == 409:
                 raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def recommendations(
+        self,
+        *,
+        application_type: PolicyPackApplicationType,
+        exposure: typing.Optional[PolicyPackApplicationExposure] = OMIT,
+        deployment_stage: typing.Optional[PolicyPackDeploymentStage] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[PolicyPackRecommendation]:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        To apply the recommendation, set the returned `id` as the project's `policy_pack_id`.
+
+        Parameters
+        ----------
+        application_type : PolicyPackApplicationType
+
+        exposure : typing.Optional[PolicyPackApplicationExposure]
+            Needed unless `application_type` is CODING_HARNESS, which ignores it; omitting it when needed returns 422
+
+        deployment_stage : typing.Optional[PolicyPackDeploymentStage]
+            Needed only when `application_type` is GENERAL and `exposure` is INTERNET_FACING, and ignored otherwise; omitting it when needed returns 422
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[PolicyPackRecommendation]
+            The recommended built-in policy pack
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "governance/v2/policy-packs/recommendations",
+            method="POST",
+            json={
+                "application_type": application_type,
+                "exposure": exposure,
+                "deployment_stage": deployment_stage,
+            },
+            headers={
+                "content-type": "application/json; charset=utf-8",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PolicyPackRecommendation,
+                    parse_obj_as(
+                        type_=PolicyPackRecommendation,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -931,6 +1054,125 @@ class AsyncRawPolicyPacksClient:
                 )
             if _response.status_code == 409:
                 raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def recommendations(
+        self,
+        *,
+        application_type: PolicyPackApplicationType,
+        exposure: typing.Optional[PolicyPackApplicationExposure] = OMIT,
+        deployment_stage: typing.Optional[PolicyPackDeploymentStage] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[PolicyPackRecommendation]:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        To apply the recommendation, set the returned `id` as the project's `policy_pack_id`.
+
+        Parameters
+        ----------
+        application_type : PolicyPackApplicationType
+
+        exposure : typing.Optional[PolicyPackApplicationExposure]
+            Needed unless `application_type` is CODING_HARNESS, which ignores it; omitting it when needed returns 422
+
+        deployment_stage : typing.Optional[PolicyPackDeploymentStage]
+            Needed only when `application_type` is GENERAL and `exposure` is INTERNET_FACING, and ignored otherwise; omitting it when needed returns 422
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[PolicyPackRecommendation]
+            The recommended built-in policy pack
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "governance/v2/policy-packs/recommendations",
+            method="POST",
+            json={
+                "application_type": application_type,
+                "exposure": exposure,
+                "deployment_stage": deployment_stage,
+            },
+            headers={
+                "content-type": "application/json; charset=utf-8",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PolicyPackRecommendation,
+                    parse_obj_as(
+                        type_=PolicyPackRecommendation,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,

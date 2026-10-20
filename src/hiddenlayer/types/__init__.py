@@ -274,6 +274,10 @@ if typing.TYPE_CHECKING:
     from .permission_area import PermissionArea
     from .permission_area_element import PermissionAreaElement
     from .policy_pack import PolicyPack
+    from .policy_pack_application_exposure import PolicyPackApplicationExposure
+    from .policy_pack_application_type import PolicyPackApplicationType
+    from .policy_pack_deployment_stage import PolicyPackDeploymentStage
+    from .policy_pack_recommendation import PolicyPackRecommendation
     from .policy_pack_rule_assignment import PolicyPackRuleAssignment
     from .policy_pack_rule_assignment_action import PolicyPackRuleAssignmentAction
     from .policy_pack_summary import PolicyPackSummary
@@ -734,6 +738,10 @@ _dynamic_imports: typing.Dict[str, str] = {
     "PermissionArea": ".permission_area",
     "PermissionAreaElement": ".permission_area_element",
     "PolicyPack": ".policy_pack",
+    "PolicyPackApplicationExposure": ".policy_pack_application_exposure",
+    "PolicyPackApplicationType": ".policy_pack_application_type",
+    "PolicyPackDeploymentStage": ".policy_pack_deployment_stage",
+    "PolicyPackRecommendation": ".policy_pack_recommendation",
     "PolicyPackRuleAssignment": ".policy_pack_rule_assignment",
     "PolicyPackRuleAssignmentAction": ".policy_pack_rule_assignment_action",
     "PolicyPackSummary": ".policy_pack_summary",
@@ -1214,6 +1222,10 @@ __all__ = [
     "PermissionArea",
     "PermissionAreaElement",
     "PolicyPack",
+    "PolicyPackApplicationExposure",
+    "PolicyPackApplicationType",
+    "PolicyPackDeploymentStage",
+    "PolicyPackRecommendation",
     "PolicyPackRuleAssignment",
     "PolicyPackRuleAssignmentAction",
     "PolicyPackSummary",

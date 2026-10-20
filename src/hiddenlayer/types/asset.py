@@ -93,6 +93,11 @@ class Asset(UniversalBaseModel):
     cloud-provider metadata.
     """
 
+    projects: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
+    """
+    The Compliance API IDs of the projects the asset belongs to, in ID order. Present only with `embed=projects` on `GET /asset-inventory/v2/assets/{asset_id}`, and empty when the asset is in no project.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:

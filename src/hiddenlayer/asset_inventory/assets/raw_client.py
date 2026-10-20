@@ -1165,6 +1165,8 @@ class RawAssetsClient:
         carries its `annotating_service` and an `attributes` property
         map holding the details that service observed.
 
+        Embedding `projects` additionally requires the `project:read` scope.
+
         Parameters
         ----------
         asset_id : str
@@ -1223,6 +1225,17 @@ class RawAssetsClient:
                 )
             if _response.status_code == 404:
                 raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -2559,6 +2572,8 @@ class AsyncRawAssetsClient:
         carries its `annotating_service` and an `attributes` property
         map holding the details that service observed.
 
+        Embedding `projects` additionally requires the `project:read` scope.
+
         Parameters
         ----------
         asset_id : str
@@ -2617,6 +2632,17 @@ class AsyncRawAssetsClient:
                 )
             if _response.status_code == 404:
                 raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,

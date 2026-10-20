@@ -3946,6 +3946,8 @@ the full asset, including its creation and last-updated
 timestamps and its current set of annotations. Each annotation
 carries its `annotating_service` and an `attributes` property
 map holding the details that service observed.
+
+Embedding `projects` additionally requires the `project:read` scope.
 </dd>
 </dl>
 </dd>
@@ -10162,6 +10164,97 @@ client.governance.policy_packs.create(
 <dd>
 
 **request:** `PolicyPackWriteRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py">recommendations</a>(...) -> PolicyPackRecommendation</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+To apply the recommendation, set the returned `id` as the project's `policy_pack_id`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.governance.policy_packs.recommendations(
+    application_type="GENERAL",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**application_type:** `PolicyPackApplicationType` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**exposure:** `typing.Optional[PolicyPackApplicationExposure]` — Needed unless `application_type` is CODING_HARNESS, which ignores it; omitting it when needed returns 422
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**deployment_stage:** `typing.Optional[PolicyPackDeploymentStage]` — Needed only when `application_type` is GENERAL and `exposure` is INTERNET_FACING, and ignored otherwise; omitting it when needed returns 422
     
 </dd>
 </dl>
