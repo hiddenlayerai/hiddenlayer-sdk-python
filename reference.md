@@ -3292,12 +3292,15 @@ full-text search query with `q`, and optionally narrow the
 results with the available filters such as provider, cloud
 account, region, service, asset type, policy status, tags
 (`tag_name`, `tag_def`, and `tag`), relationship to another
-asset (`related_to`), and — for MODEL assets — the model id
+asset (`related_to`), membership in a project (`project_id`),
+and — for MODEL assets — the model id
 (`model_id`), model name (`model_name`), or the latest scan's
 start time (`scan_started_at`).
 Results are returned in cursor-paginated pages of `page_size`
 items; follow the `next` cursor to retrieve subsequent pages.
-See the `sort` parameter for available sort fields.
+See the `sort` parameter for available sort fields. Filtering by
+`project_id` or embedding `projects` additionally requires the
+`project:read` scope.
 
 To discover the filterable fields and their available values for
 your tenant, call
@@ -3496,6 +3499,18 @@ in either direction (as source or target). Only direct
 <dl>
 <dd>
 
+**project_id:** `typing.Optional[ListAssetsRequestProjectId]` 
+
+Filter to the members of one project. Requires the `project:read`
+scope in addition to `asset:read`. A project with no members, or
+one inventory has never seen, matches nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **tag_name:** `typing.Optional[TagNameFilter]` — Filter by tag name regardless of source. Matches across both custom and discovered tags.
     
 </dd>
@@ -3602,7 +3617,8 @@ descending (most recently scanned first).
 Return typeahead suggestions for a partial search term, to help
 build asset search queries as the user types. The same filters
 available on the asset list endpoint can be applied to scope the
-suggestions.
+suggestions. Filtering by `project_id` additionally requires the
+`project:read` scope.
 </dd>
 </dl>
 </dd>
@@ -3778,6 +3794,18 @@ in either direction (as source or target). Only direct
 <dl>
 <dd>
 
+**project_id:** `typing.Optional[SuggestionsAssetsRequestProjectId]` 
+
+Filter to the members of one project. Requires the `project:read`
+scope in addition to `asset:read`. A project with no members, or
+one inventory has never seen, matches nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **tag_name:** `typing.Optional[TagNameFilter]` — Filter by tag name regardless of source. Matches across both custom and discovered tags.
     
 </dd>
@@ -3856,6 +3884,9 @@ layer required.
   `422 Unprocessable Entity`. (An `annotating_service` facet
   selection still round-trips to the list endpoint via `[in]`,
   as its `param` states.)
+- **Project** (`project_id[eq]`) — limits every facet's values to
+  the project's members. Requires the `project:read` scope in
+  addition to `asset:read`.
 
 The underlying query runs under a configurable server-side
 statement timeout; a tenant whose data exceeds it receives
@@ -3910,10 +3941,23 @@ the list endpoint's many-valued `[in]` form is rejected
 with `422 Unprocessable Entity`. Omit to receive only the
 service-independent facets.
 
-This is the only parameter the endpoint honors. Other list
-endpoint filter parameters are accepted for wire
-compatibility but do not narrow the facet values (malformed
-ones are still rejected with `422 Unprocessable Entity`).
+This and `project_id` are the only parameters the endpoint
+honors. Other list endpoint filter parameters are accepted
+for wire compatibility but do not narrow the facet values
+(malformed ones are still rejected with
+`422 Unprocessable Entity`).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**project_id:** `typing.Optional[FiltersAssetsRequestProjectId]` 
+
+Filter to the members of one project. Requires the `project:read`
+scope in addition to `asset:read`. A project with no members, or
+one inventory has never seen, matches nothing.
     
 </dd>
 </dl>

@@ -19,7 +19,7 @@ class AssetFilterV2(UniversalBaseModel):
     """
     Criteria for selecting the assets a bulk operation applies to. All specified properties are AND-ed together, and at least one must be supplied.
 
-    This filter mirrors the query parameters on `GET /asset-inventory/v2/assets`, so you can preview exactly which assets will be affected by running that search before running the job.
+    Each property matches assets the same way as the query parameter of the same name on `GET /asset-inventory/v2/assets`, so running that search with the same criteria previews exactly which assets the job will affect. `id` exists only on this filter; `q`, `project_id`, `model_id`, `model_name` and `scan_started_at` exist only on the list.
 
     Details such as provider, region, cloud account, and service are not fixed fields on this filter. They are annotation attributes, so they — and any other attribute a contributing service records — are matched through `attributes`, a dotted-path to operator filter, together with `annotating_service`.
     """

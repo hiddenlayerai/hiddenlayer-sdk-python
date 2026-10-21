@@ -103,6 +103,7 @@ if typing.TYPE_CHECKING:
     from .filter_facet import FilterFacet
     from .filter_facets_response import FilterFacetsResponse
     from .filters_assets_request_annotating_service import FiltersAssetsRequestAnnotatingService
+    from .filters_assets_request_project_id import FiltersAssetsRequestProjectId
     from .forbidden_error_model import ForbiddenErrorModel
     from .framework_item import FrameworkItem
     from .geographic_region_count import GeographicRegionCount
@@ -189,6 +190,7 @@ if typing.TYPE_CHECKING:
     from .list_assets_request_model_id import ListAssetsRequestModelId
     from .list_assets_request_model_name import ListAssetsRequestModelName
     from .list_assets_request_policy_status import ListAssetsRequestPolicyStatus
+    from .list_assets_request_project_id import ListAssetsRequestProjectId
     from .list_assets_request_related_to import ListAssetsRequestRelatedTo
     from .list_assets_request_scan_started_at import ListAssetsRequestScanStartedAt
     from .list_assets_response import ListAssetsResponse
@@ -422,6 +424,7 @@ if typing.TYPE_CHECKING:
     from .suggestions_assets_request_model_id import SuggestionsAssetsRequestModelId
     from .suggestions_assets_request_model_name import SuggestionsAssetsRequestModelName
     from .suggestions_assets_request_policy_status import SuggestionsAssetsRequestPolicyStatus
+    from .suggestions_assets_request_project_id import SuggestionsAssetsRequestProjectId
     from .suggestions_assets_request_related_to import SuggestionsAssetsRequestRelatedTo
     from .suggestions_assets_request_scan_started_at import SuggestionsAssetsRequestScanStartedAt
     from .suggestions_search_request_account_id import SuggestionsSearchRequestAccountId
@@ -572,6 +575,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FilterFacet": ".filter_facet",
     "FilterFacetsResponse": ".filter_facets_response",
     "FiltersAssetsRequestAnnotatingService": ".filters_assets_request_annotating_service",
+    "FiltersAssetsRequestProjectId": ".filters_assets_request_project_id",
     "ForbiddenErrorModel": ".forbidden_error_model",
     "FrameworkItem": ".framework_item",
     "GeographicRegionCount": ".geographic_region_count",
@@ -654,6 +658,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ListAssetsRequestModelId": ".list_assets_request_model_id",
     "ListAssetsRequestModelName": ".list_assets_request_model_name",
     "ListAssetsRequestPolicyStatus": ".list_assets_request_policy_status",
+    "ListAssetsRequestProjectId": ".list_assets_request_project_id",
     "ListAssetsRequestRelatedTo": ".list_assets_request_related_to",
     "ListAssetsRequestScanStartedAt": ".list_assets_request_scan_started_at",
     "ListAssetsResponse": ".list_assets_response",
@@ -883,6 +888,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SuggestionsAssetsRequestModelId": ".suggestions_assets_request_model_id",
     "SuggestionsAssetsRequestModelName": ".suggestions_assets_request_model_name",
     "SuggestionsAssetsRequestPolicyStatus": ".suggestions_assets_request_policy_status",
+    "SuggestionsAssetsRequestProjectId": ".suggestions_assets_request_project_id",
     "SuggestionsAssetsRequestRelatedTo": ".suggestions_assets_request_related_to",
     "SuggestionsAssetsRequestScanStartedAt": ".suggestions_assets_request_scan_started_at",
     "SuggestionsSearchRequestAccountId": ".suggestions_search_request_account_id",
@@ -1057,6 +1063,7 @@ __all__ = [
     "FilterFacet",
     "FilterFacetsResponse",
     "FiltersAssetsRequestAnnotatingService",
+    "FiltersAssetsRequestProjectId",
     "ForbiddenErrorModel",
     "FrameworkItem",
     "GeographicRegionCount",
@@ -1139,6 +1146,7 @@ __all__ = [
     "ListAssetsRequestModelId",
     "ListAssetsRequestModelName",
     "ListAssetsRequestPolicyStatus",
+    "ListAssetsRequestProjectId",
     "ListAssetsRequestRelatedTo",
     "ListAssetsRequestScanStartedAt",
     "ListAssetsResponse",
@@ -1368,6 +1376,7 @@ __all__ = [
     "SuggestionsAssetsRequestModelId",
     "SuggestionsAssetsRequestModelName",
     "SuggestionsAssetsRequestPolicyStatus",
+    "SuggestionsAssetsRequestProjectId",
     "SuggestionsAssetsRequestRelatedTo",
     "SuggestionsAssetsRequestScanStartedAt",
     "SuggestionsSearchRequestAccountId",

@@ -2,4 +2,4 @@
 
 import typing
 
-ListAssetsRequestEmbedItem = typing.Union[typing.Literal["tags"], typing.Any]
+ListAssetsRequestEmbedItem = typing.Union[typing.Literal["tags", "projects"], typing.Any]

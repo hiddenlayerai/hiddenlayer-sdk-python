@@ -17,11 +17,13 @@ from ...types.attribute_filter import AttributeFilter
 from ...types.embed import Embed
 from ...types.filter_facets_response import FilterFacetsResponse
 from ...types.filters_assets_request_annotating_service import FiltersAssetsRequestAnnotatingService
+from ...types.filters_assets_request_project_id import FiltersAssetsRequestProjectId
 from ...types.list_assets_request_annotating_service import ListAssetsRequestAnnotatingService
 from ...types.list_assets_request_asset_type import ListAssetsRequestAssetType
 from ...types.list_assets_request_model_id import ListAssetsRequestModelId
 from ...types.list_assets_request_model_name import ListAssetsRequestModelName
 from ...types.list_assets_request_policy_status import ListAssetsRequestPolicyStatus
+from ...types.list_assets_request_project_id import ListAssetsRequestProjectId
 from ...types.list_assets_request_related_to import ListAssetsRequestRelatedTo
 from ...types.list_assets_request_scan_started_at import ListAssetsRequestScanStartedAt
 from ...types.list_assets_response import ListAssetsResponse
@@ -39,6 +41,7 @@ from ...types.suggestions_assets_request_asset_type import SuggestionsAssetsRequ
 from ...types.suggestions_assets_request_model_id import SuggestionsAssetsRequestModelId
 from ...types.suggestions_assets_request_model_name import SuggestionsAssetsRequestModelName
 from ...types.suggestions_assets_request_policy_status import SuggestionsAssetsRequestPolicyStatus
+from ...types.suggestions_assets_request_project_id import SuggestionsAssetsRequestProjectId
 from ...types.suggestions_assets_request_related_to import SuggestionsAssetsRequestRelatedTo
 from ...types.suggestions_assets_request_scan_started_at import SuggestionsAssetsRequestScanStartedAt
 from ...types.tag_def_filter import TagDefFilter
@@ -325,6 +328,7 @@ class AssetsClient:
         model_id: typing.Optional[ListAssetsRequestModelId] = None,
         model_name: typing.Optional[ListAssetsRequestModelName] = None,
         related_to: typing.Optional[ListAssetsRequestRelatedTo] = None,
+        project_id: typing.Optional[ListAssetsRequestProjectId] = None,
         tag_name: typing.Optional[TagNameFilter] = None,
         tag_def: typing.Optional[TagDefFilter] = None,
         tag: typing.Optional[TagValueFilter] = None,
@@ -342,12 +346,15 @@ class AssetsClient:
         results with the available filters such as provider, cloud
         account, region, service, asset type, policy status, tags
         (`tag_name`, `tag_def`, and `tag`), relationship to another
-        asset (`related_to`), and — for MODEL assets — the model id
+        asset (`related_to`), membership in a project (`project_id`),
+        and — for MODEL assets — the model id
         (`model_id`), model name (`model_name`), or the latest scan's
         start time (`scan_started_at`).
         Results are returned in cursor-paginated pages of `page_size`
         items; follow the `next` cursor to retrieve subsequent pages.
-        See the `sort` parameter for available sort fields.
+        See the `sort` parameter for available sort fields. Filtering by
+        `project_id` or embedding `projects` additionally requires the
+        `project:read` scope.
 
         To discover the filterable fields and their available values for
         your tenant, call
@@ -441,6 +448,11 @@ class AssetsClient:
             in either direction (as source or target). Only direct
             (one-hop) relationships are considered.
 
+        project_id : typing.Optional[ListAssetsRequestProjectId]
+            Filter to the members of one project. Requires the `project:read`
+            scope in addition to `asset:read`. A project with no members, or
+            one inventory has never seen, matches nothing.
+
         tag_name : typing.Optional[TagNameFilter]
             Filter by tag name regardless of source. Matches across both custom and discovered tags.
 
@@ -528,6 +540,7 @@ class AssetsClient:
             model_id=model_id,
             model_name=model_name,
             related_to=related_to,
+            project_id=project_id,
             tag_name=tag_name,
             tag_def=tag_def,
             tag=tag,
@@ -549,6 +562,7 @@ class AssetsClient:
         model_id: typing.Optional[SuggestionsAssetsRequestModelId] = None,
         model_name: typing.Optional[SuggestionsAssetsRequestModelName] = None,
         related_to: typing.Optional[SuggestionsAssetsRequestRelatedTo] = None,
+        project_id: typing.Optional[SuggestionsAssetsRequestProjectId] = None,
         tag_name: typing.Optional[TagNameFilter] = None,
         tag_def: typing.Optional[TagDefFilter] = None,
         tag: typing.Optional[TagValueFilter] = None,
@@ -560,7 +574,8 @@ class AssetsClient:
         Return typeahead suggestions for a partial search term, to help
         build asset search queries as the user types. The same filters
         available on the asset list endpoint can be applied to scope the
-        suggestions.
+        suggestions. Filtering by `project_id` additionally requires the
+        `project:read` scope.
 
         Parameters
         ----------
@@ -637,6 +652,11 @@ class AssetsClient:
             in either direction (as source or target). Only direct
             (one-hop) relationships are considered.
 
+        project_id : typing.Optional[SuggestionsAssetsRequestProjectId]
+            Filter to the members of one project. Requires the `project:read`
+            scope in addition to `asset:read`. A project with no members, or
+            one inventory has never seen, matches nothing.
+
         tag_name : typing.Optional[TagNameFilter]
             Filter by tag name regardless of source. Matches across both custom and discovered tags.
 
@@ -676,6 +696,7 @@ class AssetsClient:
             model_id=model_id,
             model_name=model_name,
             related_to=related_to,
+            project_id=project_id,
             tag_name=tag_name,
             tag_def=tag_def,
             tag=tag,
@@ -687,6 +708,7 @@ class AssetsClient:
         self,
         *,
         annotating_service: typing.Optional[FiltersAssetsRequestAnnotatingService] = None,
+        project_id: typing.Optional[FiltersAssetsRequestProjectId] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> FilterFacetsResponse:
         """
@@ -720,6 +742,9 @@ class AssetsClient:
           `422 Unprocessable Entity`. (An `annotating_service` facet
           selection still round-trips to the list endpoint via `[in]`,
           as its `param` states.)
+        - **Project** (`project_id[eq]`) — limits every facet's values to
+          the project's members. Requires the `project:read` scope in
+          addition to `asset:read`.
 
         The underlying query runs under a configurable server-side
         statement timeout; a tenant whose data exceeds it receives
@@ -738,10 +763,16 @@ class AssetsClient:
             with `422 Unprocessable Entity`. Omit to receive only the
             service-independent facets.
 
-            This is the only parameter the endpoint honors. Other list
-            endpoint filter parameters are accepted for wire
-            compatibility but do not narrow the facet values (malformed
-            ones are still rejected with `422 Unprocessable Entity`).
+            This and `project_id` are the only parameters the endpoint
+            honors. Other list endpoint filter parameters are accepted
+            for wire compatibility but do not narrow the facet values
+            (malformed ones are still rejected with
+            `422 Unprocessable Entity`).
+
+        project_id : typing.Optional[FiltersAssetsRequestProjectId]
+            Filter to the members of one project. Requires the `project:read`
+            scope in addition to `asset:read`. A project with no members, or
+            one inventory has never seen, matches nothing.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -760,7 +791,9 @@ class AssetsClient:
         )
         client.asset_inventory.assets.filters()
         """
-        _response = self._raw_client.filters(annotating_service=annotating_service, request_options=request_options)
+        _response = self._raw_client.filters(
+            annotating_service=annotating_service, project_id=project_id, request_options=request_options
+        )
         return _response.data
 
     def get(
@@ -1227,6 +1260,7 @@ class AsyncAssetsClient:
         model_id: typing.Optional[ListAssetsRequestModelId] = None,
         model_name: typing.Optional[ListAssetsRequestModelName] = None,
         related_to: typing.Optional[ListAssetsRequestRelatedTo] = None,
+        project_id: typing.Optional[ListAssetsRequestProjectId] = None,
         tag_name: typing.Optional[TagNameFilter] = None,
         tag_def: typing.Optional[TagDefFilter] = None,
         tag: typing.Optional[TagValueFilter] = None,
@@ -1244,12 +1278,15 @@ class AsyncAssetsClient:
         results with the available filters such as provider, cloud
         account, region, service, asset type, policy status, tags
         (`tag_name`, `tag_def`, and `tag`), relationship to another
-        asset (`related_to`), and — for MODEL assets — the model id
+        asset (`related_to`), membership in a project (`project_id`),
+        and — for MODEL assets — the model id
         (`model_id`), model name (`model_name`), or the latest scan's
         start time (`scan_started_at`).
         Results are returned in cursor-paginated pages of `page_size`
         items; follow the `next` cursor to retrieve subsequent pages.
-        See the `sort` parameter for available sort fields.
+        See the `sort` parameter for available sort fields. Filtering by
+        `project_id` or embedding `projects` additionally requires the
+        `project:read` scope.
 
         To discover the filterable fields and their available values for
         your tenant, call
@@ -1342,6 +1379,11 @@ class AsyncAssetsClient:
             matches when a relationship connects it to the given asset ID,
             in either direction (as source or target). Only direct
             (one-hop) relationships are considered.
+
+        project_id : typing.Optional[ListAssetsRequestProjectId]
+            Filter to the members of one project. Requires the `project:read`
+            scope in addition to `asset:read`. A project with no members, or
+            one inventory has never seen, matches nothing.
 
         tag_name : typing.Optional[TagNameFilter]
             Filter by tag name regardless of source. Matches across both custom and discovered tags.
@@ -1439,6 +1481,7 @@ class AsyncAssetsClient:
             model_id=model_id,
             model_name=model_name,
             related_to=related_to,
+            project_id=project_id,
             tag_name=tag_name,
             tag_def=tag_def,
             tag=tag,
@@ -1460,6 +1503,7 @@ class AsyncAssetsClient:
         model_id: typing.Optional[SuggestionsAssetsRequestModelId] = None,
         model_name: typing.Optional[SuggestionsAssetsRequestModelName] = None,
         related_to: typing.Optional[SuggestionsAssetsRequestRelatedTo] = None,
+        project_id: typing.Optional[SuggestionsAssetsRequestProjectId] = None,
         tag_name: typing.Optional[TagNameFilter] = None,
         tag_def: typing.Optional[TagDefFilter] = None,
         tag: typing.Optional[TagValueFilter] = None,
@@ -1471,7 +1515,8 @@ class AsyncAssetsClient:
         Return typeahead suggestions for a partial search term, to help
         build asset search queries as the user types. The same filters
         available on the asset list endpoint can be applied to scope the
-        suggestions.
+        suggestions. Filtering by `project_id` additionally requires the
+        `project:read` scope.
 
         Parameters
         ----------
@@ -1548,6 +1593,11 @@ class AsyncAssetsClient:
             in either direction (as source or target). Only direct
             (one-hop) relationships are considered.
 
+        project_id : typing.Optional[SuggestionsAssetsRequestProjectId]
+            Filter to the members of one project. Requires the `project:read`
+            scope in addition to `asset:read`. A project with no members, or
+            one inventory has never seen, matches nothing.
+
         tag_name : typing.Optional[TagNameFilter]
             Filter by tag name regardless of source. Matches across both custom and discovered tags.
 
@@ -1595,6 +1645,7 @@ class AsyncAssetsClient:
             model_id=model_id,
             model_name=model_name,
             related_to=related_to,
+            project_id=project_id,
             tag_name=tag_name,
             tag_def=tag_def,
             tag=tag,
@@ -1606,6 +1657,7 @@ class AsyncAssetsClient:
         self,
         *,
         annotating_service: typing.Optional[FiltersAssetsRequestAnnotatingService] = None,
+        project_id: typing.Optional[FiltersAssetsRequestProjectId] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> FilterFacetsResponse:
         """
@@ -1639,6 +1691,9 @@ class AsyncAssetsClient:
           `422 Unprocessable Entity`. (An `annotating_service` facet
           selection still round-trips to the list endpoint via `[in]`,
           as its `param` states.)
+        - **Project** (`project_id[eq]`) — limits every facet's values to
+          the project's members. Requires the `project:read` scope in
+          addition to `asset:read`.
 
         The underlying query runs under a configurable server-side
         statement timeout; a tenant whose data exceeds it receives
@@ -1657,10 +1712,16 @@ class AsyncAssetsClient:
             with `422 Unprocessable Entity`. Omit to receive only the
             service-independent facets.
 
-            This is the only parameter the endpoint honors. Other list
-            endpoint filter parameters are accepted for wire
-            compatibility but do not narrow the facet values (malformed
-            ones are still rejected with `422 Unprocessable Entity`).
+            This and `project_id` are the only parameters the endpoint
+            honors. Other list endpoint filter parameters are accepted
+            for wire compatibility but do not narrow the facet values
+            (malformed ones are still rejected with
+            `422 Unprocessable Entity`).
+
+        project_id : typing.Optional[FiltersAssetsRequestProjectId]
+            Filter to the members of one project. Requires the `project:read`
+            scope in addition to `asset:read`. A project with no members, or
+            one inventory has never seen, matches nothing.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1688,7 +1749,7 @@ class AsyncAssetsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.filters(
-            annotating_service=annotating_service, request_options=request_options
+            annotating_service=annotating_service, project_id=project_id, request_options=request_options
         )
         return _response.data
 
