@@ -27,9 +27,13 @@ class InteractionEvaluationOutcome(UniversalBaseModel):
     
     `DETECT`, `REDACT`, and `BLOCK` all mean one or more detections
     were produced; they differ in what the policy did with the payload.
-    `DETECT` is an intentional observe-only outcome (detections are
-    surfaced but the effective payload is unchanged); `REDACT` modifies
-    the payload in place; `BLOCK` substitutes a canned block response.
+    `DETECT` is an observe-only outcome (detections are surfaced but the
+    effective payload is unchanged); `REDACT` modifies the payload in place;
+    `BLOCK` substitutes a canned block response.
+    
+    When the project is in monitor mode, policy evaluation does not block or
+    redact. A REDACT or BLOCK decision is returned as `DETECT`, and the
+    effective payload is unchanged.
     """
 
     threat_level: HighestSeverity = pydantic.Field()

@@ -36,6 +36,13 @@ class AssetScan(UniversalBaseModel):
     The status of the policy scan
     """
 
+    detection_count: typing.Optional[int] = pydantic.Field(default=None)
+    """
+    The latest scan's detection count, read from the supply-chain
+    annotation's `latest_scan.detection_count`. Omitted when the
+    count is unknown.
+    """
+
     created_at: dt.datetime = pydantic.Field()
     """
     The datetime when the scan was created

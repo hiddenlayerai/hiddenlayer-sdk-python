@@ -86,7 +86,7 @@ class RawProjectsClient:
             Cursor for pagination, used to navigate through pages of results
 
         sort : typing.Optional[str]
-            allow sorting by name, ascending (+) or the default descending (-)
+            allow sorting by name or modified_at, ascending (+) or the default descending (-)
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -264,6 +264,7 @@ class RawProjectsClient:
         escalation_details : typing.Optional[ProjectDetailsEscalationDetails]
 
         risk_level : typing.Optional[ProjectDetailsRiskLevel]
+            Deprecated - this field will be removed. Do not send it, and do not depend on it in responses.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -559,6 +560,7 @@ class RawProjectsClient:
         escalation_details : typing.Optional[ProjectDetailsEscalationDetails]
 
         risk_level : typing.Optional[ProjectDetailsRiskLevel]
+            Deprecated - this field will be removed. Do not send it, and do not depend on it in responses.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -823,7 +825,7 @@ class AsyncRawProjectsClient:
             Cursor for pagination, used to navigate through pages of results
 
         sort : typing.Optional[str]
-            allow sorting by name, ascending (+) or the default descending (-)
+            allow sorting by name or modified_at, ascending (+) or the default descending (-)
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1004,6 +1006,7 @@ class AsyncRawProjectsClient:
         escalation_details : typing.Optional[ProjectDetailsEscalationDetails]
 
         risk_level : typing.Optional[ProjectDetailsRiskLevel]
+            Deprecated - this field will be removed. Do not send it, and do not depend on it in responses.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1299,6 +1302,7 @@ class AsyncRawProjectsClient:
         escalation_details : typing.Optional[ProjectDetailsEscalationDetails]
 
         risk_level : typing.Optional[ProjectDetailsRiskLevel]
+            Deprecated - this field will be removed. Do not send it, and do not depend on it in responses.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.

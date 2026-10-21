@@ -7,6 +7,7 @@ import typing
 import pydantic
 import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from .tool_use_part_tool_input import ToolUsePartToolInput
 
 
 class ContentPart_Text(UniversalBaseModel):
@@ -35,7 +36,7 @@ class ContentPart_ToolUse(UniversalBaseModel):
     type: typing.Literal["tool_use"] = "tool_use"
     id: str
     tool_name: str
-    tool_input: typing.Optional[typing.Dict[str, typing.Any]] = None
+    tool_input: typing.Optional[ToolUsePartToolInput] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

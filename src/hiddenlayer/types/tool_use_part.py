@@ -4,6 +4,7 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from .tool_use_part_tool_input import ToolUsePartToolInput
 
 
 class ToolUsePart(UniversalBaseModel):
@@ -21,9 +22,10 @@ class ToolUsePart(UniversalBaseModel):
     Name of the tool being invoked.
     """
 
-    tool_input: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
+    tool_input: typing.Optional[ToolUsePartToolInput] = pydantic.Field(default=None)
     """
-    Tool arguments/input as a key-value object.
+    Tool arguments. Text may contain free-form input or redacted arguments
+    that no longer parse as a JSON object.
     """
 
     if IS_PYDANTIC_V2:

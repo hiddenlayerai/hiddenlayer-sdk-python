@@ -355,10 +355,10 @@ class RawPolicyPacksClient:
         application_type : PolicyPackApplicationType
 
         exposure : typing.Optional[PolicyPackApplicationExposure]
-            Needed unless `application_type` is CODING_HARNESS, which ignores it; omitting it when needed returns 422
+            Needed unless `application_type` is CODING_HARNESS, which ignores it; omitting it when needed returns 422. An empty string is the same as an omitted value.
 
         deployment_stage : typing.Optional[PolicyPackDeploymentStage]
-            Needed only when `application_type` is GENERAL and `exposure` is INTERNET_FACING, and ignored otherwise; omitting it when needed returns 422
+            Needed only when `application_type` is GENERAL and `exposure` is INTERNET_FACING, and ignored otherwise; omitting it when needed returns 422. An empty string is the same as an omitted value.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1123,10 +1123,10 @@ class AsyncRawPolicyPacksClient:
         application_type : PolicyPackApplicationType
 
         exposure : typing.Optional[PolicyPackApplicationExposure]
-            Needed unless `application_type` is CODING_HARNESS, which ignores it; omitting it when needed returns 422
+            Needed unless `application_type` is CODING_HARNESS, which ignores it; omitting it when needed returns 422. An empty string is the same as an omitted value.
 
         deployment_stage : typing.Optional[PolicyPackDeploymentStage]
-            Needed only when `application_type` is GENERAL and `exposure` is INTERNET_FACING, and ignored otherwise; omitting it when needed returns 422
+            Needed only when `application_type` is GENERAL and `exposure` is INTERNET_FACING, and ignored otherwise; omitting it when needed returns 422. An empty string is the same as an omitted value.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.

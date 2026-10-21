@@ -152,6 +152,9 @@ class RuntimeClient:
         - If detect or redact action: the request payload (potentially modified) in the provider's request format
         - If block action: a canned block message in the provider's response format
 
+        If the project is in monitor mode, the endpoint does not block or redact. It returns the
+        request payload unchanged.
+
         Use this endpoint inline in your LLM pipeline to evaluate prompts before they reach the model.
 
         Supported provider formats:
@@ -222,6 +225,9 @@ class RuntimeClient:
         Accepts any valid provider response payload and returns:
         - If detect or redact action: the response payload (potentially modified) in the provider's response format
         - If block action: a canned block message in the provider's response format
+
+        If the project is in monitor mode, the endpoint does not block or redact. It returns the
+        response payload unchanged.
 
         Use this endpoint inline in your LLM pipeline to evaluate model outputs before returning them to users.
 
@@ -437,6 +443,9 @@ class AsyncRuntimeClient:
         - If detect or redact action: the request payload (potentially modified) in the provider's request format
         - If block action: a canned block message in the provider's response format
 
+        If the project is in monitor mode, the endpoint does not block or redact. It returns the
+        request payload unchanged.
+
         Use this endpoint inline in your LLM pipeline to evaluate prompts before they reach the model.
 
         Supported provider formats:
@@ -515,6 +524,9 @@ class AsyncRuntimeClient:
         Accepts any valid provider response payload and returns:
         - If detect or redact action: the response payload (potentially modified) in the provider's response format
         - If block action: a canned block message in the provider's response format
+
+        If the project is in monitor mode, the endpoint does not block or redact. It returns the
+        response payload unchanged.
 
         Use this endpoint inline in your LLM pipeline to evaluate model outputs before returning them to users.
 

@@ -458,6 +458,7 @@ if typing.TYPE_CHECKING:
     from .tool_base import ToolBase
     from .tool_result_part import ToolResultPart
     from .tool_use_part import ToolUsePart
+    from .tool_use_part_tool_input import ToolUsePartToolInput
     from .unknown_file_attributes import UnknownFileAttributes
     from .unprocessable_entity_error_body import UnprocessableEntityErrorBody
     from .use_policy import UsePolicy
@@ -918,6 +919,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ToolBase": ".tool_base",
     "ToolResultPart": ".tool_result_part",
     "ToolUsePart": ".tool_use_part",
+    "ToolUsePartToolInput": ".tool_use_part_tool_input",
     "UnknownFileAttributes": ".unknown_file_attributes",
     "UnprocessableEntityErrorBody": ".unprocessable_entity_error_body",
     "UsePolicy": ".use_policy",
@@ -1402,6 +1404,7 @@ __all__ = [
     "ToolBase",
     "ToolResultPart",
     "ToolUsePart",
+    "ToolUsePartToolInput",
     "UnknownFileAttributes",
     "UnprocessableEntityErrorBody",
     "UsePolicy",

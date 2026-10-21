@@ -61,7 +61,10 @@ class ProjectDetails(UniversalBaseModel):
 
     is_editable: typing.Optional[bool] = None
     escalation_details: typing.Optional[ProjectDetailsEscalationDetails] = None
-    risk_level: typing.Optional[ProjectDetailsRiskLevel] = None
+    risk_level: typing.Optional[ProjectDetailsRiskLevel] = pydantic.Field(default=None)
+    """
+    Deprecated - this field will be removed. Do not send it, and do not depend on it in responses.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

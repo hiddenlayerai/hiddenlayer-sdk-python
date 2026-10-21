@@ -93,6 +93,35 @@ class Annotation(UniversalBaseModel):
     asset's `first_synced_at` is set by the server and is not
     derived from `attributes`; a `first_synced_at` attribute
     supplied here is not interpreted.
+    
+    By convention, supply-chain (`annotating_service: supply-chain`)
+    annotations hold a `latest_scan` object, a `model_card` object
+    when model-card data is available, and a root `created_at`.
+    `latest_scan` carries `scan_id` (a UUID), `status`
+    (`SUBMITTED`, `COMPLETED`, or `ERROR`), `start_time`,
+    `end_time`, and `detection_count`. `start_time` and `end_time`
+    are RFC 3339 timestamps. `end_time` is `null` when the producer
+    has no scan end time.
+    
+    `detection_count` is an int64 with a minimum of 0: the total
+    number of detections found for `latest_scan.scan_id`. It
+    appears only when `status` is COMPLETED. Zero is a known
+    result meaning no detections were found; an absent count is
+    unknown and must not be read as zero. The field is optional,
+    so older annotations and producers that have not adopted it
+    omit it.
+    
+    For the same `scan_id`, AIS does not let a write move a
+    COMPLETED scan back to a non-terminal status or clear its
+    `detection_count`.
+    A write for a different `scan_id` replaces `latest_scan`,
+    count included.
+    
+    A PATCH is a merge-patch, which merges nested objects. A PATCH
+    that moves `latest_scan` to a different `scan_id` must also
+    set `detection_count` in the same patch, or delete it with
+    `null`, or the previous scan's `detection_count` would remain
+    on the new `scan_id`.
     """
 
     if IS_PYDANTIC_V2:
