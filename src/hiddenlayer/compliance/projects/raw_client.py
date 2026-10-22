@@ -27,7 +27,6 @@ from ...types.list_projects_request_name import ListProjectsRequestName
 from ...types.list_projects_request_policy_id import ListProjectsRequestPolicyId
 from ...types.list_projects_request_policy_pack_id import ListProjectsRequestPolicyPackId
 from ...types.list_projects_request_rule_set_id import ListProjectsRequestRuleSetId
-from ...types.precondition_failed_error_body import PreconditionFailedErrorBody
 from ...types.project_details_escalation_details import ProjectDetailsEscalationDetails
 from ...types.project_details_risk_level import ProjectDetailsRiskLevel
 from ...types.project_id import ProjectId
@@ -654,9 +653,9 @@ class RawProjectsClient:
                 raise PreconditionFailedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        PreconditionFailedErrorBody,
+                        typing.Any,
                         parse_obj_as(
-                            type_=PreconditionFailedErrorBody,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1396,9 +1395,9 @@ class AsyncRawProjectsClient:
                 raise PreconditionFailedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        PreconditionFailedErrorBody,
+                        typing.Any,
                         parse_obj_as(
-                            type_=PreconditionFailedErrorBody,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

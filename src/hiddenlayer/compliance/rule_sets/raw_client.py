@@ -22,7 +22,6 @@ from ...errors.unprocessable_entity_error import UnprocessableEntityError
 from ...types.get_rule_set_item import GetRuleSetItem
 from ...types.limit import Limit
 from ...types.list_rule_sets_request_name import ListRuleSetsRequestName
-from ...types.precondition_failed_error_body import PreconditionFailedErrorBody
 from .types.list_rule_sets_request_feature import ListRuleSetsRequestFeature
 from .types.list_rule_sets_response import ListRuleSetsResponse
 from pydantic import ValidationError
@@ -483,9 +482,9 @@ class RawRuleSetsClient:
                 raise PreconditionFailedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        PreconditionFailedErrorBody,
+                        typing.Any,
                         parse_obj_as(
-                            type_=PreconditionFailedErrorBody,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1065,9 +1064,9 @@ class AsyncRawRuleSetsClient:
                 raise PreconditionFailedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        PreconditionFailedErrorBody,
+                        typing.Any,
                         parse_obj_as(
-                            type_=PreconditionFailedErrorBody,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

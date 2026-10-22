@@ -2611,6 +2611,339 @@ client.models.update(
 </dl>
 </details>
 
+## Access ApiKeys
+<details><summary><code>client.access.api_keys.<a href="src/hiddenlayer/access/api_keys/client.py">list</a>(...) -> ListApiKeysResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.access.api_keys.list(
+    limit=50,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**cursor:** `typing.Optional[str]` — Cursor for pagination, used to navigate through pages of results
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[Limit]` — Limit the number of items returned
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.access.api_keys.<a href="src/hiddenlayer/access/api_keys/client.py">create</a>(...) -> StaticApiKeyWithValue</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+A tenant can have at most 100 keys that are neither revoked nor retired, including keys with no active secret.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.access.api_keys.create(
+    name="ci-pipeline",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**name:** `StaticApiKeyName` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expires_at:** `typing.Optional[datetime.datetime]` 
+
+Must be in the future and no more than 365 days ahead, with at most millisecond precision.
+Defaults to 365 days from now.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**permissions:** `typing.Optional[StaticApiKeyPermissions]` — Each permission must be one the caller holds, outside the `credential` area: a key can never hold `credential:*` permissions. If omitted, the key gets every such permission, which may be none.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.access.api_keys.<a href="src/hiddenlayer/access/api_keys/client.py">get</a>(...) -> StaticApiKey</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.access.api_keys.get(
+    id="00000000-0000-0000-0000-000000000000",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` — A UUID in the request URI
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.access.api_keys.<a href="src/hiddenlayer/access/api_keys/client.py">delete</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Revokes the key and all its secrets. Revoking a key that is already revoked returns `204`, whatever the `If-Match` value.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.access.api_keys.delete(
+    id="00000000-0000-0000-0000-000000000000",
+    if_match="\"7da7a728-f910-11e6-942a-68f728c1ba70\"",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` — A UUID in the request URI
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**if_match:** `str` — The key's current `ETag`, or `*` to skip the version check.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Access Users
 <details><summary><code>client.access.users.<a href="src/hiddenlayer/access/users/client.py">list</a>(...) -> ListUsersResponse</code></summary>
 <dl>
@@ -2823,6 +3156,192 @@ client.access.tokens.short_lived()
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Access ApiKeys Secrets
+<details><summary><code>client.access.api_keys.secrets.<a href="src/hiddenlayer/access/api_keys/secrets/client.py">create</a>(...) -> StaticApiKeySecretWithValue</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Adds a secret to the key. Existing secrets keep working until they are revoked or expire.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.access.api_keys.secrets.create(
+    id="00000000-0000-0000-0000-000000000000",
+    if_match="\"7da7a728-f910-11e6-942a-68f728c1ba70\"",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` — A UUID in the request URI
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**if_match:** `str` — The key's current `ETag`, or `*` to skip the version check.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `StaticApiKeySecretCreateRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.access.api_keys.secrets.<a href="src/hiddenlayer/access/api_keys/secrets/client.py">delete</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Revokes only this secret; the key and its other secret keep working. Revoking a secret that is already revoked or expired, or whose key is revoked, returns `204`, whatever the `If-Match` value.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.access.api_keys.secrets.delete(
+    id="00000000-0000-0000-0000-000000000000",
+    secret_id="01n1adc0r38r9n4m5p6t7w8x9y",
+    if_match="\"7da7a728-f910-11e6-942a-68f728c1ba70\"",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` — A UUID in the request URI
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**secret_id:** `StaticApiKeySecretId` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**if_match:** `str` — The key's current `ETag`, or `*` to skip the version check.
+    
+</dd>
+</dl>
 
 <dl>
 <dd>

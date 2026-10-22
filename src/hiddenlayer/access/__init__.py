@@ -6,12 +6,15 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
-    from . import permissions, tokens, users
+    from . import api_keys, permissions, tokens, users
+    from .api_keys import ListApiKeysResponse
     from .permissions import ListPermissionsResponse
     from .users import ListUsersResponse
 _dynamic_imports: typing.Dict[str, str] = {
+    "ListApiKeysResponse": ".api_keys",
     "ListPermissionsResponse": ".permissions",
     "ListUsersResponse": ".users",
+    "api_keys": ".api_keys",
     "permissions": ".permissions",
     "tokens": ".tokens",
     "users": ".users",
@@ -39,4 +42,12 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["ListPermissionsResponse", "ListUsersResponse", "permissions", "tokens", "users"]
+__all__ = [
+    "ListApiKeysResponse",
+    "ListPermissionsResponse",
+    "ListUsersResponse",
+    "api_keys",
+    "permissions",
+    "tokens",
+    "users",
+]

@@ -18,7 +18,6 @@ from ....errors.precondition_failed_error import PreconditionFailedError
 from ....errors.service_unavailable_error import ServiceUnavailableError
 from ....errors.unprocessable_entity_error import UnprocessableEntityError
 from ....types.list_settings_request_category import ListSettingsRequestCategory
-from ....types.precondition_failed_error_body import PreconditionFailedErrorBody
 from ....types.settings_details_with_schema import SettingsDetailsWithSchema
 from ....types.settings_id import SettingsId
 from .types.list_settings_response import ListSettingsResponse
@@ -403,9 +402,9 @@ class RawSettingsClient:
                 raise PreconditionFailedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        PreconditionFailedErrorBody,
+                        typing.Any,
                         parse_obj_as(
-                            type_=PreconditionFailedErrorBody,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -908,9 +907,9 @@ class AsyncRawSettingsClient:
                 raise PreconditionFailedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        PreconditionFailedErrorBody,
+                        typing.Any,
                         parse_obj_as(
-                            type_=PreconditionFailedErrorBody,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

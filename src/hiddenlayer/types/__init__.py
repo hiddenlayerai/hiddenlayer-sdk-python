@@ -416,6 +416,15 @@ if typing.TYPE_CHECKING:
     from .sso_integration_saml_v2type import SsoIntegrationSamlV2Type
     from .start_rule_suggestion_response import StartRuleSuggestionResponse
     from .start_workflow_response import StartWorkflowResponse
+    from .static_api_key import StaticApiKey
+    from .static_api_key_name import StaticApiKeyName
+    from .static_api_key_permissions import StaticApiKeyPermissions
+    from .static_api_key_secret import StaticApiKeySecret
+    from .static_api_key_secret_create_request import StaticApiKeySecretCreateRequest
+    from .static_api_key_secret_id import StaticApiKeySecretId
+    from .static_api_key_secret_with_value import StaticApiKeySecretWithValue
+    from .static_api_key_value import StaticApiKeyValue
+    from .static_api_key_with_value import StaticApiKeyWithValue
     from .status import Status
     from .submit_target_response_result import SubmitTargetResponseResult
     from .suggested_rule import SuggestedRule
@@ -880,6 +889,15 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SsoIntegrationSamlV2Type": ".sso_integration_saml_v2type",
     "StartRuleSuggestionResponse": ".start_rule_suggestion_response",
     "StartWorkflowResponse": ".start_workflow_response",
+    "StaticApiKey": ".static_api_key",
+    "StaticApiKeyName": ".static_api_key_name",
+    "StaticApiKeyPermissions": ".static_api_key_permissions",
+    "StaticApiKeySecret": ".static_api_key_secret",
+    "StaticApiKeySecretCreateRequest": ".static_api_key_secret_create_request",
+    "StaticApiKeySecretId": ".static_api_key_secret_id",
+    "StaticApiKeySecretWithValue": ".static_api_key_secret_with_value",
+    "StaticApiKeyValue": ".static_api_key_value",
+    "StaticApiKeyWithValue": ".static_api_key_with_value",
     "Status": ".status",
     "SubmitTargetResponseResult": ".submit_target_response_result",
     "SuggestedRule": ".suggested_rule",
@@ -1368,6 +1386,15 @@ __all__ = [
     "SsoIntegrationSamlV2Type",
     "StartRuleSuggestionResponse",
     "StartWorkflowResponse",
+    "StaticApiKey",
+    "StaticApiKeyName",
+    "StaticApiKeyPermissions",
+    "StaticApiKeySecret",
+    "StaticApiKeySecretCreateRequest",
+    "StaticApiKeySecretId",
+    "StaticApiKeySecretWithValue",
+    "StaticApiKeyValue",
+    "StaticApiKeyWithValue",
     "Status",
     "SubmitTargetResponseResult",
     "SuggestedRule",

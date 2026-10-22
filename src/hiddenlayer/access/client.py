@@ -8,6 +8,7 @@ from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .raw_client import AsyncRawAccessClient, RawAccessClient
 
 if typing.TYPE_CHECKING:
+    from .api_keys.client import ApiKeysClient, AsyncApiKeysClient
     from .permissions.client import AsyncPermissionsClient, PermissionsClient
     from .tokens.client import AsyncTokensClient, TokensClient
     from .users.client import AsyncUsersClient, UsersClient
@@ -17,6 +18,7 @@ class AccessClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._raw_client = RawAccessClient(client_wrapper=client_wrapper)
         self._client_wrapper = client_wrapper
+        self._api_keys: typing.Optional[ApiKeysClient] = None
         self._users: typing.Optional[UsersClient] = None
         self._permissions: typing.Optional[PermissionsClient] = None
         self._tokens: typing.Optional[TokensClient] = None
@@ -31,6 +33,14 @@ class AccessClient:
         RawAccessClient
         """
         return self._raw_client
+
+    @property
+    def api_keys(self):
+        if self._api_keys is None:
+            from .api_keys.client import ApiKeysClient  # noqa: E402
+
+            self._api_keys = ApiKeysClient(client_wrapper=self._client_wrapper)
+        return self._api_keys
 
     @property
     def users(self):
@@ -61,6 +71,7 @@ class AsyncAccessClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._raw_client = AsyncRawAccessClient(client_wrapper=client_wrapper)
         self._client_wrapper = client_wrapper
+        self._api_keys: typing.Optional[AsyncApiKeysClient] = None
         self._users: typing.Optional[AsyncUsersClient] = None
         self._permissions: typing.Optional[AsyncPermissionsClient] = None
         self._tokens: typing.Optional[AsyncTokensClient] = None
@@ -75,6 +86,14 @@ class AsyncAccessClient:
         AsyncRawAccessClient
         """
         return self._raw_client
+
+    @property
+    def api_keys(self):
+        if self._api_keys is None:
+            from .api_keys.client import AsyncApiKeysClient  # noqa: E402
+
+            self._api_keys = AsyncApiKeysClient(client_wrapper=self._client_wrapper)
+        return self._api_keys
 
     @property
     def users(self):

@@ -402,7 +402,7 @@ class RawSensorsClient:
         SyncPager[SensorSorItemResponse, SensorSorQueryResponse]
             Successful response
         """
-        page_number = page_number if page_number is not None else 0
+        page_number = page_number if page_number is not None and page_number is not OMIT else 0
 
         _response = self._client_wrapper.httpx_client.request(
             "api/v2/sensors",
@@ -495,7 +495,7 @@ class RawSensorsClient:
         SyncPager[SensorSorItemResponse, SensorSorQueryResponse]
             Successful response
         """
-        page_number = page_number if page_number is not None else 0
+        page_number = page_number if page_number is not None and page_number is not OMIT else 0
 
         _response = self._client_wrapper.httpx_client.request(
             "api/v2/sensors/query",
@@ -932,7 +932,7 @@ class AsyncRawSensorsClient:
         AsyncPager[SensorSorItemResponse, SensorSorQueryResponse]
             Successful response
         """
-        page_number = page_number if page_number is not None else 0
+        page_number = page_number if page_number is not None and page_number is not OMIT else 0
 
         _response = await self._client_wrapper.httpx_client.request(
             "api/v2/sensors",
@@ -1028,7 +1028,7 @@ class AsyncRawSensorsClient:
         AsyncPager[SensorSorItemResponse, SensorSorQueryResponse]
             Successful response
         """
-        page_number = page_number if page_number is not None else 0
+        page_number = page_number if page_number is not None and page_number is not OMIT else 0
 
         _response = await self._client_wrapper.httpx_client.request(
             "api/v2/sensors/query",
