@@ -13,7 +13,6 @@ from ...errors.bad_request_error import BadRequestError
 from ...errors.forbidden_error import ForbiddenError
 from ...errors.internal_server_error import InternalServerError
 from ...errors.unauthorized_error import UnauthorizedError
-from ...types.authentication_error_model import AuthenticationErrorModel
 from ...types.limit import Limit
 from ...types.user import User
 from .types.list_users_response import ListUsersResponse
@@ -98,9 +97,9 @@ class RawUsersClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -218,9 +217,9 @@ class AsyncRawUsersClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

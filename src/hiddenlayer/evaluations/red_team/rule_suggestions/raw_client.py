@@ -16,7 +16,6 @@ from ....errors.forbidden_error import ForbiddenError
 from ....errors.not_found_error import NotFoundError
 from ....errors.unauthorized_error import UnauthorizedError
 from ....errors.unprocessable_entity_error import UnprocessableEntityError
-from ....types.authentication_error_model import AuthenticationErrorModel
 from ....types.rule_suggestion_list_item import RuleSuggestionListItem
 from ....types.rule_suggestion_list_response import RuleSuggestionListResponse
 from ....types.rule_suggestion_result_response import RuleSuggestionResultResponse
@@ -98,9 +97,9 @@ class RawRuleSuggestionsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -222,9 +221,9 @@ class RawRuleSuggestionsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -315,9 +314,9 @@ class RawRuleSuggestionsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -407,9 +406,9 @@ class RawRuleSuggestionsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -530,9 +529,9 @@ class AsyncRawRuleSuggestionsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -654,9 +653,9 @@ class AsyncRawRuleSuggestionsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -747,9 +746,9 @@ class AsyncRawRuleSuggestionsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -839,9 +838,9 @@ class AsyncRawRuleSuggestionsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

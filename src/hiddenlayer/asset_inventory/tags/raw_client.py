@@ -14,7 +14,6 @@ from ...errors.forbidden_error import ForbiddenError
 from ...errors.unauthorized_error import UnauthorizedError
 from ...types.ai_asset_inventory_v1tag_definition import AiAssetInventoryV1TagDefinition
 from ...types.ai_asset_inventory_v1tag_definition_list import AiAssetInventoryV1TagDefinitionList
-from ...types.authentication_error_model import AuthenticationErrorModel
 from ...types.list_tags_request_source import ListTagsRequestSource
 from ...types.list_v1tags_request_source import ListV1TagsRequestSource
 from ...types.tag_definition import TagDefinition
@@ -103,9 +102,9 @@ class RawTagsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -209,9 +208,9 @@ class RawTagsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -321,9 +320,9 @@ class AsyncRawTagsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -430,9 +429,9 @@ class AsyncRawTagsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

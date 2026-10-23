@@ -7,6 +7,9 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from .types import (
+        AccessToken,
+        AccessTokenRequest,
+        AccessTokenRequestGrantType,
         ActivityType,
         ActivityTypeList,
         ActorType,
@@ -265,6 +268,7 @@ if typing.TYPE_CHECKING:
         NextActionResponse,
         NullablePolicyStatus,
         NumpyFileAttributes,
+        OAuth2Error,
         OauthScope,
         Offset,
         Org,
@@ -508,6 +512,7 @@ if typing.TYPE_CHECKING:
         mitre,
         model_intel,
         models,
+        oauth2,
         permissions,
         prompt_analyzer,
         roles,
@@ -532,6 +537,9 @@ if typing.TYPE_CHECKING:
     from .users import CreateUsersResponse, GetUsersResponse, ListUsersResponse, MeUsersResponse, ResetUsersResponse
     from .version import __version__
 _dynamic_imports: typing.Dict[str, str] = {
+    "AccessToken": ".types",
+    "AccessTokenRequest": ".types",
+    "AccessTokenRequestGrantType": ".types",
     "ActivityType": ".types",
     "ActivityTypeList": ".types",
     "ActorType": ".types",
@@ -810,6 +818,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "NotFoundError": ".errors",
     "NullablePolicyStatus": ".types",
     "NumpyFileAttributes": ".types",
+    "OAuth2Error": ".types",
     "OauthScope": ".types",
     "Offset": ".types",
     "Org": ".types",
@@ -1048,6 +1057,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "mitre": ".mitre",
     "model_intel": ".model_intel",
     "models": ".models",
+    "oauth2": ".oauth2",
     "permissions": ".permissions",
     "prompt_analyzer": ".prompt_analyzer",
     "roles": ".roles",
@@ -1083,6 +1093,9 @@ def __dir__():
 
 
 __all__ = [
+    "AccessToken",
+    "AccessTokenRequest",
+    "AccessTokenRequestGrantType",
     "ActivityType",
     "ActivityTypeList",
     "ActorType",
@@ -1361,6 +1374,7 @@ __all__ = [
     "NotFoundError",
     "NullablePolicyStatus",
     "NumpyFileAttributes",
+    "OAuth2Error",
     "OauthScope",
     "Offset",
     "Org",
@@ -1599,6 +1613,7 @@ __all__ = [
     "mitre",
     "model_intel",
     "models",
+    "oauth2",
     "permissions",
     "prompt_analyzer",
     "roles",

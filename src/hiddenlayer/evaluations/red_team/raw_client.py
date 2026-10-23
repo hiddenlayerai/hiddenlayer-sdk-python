@@ -20,7 +20,6 @@ from ...errors.internal_server_error import InternalServerError
 from ...errors.not_found_error import NotFoundError
 from ...errors.unauthorized_error import UnauthorizedError
 from ...errors.unprocessable_entity_error import UnprocessableEntityError
-from ...types.authentication_error_model import AuthenticationErrorModel
 from ...types.list_red_team_request_project_id import ListRedTeamRequestProjectId
 from ...types.next_action_response import NextActionResponse
 from ...types.red_team_list_results_response import RedTeamListResultsResponse
@@ -148,9 +147,9 @@ class RawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -365,9 +364,9 @@ class RawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -443,9 +442,9 @@ class RawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -538,9 +537,9 @@ class RawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -660,9 +659,9 @@ class RawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -749,9 +748,9 @@ class RawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -830,9 +829,9 @@ class RawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -911,9 +910,9 @@ class RawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1075,9 +1074,9 @@ class AsyncRawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1292,9 +1291,9 @@ class AsyncRawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1370,9 +1369,9 @@ class AsyncRawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1465,9 +1464,9 @@ class AsyncRawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1587,9 +1586,9 @@ class AsyncRawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1676,9 +1675,9 @@ class AsyncRawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1757,9 +1756,9 @@ class AsyncRawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1838,9 +1837,9 @@ class AsyncRawRedTeamClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

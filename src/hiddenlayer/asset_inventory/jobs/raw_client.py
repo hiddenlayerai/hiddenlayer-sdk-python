@@ -13,7 +13,6 @@ from ...core.serialization import convert_and_respect_annotation_metadata
 from ...errors.forbidden_error import ForbiddenError
 from ...errors.unauthorized_error import UnauthorizedError
 from ...errors.unprocessable_entity_error import UnprocessableEntityError
-from ...types.authentication_error_model import AuthenticationErrorModel
 from .types.bulk_custom_tag_job_request_v2action import BulkCustomTagJobRequestV2Action
 from .types.bulk_custom_tag_job_request_v2body import BulkCustomTagJobRequestV2Body
 from .types.bulk_custom_tag_job_request_v2filter import BulkCustomTagJobRequestV2Filter
@@ -95,9 +94,9 @@ class RawJobsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -205,9 +204,9 @@ class AsyncRawJobsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

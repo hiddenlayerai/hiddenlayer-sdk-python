@@ -964,6 +964,82 @@ client.users.me()
 </dl>
 </details>
 
+## Oauth2
+<details><summary><code>client.oauth2.<a href="src/hiddenlayer/oauth2/client.py">token</a>(...) -> AccessToken</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Exchanges the Client ID and Client Secret of an [API credential](#operation/create_credentials_api_v2_credentials_post) for an access token, using the OAuth2 client credentials grant. Send the Client ID and Client Secret as the HTTP Basic username and password.
+
+Send the token as `Authorization: Bearer <access_token>` on every other request. It expires `expires_in` seconds after it is issued, so request a new one before then.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.oauth2.token(
+    grant_type="client_credentials",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AccessTokenRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## SsoIntegrations
 <details><summary><code>client.sso_integrations.<a href="src/hiddenlayer/sso_integrations/client.py">list</a>() -> ListSsoIntegrationsResponse</code></summary>
 <dl>
@@ -2706,6 +2782,8 @@ client.access.api_keys.list(
 <dd>
 
 [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Prefer [API credentials](#operation/create_credentials_api_v2_credentials_post), which trade a client ID and secret for short-lived OAuth2 access tokens. Reserve Static API Keys for integrations that cannot easily support OAuth2.
 
 A tenant can have at most 100 keys that are neither revoked nor retired, including keys with no active secret.
 </dd>

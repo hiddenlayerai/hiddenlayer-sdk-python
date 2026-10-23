@@ -15,7 +15,6 @@ from ...errors.bad_request_error import BadRequestError
 from ...errors.forbidden_error import ForbiddenError
 from ...errors.not_found_error import NotFoundError
 from ...errors.unauthorized_error import UnauthorizedError
-from ...types.authentication_error_model import AuthenticationErrorModel
 from ...types.scan_file_result_with_compliance_v3 import ScanFileResultWithComplianceV3
 from ...types.scan_report_summary_response_v3 import ScanReportSummaryResponseV3
 from .types.list_files_results_response import ListFilesResultsResponse
@@ -231,9 +230,9 @@ class RawResultsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -484,9 +483,9 @@ class AsyncRawResultsClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        AuthenticationErrorModel,
+                        typing.Any,
                         parse_obj_as(
-                            type_=AuthenticationErrorModel,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

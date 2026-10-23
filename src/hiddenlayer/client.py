@@ -24,6 +24,7 @@ if typing.TYPE_CHECKING:
     from .mitre.client import AsyncMitreClient, MitreClient
     from .model_intel.client import AsyncModelIntelClient, ModelIntelClient
     from .models.client import AsyncModelsClient, ModelsClient
+    from .oauth2.client import AsyncOauth2Client, Oauth2Client
     from .permissions.client import AsyncPermissionsClient, PermissionsClient
     from .prompt_analyzer.client import AsyncPromptAnalyzerClient, PromptAnalyzerClient
     from .roles.client import AsyncRolesClient, RolesClient
@@ -125,6 +126,7 @@ class HiddenLayer:
         self._permissions: typing.Optional[PermissionsClient] = None
         self._roles: typing.Optional[RolesClient] = None
         self._users: typing.Optional[UsersClient] = None
+        self._oauth2: typing.Optional[Oauth2Client] = None
         self._sso_integrations: typing.Optional[SsoIntegrationsClient] = None
         self._interactions: typing.Optional[InteractionsClient] = None
         self._prompt_analyzer: typing.Optional[PromptAnalyzerClient] = None
@@ -184,6 +186,14 @@ class HiddenLayer:
 
             self._users = UsersClient(client_wrapper=self._client_wrapper)
         return self._users
+
+    @property
+    def oauth2(self):
+        if self._oauth2 is None:
+            from .oauth2.client import Oauth2Client  # noqa: E402
+
+            self._oauth2 = Oauth2Client(client_wrapper=self._client_wrapper)
+        return self._oauth2
 
     @property
     def sso_integrations(self):
@@ -448,6 +458,7 @@ class AsyncHiddenLayer:
         self._permissions: typing.Optional[AsyncPermissionsClient] = None
         self._roles: typing.Optional[AsyncRolesClient] = None
         self._users: typing.Optional[AsyncUsersClient] = None
+        self._oauth2: typing.Optional[AsyncOauth2Client] = None
         self._sso_integrations: typing.Optional[AsyncSsoIntegrationsClient] = None
         self._interactions: typing.Optional[AsyncInteractionsClient] = None
         self._prompt_analyzer: typing.Optional[AsyncPromptAnalyzerClient] = None
@@ -507,6 +518,14 @@ class AsyncHiddenLayer:
 
             self._users = AsyncUsersClient(client_wrapper=self._client_wrapper)
         return self._users
+
+    @property
+    def oauth2(self):
+        if self._oauth2 is None:
+            from .oauth2.client import AsyncOauth2Client  # noqa: E402
+
+            self._oauth2 = AsyncOauth2Client(client_wrapper=self._client_wrapper)
+        return self._oauth2
 
     @property
     def sso_integrations(self):

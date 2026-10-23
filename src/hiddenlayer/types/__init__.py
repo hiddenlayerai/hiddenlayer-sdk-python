@@ -6,6 +6,9 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
+    from .access_token import AccessToken
+    from .access_token_request import AccessTokenRequest
+    from .access_token_request_grant_type import AccessTokenRequestGrantType
     from .activity_type import ActivityType
     from .activity_type_list import ActivityTypeList
     from .actor_type import ActorType
@@ -265,6 +268,7 @@ if typing.TYPE_CHECKING:
     from .next_action_response import NextActionResponse
     from .nullable_policy_status import NullablePolicyStatus
     from .numpy_file_attributes import NumpyFileAttributes
+    from .o_auth2error import OAuth2Error
     from .oauth_scope import OauthScope
     from .offset import Offset
     from .org import Org
@@ -484,6 +488,9 @@ if typing.TYPE_CHECKING:
     from .workflow_result_response import WorkflowResultResponse
     from .workflow_status_response import WorkflowStatusResponse
 _dynamic_imports: typing.Dict[str, str] = {
+    "AccessToken": ".access_token",
+    "AccessTokenRequest": ".access_token_request",
+    "AccessTokenRequestGrantType": ".access_token_request_grant_type",
     "ActivityType": ".activity_type",
     "ActivityTypeList": ".activity_type_list",
     "ActorType": ".actor_type",
@@ -742,6 +749,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "NextActionResponse": ".next_action_response",
     "NullablePolicyStatus": ".nullable_policy_status",
     "NumpyFileAttributes": ".numpy_file_attributes",
+    "OAuth2Error": ".o_auth2error",
     "OauthScope": ".oauth_scope",
     "Offset": ".offset",
     "Org": ".org",
@@ -981,6 +989,9 @@ def __dir__():
 
 
 __all__ = [
+    "AccessToken",
+    "AccessTokenRequest",
+    "AccessTokenRequestGrantType",
     "ActivityType",
     "ActivityTypeList",
     "ActorType",
@@ -1239,6 +1250,7 @@ __all__ = [
     "NextActionResponse",
     "NullablePolicyStatus",
     "NumpyFileAttributes",
+    "OAuth2Error",
     "OauthScope",
     "Offset",
     "Org",
