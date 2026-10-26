@@ -7,6 +7,7 @@ import typing
 import pydantic
 import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from .decision_type import DecisionType
 from .tool_use_part_tool_input import ToolUsePartToolInput
 
 
@@ -69,6 +70,53 @@ class ContentPart_ToolResult(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
+class ContentPart_DecisionQuestion(UniversalBaseModel):
+    """
+    A content part within an individual message.
+    """
+
+    type: typing.Literal["decision_question"] = "decision_question"
+    decision_type: typing.Optional[DecisionType] = None
+    decision_name: typing.Optional[str] = None
+    decision_question_payload: typing.Any
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
+class ContentPart_DecisionAnswer(UniversalBaseModel):
+    """
+    A content part within an individual message.
+    """
+
+    type: typing.Literal["decision_answer"] = "decision_answer"
+    decision_type: typing.Optional[DecisionType] = None
+    decision_name: typing.Optional[str] = None
+    decision_answer_payload: typing.Any
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
 ContentPart = typing_extensions.Annotated[
-    typing.Union[ContentPart_Text, ContentPart_ToolUse, ContentPart_ToolResult], pydantic.Field(discriminator="type")
+    typing.Union[
+        ContentPart_Text,
+        ContentPart_ToolUse,
+        ContentPart_ToolResult,
+        ContentPart_DecisionQuestion,
+        ContentPart_DecisionAnswer,
+    ],
+    pydantic.Field(discriminator="type"),
 ]

@@ -65,7 +65,14 @@ if typing.TYPE_CHECKING:
     from .condition_config import ConditionConfig
     from .conflict_error_body import ConflictErrorBody
     from .content_kind import ContentKind
-    from .content_part import ContentPart, ContentPart_Text, ContentPart_ToolResult, ContentPart_ToolUse
+    from .content_part import (
+        ContentPart,
+        ContentPart_DecisionAnswer,
+        ContentPart_DecisionQuestion,
+        ContentPart_Text,
+        ContentPart_ToolResult,
+        ContentPart_ToolUse,
+    )
     from .contributor import Contributor
     from .conviction_timeseries_response_v2 import ConvictionTimeseriesResponseV2
     from .conviction_timeseries_response_v3 import ConvictionTimeseriesResponseV3
@@ -79,6 +86,10 @@ if typing.TYPE_CHECKING:
     from .credentials_with_secret import CredentialsWithSecret
     from .credentials_without_secret import CredentialsWithoutSecret
     from .cursors import Cursors
+    from .decision_answer_part import DecisionAnswerPart
+    from .decision_question_part import DecisionQuestionPart
+    from .decision_type import DecisionType
+    from .decision_type_zero import DecisionTypeZero
     from .deprecated_scan_properties_v3 import DeprecatedScanPropertiesV3
     from .detect_config import DetectConfig
     from .embed import Embed
@@ -548,6 +559,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ConflictErrorBody": ".conflict_error_body",
     "ContentKind": ".content_kind",
     "ContentPart": ".content_part",
+    "ContentPart_DecisionAnswer": ".content_part",
+    "ContentPart_DecisionQuestion": ".content_part",
     "ContentPart_Text": ".content_part",
     "ContentPart_ToolResult": ".content_part",
     "ContentPart_ToolUse": ".content_part",
@@ -564,6 +577,10 @@ _dynamic_imports: typing.Dict[str, str] = {
     "CredentialsWithSecret": ".credentials_with_secret",
     "CredentialsWithoutSecret": ".credentials_without_secret",
     "Cursors": ".cursors",
+    "DecisionAnswerPart": ".decision_answer_part",
+    "DecisionQuestionPart": ".decision_question_part",
+    "DecisionType": ".decision_type",
+    "DecisionTypeZero": ".decision_type_zero",
     "DeprecatedScanPropertiesV3": ".deprecated_scan_properties_v3",
     "DetectConfig": ".detect_config",
     "Embed": ".embed",
@@ -1049,6 +1066,8 @@ __all__ = [
     "ConflictErrorBody",
     "ContentKind",
     "ContentPart",
+    "ContentPart_DecisionAnswer",
+    "ContentPart_DecisionQuestion",
     "ContentPart_Text",
     "ContentPart_ToolResult",
     "ContentPart_ToolUse",
@@ -1065,6 +1084,10 @@ __all__ = [
     "CredentialsWithSecret",
     "CredentialsWithoutSecret",
     "Cursors",
+    "DecisionAnswerPart",
+    "DecisionQuestionPart",
+    "DecisionType",
+    "DecisionTypeZero",
     "DeprecatedScanPropertiesV3",
     "DetectConfig",
     "Embed",

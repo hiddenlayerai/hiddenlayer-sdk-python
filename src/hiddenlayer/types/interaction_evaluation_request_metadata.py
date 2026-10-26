@@ -24,7 +24,7 @@ class InteractionEvaluationRequestMetadata(UniversalBaseModel):
 
     provider: str = pydantic.Field()
     """
-    The LLM provider (e.g., openai, anthropic, azure, bedrock).
+    The LLM provider (e.g., openai, anthropic, typesafe, azure, bedrock).
     """
 
     external_session_id: typing.Optional[str] = pydantic.Field(default=None)

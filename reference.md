@@ -1617,6 +1617,8 @@ field accepts either:
   - [OpenAI Chat Completions](https://platform.openai.com/docs/api-reference/chat)
   - [OpenAI Responses](https://platform.openai.com/docs/api-reference/responses)
   - [Anthropic Messages](https://docs.anthropic.com/en/api/messages)
+  - [TypeSafe System One](https://api.typesafe.ai/openapi.json), as JSON
+  - [OpenAI Decisions](https://developers.openai.com/api/docs/guides/decisions)
 
 Returns the evaluation context (`evaluated_interaction`): the canonicalized messages
 with per-message signals and findings attached. Also returns the policy
@@ -1705,10 +1707,11 @@ client.runtime.evaluate_interaction(
 The interaction to evaluate. Accepts either the canonical form
 (`CanonicalInteraction` — `messages` and optional `tools_available`)
 or a native LLM-provider payload passed through verbatim. Supported
-provider formats are OpenAI Chat Completions, OpenAI Responses, and
-Anthropic Messages. `ProviderPayload` is intentionally permissive
-(any JSON object) so callers can supply provider-native shapes
-without schema constraints.
+provider formats are OpenAI Chat Completions, OpenAI Responses,
+Anthropic Messages, TypeSafe System One and OpenAI Decisions.
+`ProviderPayload` is intentionally permissive (any JSON object) so
+callers can supply provider-native shapes without schema
+constraints.
     
 </dd>
 </dl>
@@ -1752,7 +1755,9 @@ Analyzes an LLM request payload for security threats before it is sent to the mo
 
 Accepts any valid provider request payload and returns:
 - If detect or redact action: the request payload (potentially modified) in the provider's request format
-- If block action: a canned block message in the provider's response format
+- If block action: a canned block message in the provider's response format. For TypeSafe
+  System One and OpenAI Decisions it is the generic block body,
+  `{"error": "request blocked by policy"}`.
 
 If the project is in monitor mode, the endpoint does not block or redact. It returns the
 request payload unchanged.
@@ -1763,6 +1768,11 @@ Supported provider formats:
 - [OpenAI Chat Completions](https://platform.openai.com/docs/api-reference/chat)
 - [OpenAI Responses](https://platform.openai.com/docs/api-reference/responses)
 - [Anthropic Messages](https://docs.anthropic.com/en/api/messages)
+- [TypeSafe System One](https://api.typesafe.ai/openapi.json), as JSON or as
+  `multipart/form-data` with the JSON request in its `request` part and the images in
+  the other parts. A multipart request is returned with the same boundary and its image
+  parts unchanged.
+- [OpenAI Decisions](https://developers.openai.com/api/docs/guides/decisions)
 </dd>
 </dl>
 </dd>
@@ -1876,6 +1886,11 @@ Supported provider formats:
 - [OpenAI Chat Completions](https://platform.openai.com/docs/api-reference/chat)
 - [OpenAI Responses](https://platform.openai.com/docs/api-reference/responses)
 - [Anthropic Messages](https://docs.anthropic.com/en/api/messages)
+- [TypeSafe System One](https://api.typesafe.ai/openapi.json)
+- [OpenAI Decisions](https://developers.openai.com/api/docs/guides/decisions)
+
+A TypeSafe System One or OpenAI Decisions response is never redacted. When blocked, it
+is replaced by the generic block body, `{"error": "request blocked by policy"}`.
 </dd>
 </dl>
 </dd>
