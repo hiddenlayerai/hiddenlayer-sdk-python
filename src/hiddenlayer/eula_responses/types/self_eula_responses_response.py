@@ -5,11 +5,11 @@ import typing
 
 import pydantic
 from ...core.pydantic_utilities import IS_PYDANTIC_V2
-from ...types.eula_response_value import EulaResponseValue
+from ...types.eula_response_status import EulaResponseStatus
 from ...types.eula_version import EulaVersion
 
 
-class SelfEulaResponsesResponse(EulaResponseValue, EulaVersion):
+class SelfEulaResponsesResponse(EulaVersion):
     modified_at: typing.Optional[dt.datetime] = pydantic.Field(default=None)
     """
     The date and time when the EULA response was last modified
@@ -18,6 +18,11 @@ class SelfEulaResponsesResponse(EulaResponseValue, EulaVersion):
     modified_by: typing.Optional[str] = pydantic.Field(default=None)
     """
     The tenant administrator that last modified the EULA response
+    """
+
+    response: EulaResponseStatus = pydantic.Field()
+    """
+    The response to the EULA
     """
 
     if IS_PYDANTIC_V2:
