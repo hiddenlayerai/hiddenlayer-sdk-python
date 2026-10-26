@@ -1,14 +1,14 @@
 {
   "cliVersion": "5.131.1",
   "generatorName": "fernapi/fern-python-sdk",
-  "generatorVersion": "5.41.3",
+  "generatorVersion": "5.41.8",
   "generatorConfig": {
     "client": {
       "class_name": "HiddenLayer"
     },
     "offset_semantics": "item-index"
   },
-  "originGitCommit": "499e4eaaacdb4726ca33f61a3ebda54fac277400",
+  "originGitCommit": "8f50db361895e06db9ada2b28563f7ac56a29c01",
   "originGitCommitIsDirty": true,
   "invokedBy": "ci",
   "requestedVersion": "3.10.0",

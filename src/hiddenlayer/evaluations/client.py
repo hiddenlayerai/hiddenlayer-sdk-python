@@ -8,6 +8,7 @@ from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .raw_client import AsyncRawEvaluationsClient, RawEvaluationsClient
 
 if typing.TYPE_CHECKING:
+    from .prompt_sets.client import AsyncPromptSetsClient, PromptSetsClient
     from .red_team.client import AsyncRedTeamClient, RedTeamClient
 
 
@@ -16,6 +17,7 @@ class EvaluationsClient:
         self._raw_client = RawEvaluationsClient(client_wrapper=client_wrapper)
         self._client_wrapper = client_wrapper
         self._red_team: typing.Optional[RedTeamClient] = None
+        self._prompt_sets: typing.Optional[PromptSetsClient] = None
 
     @property
     def with_raw_response(self) -> RawEvaluationsClient:
@@ -36,12 +38,21 @@ class EvaluationsClient:
             self._red_team = RedTeamClient(client_wrapper=self._client_wrapper)
         return self._red_team
 
+    @property
+    def prompt_sets(self):
+        if self._prompt_sets is None:
+            from .prompt_sets.client import PromptSetsClient  # noqa: E402
+
+            self._prompt_sets = PromptSetsClient(client_wrapper=self._client_wrapper)
+        return self._prompt_sets
+
 
 class AsyncEvaluationsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._raw_client = AsyncRawEvaluationsClient(client_wrapper=client_wrapper)
         self._client_wrapper = client_wrapper
         self._red_team: typing.Optional[AsyncRedTeamClient] = None
+        self._prompt_sets: typing.Optional[AsyncPromptSetsClient] = None
 
     @property
     def with_raw_response(self) -> AsyncRawEvaluationsClient:
@@ -61,3 +72,11 @@ class AsyncEvaluationsClient:
 
             self._red_team = AsyncRedTeamClient(client_wrapper=self._client_wrapper)
         return self._red_team
+
+    @property
+    def prompt_sets(self):
+        if self._prompt_sets is None:
+            from .prompt_sets.client import AsyncPromptSetsClient  # noqa: E402
+
+            self._prompt_sets = AsyncPromptSetsClient(client_wrapper=self._client_wrapper)
+        return self._prompt_sets

@@ -7,8 +7,10 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from .client_red_team_body_execution_strategy_type import ClientRedTeamBodyExecutionStrategyType
+    from .start_red_team_body_execution_strategy_type import StartRedTeamBodyExecutionStrategyType
 _dynamic_imports: typing.Dict[str, str] = {
-    "ClientRedTeamBodyExecutionStrategyType": ".client_red_team_body_execution_strategy_type"
+    "ClientRedTeamBodyExecutionStrategyType": ".client_red_team_body_execution_strategy_type",
+    "StartRedTeamBodyExecutionStrategyType": ".start_red_team_body_execution_strategy_type",
 }
 
 
@@ -33,4 +35,4 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["ClientRedTeamBodyExecutionStrategyType"]
+__all__ = ["ClientRedTeamBodyExecutionStrategyType", "StartRedTeamBodyExecutionStrategyType"]

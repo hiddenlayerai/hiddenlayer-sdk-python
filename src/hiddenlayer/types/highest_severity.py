@@ -2,4 +2,4 @@
 
 import typing
 
-HighestSeverity = typing.Union[typing.Literal["NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"], typing.Any]
+HighestSeverity = typing.Union[typing.Literal["CRITICAL", "HIGH", "MEDIUM", "LOW", "NONE"], typing.Any]

@@ -8850,6 +8850,71 @@ client.compliance.rule_sets.settings.delete(
 </details>
 
 ## Evaluations RedTeam
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py">target_models</a>() -> TargetModelResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Returns the list of available target models for red team evaluations.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team.target_models()
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py">list</a>(...) -> RedTeamListResultsResponse</code></summary>
 <dl>
 <dd>
@@ -9189,7 +9254,7 @@ generation attempts for the attacker model per turn.
 <dl>
 <dd>
 
-**prompt_set_id:** `typing.Optional[str]` — Prompt set UUID (built-in catalog or tenant DB)
+**prompt_set_id:** `typing.Optional[str]` — Prompt set UUID (built-in or tenant prompt set)
     
 </dd>
 </dl>
@@ -9715,8 +9780,7 @@ client.evaluations.red_team.terminate(
 </dl>
 </details>
 
-## Evaluations RedTeam RuleSuggestions
-<details><summary><code>client.evaluations.red_team.rule_suggestions.<a href="src/hiddenlayer/evaluations/red_team/rule_suggestions/client.py">list</a>(...) -> RuleSuggestionListResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py">simulated</a>(...) -> StartWorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -9730,9 +9794,7 @@ client.evaluations.red_team.terminate(
 
 [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-List rule suggestion runs generated for a red team evaluation, newest first.
-
-Each run is independent - triggering a new run does not replace or affect prior runs.
+Start a new simulated red team workflow with a built-in target model.
 </dd>
 </dl>
 </dd>
@@ -9755,8 +9817,8 @@ client = HiddenLayer(
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
-client.evaluations.red_team.rule_suggestions.list(
-    workflow_id="workflow_id",
+client.evaluations.red_team.simulated(
+    name="name",
 )
 
 ```
@@ -9773,7 +9835,7 @@ client.evaluations.red_team.rule_suggestions.list(
 <dl>
 <dd>
 
-**workflow_id:** `str` — The source red team evaluation's workflow identifier
+**name:** `str` — Name for this evaluation
     
 </dd>
 </dl>
@@ -9781,7 +9843,11 @@ client.evaluations.red_team.rule_suggestions.list(
 <dl>
 <dd>
 
-**limit:** `typing.Optional[int]` — Maximum number of results to return
+**config_id:** `typing.Optional[str]` 
+
+Optional preset config (see /evaluations/v1/red-team/configs) to seed the
+workflow settings. Any field also present in this body overrides the
+corresponding value from the config.
     
 </dd>
 </dl>
@@ -9789,7 +9855,148 @@ client.evaluations.red_team.rule_suggestions.list(
 <dl>
 <dd>
 
-**cursor:** `typing.Optional[str]` — Pagination cursor from previous response
+**target_model:** `typing.Optional[str]` 
+
+Target model identifier. Validated against the live servable-model
+catalog; an unknown or unsupported model returns 422 and an
+unavailable catalog returns 503.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**target_system_prompt:** `typing.Optional[str]` — System prompt for the target
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**objective_ids:** `typing.Optional[typing.List[str]]` — Objective IDs to evaluate
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**severity_mapping:** `typing.Optional[SeverityMapping]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**execution_strategy_type:** `typing.Optional[StartRedTeamBodyExecutionStrategyType]` — Execution strategy type
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**n_random_techniques:** `typing.Optional[int]` — Number of random techniques to use
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_parallel_techniques:** `typing.Optional[int]` — Maximum parallel techniques
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_turns:** `typing.Optional[int]` — Maximum conversation turns
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**attacker_max_generation_attempts:** `typing.Optional[int]` 
+
+Internal override; service default applies if omitted. Maximum number of
+generation attempts for the attacker model per turn.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**refusal_judge_model:** `typing.Optional[str]` — Internal override; service default applies if omitted.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**objective_judge_model:** `typing.Optional[str]` — Internal override; service default applies if omitted.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**evaluation_report_model:** `typing.Optional[str]` — Internal override; service default applies if omitted.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**attacker_model:** `typing.Optional[str]` — Internal override; service default applies if omitted.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**hl_project_id:** `typing.Optional[str]` — HiddenLayer project UUID or alias
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**prompt_set_id:** `typing.Optional[str]` — Prompt set UUID (built-in or tenant prompt set)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sessions_per_technique:** `typing.Optional[int]` — Number of sessions per technique
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**attacker_guidance:** `typing.Optional[str]` 
+
+Optional intent-only natural-language text the operator supplies to
+focus the attacker LLM within the configured APE objectives.
+Sanitized server-side (length cap + strict character whitelist).
+See `RedTeamConfig.attacker_guidance` for full semantics. No-op
+for the `STATIC_PROMPT_SET` execution strategy.
     
 </dd>
 </dl>
@@ -9809,7 +10016,7 @@ client.evaluations.red_team.rule_suggestions.list(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.rule_suggestions.<a href="src/hiddenlayer/evaluations/red_team/rule_suggestions/client.py">create</a>(...) -> StartRuleSuggestionResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py">csv</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -9823,17 +10030,7 @@ client.evaluations.red_team.rule_suggestions.list(
 
 [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-Start a new rule suggestion run for a completed red team evaluation. Analyzes the
-evaluation's successful attacks and generates a detection rule suggestion that can be
-reviewed and added to a project's runtime security policy.
-
-Callable multiple times for the same evaluation; each call starts an independent run.
-The response's `suggestion_id` identifies the new run - use it in the status, result,
-and list endpoints (the `{workflow_id}` path segment continues to identify the source
-red team evaluation). Client should poll /status, then fetch the full result once
-complete.
-
-An empty JSON object `{}` is the minimal valid request body.
+Export attacker/target interactions for a red team workflow as CSV (one row per message).
 </dd>
 </dl>
 </dd>
@@ -9856,7 +10053,7 @@ client = HiddenLayer(
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
-client.evaluations.red_team.rule_suggestions.create(
+client.evaluations.red_team.csv(
     workflow_id="workflow_id",
 )
 
@@ -9874,15 +10071,7 @@ client.evaluations.red_team.rule_suggestions.create(
 <dl>
 <dd>
 
-**workflow_id:** `str` — The source red team evaluation's workflow identifier
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**name:** `typing.Optional[str]` — Optional name for this rule suggestion run. When omitted, the server derives one from the source evaluation (e.g. "Rule suggestions for {evaluation name}").
+**workflow_id:** `str` — The workflow identifier
     
 </dd>
 </dl>
@@ -9902,7 +10091,8 @@ client.evaluations.red_team.rule_suggestions.create(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.rule_suggestions.<a href="src/hiddenlayer/evaluations/red_team/rule_suggestions/client.py">status</a>(...) -> RuleSuggestionStatusResponse</code></summary>
+## Evaluations PromptSets
+<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py">list</a>() -> PromptSetsResponse</code></summary>
 <dl>
 <dd>
 
@@ -9916,8 +10106,11 @@ client.evaluations.red_team.rule_suggestions.create(
 
 [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-Get current status of a rule suggestion run (polling endpoint).
-Returns immediately with current state.
+List all available prompt sets for a tenant.
+
+Returns both:
+- Built-in prompt sets
+- Tenant-specific prompt sets with their current status
 </dd>
 </dl>
 </dd>
@@ -9940,9 +10133,84 @@ client = HiddenLayer(
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
-client.evaluations.red_team.rule_suggestions.status(
-    workflow_id="workflow_id",
-    suggestion_id="suggestion_id",
+client.evaluations.prompt_sets.list()
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py">create</a>(...) -> CreatePromptSetResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Create a new tenant-specific prompt set.
+
+The server assigns the `prompt_set_id` (a UUID). The prompt set is stored
+with status `IN_PROGRESS` and the response returns immediately. A
+background job then tags the prompts, after applying any requested
+mutations. List the prompt sets to see when the status changes.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer, CreatePromptRequest
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.prompt_sets.create(
+    name="name",
+    provider="provider",
+    prompts=[
+        CreatePromptRequest(
+            user_prompt="user_prompt",
+        )
+    ],
 )
 
 ```
@@ -9959,7 +10227,7 @@ client.evaluations.red_team.rule_suggestions.status(
 <dl>
 <dd>
 
-**workflow_id:** `str` — The source red team evaluation's workflow identifier
+**name:** `str` — Human-readable name for the prompt set
     
 </dd>
 </dl>
@@ -9967,7 +10235,63 @@ client.evaluations.red_team.rule_suggestions.status(
 <dl>
 <dd>
 
-**suggestion_id:** `str` — The rule suggestion run identifier
+**provider:** `str` — Provider/source of the prompt set
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**prompts:** `typing.List[CreatePromptRequest]` — List of prompts in the set
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**url:** `typing.Optional[str]` — Reference URL for the prompt set
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `typing.Optional[str]` — Description of the prompt set
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**mutations:** `typing.Optional[typing.List[MutationType]]` — List of mutation methods to apply
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**encodings:** `typing.Optional[typing.List[EncodingType]]` — List of encoding methods to apply
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**semantic_transformations:** `typing.Optional[typing.List[SemanticType]]` — List of semantic transformation methods to apply
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**variations_per_prompt:** `typing.Optional[int]` — Number of variations to generate per prompt
     
 </dd>
 </dl>
@@ -9987,7 +10311,7 @@ client.evaluations.red_team.rule_suggestions.status(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.rule_suggestions.<a href="src/hiddenlayer/evaluations/red_team/rule_suggestions/client.py">get</a>(...) -> RuleSuggestionResultResponse</code></summary>
+<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py">mutations</a>() -> AvailableMutationsResponse</code></summary>
 <dl>
 <dd>
 
@@ -10001,7 +10325,12 @@ client.evaluations.red_team.rule_suggestions.status(
 
 [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-Get the complete result of a rule suggestion run, including any generated rules.
+Return static list of available mutation types by category.
+
+Returns all available mutation methods organized by category:
+- mutations: Character/word-level text mutations
+- encodings: Text encoding transformations
+- semantic_transformations: LLM-based semantic transformations
 </dd>
 </dl>
 </dd>
@@ -10024,9 +10353,73 @@ client = HiddenLayer(
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
-client.evaluations.red_team.rule_suggestions.get(
-    workflow_id="workflow_id",
-    suggestion_id="suggestion_id",
+client.evaluations.prompt_sets.mutations()
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py">delete</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Delete a tenant-specific prompt set.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.prompt_sets.delete(
+    prompt_set_id="prompt_set_id",
 )
 
 ```
@@ -10043,7 +10436,7 @@ client.evaluations.red_team.rule_suggestions.get(
 <dl>
 <dd>
 
-**workflow_id:** `str` — The source red team evaluation's workflow identifier
+**prompt_set_id:** `str` — The prompt set identifier
     
 </dd>
 </dl>
@@ -10051,7 +10444,1198 @@ client.evaluations.red_team.rule_suggestions.get(
 <dl>
 <dd>
 
-**suggestion_id:** `str` — The rule suggestion run identifier
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py">csv</a>(...) -> typing.Iterator[bytes]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Export a prompt set as CSV.
+
+Exports a built-in or tenant-specific prompt set as CSV with columns:
+prompt_id, system_prompt, user_prompt, technique_ids.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.prompt_sets.csv(
+    prompt_set_id="prompt_set_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**prompt_set_id:** `str` — The prompt set identifier
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Evaluations RedTeam Objectives
+<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py">list</a>(...) -> ObjectivesListResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+List the red team evaluation objectives available to the tenant.
+
+The first page is prefixed with the built-in HLO catalog (read-only,
+`HLO.NN` IDs); subsequent pages contain only the tenant's custom
+objectives (UUID IDs). The list is cursor-paginated.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team.objectives.list(
+    limit=50,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[Limit]` — Limit the number of items returned
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cursor:** `typing.Optional[str]` — Cursor for pagination, used to navigate through pages of results
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py">create</a>(...) -> ApeObjective</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Create a tenant custom objective. Custom objectives flow through the
+same attacker/judge pipeline as the built-in HLO catalog and are
+referenced by their UUID in `objective_ids` on a config preset or a
+start request.
+
+`objective_name`, `objective_description`, and the optional
+`attacker_guidance` are sanitized server-side (NFKC normalization plus
+a strict character whitelist). A per-tenant cap applies; exceeding it
+returns 409.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team.objectives.create(
+    objective_name="objective_name",
+    objective_description="objective_description",
+    default_severity="CRITICAL",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**objective_name:** `str` — Human-readable name for the custom objective.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**objective_description:** `str` 
+
+HLO-style harm definition for the objective. Recommended format:
+`Induce the model to [harmful behavior] in a context where
+[precondition], without [missing safeguard].`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**default_severity:** `HighestSeverity` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**attacker_guidance:** `typing.Optional[str]` 
+
+Optional objective-scoped attacker guidance used to stage reusable
+scenario or user-state preconditions for this custom objective.
+Rendered inline with this objective in attacker prompts. Sanitized
+server-side using the same rules as run/config attacker guidance.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py">get</a>(...) -> ApeObjective</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Return a single objective by ID. `HLO.NN` IDs return a built-in
+objective; UUIDs return one of the tenant's custom objectives.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team.objectives.get(
+    objective_id="objective_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**objective_id:** `str` — The objective identifier (`HLO.NN` built-in or custom UUID)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py">delete</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Hard-delete a tenant custom objective. Past workflow runs that
+referenced this objective are unaffected: the resolved objective is
+snapshotted into the result row at start time.
+
+Built-in `HLO.NN` objectives are read-only: a DELETE against one
+returns 409.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team.objectives.delete(
+    objective_id="objective_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**objective_id:** `str` — The custom objective UUID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py">update</a>(...) -> ApeObjective</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Partially update a tenant custom objective. Omitted fields are left
+unchanged; an explicit `""` clears `attacker_guidance`.
+
+Built-in `HLO.NN` objectives are read-only: a PATCH against one returns
+409. Use `severity_mapping` on a config or start request to tune a
+built-in's effective severity instead.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team.objectives.update(
+    objective_id="objective_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**objective_id:** `str` — The custom objective UUID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**objective_name:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**objective_description:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**attacker_guidance:** `typing.Optional[str]` — Optional objective-scoped attacker guidance. Send `""` to clear.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**default_severity:** `typing.Optional[HighestSeverity]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Evaluations RedTeam Configs
+<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py">list</a>(...) -> RedTeamConfigsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+List all red team config presets for the tenant.
+
+Each config is a reusable bundle of preset-able workflow settings (target model,
+target system prompt, objective IDs, severity mapping, prompt set, project, tuning
+knobs). Configs are referenced from the start endpoints via `config_id`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team.configs.list(
+    limit=50,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[Limit]` — Limit the number of items returned
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cursor:** `typing.Optional[str]` — Cursor for pagination, used to navigate through pages of results
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py">create</a>(...) -> RedTeamConfig</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Create a new red team config preset for the tenant.
+
+A config may hold any subset of the preset-able workflow settings. The
+server validates that any supplied `prompt_set_id` exists (built-in or tenant prompt set) and that any
+supplied `hl_project_id` (UUID or alias) names an existing project; an alias
+is stored as the canonical project UUID.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team.configs.create(
+    name="name",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**name:** `str` — Human-readable name; must be unique per tenant
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**target_model:** `typing.Optional[str]` 
+
+Target model identifier. Validated against the live servable-model
+catalog; an unknown or unsupported model returns 422 and an
+unavailable catalog returns 503.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**target_system_prompt:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**objective_ids:** `typing.Optional[typing.List[str]]` 
+
+Custom objective UUIDs to evaluate in addition to the built-in HLO
+catalog. Built-in `HLO.*` objectives are always included; up to 10
+additional custom UUIDs may be supplied. `HLO.*` entries are ignored.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**severity_mapping:** `typing.Optional[SeverityMapping]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**execution_strategy_type:** `typing.Optional[CreateRedTeamConfigRequestExecutionStrategyType]` 
+
+Execution strategy type. When set to `STATIC_PROMPT_SET`,
+`prompt_set_id` is required (on this request, or pre-existing
+on the config for PATCH). The server returns 422 otherwise.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**n_random_techniques:** `typing.Optional[int]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_turns:** `typing.Optional[int]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**prompt_set_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sessions_per_technique:** `typing.Optional[int]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**hl_project_id:** `typing.Optional[str]` 
+
+HiddenLayer project UUID or alias. Aliases are stored as the canonical
+project UUID.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**attacker_guidance:** `typing.Optional[str]` 
+
+Optional intent-only natural-language text to focus the attacker LLM
+within the configured APE objectives. Sanitized server-side (length
+cap + strict character whitelist after NFKC normalization). See
+`RedTeamConfig.attacker_guidance` for full semantics.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py">get</a>(...) -> RedTeamConfig</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Return a single red team config by ID.
+
+Includes the staleness signals `prompt_set_status` and `hl_project_status`,
+which show whether the referenced prompt set or project was deleted.
+`hl_project_status` is `unknown` when the project service is unavailable.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team.configs.get(
+    config_id="config_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**config_id:** `str` — The config identifier
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py">delete</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Delete a red team config by ID. Past workflow runs that referenced this config
+are unaffected because the resolved settings are snapshotted into the result row
+at start time.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team.configs.delete(
+    config_id="config_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**config_id:** `str` — The config identifier
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py">update</a>(...) -> RedTeamConfig</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Partially update an existing red team config.
+
+Omitted fields are left unchanged.
+
+To clear a field that supports an empty value, send the explicit empty value
+for the type (`""` for strings, `[]` for arrays, `{}` for maps). The reference
+fields `prompt_set_id` and `hl_project_id` have no empty value: to clear one,
+delete the config and create it again.
+
+Cross-reference fields (`prompt_set_id`, `hl_project_id`) are re-validated
+whenever they are present in the request body with a non-empty value.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team.configs.update(
+    config_id="config_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**config_id:** `str` — The config identifier
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**target_model:** `typing.Optional[str]` 
+
+Target model identifier. Validated against the live servable-model
+catalog; an unknown or unsupported model returns 422 and an
+unavailable catalog returns 503.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**target_system_prompt:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**objective_ids:** `typing.Optional[typing.List[str]]` 
+
+Custom objective UUIDs to evaluate in addition to the built-in HLO
+catalog. Send `[]` to clear. Built-in `HLO.*` objectives are always
+included; up to 10 additional custom UUIDs may be supplied.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**severity_mapping:** `typing.Optional[SeverityMapping]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**execution_strategy_type:** `typing.Optional[UpdateRedTeamConfigRequestExecutionStrategyType]` 
+
+Execution strategy type. When set to `STATIC_PROMPT_SET`,
+`prompt_set_id` is required (on this request, or pre-existing
+on the config for PATCH). The server returns 422 otherwise.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**n_random_techniques:** `typing.Optional[int]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_turns:** `typing.Optional[int]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**prompt_set_id:** `typing.Optional[str]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sessions_per_technique:** `typing.Optional[int]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**hl_project_id:** `typing.Optional[str]` — HiddenLayer project UUID or alias.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**attacker_guidance:** `typing.Optional[str]` 
+
+Optional intent-only natural-language text to focus the attacker LLM
+within the configured APE objectives. Send `""` to clear. Sanitized
+server-side (length cap + strict character whitelist after NFKC
+normalization). See `RedTeamConfig.attacker_guidance` for full
+semantics.
     
 </dd>
 </dl>

@@ -6,34 +6,29 @@ import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 
 
-class RuleSuggestionStatusResponse(UniversalBaseModel):
+class TargetModel(UniversalBaseModel):
     """
-    Status of a rule suggestion run.
-    """
-
-    suggestion_id: str = pydantic.Field()
-    """
-    Rule suggestion run identifier
+    An available target model for evaluations.
     """
 
-    phase: str = pydantic.Field()
+    model_id: str = pydantic.Field()
     """
-    Current run phase
+    Unique identifier for the model
     """
 
     name: str = pydantic.Field()
     """
-    Run name
+    Human-readable model name
     """
 
-    error: typing.Optional[str] = pydantic.Field(default=None)
+    provider: str = pydantic.Field()
     """
-    Error message if failed
+    Model provider (e.g., "openai", "bedrock", "google")
     """
 
-    message: typing.Optional[str] = pydantic.Field(default=None)
+    is_beta: bool = pydantic.Field()
     """
-    Status message
+    Whether this model is in beta
     """
 
     if IS_PYDANTIC_V2:

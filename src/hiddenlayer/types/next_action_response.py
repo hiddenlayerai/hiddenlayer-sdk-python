@@ -23,7 +23,7 @@ class NextActionResponse(UniversalBaseModel):
 
     action_type: typing.Optional[str] = pydantic.Field(default=None)
     """
-    Type of action (e.g., "attack", "complete")
+    Type of action: `attack_task`, `complete` or `failed`
     """
 
     message: typing.Optional[str] = pydantic.Field(default=None)

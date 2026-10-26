@@ -43,6 +43,9 @@ OauthScope = typing.Union[
         "runtime:r",
         "runtime:w",
         "runtime:d",
+        "aas:r",
+        "aas:w",
+        "aas:d",
     ],
     typing.Any,
 ]

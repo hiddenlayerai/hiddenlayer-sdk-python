@@ -4,27 +4,15 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from .target_model import TargetModel
 
 
-class SuggestedRule(UniversalBaseModel):
+class TargetModelResponse(UniversalBaseModel):
     """
-    A single generated detection rule.
-    """
-
-    expression_name: str = pydantic.Field()
-    """
-    Name of the generated expression (detection entry point)
+    List of available target models.
     """
 
-    new_expression: str = pydantic.Field()
-    """
-    Full CEL expression file contents (frontmatter and rule body)
-    """
-
-    reason: typing.Optional[str] = pydantic.Field(default=None)
-    """
-    Explanation of what the rule detects and why
-    """
+    models: typing.List[TargetModel]
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -1,9 +1,9 @@
 [project]
-name = "hiddenlayer-sdk"
+name = "hiddenlayer"
 dynamic = ["version"]
 
 [tool.poetry]
-name = "hiddenlayer-sdk"
+name = "hiddenlayer"
 version = "3.10.0"
 description = ""
 readme = "README.md"

@@ -15,13 +15,16 @@ from ...types.red_team_result_item import RedTeamResultItem
 from ...types.severity_mapping import SeverityMapping
 from ...types.start_workflow_response import StartWorkflowResponse
 from ...types.submit_target_response_result import SubmitTargetResponseResult
+from ...types.target_model_response import TargetModelResponse
 from ...types.workflow_result_response import WorkflowResultResponse
 from ...types.workflow_status_response import WorkflowStatusResponse
 from .raw_client import AsyncRawRedTeamClient, RawRedTeamClient
 from .types.client_red_team_body_execution_strategy_type import ClientRedTeamBodyExecutionStrategyType
+from .types.start_red_team_body_execution_strategy_type import StartRedTeamBodyExecutionStrategyType
 
 if typing.TYPE_CHECKING:
-    from .rule_suggestions.client import AsyncRuleSuggestionsClient, RuleSuggestionsClient
+    from .configs.client import AsyncConfigsClient, ConfigsClient
+    from .objectives.client import AsyncObjectivesClient, ObjectivesClient
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
@@ -30,7 +33,8 @@ class RedTeamClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._raw_client = RawRedTeamClient(client_wrapper=client_wrapper)
         self._client_wrapper = client_wrapper
-        self._rule_suggestions: typing.Optional[RuleSuggestionsClient] = None
+        self._objectives: typing.Optional[ObjectivesClient] = None
+        self._configs: typing.Optional[ConfigsClient] = None
 
     @property
     def with_raw_response(self) -> RawRedTeamClient:
@@ -42,6 +46,34 @@ class RedTeamClient:
         RawRedTeamClient
         """
         return self._raw_client
+
+    def target_models(self, *, request_options: typing.Optional[RequestOptions] = None) -> TargetModelResponse:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        Returns the list of available target models for red team evaluations.
+
+        Parameters
+        ----------
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        TargetModelResponse
+            Successful Response
+
+        Examples
+        --------
+        from hiddenlayer import HiddenLayer
+
+        client = HiddenLayer(
+            token="YOUR_TOKEN",
+        )
+        client.evaluations.red_team.target_models()
+        """
+        _response = self._raw_client.target_models(request_options=request_options)
+        return _response.data
 
     def list(
         self,
@@ -216,7 +248,7 @@ class RedTeamClient:
             HiddenLayer project UUID or alias
 
         prompt_set_id : typing.Optional[str]
-            Prompt set UUID (built-in catalog or tenant DB)
+            Prompt set UUID (built-in or tenant prompt set)
 
         sessions_per_technique : typing.Optional[int]
             Number of sessions per technique
@@ -506,20 +538,203 @@ class RedTeamClient:
         _response = self._raw_client.terminate(workflow_id, request_options=request_options)
         return _response.data
 
-    @property
-    def rule_suggestions(self):
-        if self._rule_suggestions is None:
-            from .rule_suggestions.client import RuleSuggestionsClient  # noqa: E402
+    def simulated(
+        self,
+        *,
+        name: str,
+        config_id: typing.Optional[str] = OMIT,
+        target_model: typing.Optional[str] = OMIT,
+        target_system_prompt: typing.Optional[str] = OMIT,
+        objective_ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        severity_mapping: typing.Optional[SeverityMapping] = OMIT,
+        execution_strategy_type: typing.Optional[StartRedTeamBodyExecutionStrategyType] = OMIT,
+        n_random_techniques: typing.Optional[int] = OMIT,
+        max_parallel_techniques: typing.Optional[int] = OMIT,
+        max_turns: typing.Optional[int] = OMIT,
+        attacker_max_generation_attempts: typing.Optional[int] = OMIT,
+        refusal_judge_model: typing.Optional[str] = OMIT,
+        objective_judge_model: typing.Optional[str] = OMIT,
+        evaluation_report_model: typing.Optional[str] = OMIT,
+        attacker_model: typing.Optional[str] = OMIT,
+        hl_project_id: typing.Optional[str] = OMIT,
+        prompt_set_id: typing.Optional[str] = OMIT,
+        sessions_per_technique: typing.Optional[int] = OMIT,
+        attacker_guidance: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartWorkflowResponse:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-            self._rule_suggestions = RuleSuggestionsClient(client_wrapper=self._client_wrapper)
-        return self._rule_suggestions
+        Start a new simulated red team workflow with a built-in target model.
+
+        Parameters
+        ----------
+        name : str
+            Name for this evaluation
+
+        config_id : typing.Optional[str]
+            Optional preset config (see /evaluations/v1/red-team/configs) to seed the
+            workflow settings. Any field also present in this body overrides the
+            corresponding value from the config.
+
+        target_model : typing.Optional[str]
+            Target model identifier. Validated against the live servable-model
+            catalog; an unknown or unsupported model returns 422 and an
+            unavailable catalog returns 503.
+
+        target_system_prompt : typing.Optional[str]
+            System prompt for the target
+
+        objective_ids : typing.Optional[typing.Sequence[str]]
+            Objective IDs to evaluate
+
+        severity_mapping : typing.Optional[SeverityMapping]
+
+        execution_strategy_type : typing.Optional[StartRedTeamBodyExecutionStrategyType]
+            Execution strategy type
+
+        n_random_techniques : typing.Optional[int]
+            Number of random techniques to use
+
+        max_parallel_techniques : typing.Optional[int]
+            Maximum parallel techniques
+
+        max_turns : typing.Optional[int]
+            Maximum conversation turns
+
+        attacker_max_generation_attempts : typing.Optional[int]
+            Internal override; service default applies if omitted. Maximum number of
+            generation attempts for the attacker model per turn.
+
+        refusal_judge_model : typing.Optional[str]
+            Internal override; service default applies if omitted.
+
+        objective_judge_model : typing.Optional[str]
+            Internal override; service default applies if omitted.
+
+        evaluation_report_model : typing.Optional[str]
+            Internal override; service default applies if omitted.
+
+        attacker_model : typing.Optional[str]
+            Internal override; service default applies if omitted.
+
+        hl_project_id : typing.Optional[str]
+            HiddenLayer project UUID or alias
+
+        prompt_set_id : typing.Optional[str]
+            Prompt set UUID (built-in or tenant prompt set)
+
+        sessions_per_technique : typing.Optional[int]
+            Number of sessions per technique
+
+        attacker_guidance : typing.Optional[str]
+            Optional intent-only natural-language text the operator supplies to
+            focus the attacker LLM within the configured APE objectives.
+            Sanitized server-side (length cap + strict character whitelist).
+            See `RedTeamConfig.attacker_guidance` for full semantics. No-op
+            for the `STATIC_PROMPT_SET` execution strategy.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartWorkflowResponse
+            Workflow started successfully
+
+        Examples
+        --------
+        from hiddenlayer import HiddenLayer
+
+        client = HiddenLayer(
+            token="YOUR_TOKEN",
+        )
+        client.evaluations.red_team.simulated(
+            name="name",
+        )
+        """
+        _response = self._raw_client.simulated(
+            name=name,
+            config_id=config_id,
+            target_model=target_model,
+            target_system_prompt=target_system_prompt,
+            objective_ids=objective_ids,
+            severity_mapping=severity_mapping,
+            execution_strategy_type=execution_strategy_type,
+            n_random_techniques=n_random_techniques,
+            max_parallel_techniques=max_parallel_techniques,
+            max_turns=max_turns,
+            attacker_max_generation_attempts=attacker_max_generation_attempts,
+            refusal_judge_model=refusal_judge_model,
+            objective_judge_model=objective_judge_model,
+            evaluation_report_model=evaluation_report_model,
+            attacker_model=attacker_model,
+            hl_project_id=hl_project_id,
+            prompt_set_id=prompt_set_id,
+            sessions_per_technique=sessions_per_technique,
+            attacker_guidance=attacker_guidance,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def csv(
+        self, workflow_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.Iterator[bytes]:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        Export attacker/target interactions for a red team workflow as CSV (one row per message).
+
+        Parameters
+        ----------
+        workflow_id : str
+            The workflow identifier
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.Iterator[bytes]
+            CSV file stream
+
+        Examples
+        --------
+        from hiddenlayer import HiddenLayer
+
+        client = HiddenLayer(
+            token="YOUR_TOKEN",
+        )
+        client.evaluations.red_team.csv(
+            workflow_id="workflow_id",
+        )
+        """
+        with self._raw_client.csv(workflow_id, request_options=request_options) as r:
+            yield from r.data
+
+    @property
+    def objectives(self):
+        if self._objectives is None:
+            from .objectives.client import ObjectivesClient  # noqa: E402
+
+            self._objectives = ObjectivesClient(client_wrapper=self._client_wrapper)
+        return self._objectives
+
+    @property
+    def configs(self):
+        if self._configs is None:
+            from .configs.client import ConfigsClient  # noqa: E402
+
+            self._configs = ConfigsClient(client_wrapper=self._client_wrapper)
+        return self._configs
 
 
 class AsyncRedTeamClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._raw_client = AsyncRawRedTeamClient(client_wrapper=client_wrapper)
         self._client_wrapper = client_wrapper
-        self._rule_suggestions: typing.Optional[AsyncRuleSuggestionsClient] = None
+        self._objectives: typing.Optional[AsyncObjectivesClient] = None
+        self._configs: typing.Optional[AsyncConfigsClient] = None
 
     @property
     def with_raw_response(self) -> AsyncRawRedTeamClient:
@@ -531,6 +746,42 @@ class AsyncRedTeamClient:
         AsyncRawRedTeamClient
         """
         return self._raw_client
+
+    async def target_models(self, *, request_options: typing.Optional[RequestOptions] = None) -> TargetModelResponse:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        Returns the list of available target models for red team evaluations.
+
+        Parameters
+        ----------
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        TargetModelResponse
+            Successful Response
+
+        Examples
+        --------
+        import asyncio
+
+        from hiddenlayer import AsyncHiddenLayer
+
+        client = AsyncHiddenLayer(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.evaluations.red_team.target_models()
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.target_models(request_options=request_options)
+        return _response.data
 
     async def list(
         self,
@@ -714,7 +965,7 @@ class AsyncRedTeamClient:
             HiddenLayer project UUID or alias
 
         prompt_set_id : typing.Optional[str]
-            Prompt set UUID (built-in catalog or tenant DB)
+            Prompt set UUID (built-in or tenant prompt set)
 
         sessions_per_technique : typing.Optional[int]
             Number of sessions per technique
@@ -1060,10 +1311,209 @@ class AsyncRedTeamClient:
         _response = await self._raw_client.terminate(workflow_id, request_options=request_options)
         return _response.data
 
-    @property
-    def rule_suggestions(self):
-        if self._rule_suggestions is None:
-            from .rule_suggestions.client import AsyncRuleSuggestionsClient  # noqa: E402
+    async def simulated(
+        self,
+        *,
+        name: str,
+        config_id: typing.Optional[str] = OMIT,
+        target_model: typing.Optional[str] = OMIT,
+        target_system_prompt: typing.Optional[str] = OMIT,
+        objective_ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        severity_mapping: typing.Optional[SeverityMapping] = OMIT,
+        execution_strategy_type: typing.Optional[StartRedTeamBodyExecutionStrategyType] = OMIT,
+        n_random_techniques: typing.Optional[int] = OMIT,
+        max_parallel_techniques: typing.Optional[int] = OMIT,
+        max_turns: typing.Optional[int] = OMIT,
+        attacker_max_generation_attempts: typing.Optional[int] = OMIT,
+        refusal_judge_model: typing.Optional[str] = OMIT,
+        objective_judge_model: typing.Optional[str] = OMIT,
+        evaluation_report_model: typing.Optional[str] = OMIT,
+        attacker_model: typing.Optional[str] = OMIT,
+        hl_project_id: typing.Optional[str] = OMIT,
+        prompt_set_id: typing.Optional[str] = OMIT,
+        sessions_per_technique: typing.Optional[int] = OMIT,
+        attacker_guidance: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> StartWorkflowResponse:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-            self._rule_suggestions = AsyncRuleSuggestionsClient(client_wrapper=self._client_wrapper)
-        return self._rule_suggestions
+        Start a new simulated red team workflow with a built-in target model.
+
+        Parameters
+        ----------
+        name : str
+            Name for this evaluation
+
+        config_id : typing.Optional[str]
+            Optional preset config (see /evaluations/v1/red-team/configs) to seed the
+            workflow settings. Any field also present in this body overrides the
+            corresponding value from the config.
+
+        target_model : typing.Optional[str]
+            Target model identifier. Validated against the live servable-model
+            catalog; an unknown or unsupported model returns 422 and an
+            unavailable catalog returns 503.
+
+        target_system_prompt : typing.Optional[str]
+            System prompt for the target
+
+        objective_ids : typing.Optional[typing.Sequence[str]]
+            Objective IDs to evaluate
+
+        severity_mapping : typing.Optional[SeverityMapping]
+
+        execution_strategy_type : typing.Optional[StartRedTeamBodyExecutionStrategyType]
+            Execution strategy type
+
+        n_random_techniques : typing.Optional[int]
+            Number of random techniques to use
+
+        max_parallel_techniques : typing.Optional[int]
+            Maximum parallel techniques
+
+        max_turns : typing.Optional[int]
+            Maximum conversation turns
+
+        attacker_max_generation_attempts : typing.Optional[int]
+            Internal override; service default applies if omitted. Maximum number of
+            generation attempts for the attacker model per turn.
+
+        refusal_judge_model : typing.Optional[str]
+            Internal override; service default applies if omitted.
+
+        objective_judge_model : typing.Optional[str]
+            Internal override; service default applies if omitted.
+
+        evaluation_report_model : typing.Optional[str]
+            Internal override; service default applies if omitted.
+
+        attacker_model : typing.Optional[str]
+            Internal override; service default applies if omitted.
+
+        hl_project_id : typing.Optional[str]
+            HiddenLayer project UUID or alias
+
+        prompt_set_id : typing.Optional[str]
+            Prompt set UUID (built-in or tenant prompt set)
+
+        sessions_per_technique : typing.Optional[int]
+            Number of sessions per technique
+
+        attacker_guidance : typing.Optional[str]
+            Optional intent-only natural-language text the operator supplies to
+            focus the attacker LLM within the configured APE objectives.
+            Sanitized server-side (length cap + strict character whitelist).
+            See `RedTeamConfig.attacker_guidance` for full semantics. No-op
+            for the `STATIC_PROMPT_SET` execution strategy.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        StartWorkflowResponse
+            Workflow started successfully
+
+        Examples
+        --------
+        import asyncio
+
+        from hiddenlayer import AsyncHiddenLayer
+
+        client = AsyncHiddenLayer(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.evaluations.red_team.simulated(
+                name="name",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.simulated(
+            name=name,
+            config_id=config_id,
+            target_model=target_model,
+            target_system_prompt=target_system_prompt,
+            objective_ids=objective_ids,
+            severity_mapping=severity_mapping,
+            execution_strategy_type=execution_strategy_type,
+            n_random_techniques=n_random_techniques,
+            max_parallel_techniques=max_parallel_techniques,
+            max_turns=max_turns,
+            attacker_max_generation_attempts=attacker_max_generation_attempts,
+            refusal_judge_model=refusal_judge_model,
+            objective_judge_model=objective_judge_model,
+            evaluation_report_model=evaluation_report_model,
+            attacker_model=attacker_model,
+            hl_project_id=hl_project_id,
+            prompt_set_id=prompt_set_id,
+            sessions_per_technique=sessions_per_technique,
+            attacker_guidance=attacker_guidance,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def csv(
+        self, workflow_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.AsyncIterator[bytes]:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        Export attacker/target interactions for a red team workflow as CSV (one row per message).
+
+        Parameters
+        ----------
+        workflow_id : str
+            The workflow identifier
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration. You can pass in configuration such as `chunk_size`, and more to customize the request and response.
+
+        Returns
+        -------
+        typing.AsyncIterator[bytes]
+            CSV file stream
+
+        Examples
+        --------
+        import asyncio
+
+        from hiddenlayer import AsyncHiddenLayer
+
+        client = AsyncHiddenLayer(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.evaluations.red_team.csv(
+                workflow_id="workflow_id",
+            )
+
+
+        asyncio.run(main())
+        """
+        async with self._raw_client.csv(workflow_id, request_options=request_options) as r:
+            async for _chunk in r.data:
+                yield _chunk
+
+    @property
+    def objectives(self):
+        if self._objectives is None:
+            from .objectives.client import AsyncObjectivesClient  # noqa: E402
+
+            self._objectives = AsyncObjectivesClient(client_wrapper=self._client_wrapper)
+        return self._objectives
+
+    @property
+    def configs(self):
+        if self._configs is None:
+            from .configs.client import AsyncConfigsClient  # noqa: E402
+
+            self._configs = AsyncConfigsClient(client_wrapper=self._client_wrapper)
+        return self._configs

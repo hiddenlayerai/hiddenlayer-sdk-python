@@ -4,22 +4,15 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from .prompt_set_summary import PromptSetSummary
 
 
-class StartRuleSuggestionResponse(UniversalBaseModel):
+class PromptSetsResponse(UniversalBaseModel):
     """
-    Response from starting a rule suggestion run.
-    """
-
-    suggestion_id: str = pydantic.Field()
-    """
-    Rule suggestion run identifier; use as {suggestion_id} in the status, result, and list endpoints
+    List of available prompt sets.
     """
 
-    run_id: str = pydantic.Field()
-    """
-    Run identifier
-    """
+    prompt_sets: typing.List[PromptSetSummary]
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -6,11 +6,19 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
-    from .types import ClientRedTeamBodyExecutionStrategyType
-    from . import rule_suggestions
+    from .types import ClientRedTeamBodyExecutionStrategyType, StartRedTeamBodyExecutionStrategyType
+    from . import configs, objectives
+    from .configs import (
+        CreateRedTeamConfigRequestExecutionStrategyType,
+        UpdateRedTeamConfigRequestExecutionStrategyType,
+    )
 _dynamic_imports: typing.Dict[str, str] = {
     "ClientRedTeamBodyExecutionStrategyType": ".types",
-    "rule_suggestions": ".rule_suggestions",
+    "CreateRedTeamConfigRequestExecutionStrategyType": ".configs",
+    "StartRedTeamBodyExecutionStrategyType": ".types",
+    "UpdateRedTeamConfigRequestExecutionStrategyType": ".configs",
+    "configs": ".configs",
+    "objectives": ".objectives",
 }
 
 
@@ -35,4 +43,11 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["ClientRedTeamBodyExecutionStrategyType", "rule_suggestions"]
+__all__ = [
+    "ClientRedTeamBodyExecutionStrategyType",
+    "CreateRedTeamConfigRequestExecutionStrategyType",
+    "StartRedTeamBodyExecutionStrategyType",
+    "UpdateRedTeamConfigRequestExecutionStrategyType",
+    "configs",
+    "objectives",
+]

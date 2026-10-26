@@ -12,61 +12,59 @@ from ....core.parse_error import ParsingError
 from ....core.pydantic_utilities import parse_obj_as
 from ....core.request_options import RequestOptions
 from ....errors.bad_request_error import BadRequestError
+from ....errors.conflict_error import ConflictError
 from ....errors.forbidden_error import ForbiddenError
 from ....errors.not_found_error import NotFoundError
 from ....errors.unauthorized_error import UnauthorizedError
 from ....errors.unprocessable_entity_error import UnprocessableEntityError
-from ....types.rule_suggestion_list_item import RuleSuggestionListItem
-from ....types.rule_suggestion_list_response import RuleSuggestionListResponse
-from ....types.rule_suggestion_result_response import RuleSuggestionResultResponse
-from ....types.rule_suggestion_status_response import RuleSuggestionStatusResponse
-from ....types.start_rule_suggestion_response import StartRuleSuggestionResponse
+from ....types.ape_objective import ApeObjective
+from ....types.highest_severity import HighestSeverity
+from ....types.limit import Limit
+from ....types.objectives_list_response import ObjectivesListResponse
 from pydantic import ValidationError
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
 
-class RawRuleSuggestionsClient:
+class RawObjectivesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     def list(
         self,
-        workflow_id: str,
         *,
-        limit: typing.Optional[int] = None,
+        limit: typing.Optional[Limit] = None,
         cursor: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> SyncPager[RuleSuggestionListItem, RuleSuggestionListResponse]:
+    ) -> SyncPager[ApeObjective, ObjectivesListResponse]:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-        List rule suggestion runs generated for a red team evaluation, newest first.
+        List the red team evaluation objectives available to the tenant.
 
-        Each run is independent - triggering a new run does not replace or affect prior runs.
+        The first page is prefixed with the built-in HLO catalog (read-only,
+        `HLO.NN` IDs); subsequent pages contain only the tenant's custom
+        objectives (UUID IDs). The list is cursor-paginated.
 
         Parameters
         ----------
-        workflow_id : str
-            The source red team evaluation's workflow identifier
-
-        limit : typing.Optional[int]
-            Maximum number of results to return
+        limit : typing.Optional[Limit]
+            Limit the number of items returned
 
         cursor : typing.Optional[str]
-            Pagination cursor from previous response
+            Cursor for pagination, used to navigate through pages of results
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        SyncPager[RuleSuggestionListItem, RuleSuggestionListResponse]
-            List of rule suggestion runs for this evaluation
+        SyncPager[ApeObjective, ObjectivesListResponse]
+            Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/rule-suggestions",
+            "evaluations/v1/red-team/objectives",
             method="GET",
             params={
                 "limit": limit,
@@ -77,9 +75,9 @@ class RawRuleSuggestionsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _parsed_response = typing.cast(
-                    RuleSuggestionListResponse,
+                    ObjectivesListResponse,
                     parse_obj_as(
-                        type_=RuleSuggestionListResponse,  # type: ignore
+                        type_=ObjectivesListResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -87,12 +85,22 @@ class RawRuleSuggestionsClient:
                 _parsed_next = _parsed_response.next
                 _has_next = _parsed_next is not None and _parsed_next != ""
                 _get_next = lambda: self.list(
-                    workflow_id,
                     limit=limit,
                     cursor=_parsed_next,
                     request_options=request_options,
                 )
                 return SyncPager(has_next=_has_next, items=_items, get_next=_get_next, response=_parsed_response)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 401:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
@@ -106,17 +114,6 @@ class RawRuleSuggestionsClient:
                 )
             if _response.status_code == 403:
                 raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -148,47 +145,60 @@ class RawRuleSuggestionsClient:
 
     def create(
         self,
-        workflow_id: str,
         *,
-        name: typing.Optional[str] = OMIT,
+        objective_name: str,
+        objective_description: str,
+        default_severity: HighestSeverity,
+        attacker_guidance: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[StartRuleSuggestionResponse]:
+    ) -> HttpResponse[ApeObjective]:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-        Start a new rule suggestion run for a completed red team evaluation. Analyzes the
-        evaluation's successful attacks and generates a detection rule suggestion that can be
-        reviewed and added to a project's runtime security policy.
+        Create a tenant custom objective. Custom objectives flow through the
+        same attacker/judge pipeline as the built-in HLO catalog and are
+        referenced by their UUID in `objective_ids` on a config preset or a
+        start request.
 
-        Callable multiple times for the same evaluation; each call starts an independent run.
-        The response's `suggestion_id` identifies the new run - use it in the status, result,
-        and list endpoints (the `{workflow_id}` path segment continues to identify the source
-        red team evaluation). Client should poll /status, then fetch the full result once
-        complete.
-
-        An empty JSON object `{}` is the minimal valid request body.
+        `objective_name`, `objective_description`, and the optional
+        `attacker_guidance` are sanitized server-side (NFKC normalization plus
+        a strict character whitelist). A per-tenant cap applies; exceeding it
+        returns 409.
 
         Parameters
         ----------
-        workflow_id : str
-            The source red team evaluation's workflow identifier
+        objective_name : str
+            Human-readable name for the custom objective.
 
-        name : typing.Optional[str]
-            Optional name for this rule suggestion run. When omitted, the server derives one from the source evaluation (e.g. "Rule suggestions for {evaluation name}").
+        objective_description : str
+            HLO-style harm definition for the objective. Recommended format:
+            `Induce the model to [harmful behavior] in a context where
+            [precondition], without [missing safeguard].`
+
+        default_severity : HighestSeverity
+
+        attacker_guidance : typing.Optional[str]
+            Optional objective-scoped attacker guidance used to stage reusable
+            scenario or user-state preconditions for this custom objective.
+            Rendered inline with this objective in attacker prompts. Sanitized
+            server-side using the same rules as run/config attacker guidance.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[StartRuleSuggestionResponse]
-            Rule suggestion run started successfully
+        HttpResponse[ApeObjective]
+            Custom objective created successfully
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/rule-suggestions",
+            "evaluations/v1/red-team/objectives",
             method="POST",
             json={
-                "name": name,
+                "objective_name": objective_name,
+                "objective_description": objective_description,
+                "attacker_guidance": attacker_guidance,
+                "default_severity": default_severity,
             },
             headers={
                 "content-type": "application/json",
@@ -199,9 +209,327 @@ class RawRuleSuggestionsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    StartRuleSuggestionResponse,
+                    ApeObjective,
                     parse_obj_as(
-                        type_=StartRuleSuggestionResponse,  # type: ignore
+                        type_=ApeObjective,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def get(
+        self, objective_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[ApeObjective]:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        Return a single objective by ID. `HLO.NN` IDs return a built-in
+        objective; UUIDs return one of the tenant's custom objectives.
+
+        Parameters
+        ----------
+        objective_id : str
+            The objective identifier (`HLO.NN` built-in or custom UUID)
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ApeObjective]
+            Successful Response
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"evaluations/v1/red-team/objectives/{encode_path_param(objective_id)}",
+            method="GET",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ApeObjective,
+                    parse_obj_as(
+                        type_=ApeObjective,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete(
+        self, objective_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[None]:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        Hard-delete a tenant custom objective. Past workflow runs that
+        referenced this objective are unaffected: the resolved objective is
+        snapshotted into the result row at start time.
+
+        Built-in `HLO.NN` objectives are read-only: a DELETE against one
+        returns 409.
+
+        Parameters
+        ----------
+        objective_id : str
+            The custom objective UUID
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[None]
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"evaluations/v1/red-team/objectives/{encode_path_param(objective_id)}",
+            method="DELETE",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return HttpResponse(response=_response, data=None)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def update(
+        self,
+        objective_id: str,
+        *,
+        objective_name: typing.Optional[str] = OMIT,
+        objective_description: typing.Optional[str] = OMIT,
+        attacker_guidance: typing.Optional[str] = OMIT,
+        default_severity: typing.Optional[HighestSeverity] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ApeObjective]:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        Partially update a tenant custom objective. Omitted fields are left
+        unchanged; an explicit `""` clears `attacker_guidance`.
+
+        Built-in `HLO.NN` objectives are read-only: a PATCH against one returns
+        409. Use `severity_mapping` on a config or start request to tune a
+        built-in's effective severity instead.
+
+        Parameters
+        ----------
+        objective_id : str
+            The custom objective UUID
+
+        objective_name : typing.Optional[str]
+
+        objective_description : typing.Optional[str]
+
+        attacker_guidance : typing.Optional[str]
+            Optional objective-scoped attacker guidance. Send `""` to clear.
+
+        default_severity : typing.Optional[HighestSeverity]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ApeObjective]
+            Custom objective updated successfully
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"evaluations/v1/red-team/objectives/{encode_path_param(objective_id)}",
+            method="PATCH",
+            json={
+                "objective_name": objective_name,
+                "objective_description": objective_description,
+                "attacker_guidance": attacker_guidance,
+                "default_severity": default_severity,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ApeObjective,
+                    parse_obj_as(
+                        type_=ApeObjective,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -250,182 +578,8 @@ class RawRuleSuggestionsClient:
                         ),
                     ),
                 )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
-        except ValidationError as e:
-            raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
-            )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
-
-    def status(
-        self, workflow_id: str, suggestion_id: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> HttpResponse[RuleSuggestionStatusResponse]:
-        """
-        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
-
-        Get current status of a rule suggestion run (polling endpoint).
-        Returns immediately with current state.
-
-        Parameters
-        ----------
-        workflow_id : str
-            The source red team evaluation's workflow identifier
-
-        suggestion_id : str
-            The rule suggestion run identifier
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        HttpResponse[RuleSuggestionStatusResponse]
-            Current rule suggestion run status
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/rule-suggestions/{encode_path_param(suggestion_id)}/status",
-            method="GET",
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    RuleSuggestionStatusResponse,
-                    parse_obj_as(
-                        type_=RuleSuggestionStatusResponse,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
-        except ValidationError as e:
-            raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
-            )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
-
-    def get(
-        self, workflow_id: str, suggestion_id: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> HttpResponse[RuleSuggestionResultResponse]:
-        """
-        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
-
-        Get the complete result of a rule suggestion run, including any generated rules.
-
-        Parameters
-        ----------
-        workflow_id : str
-            The source red team evaluation's workflow identifier
-
-        suggestion_id : str
-            The rule suggestion run identifier
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        HttpResponse[RuleSuggestionResultResponse]
-            Complete rule suggestion result
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/rule-suggestions/{encode_path_param(suggestion_id)}",
-            method="GET",
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    RuleSuggestionResultResponse,
-                    parse_obj_as(
-                        type_=RuleSuggestionResultResponse,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 409:
+                raise ConflictError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -456,46 +610,44 @@ class RawRuleSuggestionsClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
 
-class AsyncRawRuleSuggestionsClient:
+class AsyncRawObjectivesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
     async def list(
         self,
-        workflow_id: str,
         *,
-        limit: typing.Optional[int] = None,
+        limit: typing.Optional[Limit] = None,
         cursor: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncPager[RuleSuggestionListItem, RuleSuggestionListResponse]:
+    ) -> AsyncPager[ApeObjective, ObjectivesListResponse]:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-        List rule suggestion runs generated for a red team evaluation, newest first.
+        List the red team evaluation objectives available to the tenant.
 
-        Each run is independent - triggering a new run does not replace or affect prior runs.
+        The first page is prefixed with the built-in HLO catalog (read-only,
+        `HLO.NN` IDs); subsequent pages contain only the tenant's custom
+        objectives (UUID IDs). The list is cursor-paginated.
 
         Parameters
         ----------
-        workflow_id : str
-            The source red team evaluation's workflow identifier
-
-        limit : typing.Optional[int]
-            Maximum number of results to return
+        limit : typing.Optional[Limit]
+            Limit the number of items returned
 
         cursor : typing.Optional[str]
-            Pagination cursor from previous response
+            Cursor for pagination, used to navigate through pages of results
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncPager[RuleSuggestionListItem, RuleSuggestionListResponse]
-            List of rule suggestion runs for this evaluation
+        AsyncPager[ApeObjective, ObjectivesListResponse]
+            Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/rule-suggestions",
+            "evaluations/v1/red-team/objectives",
             method="GET",
             params={
                 "limit": limit,
@@ -506,9 +658,9 @@ class AsyncRawRuleSuggestionsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _parsed_response = typing.cast(
-                    RuleSuggestionListResponse,
+                    ObjectivesListResponse,
                     parse_obj_as(
-                        type_=RuleSuggestionListResponse,  # type: ignore
+                        type_=ObjectivesListResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -518,13 +670,23 @@ class AsyncRawRuleSuggestionsClient:
 
                 async def _get_next():
                     return await self.list(
-                        workflow_id,
                         limit=limit,
                         cursor=_parsed_next,
                         request_options=request_options,
                     )
 
                 return AsyncPager(has_next=_has_next, items=_items, get_next=_get_next, response=_parsed_response)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 401:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
@@ -538,17 +700,6 @@ class AsyncRawRuleSuggestionsClient:
                 )
             if _response.status_code == 403:
                 raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -580,47 +731,60 @@ class AsyncRawRuleSuggestionsClient:
 
     async def create(
         self,
-        workflow_id: str,
         *,
-        name: typing.Optional[str] = OMIT,
+        objective_name: str,
+        objective_description: str,
+        default_severity: HighestSeverity,
+        attacker_guidance: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[StartRuleSuggestionResponse]:
+    ) -> AsyncHttpResponse[ApeObjective]:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-        Start a new rule suggestion run for a completed red team evaluation. Analyzes the
-        evaluation's successful attacks and generates a detection rule suggestion that can be
-        reviewed and added to a project's runtime security policy.
+        Create a tenant custom objective. Custom objectives flow through the
+        same attacker/judge pipeline as the built-in HLO catalog and are
+        referenced by their UUID in `objective_ids` on a config preset or a
+        start request.
 
-        Callable multiple times for the same evaluation; each call starts an independent run.
-        The response's `suggestion_id` identifies the new run - use it in the status, result,
-        and list endpoints (the `{workflow_id}` path segment continues to identify the source
-        red team evaluation). Client should poll /status, then fetch the full result once
-        complete.
-
-        An empty JSON object `{}` is the minimal valid request body.
+        `objective_name`, `objective_description`, and the optional
+        `attacker_guidance` are sanitized server-side (NFKC normalization plus
+        a strict character whitelist). A per-tenant cap applies; exceeding it
+        returns 409.
 
         Parameters
         ----------
-        workflow_id : str
-            The source red team evaluation's workflow identifier
+        objective_name : str
+            Human-readable name for the custom objective.
 
-        name : typing.Optional[str]
-            Optional name for this rule suggestion run. When omitted, the server derives one from the source evaluation (e.g. "Rule suggestions for {evaluation name}").
+        objective_description : str
+            HLO-style harm definition for the objective. Recommended format:
+            `Induce the model to [harmful behavior] in a context where
+            [precondition], without [missing safeguard].`
+
+        default_severity : HighestSeverity
+
+        attacker_guidance : typing.Optional[str]
+            Optional objective-scoped attacker guidance used to stage reusable
+            scenario or user-state preconditions for this custom objective.
+            Rendered inline with this objective in attacker prompts. Sanitized
+            server-side using the same rules as run/config attacker guidance.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[StartRuleSuggestionResponse]
-            Rule suggestion run started successfully
+        AsyncHttpResponse[ApeObjective]
+            Custom objective created successfully
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/rule-suggestions",
+            "evaluations/v1/red-team/objectives",
             method="POST",
             json={
-                "name": name,
+                "objective_name": objective_name,
+                "objective_description": objective_description,
+                "attacker_guidance": attacker_guidance,
+                "default_severity": default_severity,
             },
             headers={
                 "content-type": "application/json",
@@ -631,9 +795,327 @@ class AsyncRawRuleSuggestionsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    StartRuleSuggestionResponse,
+                    ApeObjective,
                     parse_obj_as(
-                        type_=StartRuleSuggestionResponse,  # type: ignore
+                        type_=ApeObjective,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def get(
+        self, objective_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[ApeObjective]:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        Return a single objective by ID. `HLO.NN` IDs return a built-in
+        objective; UUIDs return one of the tenant's custom objectives.
+
+        Parameters
+        ----------
+        objective_id : str
+            The objective identifier (`HLO.NN` built-in or custom UUID)
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ApeObjective]
+            Successful Response
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"evaluations/v1/red-team/objectives/{encode_path_param(objective_id)}",
+            method="GET",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ApeObjective,
+                    parse_obj_as(
+                        type_=ApeObjective,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete(
+        self, objective_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[None]:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        Hard-delete a tenant custom objective. Past workflow runs that
+        referenced this objective are unaffected: the resolved objective is
+        snapshotted into the result row at start time.
+
+        Built-in `HLO.NN` objectives are read-only: a DELETE against one
+        returns 409.
+
+        Parameters
+        ----------
+        objective_id : str
+            The custom objective UUID
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[None]
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"evaluations/v1/red-team/objectives/{encode_path_param(objective_id)}",
+            method="DELETE",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                return AsyncHttpResponse(response=_response, data=None)
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 409:
+                raise ConflictError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def update(
+        self,
+        objective_id: str,
+        *,
+        objective_name: typing.Optional[str] = OMIT,
+        objective_description: typing.Optional[str] = OMIT,
+        attacker_guidance: typing.Optional[str] = OMIT,
+        default_severity: typing.Optional[HighestSeverity] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ApeObjective]:
+        """
+        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+        Partially update a tenant custom objective. Omitted fields are left
+        unchanged; an explicit `""` clears `attacker_guidance`.
+
+        Built-in `HLO.NN` objectives are read-only: a PATCH against one returns
+        409. Use `severity_mapping` on a config or start request to tune a
+        built-in's effective severity instead.
+
+        Parameters
+        ----------
+        objective_id : str
+            The custom objective UUID
+
+        objective_name : typing.Optional[str]
+
+        objective_description : typing.Optional[str]
+
+        attacker_guidance : typing.Optional[str]
+            Optional objective-scoped attacker guidance. Send `""` to clear.
+
+        default_severity : typing.Optional[HighestSeverity]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ApeObjective]
+            Custom objective updated successfully
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"evaluations/v1/red-team/objectives/{encode_path_param(objective_id)}",
+            method="PATCH",
+            json={
+                "objective_name": objective_name,
+                "objective_description": objective_description,
+                "attacker_guidance": attacker_guidance,
+                "default_severity": default_severity,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ApeObjective,
+                    parse_obj_as(
+                        type_=ApeObjective,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -682,182 +1164,8 @@ class AsyncRawRuleSuggestionsClient:
                         ),
                     ),
                 )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
-        except ValidationError as e:
-            raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
-            )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
-
-    async def status(
-        self, workflow_id: str, suggestion_id: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> AsyncHttpResponse[RuleSuggestionStatusResponse]:
-        """
-        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
-
-        Get current status of a rule suggestion run (polling endpoint).
-        Returns immediately with current state.
-
-        Parameters
-        ----------
-        workflow_id : str
-            The source red team evaluation's workflow identifier
-
-        suggestion_id : str
-            The rule suggestion run identifier
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        AsyncHttpResponse[RuleSuggestionStatusResponse]
-            Current rule suggestion run status
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/rule-suggestions/{encode_path_param(suggestion_id)}/status",
-            method="GET",
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    RuleSuggestionStatusResponse,
-                    parse_obj_as(
-                        type_=RuleSuggestionStatusResponse,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
-        except ValidationError as e:
-            raise ParsingError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
-            )
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
-
-    async def get(
-        self, workflow_id: str, suggestion_id: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> AsyncHttpResponse[RuleSuggestionResultResponse]:
-        """
-        [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
-
-        Get the complete result of a rule suggestion run, including any generated rules.
-
-        Parameters
-        ----------
-        workflow_id : str
-            The source red team evaluation's workflow identifier
-
-        suggestion_id : str
-            The rule suggestion run identifier
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        AsyncHttpResponse[RuleSuggestionResultResponse]
-            Complete rule suggestion result
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/rule-suggestions/{encode_path_param(suggestion_id)}",
-            method="GET",
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    RuleSuggestionResultResponse,
-                    parse_obj_as(
-                        type_=RuleSuggestionResultResponse,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        parse_obj_as(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
+            if _response.status_code == 409:
+                raise ConflictError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,

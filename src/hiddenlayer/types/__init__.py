@@ -31,6 +31,7 @@ if typing.TYPE_CHECKING:
     from .ai_asset_summary import AiAssetSummary
     from .aidr_status import AidrStatus
     from .annotation import Annotation
+    from .ape_objective import ApeObjective
     from .asset import Asset
     from .asset_filter_v2 import AssetFilterV2
     from .asset_filter_v2annotating_service import AssetFilterV2AnnotatingService
@@ -53,6 +54,7 @@ if typing.TYPE_CHECKING:
     from .audit_entry import AuditEntry
     from .audit_entry_base import AuditEntryBase
     from .authentication_error_model import AuthenticationErrorModel
+    from .available_mutations_response import AvailableMutationsResponse
     from .bad_request_error_body import BadRequestErrorBody
     from .block_config import BlockConfig
     from .bulk_evaluation_results import BulkEvaluationResults
@@ -83,6 +85,8 @@ if typing.TYPE_CHECKING:
     from .create_csv_request_severity import CreateCsvRequestSeverity
     from .create_csv_request_source import CreateCsvRequestSource
     from .create_csv_request_source_eq import CreateCsvRequestSourceEq
+    from .create_prompt_request import CreatePromptRequest
+    from .create_prompt_set_response import CreatePromptSetResponse
     from .credentials_with_secret import CredentialsWithSecret
     from .credentials_without_secret import CredentialsWithoutSecret
     from .cursors import Cursors
@@ -93,6 +97,7 @@ if typing.TYPE_CHECKING:
     from .deprecated_scan_properties_v3 import DeprecatedScanPropertiesV3
     from .detect_config import DetectConfig
     from .embed import Embed
+    from .encoding_type import EncodingType
     from .enriched_analysis import EnrichedAnalysis
     from .enriched_analysis_configuration import EnrichedAnalysisConfiguration
     from .enriched_analysis_findings import EnrichedAnalysisFindings
@@ -157,6 +162,7 @@ if typing.TYPE_CHECKING:
     from .hidden_layer_prompt_analyzer_response_metadata import HiddenLayerPromptAnalyzerResponseMetadata
     from .hidden_layer_proxy_response import HiddenLayerProxyResponse
     from .highest_severity import HighestSeverity
+    from .hl_project_reference_status import HlProjectReferenceStatus
     from .hl_resource import HlResource
     from .hl_resource_resource_type import HlResourceResourceType
     from .hl_tenant import HlTenant
@@ -275,12 +281,14 @@ if typing.TYPE_CHECKING:
     from .model_intelligence import ModelIntelligence
     from .model_license import ModelLicense
     from .model_usage_policy import ModelUsagePolicy
+    from .mutation_type import MutationType
     from .named_object import NamedObject
     from .next_action_response import NextActionResponse
     from .nullable_policy_status import NullablePolicyStatus
     from .numpy_file_attributes import NumpyFileAttributes
     from .o_auth2error import OAuth2Error
     from .oauth_scope import OauthScope
+    from .objectives_list_response import ObjectivesListResponse
     from .offset import Offset
     from .org import Org
     from .page_info import PageInfo
@@ -315,12 +323,20 @@ if typing.TYPE_CHECKING:
     from .project_details_risk_level_zero import ProjectDetailsRiskLevelZero
     from .project_id import ProjectId
     from .project_policy_pack import ProjectPolicyPack
+    from .prompt_set_reference_status import PromptSetReferenceStatus
+    from .prompt_set_status import PromptSetStatus
+    from .prompt_set_summary import PromptSetSummary
+    from .prompt_sets_response import PromptSetsResponse
     from .provider import Provider
     from .provider_counts import ProviderCounts
     from .provider_details import ProviderDetails
     from .provider_details_provider import ProviderDetailsProvider
     from .provider_payload import ProviderPayload
     from .rds_file_attributes import RdsFileAttributes
+    from .red_team_config import RedTeamConfig
+    from .red_team_config_execution_strategy_type import RedTeamConfigExecutionStrategyType
+    from .red_team_config_summary import RedTeamConfigSummary
+    from .red_team_configs_response import RedTeamConfigsResponse
     from .red_team_list_results_response import RedTeamListResultsResponse
     from .red_team_result_item import RedTeamResultItem
     from .red_team_result_payload import RedTeamResultPayload
@@ -342,10 +358,6 @@ if typing.TYPE_CHECKING:
     from .rule_set_id import RuleSetId
     from .rule_set_settings_id_collection import RuleSetSettingsIdCollection
     from .rule_set_settings_id_collection_settings_item import RuleSetSettingsIdCollectionSettingsItem
-    from .rule_suggestion_list_item import RuleSuggestionListItem
-    from .rule_suggestion_list_response import RuleSuggestionListResponse
-    from .rule_suggestion_result_response import RuleSuggestionResultResponse
-    from .rule_suggestion_status_response import RuleSuggestionStatusResponse
     from .saml_identity_provider import SamlIdentityProvider
     from .saml_service_provider import SamlServiceProvider
     from .saml_signing_certificate import SamlSigningCertificate
@@ -403,6 +415,7 @@ if typing.TYPE_CHECKING:
     from .search_result_match_type import SearchResultMatchType
     from .search_suggestions_response import SearchSuggestionsResponse
     from .security_posture import SecurityPosture
+    from .semantic_type import SemanticType
     from .sensor_sor_deployment import SensorSorDeployment
     from .sensor_sor_item_response import SensorSorItemResponse
     from .sensor_sor_model import SensorSorModel
@@ -429,7 +442,6 @@ if typing.TYPE_CHECKING:
     from .sso_integration_request_signing import SsoIntegrationRequestSigning
     from .sso_integration_saml_v2 import SsoIntegrationSamlV2
     from .sso_integration_saml_v2type import SsoIntegrationSamlV2Type
-    from .start_rule_suggestion_response import StartRuleSuggestionResponse
     from .start_workflow_response import StartWorkflowResponse
     from .static_api_key import StaticApiKey
     from .static_api_key_name import StaticApiKeyName
@@ -442,7 +454,6 @@ if typing.TYPE_CHECKING:
     from .static_api_key_with_value import StaticApiKeyWithValue
     from .status import Status
     from .submit_target_response_result import SubmitTargetResponseResult
-    from .suggested_rule import SuggestedRule
     from .suggestions_assets_request_annotating_service import SuggestionsAssetsRequestAnnotatingService
     from .suggestions_assets_request_asset_type import SuggestionsAssetsRequestAssetType
     from .suggestions_assets_request_model_id import SuggestionsAssetsRequestModelId
@@ -475,6 +486,8 @@ if typing.TYPE_CHECKING:
     from .tag_value_filter_in_discovered_value import TagValueFilterInDiscoveredValue
     from .tag_value_list import TagValueList
     from .tags import Tags
+    from .target_model import TargetModel
+    from .target_model_response import TargetModelResponse
     from .text_part import TextPart
     from .time_series_response_v2 import TimeSeriesResponseV2
     from .time_series_response_v2aggregations import TimeSeriesResponseV2Aggregations
@@ -524,6 +537,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "AiAssetSummary": ".ai_asset_summary",
     "AidrStatus": ".aidr_status",
     "Annotation": ".annotation",
+    "ApeObjective": ".ape_objective",
     "Asset": ".asset",
     "AssetFilterV2": ".asset_filter_v2",
     "AssetFilterV2AnnotatingService": ".asset_filter_v2annotating_service",
@@ -546,6 +560,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "AuditEntry": ".audit_entry",
     "AuditEntryBase": ".audit_entry_base",
     "AuthenticationErrorModel": ".authentication_error_model",
+    "AvailableMutationsResponse": ".available_mutations_response",
     "BadRequestErrorBody": ".bad_request_error_body",
     "BlockConfig": ".block_config",
     "BulkEvaluationResults": ".bulk_evaluation_results",
@@ -574,6 +589,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "CreateCsvRequestSeverity": ".create_csv_request_severity",
     "CreateCsvRequestSource": ".create_csv_request_source",
     "CreateCsvRequestSourceEq": ".create_csv_request_source_eq",
+    "CreatePromptRequest": ".create_prompt_request",
+    "CreatePromptSetResponse": ".create_prompt_set_response",
     "CredentialsWithSecret": ".credentials_with_secret",
     "CredentialsWithoutSecret": ".credentials_without_secret",
     "Cursors": ".cursors",
@@ -584,6 +601,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "DeprecatedScanPropertiesV3": ".deprecated_scan_properties_v3",
     "DetectConfig": ".detect_config",
     "Embed": ".embed",
+    "EncodingType": ".encoding_type",
     "EnrichedAnalysis": ".enriched_analysis",
     "EnrichedAnalysisConfiguration": ".enriched_analysis_configuration",
     "EnrichedAnalysisFindings": ".enriched_analysis_findings",
@@ -644,6 +662,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "HiddenLayerPromptAnalyzerResponseMetadata": ".hidden_layer_prompt_analyzer_response_metadata",
     "HiddenLayerProxyResponse": ".hidden_layer_proxy_response",
     "HighestSeverity": ".highest_severity",
+    "HlProjectReferenceStatus": ".hl_project_reference_status",
     "HlResource": ".hl_resource",
     "HlResourceResourceType": ".hl_resource_resource_type",
     "HlTenant": ".hl_tenant",
@@ -762,12 +781,14 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ModelIntelligence": ".model_intelligence",
     "ModelLicense": ".model_license",
     "ModelUsagePolicy": ".model_usage_policy",
+    "MutationType": ".mutation_type",
     "NamedObject": ".named_object",
     "NextActionResponse": ".next_action_response",
     "NullablePolicyStatus": ".nullable_policy_status",
     "NumpyFileAttributes": ".numpy_file_attributes",
     "OAuth2Error": ".o_auth2error",
     "OauthScope": ".oauth_scope",
+    "ObjectivesListResponse": ".objectives_list_response",
     "Offset": ".offset",
     "Org": ".org",
     "PageInfo": ".page_info",
@@ -802,12 +823,20 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ProjectDetailsRiskLevelZero": ".project_details_risk_level_zero",
     "ProjectId": ".project_id",
     "ProjectPolicyPack": ".project_policy_pack",
+    "PromptSetReferenceStatus": ".prompt_set_reference_status",
+    "PromptSetStatus": ".prompt_set_status",
+    "PromptSetSummary": ".prompt_set_summary",
+    "PromptSetsResponse": ".prompt_sets_response",
     "Provider": ".provider",
     "ProviderCounts": ".provider_counts",
     "ProviderDetails": ".provider_details",
     "ProviderDetailsProvider": ".provider_details_provider",
     "ProviderPayload": ".provider_payload",
     "RdsFileAttributes": ".rds_file_attributes",
+    "RedTeamConfig": ".red_team_config",
+    "RedTeamConfigExecutionStrategyType": ".red_team_config_execution_strategy_type",
+    "RedTeamConfigSummary": ".red_team_config_summary",
+    "RedTeamConfigsResponse": ".red_team_configs_response",
     "RedTeamListResultsResponse": ".red_team_list_results_response",
     "RedTeamResultItem": ".red_team_result_item",
     "RedTeamResultPayload": ".red_team_result_payload",
@@ -829,10 +858,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "RuleSetId": ".rule_set_id",
     "RuleSetSettingsIdCollection": ".rule_set_settings_id_collection",
     "RuleSetSettingsIdCollectionSettingsItem": ".rule_set_settings_id_collection_settings_item",
-    "RuleSuggestionListItem": ".rule_suggestion_list_item",
-    "RuleSuggestionListResponse": ".rule_suggestion_list_response",
-    "RuleSuggestionResultResponse": ".rule_suggestion_result_response",
-    "RuleSuggestionStatusResponse": ".rule_suggestion_status_response",
     "SamlIdentityProvider": ".saml_identity_provider",
     "SamlServiceProvider": ".saml_service_provider",
     "SamlSigningCertificate": ".saml_signing_certificate",
@@ -886,6 +911,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SearchResultMatchType": ".search_result_match_type",
     "SearchSuggestionsResponse": ".search_suggestions_response",
     "SecurityPosture": ".security_posture",
+    "SemanticType": ".semantic_type",
     "SensorSorDeployment": ".sensor_sor_deployment",
     "SensorSorItemResponse": ".sensor_sor_item_response",
     "SensorSorModel": ".sensor_sor_model",
@@ -912,7 +938,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SsoIntegrationRequestSigning": ".sso_integration_request_signing",
     "SsoIntegrationSamlV2": ".sso_integration_saml_v2",
     "SsoIntegrationSamlV2Type": ".sso_integration_saml_v2type",
-    "StartRuleSuggestionResponse": ".start_rule_suggestion_response",
     "StartWorkflowResponse": ".start_workflow_response",
     "StaticApiKey": ".static_api_key",
     "StaticApiKeyName": ".static_api_key_name",
@@ -925,7 +950,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "StaticApiKeyWithValue": ".static_api_key_with_value",
     "Status": ".status",
     "SubmitTargetResponseResult": ".submit_target_response_result",
-    "SuggestedRule": ".suggested_rule",
     "SuggestionsAssetsRequestAnnotatingService": ".suggestions_assets_request_annotating_service",
     "SuggestionsAssetsRequestAssetType": ".suggestions_assets_request_asset_type",
     "SuggestionsAssetsRequestModelId": ".suggestions_assets_request_model_id",
@@ -958,6 +982,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "TagValueFilterInDiscoveredValue": ".tag_value_filter_in_discovered_value",
     "TagValueList": ".tag_value_list",
     "Tags": ".tags",
+    "TargetModel": ".target_model",
+    "TargetModelResponse": ".target_model_response",
     "TextPart": ".text_part",
     "TimeSeriesResponseV2": ".time_series_response_v2",
     "TimeSeriesResponseV2Aggregations": ".time_series_response_v2aggregations",
@@ -1031,6 +1057,7 @@ __all__ = [
     "AiAssetSummary",
     "AidrStatus",
     "Annotation",
+    "ApeObjective",
     "Asset",
     "AssetFilterV2",
     "AssetFilterV2AnnotatingService",
@@ -1053,6 +1080,7 @@ __all__ = [
     "AuditEntry",
     "AuditEntryBase",
     "AuthenticationErrorModel",
+    "AvailableMutationsResponse",
     "BadRequestErrorBody",
     "BlockConfig",
     "BulkEvaluationResults",
@@ -1081,6 +1109,8 @@ __all__ = [
     "CreateCsvRequestSeverity",
     "CreateCsvRequestSource",
     "CreateCsvRequestSourceEq",
+    "CreatePromptRequest",
+    "CreatePromptSetResponse",
     "CredentialsWithSecret",
     "CredentialsWithoutSecret",
     "Cursors",
@@ -1091,6 +1121,7 @@ __all__ = [
     "DeprecatedScanPropertiesV3",
     "DetectConfig",
     "Embed",
+    "EncodingType",
     "EnrichedAnalysis",
     "EnrichedAnalysisConfiguration",
     "EnrichedAnalysisFindings",
@@ -1151,6 +1182,7 @@ __all__ = [
     "HiddenLayerPromptAnalyzerResponseMetadata",
     "HiddenLayerProxyResponse",
     "HighestSeverity",
+    "HlProjectReferenceStatus",
     "HlResource",
     "HlResourceResourceType",
     "HlTenant",
@@ -1269,12 +1301,14 @@ __all__ = [
     "ModelIntelligence",
     "ModelLicense",
     "ModelUsagePolicy",
+    "MutationType",
     "NamedObject",
     "NextActionResponse",
     "NullablePolicyStatus",
     "NumpyFileAttributes",
     "OAuth2Error",
     "OauthScope",
+    "ObjectivesListResponse",
     "Offset",
     "Org",
     "PageInfo",
@@ -1309,12 +1343,20 @@ __all__ = [
     "ProjectDetailsRiskLevelZero",
     "ProjectId",
     "ProjectPolicyPack",
+    "PromptSetReferenceStatus",
+    "PromptSetStatus",
+    "PromptSetSummary",
+    "PromptSetsResponse",
     "Provider",
     "ProviderCounts",
     "ProviderDetails",
     "ProviderDetailsProvider",
     "ProviderPayload",
     "RdsFileAttributes",
+    "RedTeamConfig",
+    "RedTeamConfigExecutionStrategyType",
+    "RedTeamConfigSummary",
+    "RedTeamConfigsResponse",
     "RedTeamListResultsResponse",
     "RedTeamResultItem",
     "RedTeamResultPayload",
@@ -1336,10 +1378,6 @@ __all__ = [
     "RuleSetId",
     "RuleSetSettingsIdCollection",
     "RuleSetSettingsIdCollectionSettingsItem",
-    "RuleSuggestionListItem",
-    "RuleSuggestionListResponse",
-    "RuleSuggestionResultResponse",
-    "RuleSuggestionStatusResponse",
     "SamlIdentityProvider",
     "SamlServiceProvider",
     "SamlSigningCertificate",
@@ -1393,6 +1431,7 @@ __all__ = [
     "SearchResultMatchType",
     "SearchSuggestionsResponse",
     "SecurityPosture",
+    "SemanticType",
     "SensorSorDeployment",
     "SensorSorItemResponse",
     "SensorSorModel",
@@ -1419,7 +1458,6 @@ __all__ = [
     "SsoIntegrationRequestSigning",
     "SsoIntegrationSamlV2",
     "SsoIntegrationSamlV2Type",
-    "StartRuleSuggestionResponse",
     "StartWorkflowResponse",
     "StaticApiKey",
     "StaticApiKeyName",
@@ -1432,7 +1470,6 @@ __all__ = [
     "StaticApiKeyWithValue",
     "Status",
     "SubmitTargetResponseResult",
-    "SuggestedRule",
     "SuggestionsAssetsRequestAnnotatingService",
     "SuggestionsAssetsRequestAssetType",
     "SuggestionsAssetsRequestModelId",
@@ -1465,6 +1502,8 @@ __all__ = [
     "TagValueFilterInDiscoveredValue",
     "TagValueList",
     "Tags",
+    "TargetModel",
+    "TargetModelResponse",
     "TextPart",
     "TimeSeriesResponseV2",
     "TimeSeriesResponseV2Aggregations",
