@@ -10,6 +10,8 @@ from .raw_client import AsyncRawEvaluationsClient, RawEvaluationsClient
 if typing.TYPE_CHECKING:
     from .prompt_sets.client import AsyncPromptSetsClient, PromptSetsClient
     from .red_team.client import AsyncRedTeamClient, RedTeamClient
+    from .system_prompt_analysis.client import AsyncSystemPromptAnalysisClient, SystemPromptAnalysisClient
+    from .threat_modeling.client import AsyncThreatModelingClient, ThreatModelingClient
 
 
 class EvaluationsClient:
@@ -18,6 +20,8 @@ class EvaluationsClient:
         self._client_wrapper = client_wrapper
         self._red_team: typing.Optional[RedTeamClient] = None
         self._prompt_sets: typing.Optional[PromptSetsClient] = None
+        self._system_prompt_analysis: typing.Optional[SystemPromptAnalysisClient] = None
+        self._threat_modeling: typing.Optional[ThreatModelingClient] = None
 
     @property
     def with_raw_response(self) -> RawEvaluationsClient:
@@ -46,6 +50,22 @@ class EvaluationsClient:
             self._prompt_sets = PromptSetsClient(client_wrapper=self._client_wrapper)
         return self._prompt_sets
 
+    @property
+    def system_prompt_analysis(self):
+        if self._system_prompt_analysis is None:
+            from .system_prompt_analysis.client import SystemPromptAnalysisClient  # noqa: E402
+
+            self._system_prompt_analysis = SystemPromptAnalysisClient(client_wrapper=self._client_wrapper)
+        return self._system_prompt_analysis
+
+    @property
+    def threat_modeling(self):
+        if self._threat_modeling is None:
+            from .threat_modeling.client import ThreatModelingClient  # noqa: E402
+
+            self._threat_modeling = ThreatModelingClient(client_wrapper=self._client_wrapper)
+        return self._threat_modeling
+
 
 class AsyncEvaluationsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -53,6 +73,8 @@ class AsyncEvaluationsClient:
         self._client_wrapper = client_wrapper
         self._red_team: typing.Optional[AsyncRedTeamClient] = None
         self._prompt_sets: typing.Optional[AsyncPromptSetsClient] = None
+        self._system_prompt_analysis: typing.Optional[AsyncSystemPromptAnalysisClient] = None
+        self._threat_modeling: typing.Optional[AsyncThreatModelingClient] = None
 
     @property
     def with_raw_response(self) -> AsyncRawEvaluationsClient:
@@ -80,3 +102,19 @@ class AsyncEvaluationsClient:
 
             self._prompt_sets = AsyncPromptSetsClient(client_wrapper=self._client_wrapper)
         return self._prompt_sets
+
+    @property
+    def system_prompt_analysis(self):
+        if self._system_prompt_analysis is None:
+            from .system_prompt_analysis.client import AsyncSystemPromptAnalysisClient  # noqa: E402
+
+            self._system_prompt_analysis = AsyncSystemPromptAnalysisClient(client_wrapper=self._client_wrapper)
+        return self._system_prompt_analysis
+
+    @property
+    def threat_modeling(self):
+        if self._threat_modeling is None:
+            from .threat_modeling.client import AsyncThreatModelingClient  # noqa: E402
+
+            self._threat_modeling = AsyncThreatModelingClient(client_wrapper=self._client_wrapper)
+        return self._threat_modeling

@@ -5,7 +5,7 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from .ai_asset_summary import AiAssetSummary
-from .search_result_match_confidence import SearchResultMatchConfidence
+from .impact_level import ImpactLevel
 from .search_result_match_type import SearchResultMatchType
 
 
@@ -17,7 +17,7 @@ class SearchResult(AiAssetSummary):
     """
 
     match_type: typing.Optional[SearchResultMatchType] = None
-    match_confidence: typing.Optional[SearchResultMatchConfidence] = None
+    match_confidence: typing.Optional[ImpactLevel] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

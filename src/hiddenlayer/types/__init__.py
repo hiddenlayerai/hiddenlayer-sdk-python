@@ -30,6 +30,8 @@ if typing.TYPE_CHECKING:
     from .ai_asset_inventory_v1tag_value_list import AiAssetInventoryV1TagValueList
     from .ai_asset_summary import AiAssetSummary
     from .aidr_status import AidrStatus
+    from .analysis_result import AnalysisResult
+    from .analysis_status import AnalysisStatus
     from .annotation import Annotation
     from .ape_objective import ApeObjective
     from .asset import Asset
@@ -169,6 +171,7 @@ if typing.TYPE_CHECKING:
     from .hl_tenant_base import HlTenantBase
     from .hl_tenant_list import HlTenantList
     from .http_validation_error import HttpValidationError
+    from .impact_level import ImpactLevel
     from .incident_timeseries_response_v2 import IncidentTimeseriesResponseV2
     from .incident_timeseries_response_v2aggregations import IncidentTimeseriesResponseV2Aggregations
     from .incident_timeseries_response_v2timeseries_item import IncidentTimeseriesResponseV2TimeseriesItem
@@ -332,6 +335,7 @@ if typing.TYPE_CHECKING:
     from .provider_details import ProviderDetails
     from .provider_details_provider import ProviderDetailsProvider
     from .provider_payload import ProviderPayload
+    from .question_answer import QuestionAnswer
     from .rds_file_attributes import RdsFileAttributes
     from .red_team_config import RedTeamConfig
     from .red_team_config_execution_strategy_type import RedTeamConfigExecutionStrategyType
@@ -411,7 +415,6 @@ if typing.TYPE_CHECKING:
     )
     from .search_response import SearchResponse
     from .search_result import SearchResult
-    from .search_result_match_confidence import SearchResultMatchConfidence
     from .search_result_match_type import SearchResultMatchType
     from .search_suggestions_response import SearchSuggestionsResponse
     from .security_posture import SecurityPosture
@@ -453,6 +456,8 @@ if typing.TYPE_CHECKING:
     from .static_api_key_value import StaticApiKeyValue
     from .static_api_key_with_value import StaticApiKeyWithValue
     from .status import Status
+    from .stride_category import StrideCategory
+    from .submit_answers_result import SubmitAnswersResult
     from .submit_target_response_result import SubmitTargetResponseResult
     from .suggestions_assets_request_annotating_service import SuggestionsAssetsRequestAnnotatingService
     from .suggestions_assets_request_asset_type import SuggestionsAssetsRequestAssetType
@@ -470,6 +475,8 @@ if typing.TYPE_CHECKING:
     from .suggestions_search_request_provider import SuggestionsSearchRequestProvider
     from .suggestions_search_request_region import SuggestionsSearchRequestRegion
     from .suggestions_search_request_service import SuggestionsSearchRequestService
+    from .system_prompt_list_results_response import SystemPromptListResultsResponse
+    from .system_prompt_result_item import SystemPromptResultItem
     from .tag_def_filter import TagDefFilter
     from .tag_def_filter_all import TagDefFilterAll
     from .tag_def_filter_in import TagDefFilterIn
@@ -489,6 +496,13 @@ if typing.TYPE_CHECKING:
     from .target_model import TargetModel
     from .target_model_response import TargetModelResponse
     from .text_part import TextPart
+    from .threat_modeling_list_results_response import ThreatModelingListResultsResponse
+    from .threat_modeling_report import ThreatModelingReport
+    from .threat_modeling_result import ThreatModelingResult
+    from .threat_modeling_result_item import ThreatModelingResultItem
+    from .threat_modeling_status import ThreatModelingStatus
+    from .threat_modeling_system import ThreatModelingSystem
+    from .threat_modeling_system_threat import ThreatModelingSystemThreat
     from .time_series_response_v2 import TimeSeriesResponseV2
     from .time_series_response_v2aggregations import TimeSeriesResponseV2Aggregations
     from .time_series_response_v2timeseries_item import TimeSeriesResponseV2TimeseriesItem
@@ -536,6 +550,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "AiAssetInventoryV1TagValueList": ".ai_asset_inventory_v1tag_value_list",
     "AiAssetSummary": ".ai_asset_summary",
     "AidrStatus": ".aidr_status",
+    "AnalysisResult": ".analysis_result",
+    "AnalysisStatus": ".analysis_status",
     "Annotation": ".annotation",
     "ApeObjective": ".ape_objective",
     "Asset": ".asset",
@@ -669,6 +685,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "HlTenantBase": ".hl_tenant_base",
     "HlTenantList": ".hl_tenant_list",
     "HttpValidationError": ".http_validation_error",
+    "ImpactLevel": ".impact_level",
     "IncidentTimeseriesResponseV2": ".incident_timeseries_response_v2",
     "IncidentTimeseriesResponseV2Aggregations": ".incident_timeseries_response_v2aggregations",
     "IncidentTimeseriesResponseV2TimeseriesItem": ".incident_timeseries_response_v2timeseries_item",
@@ -832,6 +849,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ProviderDetails": ".provider_details",
     "ProviderDetailsProvider": ".provider_details_provider",
     "ProviderPayload": ".provider_payload",
+    "QuestionAnswer": ".question_answer",
     "RdsFileAttributes": ".rds_file_attributes",
     "RedTeamConfig": ".red_team_config",
     "RedTeamConfigExecutionStrategyType": ".red_team_config_execution_strategy_type",
@@ -907,7 +925,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ScanTimeseriesResponseV3TimeseriesItemThreatLevelSafe": ".scan_timeseries_response_v3timeseries_item_threat_level_safe",
     "SearchResponse": ".search_response",
     "SearchResult": ".search_result",
-    "SearchResultMatchConfidence": ".search_result_match_confidence",
     "SearchResultMatchType": ".search_result_match_type",
     "SearchSuggestionsResponse": ".search_suggestions_response",
     "SecurityPosture": ".security_posture",
@@ -949,6 +966,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "StaticApiKeyValue": ".static_api_key_value",
     "StaticApiKeyWithValue": ".static_api_key_with_value",
     "Status": ".status",
+    "StrideCategory": ".stride_category",
+    "SubmitAnswersResult": ".submit_answers_result",
     "SubmitTargetResponseResult": ".submit_target_response_result",
     "SuggestionsAssetsRequestAnnotatingService": ".suggestions_assets_request_annotating_service",
     "SuggestionsAssetsRequestAssetType": ".suggestions_assets_request_asset_type",
@@ -966,6 +985,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SuggestionsSearchRequestProvider": ".suggestions_search_request_provider",
     "SuggestionsSearchRequestRegion": ".suggestions_search_request_region",
     "SuggestionsSearchRequestService": ".suggestions_search_request_service",
+    "SystemPromptListResultsResponse": ".system_prompt_list_results_response",
+    "SystemPromptResultItem": ".system_prompt_result_item",
     "TagDefFilter": ".tag_def_filter",
     "TagDefFilterAll": ".tag_def_filter_all",
     "TagDefFilterIn": ".tag_def_filter_in",
@@ -985,6 +1006,13 @@ _dynamic_imports: typing.Dict[str, str] = {
     "TargetModel": ".target_model",
     "TargetModelResponse": ".target_model_response",
     "TextPart": ".text_part",
+    "ThreatModelingListResultsResponse": ".threat_modeling_list_results_response",
+    "ThreatModelingReport": ".threat_modeling_report",
+    "ThreatModelingResult": ".threat_modeling_result",
+    "ThreatModelingResultItem": ".threat_modeling_result_item",
+    "ThreatModelingStatus": ".threat_modeling_status",
+    "ThreatModelingSystem": ".threat_modeling_system",
+    "ThreatModelingSystemThreat": ".threat_modeling_system_threat",
     "TimeSeriesResponseV2": ".time_series_response_v2",
     "TimeSeriesResponseV2Aggregations": ".time_series_response_v2aggregations",
     "TimeSeriesResponseV2TimeseriesItem": ".time_series_response_v2timeseries_item",
@@ -1056,6 +1084,8 @@ __all__ = [
     "AiAssetInventoryV1TagValueList",
     "AiAssetSummary",
     "AidrStatus",
+    "AnalysisResult",
+    "AnalysisStatus",
     "Annotation",
     "ApeObjective",
     "Asset",
@@ -1189,6 +1219,7 @@ __all__ = [
     "HlTenantBase",
     "HlTenantList",
     "HttpValidationError",
+    "ImpactLevel",
     "IncidentTimeseriesResponseV2",
     "IncidentTimeseriesResponseV2Aggregations",
     "IncidentTimeseriesResponseV2TimeseriesItem",
@@ -1352,6 +1383,7 @@ __all__ = [
     "ProviderDetails",
     "ProviderDetailsProvider",
     "ProviderPayload",
+    "QuestionAnswer",
     "RdsFileAttributes",
     "RedTeamConfig",
     "RedTeamConfigExecutionStrategyType",
@@ -1427,7 +1459,6 @@ __all__ = [
     "ScanTimeseriesResponseV3TimeseriesItemThreatLevelSafe",
     "SearchResponse",
     "SearchResult",
-    "SearchResultMatchConfidence",
     "SearchResultMatchType",
     "SearchSuggestionsResponse",
     "SecurityPosture",
@@ -1469,6 +1500,8 @@ __all__ = [
     "StaticApiKeyValue",
     "StaticApiKeyWithValue",
     "Status",
+    "StrideCategory",
+    "SubmitAnswersResult",
     "SubmitTargetResponseResult",
     "SuggestionsAssetsRequestAnnotatingService",
     "SuggestionsAssetsRequestAssetType",
@@ -1486,6 +1519,8 @@ __all__ = [
     "SuggestionsSearchRequestProvider",
     "SuggestionsSearchRequestRegion",
     "SuggestionsSearchRequestService",
+    "SystemPromptListResultsResponse",
+    "SystemPromptResultItem",
     "TagDefFilter",
     "TagDefFilterAll",
     "TagDefFilterIn",
@@ -1505,6 +1540,13 @@ __all__ = [
     "TargetModel",
     "TargetModelResponse",
     "TextPart",
+    "ThreatModelingListResultsResponse",
+    "ThreatModelingReport",
+    "ThreatModelingResult",
+    "ThreatModelingResultItem",
+    "ThreatModelingStatus",
+    "ThreatModelingSystem",
+    "ThreatModelingSystemThreat",
     "TimeSeriesResponseV2",
     "TimeSeriesResponseV2Aggregations",
     "TimeSeriesResponseV2TimeseriesItem",
