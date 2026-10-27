@@ -64,6 +64,8 @@ if typing.TYPE_CHECKING:
     from .canonical_interaction_message import CanonicalInteractionMessage
     from .canonical_interaction_message_timestamp import CanonicalInteractionMessageTimestamp
     from .category import Category
+    from .completed_job import CompletedJob
+    from .completed_job_failures_item import CompletedJobFailuresItem
     from .condition import Condition
     from .condition_condition_operator import ConditionConditionOperator
     from .condition_config import ConditionConfig
@@ -115,6 +117,7 @@ if typing.TYPE_CHECKING:
     from .eula_version import EulaVersion
     from .evaluation_result import EvaluationResult
     from .evaluation_result_artifact_type import EvaluationResultArtifactType
+    from .failed_job import FailedJob
     from .file import File
     from .file_details_v3 import FileDetailsV3
     from .file_details_v3file_type_details import FileDetailsV3FileTypeDetails
@@ -203,6 +206,8 @@ if typing.TYPE_CHECKING:
     from .interactions_text_content import InteractionsTextContent
     from .internal_server_error_body import InternalServerErrorBody
     from .is_default_project import IsDefaultProject
+    from .job_base import JobBase
+    from .job_base_failures_item import JobBaseFailuresItem
     from .keras_file_attributes import KerasFileAttributes
     from .license import License
     from .lifecycle_event import LifecycleEvent
@@ -318,6 +323,8 @@ if typing.TYPE_CHECKING:
     from .problem_details_errors_item import ProblemDetailsErrorsItem
     from .problem_details_v2 import ProblemDetailsV2
     from .problem_details_v2errors_item import ProblemDetailsV2ErrorsItem
+    from .problem_details_with_status import ProblemDetailsWithStatus
+    from .problem_details_with_status_errors_item import ProblemDetailsWithStatusErrorsItem
     from .project import Project
     from .project_alias import ProjectAlias
     from .project_details import ProjectDetails
@@ -475,6 +482,7 @@ if typing.TYPE_CHECKING:
     from .suggestions_search_request_provider import SuggestionsSearchRequestProvider
     from .suggestions_search_request_region import SuggestionsSearchRequestRegion
     from .suggestions_search_request_service import SuggestionsSearchRequestService
+    from .sync_job import SyncJob, SyncJob_Completed, SyncJob_Failed
     from .system_prompt_list_results_response import SystemPromptListResultsResponse
     from .system_prompt_result_item import SystemPromptResultItem
     from .tag_def_filter import TagDefFilter
@@ -584,6 +592,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "CanonicalInteractionMessage": ".canonical_interaction_message",
     "CanonicalInteractionMessageTimestamp": ".canonical_interaction_message_timestamp",
     "Category": ".category",
+    "CompletedJob": ".completed_job",
+    "CompletedJobFailuresItem": ".completed_job_failures_item",
     "Condition": ".condition",
     "ConditionConditionOperator": ".condition_condition_operator",
     "ConditionConfig": ".condition_config",
@@ -633,6 +643,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "EulaVersion": ".eula_version",
     "EvaluationResult": ".evaluation_result",
     "EvaluationResultArtifactType": ".evaluation_result_artifact_type",
+    "FailedJob": ".failed_job",
     "File": ".file",
     "FileDetailsV3": ".file_details_v3",
     "FileDetailsV3FileTypeDetails": ".file_details_v3file_type_details",
@@ -717,6 +728,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "InteractionsTextContent": ".interactions_text_content",
     "InternalServerErrorBody": ".internal_server_error_body",
     "IsDefaultProject": ".is_default_project",
+    "JobBase": ".job_base",
+    "JobBaseFailuresItem": ".job_base_failures_item",
     "KerasFileAttributes": ".keras_file_attributes",
     "License": ".license",
     "LifecycleEvent": ".lifecycle_event",
@@ -832,6 +845,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ProblemDetailsErrorsItem": ".problem_details_errors_item",
     "ProblemDetailsV2": ".problem_details_v2",
     "ProblemDetailsV2ErrorsItem": ".problem_details_v2errors_item",
+    "ProblemDetailsWithStatus": ".problem_details_with_status",
+    "ProblemDetailsWithStatusErrorsItem": ".problem_details_with_status_errors_item",
     "Project": ".project",
     "ProjectAlias": ".project_alias",
     "ProjectDetails": ".project_details",
@@ -985,6 +1000,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SuggestionsSearchRequestProvider": ".suggestions_search_request_provider",
     "SuggestionsSearchRequestRegion": ".suggestions_search_request_region",
     "SuggestionsSearchRequestService": ".suggestions_search_request_service",
+    "SyncJob": ".sync_job",
+    "SyncJob_Completed": ".sync_job",
+    "SyncJob_Failed": ".sync_job",
     "SystemPromptListResultsResponse": ".system_prompt_list_results_response",
     "SystemPromptResultItem": ".system_prompt_result_item",
     "TagDefFilter": ".tag_def_filter",
@@ -1118,6 +1136,8 @@ __all__ = [
     "CanonicalInteractionMessage",
     "CanonicalInteractionMessageTimestamp",
     "Category",
+    "CompletedJob",
+    "CompletedJobFailuresItem",
     "Condition",
     "ConditionConditionOperator",
     "ConditionConfig",
@@ -1167,6 +1187,7 @@ __all__ = [
     "EulaVersion",
     "EvaluationResult",
     "EvaluationResultArtifactType",
+    "FailedJob",
     "File",
     "FileDetailsV3",
     "FileDetailsV3FileTypeDetails",
@@ -1251,6 +1272,8 @@ __all__ = [
     "InteractionsTextContent",
     "InternalServerErrorBody",
     "IsDefaultProject",
+    "JobBase",
+    "JobBaseFailuresItem",
     "KerasFileAttributes",
     "License",
     "LifecycleEvent",
@@ -1366,6 +1389,8 @@ __all__ = [
     "ProblemDetailsErrorsItem",
     "ProblemDetailsV2",
     "ProblemDetailsV2ErrorsItem",
+    "ProblemDetailsWithStatus",
+    "ProblemDetailsWithStatusErrorsItem",
     "Project",
     "ProjectAlias",
     "ProjectDetails",
@@ -1519,6 +1544,9 @@ __all__ = [
     "SuggestionsSearchRequestProvider",
     "SuggestionsSearchRequestRegion",
     "SuggestionsSearchRequestService",
+    "SyncJob",
+    "SyncJob_Completed",
+    "SyncJob_Failed",
     "SystemPromptListResultsResponse",
     "SystemPromptResultItem",
     "TagDefFilter",

@@ -9,14 +9,10 @@ if typing.TYPE_CHECKING:
     from .bulk_custom_tag_job_request_v2action import BulkCustomTagJobRequestV2Action
     from .bulk_custom_tag_job_request_v2body import BulkCustomTagJobRequestV2Body
     from .bulk_custom_tag_job_request_v2filter import BulkCustomTagJobRequestV2Filter
-    from .custom_tags_jobs_response import CustomTagsJobsResponse
-    from .custom_tags_jobs_response_type import CustomTagsJobsResponseType
 _dynamic_imports: typing.Dict[str, str] = {
     "BulkCustomTagJobRequestV2Action": ".bulk_custom_tag_job_request_v2action",
     "BulkCustomTagJobRequestV2Body": ".bulk_custom_tag_job_request_v2body",
     "BulkCustomTagJobRequestV2Filter": ".bulk_custom_tag_job_request_v2filter",
-    "CustomTagsJobsResponse": ".custom_tags_jobs_response",
-    "CustomTagsJobsResponseType": ".custom_tags_jobs_response_type",
 }
 
 
@@ -41,10 +37,4 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = [
-    "BulkCustomTagJobRequestV2Action",
-    "BulkCustomTagJobRequestV2Body",
-    "BulkCustomTagJobRequestV2Filter",
-    "CustomTagsJobsResponse",
-    "CustomTagsJobsResponseType",
-]
+__all__ = ["BulkCustomTagJobRequestV2Action", "BulkCustomTagJobRequestV2Body", "BulkCustomTagJobRequestV2Filter"]

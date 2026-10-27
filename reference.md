@@ -6338,7 +6338,7 @@ URL-encoded if it contains special characters, including `/`.
 </details>
 
 ## AssetInventory Jobs
-<details><summary><code>client.asset_inventory.jobs.<a href="src/hiddenlayer/asset_inventory/jobs/client.py">custom_tags</a>(...) -> CustomTagsJobsResponse</code></summary>
+<details><summary><code>client.asset_inventory.jobs.<a href="src/hiddenlayer/asset_inventory/jobs/client.py">custom_tags</a>(...) -> SyncJob</code></summary>
 <dl>
 <dd>
 

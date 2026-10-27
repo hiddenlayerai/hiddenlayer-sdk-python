@@ -6,19 +6,11 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
-    from .types import (
-        BulkCustomTagJobRequestV2Action,
-        BulkCustomTagJobRequestV2Body,
-        BulkCustomTagJobRequestV2Filter,
-        CustomTagsJobsResponse,
-        CustomTagsJobsResponseType,
-    )
+    from .types import BulkCustomTagJobRequestV2Action, BulkCustomTagJobRequestV2Body, BulkCustomTagJobRequestV2Filter
 _dynamic_imports: typing.Dict[str, str] = {
     "BulkCustomTagJobRequestV2Action": ".types",
     "BulkCustomTagJobRequestV2Body": ".types",
     "BulkCustomTagJobRequestV2Filter": ".types",
-    "CustomTagsJobsResponse": ".types",
-    "CustomTagsJobsResponseType": ".types",
 }
 
 
@@ -43,10 +35,4 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = [
-    "BulkCustomTagJobRequestV2Action",
-    "BulkCustomTagJobRequestV2Body",
-    "BulkCustomTagJobRequestV2Filter",
-    "CustomTagsJobsResponse",
-    "CustomTagsJobsResponseType",
-]
+__all__ = ["BulkCustomTagJobRequestV2Action", "BulkCustomTagJobRequestV2Body", "BulkCustomTagJobRequestV2Filter"]

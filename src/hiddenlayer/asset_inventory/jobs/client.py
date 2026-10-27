@@ -4,11 +4,11 @@ import typing
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.request_options import RequestOptions
+from ...types.sync_job import SyncJob
 from .raw_client import AsyncRawJobsClient, RawJobsClient
 from .types.bulk_custom_tag_job_request_v2action import BulkCustomTagJobRequestV2Action
 from .types.bulk_custom_tag_job_request_v2body import BulkCustomTagJobRequestV2Body
 from .types.bulk_custom_tag_job_request_v2filter import BulkCustomTagJobRequestV2Filter
-from .types.custom_tags_jobs_response import CustomTagsJobsResponse
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -36,7 +36,7 @@ class JobsClient:
         action: BulkCustomTagJobRequestV2Action,
         body: BulkCustomTagJobRequestV2Body,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> CustomTagsJobsResponse:
+    ) -> SyncJob:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
@@ -61,7 +61,7 @@ class JobsClient:
 
         Returns
         -------
-        CustomTagsJobsResponse
+        SyncJob
             Job completed
 
         Examples
@@ -135,7 +135,7 @@ class AsyncJobsClient:
         action: BulkCustomTagJobRequestV2Action,
         body: BulkCustomTagJobRequestV2Body,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> CustomTagsJobsResponse:
+    ) -> SyncJob:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
@@ -160,7 +160,7 @@ class AsyncJobsClient:
 
         Returns
         -------
-        CustomTagsJobsResponse
+        SyncJob
             Job completed
 
         Examples

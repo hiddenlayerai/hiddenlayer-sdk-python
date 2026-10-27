@@ -33,19 +33,11 @@ if typing.TYPE_CHECKING:
         SuggestionsAssetsResponse,
         SuggestionsAssetsResponseSuggestionsItem,
     )
-    from .jobs import (
-        BulkCustomTagJobRequestV2Action,
-        BulkCustomTagJobRequestV2Body,
-        BulkCustomTagJobRequestV2Filter,
-        CustomTagsJobsResponse,
-        CustomTagsJobsResponseType,
-    )
+    from .jobs import BulkCustomTagJobRequestV2Action, BulkCustomTagJobRequestV2Body, BulkCustomTagJobRequestV2Filter
 _dynamic_imports: typing.Dict[str, str] = {
     "BulkCustomTagJobRequestV2Action": ".jobs",
     "BulkCustomTagJobRequestV2Body": ".jobs",
     "BulkCustomTagJobRequestV2Filter": ".jobs",
-    "CustomTagsJobsResponse": ".jobs",
-    "CustomTagsJobsResponseType": ".jobs",
     "FiltersV1AssetsResponse": ".assets",
     "FiltersV1AssetsResponseItemsItem": ".assets",
     "GetAnnotationsRequestEmbedItem": ".annotations",
@@ -95,8 +87,6 @@ __all__ = [
     "BulkCustomTagJobRequestV2Action",
     "BulkCustomTagJobRequestV2Body",
     "BulkCustomTagJobRequestV2Filter",
-    "CustomTagsJobsResponse",
-    "CustomTagsJobsResponseType",
     "FiltersV1AssetsResponse",
     "FiltersV1AssetsResponseItemsItem",
     "GetAnnotationsRequestEmbedItem",

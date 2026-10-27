@@ -13,10 +13,10 @@ from ...core.serialization import convert_and_respect_annotation_metadata
 from ...errors.forbidden_error import ForbiddenError
 from ...errors.unauthorized_error import UnauthorizedError
 from ...errors.unprocessable_entity_error import UnprocessableEntityError
+from ...types.sync_job import SyncJob
 from .types.bulk_custom_tag_job_request_v2action import BulkCustomTagJobRequestV2Action
 from .types.bulk_custom_tag_job_request_v2body import BulkCustomTagJobRequestV2Body
 from .types.bulk_custom_tag_job_request_v2filter import BulkCustomTagJobRequestV2Filter
-from .types.custom_tags_jobs_response import CustomTagsJobsResponse
 from pydantic import ValidationError
 
 # this is used as the default value for optional parameters
@@ -34,7 +34,7 @@ class RawJobsClient:
         action: BulkCustomTagJobRequestV2Action,
         body: BulkCustomTagJobRequestV2Body,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[CustomTagsJobsResponse]:
+    ) -> HttpResponse[SyncJob]:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
@@ -59,7 +59,7 @@ class RawJobsClient:
 
         Returns
         -------
-        HttpResponse[CustomTagsJobsResponse]
+        HttpResponse[SyncJob]
             Job completed
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -83,9 +83,9 @@ class RawJobsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    CustomTagsJobsResponse,
+                    SyncJob,
                     parse_obj_as(
-                        type_=CustomTagsJobsResponse,  # type: ignore
+                        type_=SyncJob,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -144,7 +144,7 @@ class AsyncRawJobsClient:
         action: BulkCustomTagJobRequestV2Action,
         body: BulkCustomTagJobRequestV2Body,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[CustomTagsJobsResponse]:
+    ) -> AsyncHttpResponse[SyncJob]:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
@@ -169,7 +169,7 @@ class AsyncRawJobsClient:
 
         Returns
         -------
-        AsyncHttpResponse[CustomTagsJobsResponse]
+        AsyncHttpResponse[SyncJob]
             Job completed
         """
         _response = await self._client_wrapper.httpx_client.request(
@@ -193,9 +193,9 @@ class AsyncRawJobsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    CustomTagsJobsResponse,
+                    SyncJob,
                     parse_obj_as(
-                        type_=CustomTagsJobsResponse,  # type: ignore
+                        type_=SyncJob,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

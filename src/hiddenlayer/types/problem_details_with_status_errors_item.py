@@ -3,12 +3,16 @@
 import typing
 
 import pydantic
-from ....core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
-from .custom_tags_jobs_response_type import CustomTagsJobsResponseType
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 
 
-class CustomTagsJobsResponse(UniversalBaseModel):
-    type: typing.Optional[CustomTagsJobsResponseType] = None
+class ProblemDetailsWithStatusErrorsItem(UniversalBaseModel):
+    code: typing.Optional[str] = None
+    detail: typing.Optional[str] = None
+    pointer: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
+    """
+    array of JSON Pointers
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
