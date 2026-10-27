@@ -1,25 +1,44 @@
 # Hiddenlayer Python Library
 
-[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=Hiddenlayer%2FPython)
+[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fhiddenlayerai%2Fhiddenlayer-sdk-python)
 [![pypi](https://img.shields.io/pypi/v/hiddenlayer)](https://pypi.python.org/pypi/hiddenlayer)
 
 The Hiddenlayer Python library provides convenient access to the Hiddenlayer APIs from Python.
 
 ## Table of Contents
 
+- [Documentation](#documentation)
+- [Beta Apis](#beta-apis)
 - [Installation](#installation)
 - [Reference](#reference)
 - [Usage](#usage)
+- [Async Usage](#async-usage)
+- [Using Types](#using-types)
 - [Environments](#environments)
 - [Async Client](#async-client)
 - [Exception Handling](#exception-handling)
 - [Pagination](#pagination)
+- [Nested Params](#nested-params)
+- [Handling Errors](#handling-errors)
 - [Advanced](#advanced)
   - [Access Raw Response Data](#access-raw-response-data)
   - [Retries](#retries)
   - [Timeouts](#timeouts)
   - [Custom Client](#custom-client)
+- [Versioning](#versioning)
+- [Requirements](#requirements)
 - [Contributing](#contributing)
+
+## Documentation
+
+The REST API documentation can be found on [dev.hiddenlayer.ai](https://dev.hiddenlayer.ai). The full API of this library can be found in [api.md](api.md).
+
+## Beta APIs
+
+Some HiddenLayer APIs are marked as **Beta**, meaning they are not yet generally available (GA) or production ready. Beta APIs can be used in a production environment, but at your own risk and discretion. For full details, see the [Beta API Guidelines](https://dev.hiddenlayer.ai/docs/beta-api-faq) on the developer portal.
+
+- HiddenLayer does not provide compatibility guarantees for Beta APIs. Breaking changes may occur at any time.
+- SDK functions and types associated with Beta APIs are excluded when determining semver release versions.
 
 ## Installation
 
@@ -29,7 +48,7 @@ pip install hiddenlayer
 
 ## Reference
 
-A full reference for this library is available [here](./reference.md).
+A full reference for this library is available [here](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/blob/HEAD/./reference.md).
 
 ## Usage
 
@@ -46,6 +65,95 @@ client.credentials.create(
     name="some-name",
 )
 ```
+
+## Async usage
+
+Simply import `AsyncHiddenLayer` instead of `HiddenLayer` and use `await` with each API call:
+
+```python
+import asyncio
+from hiddenlayer import AsyncHiddenLayer
+
+client = AsyncHiddenLayer(
+    # defaults to "prod-us".
+    environment="prod-eu",
+)
+
+
+async def main() -> None:
+    response = await client.interactions.analyze(
+        metadata={
+            "model": "REPLACE_ME",
+            "requester_id": "REPLACE_ME",
+        },
+        input={
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "REPLACE_ME",
+                }
+            ]
+        },
+    )
+    print(response.analysis)
+
+
+asyncio.run(main())
+```
+
+Functionality between the synchronous and asynchronous clients is otherwise identical.
+
+### With aiohttp
+
+By default, the async client uses `httpx` for HTTP requests. However, for improved concurrency performance you may also use `aiohttp` as the HTTP backend.
+
+You can enable this by installing `aiohttp`:
+
+```sh
+# install from PyPI
+pip install hiddenlayer-sdk[aiohttp]
+```
+
+Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
+
+```python
+import asyncio
+from hiddenlayer import DefaultAioHttpClient
+from hiddenlayer import AsyncHiddenLayer
+
+
+async def main() -> None:
+    async with AsyncHiddenLayer(
+        http_client=DefaultAioHttpClient(),
+    ) as client:
+        response = await client.interactions.analyze(
+            metadata={
+                "model": "REPLACE_ME",
+                "requester_id": "REPLACE_ME",
+            },
+            input={
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": "REPLACE_ME",
+                    }
+                ]
+            },
+        )
+        print(response.analysis)
+
+
+asyncio.run(main())
+```
+
+## Using types
+
+Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typing.html#typing.TypedDict). Responses are [Pydantic models](https://docs.pydantic.dev) which also provide helper methods for things like:
+
+- Serializing back into JSON, `model.to_json()`
+- Converting to a dictionary, `model.to_dict()`
+
+Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
 
 ## Environments
 
@@ -120,6 +228,153 @@ for page in pager.iter_pages():
     for item in page:
         print(item)
 ```
+
+## Nested params
+
+Nested parameters are dictionaries, typed using `TypedDict`, for example:
+
+```python
+from hiddenlayer import HiddenLayer
+
+client = HiddenLayer()
+
+response = client.interactions.analyze(
+    metadata={
+        "model": "gpt-5",
+        "requester_id": "user-1234",
+        "provider": "openai",
+    },
+)
+print(response.metadata)
+```
+
+## Handling errors
+
+When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `hiddenlayer.APIConnectionError` is raised.
+
+When the API returns a non-success status code (that is, 4xx or 5xx
+response), a subclass of `hiddenlayer.APIStatusError` is raised, containing `status_code` and `response` properties.
+
+All errors inherit from `hiddenlayer.APIError`.
+
+```python
+import hiddenlayer
+from hiddenlayer import HiddenLayer
+
+client = HiddenLayer()
+
+try:
+    client.interactions.analyze(
+        metadata={
+            "model": "REPLACE_ME",
+            "requester_id": "REPLACE_ME",
+        },
+        input={
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "REPLACE_ME",
+                }
+            ]
+        },
+    )
+except hiddenlayer.APIConnectionError as e:
+    print("The server could not be reached")
+    print(e.__cause__)  # an underlying Exception, likely raised within httpx.
+except hiddenlayer.RateLimitError as e:
+    print("A 429 status code was received; we should back off a bit.")
+except hiddenlayer.APIStatusError as e:
+    print("Another non-200-range status code was received")
+    print(e.status_code)
+    print(e.response)
+```
+
+Error codes are as follows:
+
+| Status Code | Error Type                 |
+| ----------- | -------------------------- |
+| 400         | `BadRequestError`          |
+| 401         | `AuthenticationError`      |
+| 403         | `PermissionDeniedError`    |
+| 404         | `NotFoundError`            |
+| 422         | `UnprocessableEntityError` |
+| 429         | `RateLimitError`           |
+| >=500       | `InternalServerError`      |
+| N/A         | `APIConnectionError`       |
+
+### Retries
+
+Certain errors are automatically retried 2 times by default, with a short exponential backoff.
+Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
+429 Rate Limit, and >=500 Internal errors are all retried by default.
+
+You can use the `max_retries` option to configure or disable retry settings:
+
+```python
+from hiddenlayer import HiddenLayer
+
+# Configure the default for all requests:
+client = HiddenLayer(
+    # default is 2
+    max_retries=0,
+)
+
+# Or, configure per-request:
+client.with_options(max_retries=5).interactions.analyze(
+    metadata={
+        "model": "REPLACE_ME",
+        "requester_id": "REPLACE_ME",
+    },
+    input={
+        "messages": [
+            {
+                "role": "user",
+                "content": "REPLACE_ME",
+            }
+        ]
+    },
+)
+```
+
+### Timeouts
+
+By default requests time out after 1 minute. You can configure this with a `timeout` option,
+which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:
+
+```python
+from hiddenlayer import HiddenLayer
+
+# Configure the default for all requests:
+client = HiddenLayer(
+    # 20 seconds (default is 1 minute)
+    timeout=20.0,
+)
+
+# More granular control:
+client = HiddenLayer(
+    timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
+)
+
+# Override per-request:
+client.with_options(timeout=5.0).interactions.analyze(
+    metadata={
+        "model": "REPLACE_ME",
+        "requester_id": "REPLACE_ME",
+    },
+    input={
+        "messages": [
+            {
+                "role": "user",
+                "content": "REPLACE_ME",
+            }
+        ]
+    },
+)
+```
+
+On timeout, an `APITimeoutError` is thrown.
+
+Note that requests that time out are [retried twice by default](#retries).
 
 ## Advanced
 
@@ -200,6 +455,33 @@ client = HiddenLayer(
     ),
 )
 ```
+
+## Versioning
+
+This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
+
+1. Changes that only affect static types, without breaking runtime behavior.
+2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_
+3. Changes that we do not expect to impact the vast majority of users in practice.
+
+We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
+
+We are keen for your feedback; please open an [issue](https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python/issues) with questions, bugs, or suggestions.
+
+### Determining the installed version
+
+If you've upgraded to the latest version but aren't seeing any new features you were expecting then your python environment is likely still using an older version.
+
+You can determine the version that is being used at runtime with:
+
+```py
+import hiddenlayer
+print(hiddenlayer.__version__)
+```
+
+## Requirements
+
+Python 3.9 or higher.
 
 ## Contributing
 
