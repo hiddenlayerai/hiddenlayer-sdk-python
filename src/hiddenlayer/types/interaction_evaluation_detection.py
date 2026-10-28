@@ -16,6 +16,11 @@ class InteractionEvaluationDetection(UniversalBaseModel):
     via the signals and findings that the rule matched.
     """
 
+    rule_id: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    The unique identifier for the detection rule that produced this detection.
+    """
+
     rule_name: str = pydantic.Field()
     """
     The human-readable name of the detection rule (e.g., prompt_injection, sensitive_pii_exposed).
