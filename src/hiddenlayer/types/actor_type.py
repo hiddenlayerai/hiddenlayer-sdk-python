@@ -2,4 +2,4 @@
 
 import typing
 
-ActorType = typing.Union[typing.Literal["USER", "API_KEY"], typing.Any]
+ActorType = typing.Union[typing.Literal["USER", "CLIENT_CREDENTIAL", "STATIC_API_KEY", "SYSTEM", "API_KEY"], typing.Any]

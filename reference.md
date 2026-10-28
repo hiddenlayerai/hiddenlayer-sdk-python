@@ -7249,7 +7249,7 @@ client.audit.entries.list(
 <dl>
 <dd>
 
-**role:** `typing.Optional[str]` — Filter audit entries by role
+**role:** `typing.Optional[str]` — Filter audit entries by a role in `assigned_roles`
     
 </dd>
 </dl>
@@ -7273,7 +7273,7 @@ client.audit.entries.list(
 <dl>
 <dd>
 
-**actor_type:** `typing.Optional[ActorType]` — Filter audit entries by actor_type
+**actor_type:** `typing.Optional[ActorType]` — Filter audit entries by actor_type. `CLIENT_CREDENTIAL` and `API_KEY` return the same entries; neither returns Static API Key actions.
     
 </dd>
 </dl>

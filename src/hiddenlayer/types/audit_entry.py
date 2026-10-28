@@ -17,7 +17,11 @@ class AuditEntry(AuditEntryBase):
     actor_type: ActorType
     actor_id: str = pydantic.Field()
     """
-    Unique identifier for the actor
+    ID of the actor, by `actor_type`:
+    - `USER`: the user's `id`.
+    - `CLIENT_CREDENTIAL` and `API_KEY`: the API credential's `client_id`.
+    - `STATIC_API_KEY`: the Static API Key's `id`, not a secret's `id`.
+    - `SYSTEM`: an ID that HiddenLayer assigns to the process.
     """
 
     actor_name: typing.Optional[str] = pydantic.Field(default=None)
@@ -27,12 +31,12 @@ class AuditEntry(AuditEntryBase):
 
     actor_email: typing.Optional[str] = pydantic.Field(default=None)
     """
-    Email address of the actor
+    Email address of the actor. Empty unless `actor_type` is `USER`.
     """
 
     assigned_roles: typing.List[str] = pydantic.Field()
     """
-    Snapshot of the roles assigned to the actor at the time of the action
+    Snapshot of the roles assigned to the actor at the time of the action. Empty unless `actor_type` is `USER`.
     """
 
     correlation_id: typing.Optional[str] = pydantic.Field(default=None)
@@ -42,7 +46,7 @@ class AuditEntry(AuditEntryBase):
 
     session_id: typing.Optional[str] = pydantic.Field(default=None)
     """
-    Session ID
+    ID of the user's login session. Empty unless `actor_type` is `USER`.
     """
 
     if IS_PYDANTIC_V2:

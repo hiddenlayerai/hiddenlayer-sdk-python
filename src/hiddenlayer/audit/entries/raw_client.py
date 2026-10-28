@@ -49,7 +49,7 @@ class RawEntriesClient:
             Filter audit entries by time range
 
         role : typing.Optional[str]
-            Filter audit entries by role
+            Filter audit entries by a role in `assigned_roles`
 
         action : typing.Optional[str]
             Filter audit entries by action
@@ -58,7 +58,7 @@ class RawEntriesClient:
             Filter audit entries by resource_type
 
         actor_type : typing.Optional[ActorType]
-            Filter audit entries by actor_type
+            Filter audit entries by actor_type. `CLIENT_CREDENTIAL` and `API_KEY` return the same entries; neither returns Static API Key actions.
 
         search : typing.Optional[str]
             Search for audit entries by text (searches user, role, action, resource type)
@@ -179,7 +179,7 @@ class AsyncRawEntriesClient:
             Filter audit entries by time range
 
         role : typing.Optional[str]
-            Filter audit entries by role
+            Filter audit entries by a role in `assigned_roles`
 
         action : typing.Optional[str]
             Filter audit entries by action
@@ -188,7 +188,7 @@ class AsyncRawEntriesClient:
             Filter audit entries by resource_type
 
         actor_type : typing.Optional[ActorType]
-            Filter audit entries by actor_type
+            Filter audit entries by actor_type. `CLIENT_CREDENTIAL` and `API_KEY` return the same entries; neither returns Static API Key actions.
 
         search : typing.Optional[str]
             Search for audit entries by text (searches user, role, action, resource type)
