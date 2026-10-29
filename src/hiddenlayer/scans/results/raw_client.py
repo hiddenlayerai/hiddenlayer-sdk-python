@@ -15,6 +15,7 @@ from ...errors.bad_request_error import BadRequestError
 from ...errors.forbidden_error import ForbiddenError
 from ...errors.not_found_error import NotFoundError
 from ...errors.unauthorized_error import UnauthorizedError
+from ...errors.unprocessable_entity_error import UnprocessableEntityError
 from ...types.scan_file_result_with_compliance_v3 import ScanFileResultWithComplianceV3
 from ...types.scan_report_summary_response_v3 import ScanReportSummaryResponseV3
 from .types.list_files_results_response import ListFilesResultsResponse
@@ -32,6 +33,7 @@ class RawResultsClient:
         has_detections: typing.Optional[bool] = None,
         page_size: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
+        sort: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> SyncPager[ScanFileResultWithComplianceV3, ListFilesResultsResponse]:
         """
@@ -51,6 +53,13 @@ class RawResultsClient:
         cursor : typing.Optional[str]
             Cursor for pagination, used to navigate through pages of results
 
+        sort : typing.Optional[str]
+            Comma-separated sort fields, each ascending (`+`) or descending (`-` or no prefix). Ties are broken by file path.
+            - `compliance_verdict`: by policy verdict, alphabetically. Ascending puts files without a verdict first, then `COMPLIANT`, then `NONCOMPLIANT`; descending puts `NONCOMPLIANT` first.
+            - `severity_order`: by the file's highest detection severity, as a rank. Ascending puts critical first.
+            - `file_path`: by file path.
+            An unknown sort field returns 422.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -66,6 +75,7 @@ class RawResultsClient:
                 "has_detections": has_detections,
                 "page_size": page_size,
                 "cursor": cursor,
+                "sort": sort,
             },
             request_options=request_options,
         )
@@ -86,6 +96,7 @@ class RawResultsClient:
                     has_detections=has_detections,
                     page_size=page_size,
                     cursor=_parsed_next,
+                    sort=sort,
                     request_options=request_options,
                 )
                 return SyncPager(has_next=_has_next, items=_items, get_next=_get_next, response=_parsed_response)
@@ -102,6 +113,17 @@ class RawResultsClient:
                 )
             if _response.status_code == 404:
                 raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -280,6 +302,7 @@ class AsyncRawResultsClient:
         has_detections: typing.Optional[bool] = None,
         page_size: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
+        sort: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncPager[ScanFileResultWithComplianceV3, ListFilesResultsResponse]:
         """
@@ -299,6 +322,13 @@ class AsyncRawResultsClient:
         cursor : typing.Optional[str]
             Cursor for pagination, used to navigate through pages of results
 
+        sort : typing.Optional[str]
+            Comma-separated sort fields, each ascending (`+`) or descending (`-` or no prefix). Ties are broken by file path.
+            - `compliance_verdict`: by policy verdict, alphabetically. Ascending puts files without a verdict first, then `COMPLIANT`, then `NONCOMPLIANT`; descending puts `NONCOMPLIANT` first.
+            - `severity_order`: by the file's highest detection severity, as a rank. Ascending puts critical first.
+            - `file_path`: by file path.
+            An unknown sort field returns 422.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -314,6 +344,7 @@ class AsyncRawResultsClient:
                 "has_detections": has_detections,
                 "page_size": page_size,
                 "cursor": cursor,
+                "sort": sort,
             },
             request_options=request_options,
         )
@@ -336,6 +367,7 @@ class AsyncRawResultsClient:
                         has_detections=has_detections,
                         page_size=page_size,
                         cursor=_parsed_next,
+                        sort=sort,
                         request_options=request_options,
                     )
 
@@ -353,6 +385,17 @@ class AsyncRawResultsClient:
                 )
             if _response.status_code == 404:
                 raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
