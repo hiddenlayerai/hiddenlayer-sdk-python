@@ -256,6 +256,7 @@ if typing.TYPE_CHECKING:
     from .list_search_request_region import ListSearchRequestRegion
     from .list_search_request_service import ListSearchRequestService
     from .list_settings_request_category import ListSettingsRequestCategory
+    from .list_system_prompt_analysis_request_project_id import ListSystemPromptAnalysisRequestProjectId
     from .list_tags_request_source import ListTagsRequestSource
     from .list_v1assets_request_account_id import ListV1AssetsRequestAccountId
     from .list_v1assets_request_asset_type import ListV1AssetsRequestAssetType
@@ -778,6 +779,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ListSearchRequestRegion": ".list_search_request_region",
     "ListSearchRequestService": ".list_search_request_service",
     "ListSettingsRequestCategory": ".list_settings_request_category",
+    "ListSystemPromptAnalysisRequestProjectId": ".list_system_prompt_analysis_request_project_id",
     "ListTagsRequestSource": ".list_tags_request_source",
     "ListV1AssetsRequestAccountId": ".list_v1assets_request_account_id",
     "ListV1AssetsRequestAssetType": ".list_v1assets_request_asset_type",
@@ -1322,6 +1324,7 @@ __all__ = [
     "ListSearchRequestRegion",
     "ListSearchRequestService",
     "ListSettingsRequestCategory",
+    "ListSystemPromptAnalysisRequestProjectId",
     "ListTagsRequestSource",
     "ListV1AssetsRequestAccountId",
     "ListV1AssetsRequestAssetType",

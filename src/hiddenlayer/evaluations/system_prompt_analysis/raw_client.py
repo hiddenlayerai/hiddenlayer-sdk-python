@@ -22,6 +22,7 @@ from ...errors.unauthorized_error import UnauthorizedError
 from ...errors.unprocessable_entity_error import UnprocessableEntityError
 from ...types.analysis_result import AnalysisResult
 from ...types.analysis_status import AnalysisStatus
+from ...types.list_system_prompt_analysis_request_project_id import ListSystemPromptAnalysisRequestProjectId
 from ...types.question_answer import QuestionAnswer
 from ...types.start_workflow_response import StartWorkflowResponse
 from ...types.submit_answers_result import SubmitAnswersResult
@@ -45,6 +46,7 @@ class RawSystemPromptAnalysisClient:
         status: typing.Optional[str] = None,
         start_time_from: typing.Optional[dt.datetime] = None,
         start_time_to: typing.Optional[dt.datetime] = None,
+        project_id: typing.Optional[ListSystemPromptAnalysisRequestProjectId] = None,
         limit: typing.Optional[int] = None,
         page_size: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -74,6 +76,10 @@ class RawSystemPromptAnalysisClient:
         start_time_to : typing.Optional[dt.datetime]
             Filter for results started before this time
 
+        project_id : typing.Optional[ListSystemPromptAnalysisRequestProjectId]
+            Filter to analyses started under any of the given HiddenLayer
+            projects. Analyses without a project never match.
+
         limit : typing.Optional[int]
             Maximum number of results to return
 
@@ -100,6 +106,9 @@ class RawSystemPromptAnalysisClient:
                 "status": status,
                 "start_time_from": serialize_datetime(start_time_from) if start_time_from is not None else None,
                 "start_time_to": serialize_datetime(start_time_to) if start_time_to is not None else None,
+                "project_id": convert_and_respect_annotation_metadata(
+                    object_=project_id, annotation=ListSystemPromptAnalysisRequestProjectId, direction="write"
+                ),
                 "limit": limit,
                 "page_size": page_size,
                 "cursor": cursor,
@@ -124,6 +133,7 @@ class RawSystemPromptAnalysisClient:
                     status=status,
                     start_time_from=start_time_from,
                     start_time_to=start_time_to,
+                    project_id=project_id,
                     limit=limit,
                     page_size=page_size,
                     cursor=_parsed_next,
@@ -189,6 +199,7 @@ class RawSystemPromptAnalysisClient:
         name: str,
         system_prompt: str,
         num_questions: typing.Optional[int] = OMIT,
+        hl_project_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[StartWorkflowResponse]:
         """
@@ -210,6 +221,11 @@ class RawSystemPromptAnalysisClient:
         num_questions : typing.Optional[int]
             Number of questions to generate
 
+        hl_project_id : typing.Optional[str]
+            HiddenLayer project UUID or alias to start the analysis under. The
+            analysis stores the project's UUID. A project that does not exist
+            for the tenant returns 422.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -225,6 +241,7 @@ class RawSystemPromptAnalysisClient:
                 "name": name,
                 "system_prompt": system_prompt,
                 "num_questions": num_questions,
+                "hl_project_id": hl_project_id,
             },
             headers={
                 "content-type": "application/json",
@@ -699,6 +716,7 @@ class AsyncRawSystemPromptAnalysisClient:
         status: typing.Optional[str] = None,
         start_time_from: typing.Optional[dt.datetime] = None,
         start_time_to: typing.Optional[dt.datetime] = None,
+        project_id: typing.Optional[ListSystemPromptAnalysisRequestProjectId] = None,
         limit: typing.Optional[int] = None,
         page_size: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -728,6 +746,10 @@ class AsyncRawSystemPromptAnalysisClient:
         start_time_to : typing.Optional[dt.datetime]
             Filter for results started before this time
 
+        project_id : typing.Optional[ListSystemPromptAnalysisRequestProjectId]
+            Filter to analyses started under any of the given HiddenLayer
+            projects. Analyses without a project never match.
+
         limit : typing.Optional[int]
             Maximum number of results to return
 
@@ -754,6 +776,9 @@ class AsyncRawSystemPromptAnalysisClient:
                 "status": status,
                 "start_time_from": serialize_datetime(start_time_from) if start_time_from is not None else None,
                 "start_time_to": serialize_datetime(start_time_to) if start_time_to is not None else None,
+                "project_id": convert_and_respect_annotation_metadata(
+                    object_=project_id, annotation=ListSystemPromptAnalysisRequestProjectId, direction="write"
+                ),
                 "limit": limit,
                 "page_size": page_size,
                 "cursor": cursor,
@@ -780,6 +805,7 @@ class AsyncRawSystemPromptAnalysisClient:
                         status=status,
                         start_time_from=start_time_from,
                         start_time_to=start_time_to,
+                        project_id=project_id,
                         limit=limit,
                         page_size=page_size,
                         cursor=_parsed_next,
@@ -846,6 +872,7 @@ class AsyncRawSystemPromptAnalysisClient:
         name: str,
         system_prompt: str,
         num_questions: typing.Optional[int] = OMIT,
+        hl_project_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[StartWorkflowResponse]:
         """
@@ -867,6 +894,11 @@ class AsyncRawSystemPromptAnalysisClient:
         num_questions : typing.Optional[int]
             Number of questions to generate
 
+        hl_project_id : typing.Optional[str]
+            HiddenLayer project UUID or alias to start the analysis under. The
+            analysis stores the project's UUID. A project that does not exist
+            for the tenant returns 422.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -882,6 +914,7 @@ class AsyncRawSystemPromptAnalysisClient:
                 "name": name,
                 "system_prompt": system_prompt,
                 "num_questions": num_questions,
+                "hl_project_id": hl_project_id,
             },
             headers={
                 "content-type": "application/json",

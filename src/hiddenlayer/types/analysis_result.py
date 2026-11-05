@@ -47,6 +47,12 @@ class AnalysisResult(UniversalBaseModel):
     Validation error messages
     """
 
+    hl_project_id: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    HiddenLayer project UUID the analysis was started under. Omitted
+    when the analysis has no project.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:

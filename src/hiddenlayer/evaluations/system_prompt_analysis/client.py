@@ -8,6 +8,7 @@ from ...core.pagination import AsyncPager, SyncPager
 from ...core.request_options import RequestOptions
 from ...types.analysis_result import AnalysisResult
 from ...types.analysis_status import AnalysisStatus
+from ...types.list_system_prompt_analysis_request_project_id import ListSystemPromptAnalysisRequestProjectId
 from ...types.question_answer import QuestionAnswer
 from ...types.start_workflow_response import StartWorkflowResponse
 from ...types.submit_answers_result import SubmitAnswersResult
@@ -42,6 +43,7 @@ class SystemPromptAnalysisClient:
         status: typing.Optional[str] = None,
         start_time_from: typing.Optional[dt.datetime] = None,
         start_time_to: typing.Optional[dt.datetime] = None,
+        project_id: typing.Optional[ListSystemPromptAnalysisRequestProjectId] = None,
         limit: typing.Optional[int] = None,
         page_size: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -70,6 +72,10 @@ class SystemPromptAnalysisClient:
 
         start_time_to : typing.Optional[dt.datetime]
             Filter for results started before this time
+
+        project_id : typing.Optional[ListSystemPromptAnalysisRequestProjectId]
+            Filter to analyses started under any of the given HiddenLayer
+            projects. Analyses without a project never match.
 
         limit : typing.Optional[int]
             Maximum number of results to return
@@ -108,6 +114,7 @@ class SystemPromptAnalysisClient:
             status=status,
             start_time_from=start_time_from,
             start_time_to=start_time_to,
+            project_id=project_id,
             limit=limit,
             page_size=page_size,
             cursor=cursor,
@@ -120,6 +127,7 @@ class SystemPromptAnalysisClient:
         name: str,
         system_prompt: str,
         num_questions: typing.Optional[int] = OMIT,
+        hl_project_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> StartWorkflowResponse:
         """
@@ -140,6 +148,11 @@ class SystemPromptAnalysisClient:
 
         num_questions : typing.Optional[int]
             Number of questions to generate
+
+        hl_project_id : typing.Optional[str]
+            HiddenLayer project UUID or alias to start the analysis under. The
+            analysis stores the project's UUID. A project that does not exist
+            for the tenant returns 422.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -162,7 +175,11 @@ class SystemPromptAnalysisClient:
         )
         """
         _response = self._raw_client.create(
-            name=name, system_prompt=system_prompt, num_questions=num_questions, request_options=request_options
+            name=name,
+            system_prompt=system_prompt,
+            num_questions=num_questions,
+            hl_project_id=hl_project_id,
+            request_options=request_options,
         )
         return _response.data
 
@@ -341,6 +358,7 @@ class AsyncSystemPromptAnalysisClient:
         status: typing.Optional[str] = None,
         start_time_from: typing.Optional[dt.datetime] = None,
         start_time_to: typing.Optional[dt.datetime] = None,
+        project_id: typing.Optional[ListSystemPromptAnalysisRequestProjectId] = None,
         limit: typing.Optional[int] = None,
         page_size: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -369,6 +387,10 @@ class AsyncSystemPromptAnalysisClient:
 
         start_time_to : typing.Optional[dt.datetime]
             Filter for results started before this time
+
+        project_id : typing.Optional[ListSystemPromptAnalysisRequestProjectId]
+            Filter to analyses started under any of the given HiddenLayer
+            projects. Analyses without a project never match.
 
         limit : typing.Optional[int]
             Maximum number of results to return
@@ -416,6 +438,7 @@ class AsyncSystemPromptAnalysisClient:
             status=status,
             start_time_from=start_time_from,
             start_time_to=start_time_to,
+            project_id=project_id,
             limit=limit,
             page_size=page_size,
             cursor=cursor,
@@ -428,6 +451,7 @@ class AsyncSystemPromptAnalysisClient:
         name: str,
         system_prompt: str,
         num_questions: typing.Optional[int] = OMIT,
+        hl_project_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> StartWorkflowResponse:
         """
@@ -448,6 +472,11 @@ class AsyncSystemPromptAnalysisClient:
 
         num_questions : typing.Optional[int]
             Number of questions to generate
+
+        hl_project_id : typing.Optional[str]
+            HiddenLayer project UUID or alias to start the analysis under. The
+            analysis stores the project's UUID. A project that does not exist
+            for the tenant returns 422.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -478,7 +507,11 @@ class AsyncSystemPromptAnalysisClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
-            name=name, system_prompt=system_prompt, num_questions=num_questions, request_options=request_options
+            name=name,
+            system_prompt=system_prompt,
+            num_questions=num_questions,
+            hl_project_id=hl_project_id,
+            request_options=request_options,
         )
         return _response.data
 
