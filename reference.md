@@ -16283,7 +16283,7 @@ client.scans.jobs.list(
 <dl>
 <dd>
 
-**severity:** `typing.Optional[ListJobsRequestSeverity]` — Severities
+**severity:** `typing.Optional[ListJobsRequestSeverity]` — Comma-separated severities. A scan matches when its highest detection severity is a listed severity. Advisories don't count.
     
 </dd>
 </dl>
@@ -17200,7 +17200,7 @@ If not specified, defaults to: name, detections, scanned_on, policy_status, orig
 <dl>
 <dd>
 
-**severity:** `typing.Optional[CreateCsvRequestSeverity]` — Filter by severity levels (comma-separated)
+**severity:** `typing.Optional[CreateCsvRequestSeverity]` — Comma-separated severities. A scan matches when its highest detection severity is a listed severity. Advisories don't count.
     
 </dd>
 </dl>

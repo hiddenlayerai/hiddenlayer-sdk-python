@@ -245,7 +245,7 @@ class RawJobsClient:
             End Time
 
         severity : typing.Optional[ListJobsRequestSeverity]
-            Severities
+            Comma-separated severities. A scan matches when its highest detection severity is a listed severity. Advisories don't count.
 
         status : typing.Optional[typing.Union[str, typing.Sequence[str]]]
             Statuses
@@ -609,7 +609,7 @@ class AsyncRawJobsClient:
             End Time
 
         severity : typing.Optional[ListJobsRequestSeverity]
-            Severities
+            Comma-separated severities. A scan matches when its highest detection severity is a listed severity. Advisories don't count.
 
         status : typing.Optional[typing.Union[str, typing.Sequence[str]]]
             Statuses

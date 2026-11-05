@@ -89,7 +89,7 @@ class CsvClient:
             Filter scans with start time less than or equal to this value
 
         severity : typing.Optional[CreateCsvRequestSeverity]
-            Filter by severity levels (comma-separated)
+            Comma-separated severities. A scan matches when its highest detection severity is a listed severity. Advisories don't count.
 
         status : typing.Optional[typing.Union[str, typing.Sequence[str]]]
             Filter by scan status (comma-separated)
@@ -295,7 +295,7 @@ class AsyncCsvClient:
             Filter scans with start time less than or equal to this value
 
         severity : typing.Optional[CreateCsvRequestSeverity]
-            Filter by severity levels (comma-separated)
+            Comma-separated severities. A scan matches when its highest detection severity is a listed severity. Advisories don't count.
 
         status : typing.Optional[typing.Union[str, typing.Sequence[str]]]
             Filter by scan status (comma-separated)
