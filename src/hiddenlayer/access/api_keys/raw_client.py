@@ -146,7 +146,7 @@ class RawApiKeysClient:
         self,
         *,
         name: StaticApiKeyName,
-        permissions: typing.Optional[StaticApiKeyPermissions] = OMIT,
+        permissions: StaticApiKeyPermissions,
         expires_at: typing.Optional[dt.datetime] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[StaticApiKeyWithValue]:
@@ -161,8 +161,8 @@ class RawApiKeysClient:
         ----------
         name : StaticApiKeyName
 
-        permissions : typing.Optional[StaticApiKeyPermissions]
-            Each permission must be one the caller holds, outside the `credential` area: a key can never hold `credential:*` permissions. If omitted, the key gets every such permission, which may be none.
+        permissions : StaticApiKeyPermissions
+            Each permission must be one the caller holds, outside the `credential` area: a key can never hold `credential:*` permissions.
 
         expires_at : typing.Optional[dt.datetime]
             Must be in the future and no more than 365 days ahead, with at most millisecond precision.
@@ -598,7 +598,7 @@ class AsyncRawApiKeysClient:
         self,
         *,
         name: StaticApiKeyName,
-        permissions: typing.Optional[StaticApiKeyPermissions] = OMIT,
+        permissions: StaticApiKeyPermissions,
         expires_at: typing.Optional[dt.datetime] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[StaticApiKeyWithValue]:
@@ -613,8 +613,8 @@ class AsyncRawApiKeysClient:
         ----------
         name : StaticApiKeyName
 
-        permissions : typing.Optional[StaticApiKeyPermissions]
-            Each permission must be one the caller holds, outside the `credential` area: a key can never hold `credential:*` permissions. If omitted, the key gets every such permission, which may be none.
+        permissions : StaticApiKeyPermissions
+            Each permission must be one the caller holds, outside the `credential` area: a key can never hold `credential:*` permissions.
 
         expires_at : typing.Optional[dt.datetime]
             Must be in the future and no more than 365 days ahead, with at most millisecond precision.

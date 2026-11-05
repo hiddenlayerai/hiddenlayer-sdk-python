@@ -2825,6 +2825,10 @@ client = HiddenLayer(
 
 client.access.api_keys.create(
     name="ci-pipeline",
+    permissions=[
+        "model:read",
+        "model:write"
+    ],
 )
 
 ```
@@ -2849,10 +2853,7 @@ client.access.api_keys.create(
 <dl>
 <dd>
 
-**expires_at:** `typing.Optional[datetime.datetime]` 
-
-Must be in the future and no more than 365 days ahead, with at most millisecond precision.
-Defaults to 365 days from now.
+**permissions:** `StaticApiKeyPermissions` — Each permission must be one the caller holds, outside the `credential` area: a key can never hold `credential:*` permissions.
     
 </dd>
 </dl>
@@ -2860,7 +2861,10 @@ Defaults to 365 days from now.
 <dl>
 <dd>
 
-**permissions:** `typing.Optional[StaticApiKeyPermissions]` — Each permission must be one the caller holds, outside the `credential` area: a key can never hold `credential:*` permissions. If omitted, the key gets every such permission, which may be none.
+**expires_at:** `typing.Optional[datetime.datetime]` 
+
+Must be in the future and no more than 365 days ahead, with at most millisecond precision.
+Defaults to 365 days from now.
     
 </dd>
 </dl>
