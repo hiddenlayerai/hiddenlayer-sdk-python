@@ -4,6 +4,11 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from .evaluation_request_source import EvaluationRequestSource
+from .red_team_analysis import RedTeamAnalysis
+from .red_team_attacker_session_result import RedTeamAttackerSessionResult
+from .red_team_report import RedTeamReport
+from .red_team_result_settings import RedTeamResultSettings
 
 
 class RedTeamResultPayload(UniversalBaseModel):
@@ -26,14 +31,15 @@ class RedTeamResultPayload(UniversalBaseModel):
     Final evaluation report text
     """
 
-    settings: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
+    request_source: typing.Optional[EvaluationRequestSource] = pydantic.Field(default=None)
     """
-    Workflow configuration settings used for this evaluation
+    Where the request that started the evaluation came from.
     """
 
-    attacker_results: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
+    settings: typing.Optional[RedTeamResultSettings] = None
+    attacker_results: typing.Optional[typing.List[RedTeamAttackerSessionResult]] = pydantic.Field(default=None)
     """
-    Detailed attacker session results including prompts, responses, and judgements
+    One result per attack session, with its transcript and objective verdicts
     """
 
     usage: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
@@ -41,10 +47,8 @@ class RedTeamResultPayload(UniversalBaseModel):
     Token usage statistics across all models
     """
 
-    report: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
-    """
-    Structured evaluation report with metrics and analysis
-    """
+    report: typing.Optional[RedTeamReport] = None
+    analysis: typing.Optional[RedTeamAnalysis] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

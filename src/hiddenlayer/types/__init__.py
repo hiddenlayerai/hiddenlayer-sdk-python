@@ -115,6 +115,7 @@ if typing.TYPE_CHECKING:
     from .eula_response_status import EulaResponseStatus
     from .eula_response_value import EulaResponseValue
     from .eula_version import EulaVersion
+    from .evaluation_request_source import EvaluationRequestSource
     from .evaluation_result import EvaluationResult
     from .evaluation_result_artifact_type import EvaluationResultArtifactType
     from .failed_job import FailedJob
@@ -345,13 +346,60 @@ if typing.TYPE_CHECKING:
     from .provider_payload import ProviderPayload
     from .question_answer import QuestionAnswer
     from .rds_file_attributes import RdsFileAttributes
+    from .red_team_analysis import RedTeamAnalysis
+    from .red_team_analysis_evidence import RedTeamAnalysisEvidence
+    from .red_team_analysis_exposed_item import RedTeamAnalysisExposedItem
+    from .red_team_analysis_insight import RedTeamAnalysisInsight
+    from .red_team_attacker_session_result import RedTeamAttackerSessionResult
     from .red_team_config import RedTeamConfig
     from .red_team_config_execution_strategy_type import RedTeamConfigExecutionStrategyType
     from .red_team_config_summary import RedTeamConfigSummary
     from .red_team_configs_response import RedTeamConfigsResponse
+    from .red_team_framework_coverage import RedTeamFrameworkCoverage
+    from .red_team_framework_coverage_framework import RedTeamFrameworkCoverageFramework
+    from .red_team_framework_coverage_item import RedTeamFrameworkCoverageItem
+    from .red_team_framework_entry import RedTeamFrameworkEntry
+    from .red_team_framework_entry_basis import RedTeamFrameworkEntryBasis
+    from .red_team_framework_entry_source import RedTeamFrameworkEntrySource
+    from .red_team_framework_method_note import RedTeamFrameworkMethodNote
+    from .red_team_framework_note import RedTeamFrameworkNote
+    from .red_team_framework_state import RedTeamFrameworkState
+    from .red_team_framework_tag import RedTeamFrameworkTag
     from .red_team_list_results_response import RedTeamListResultsResponse
+    from .red_team_message import RedTeamMessage
+    from .red_team_message_analysis import RedTeamMessageAnalysis
+    from .red_team_message_analysis_signals import RedTeamMessageAnalysisSignals
+    from .red_team_message_analysis_signals_code import RedTeamMessageAnalysisSignalsCode
+    from .red_team_message_analysis_signals_denial_of_service import RedTeamMessageAnalysisSignalsDenialOfService
+    from .red_team_message_analysis_signals_guardrails import RedTeamMessageAnalysisSignalsGuardrails
+    from .red_team_message_analysis_signals_language import RedTeamMessageAnalysisSignalsLanguage
+    from .red_team_message_analysis_signals_personally_identifiable_information import (
+        RedTeamMessageAnalysisSignalsPersonallyIdentifiableInformation,
+    )
+    from .red_team_message_analysis_signals_prompt_injection import RedTeamMessageAnalysisSignalsPromptInjection
+    from .red_team_message_analysis_signals_url import RedTeamMessageAnalysisSignalsUrl
+    from .red_team_message_outcome_counts import RedTeamMessageOutcomeCounts
+    from .red_team_objective_breakdown import RedTeamObjectiveBreakdown
+    from .red_team_objective_summary import RedTeamObjectiveSummary
+    from .red_team_objective_verdict import RedTeamObjectiveVerdict
+    from .red_team_report import RedTeamReport
+    from .red_team_report_summary import RedTeamReportSummary
     from .red_team_result_item import RedTeamResultItem
     from .red_team_result_payload import RedTeamResultPayload
+    from .red_team_result_settings import RedTeamResultSettings
+    from .red_team_result_settings_runtime_security_mode import RedTeamResultSettingsRuntimeSecurityMode
+    from .red_team_run_outcome import RedTeamRunOutcome
+    from .red_team_run_outcome_run_status import RedTeamRunOutcomeRunStatus
+    from .red_team_runtime_security_counts import RedTeamRuntimeSecurityCounts
+    from .red_team_runtime_security_detection import RedTeamRuntimeSecurityDetection
+    from .red_team_runtime_security_outcome import RedTeamRuntimeSecurityOutcome
+    from .red_team_runtime_security_outcome_status import RedTeamRuntimeSecurityOutcomeStatus
+    from .red_team_runtime_session_record import RedTeamRuntimeSessionRecord
+    from .red_team_session_execution_details import RedTeamSessionExecutionDetails
+    from .red_team_session_execution_details_static_prompt import RedTeamSessionExecutionDetailsStaticPrompt
+    from .red_team_technique import RedTeamTechnique
+    from .red_team_technique_breakdown import RedTeamTechniqueBreakdown
+    from .red_team_turn_not_evaluated import RedTeamTurnNotEvaluated
     from .redact_condition_config import RedactConditionConfig
     from .redact_config import RedactConfig
     from .region_counts import RegionCounts
@@ -467,6 +515,7 @@ if typing.TYPE_CHECKING:
     from .stride_category import StrideCategory
     from .submit_answers_result import SubmitAnswersResult
     from .submit_target_response_result import SubmitTargetResponseResult
+    from .suggested_rule import SuggestedRule
     from .suggestions_assets_request_annotating_service import SuggestionsAssetsRequestAnnotatingService
     from .suggestions_assets_request_asset_type import SuggestionsAssetsRequestAssetType
     from .suggestions_assets_request_model_id import SuggestionsAssetsRequestModelId
@@ -642,6 +691,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "EulaResponseStatus": ".eula_response_status",
     "EulaResponseValue": ".eula_response_value",
     "EulaVersion": ".eula_version",
+    "EvaluationRequestSource": ".evaluation_request_source",
     "EvaluationResult": ".evaluation_result",
     "EvaluationResultArtifactType": ".evaluation_result_artifact_type",
     "FailedJob": ".failed_job",
@@ -868,13 +918,58 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ProviderPayload": ".provider_payload",
     "QuestionAnswer": ".question_answer",
     "RdsFileAttributes": ".rds_file_attributes",
+    "RedTeamAnalysis": ".red_team_analysis",
+    "RedTeamAnalysisEvidence": ".red_team_analysis_evidence",
+    "RedTeamAnalysisExposedItem": ".red_team_analysis_exposed_item",
+    "RedTeamAnalysisInsight": ".red_team_analysis_insight",
+    "RedTeamAttackerSessionResult": ".red_team_attacker_session_result",
     "RedTeamConfig": ".red_team_config",
     "RedTeamConfigExecutionStrategyType": ".red_team_config_execution_strategy_type",
     "RedTeamConfigSummary": ".red_team_config_summary",
     "RedTeamConfigsResponse": ".red_team_configs_response",
+    "RedTeamFrameworkCoverage": ".red_team_framework_coverage",
+    "RedTeamFrameworkCoverageFramework": ".red_team_framework_coverage_framework",
+    "RedTeamFrameworkCoverageItem": ".red_team_framework_coverage_item",
+    "RedTeamFrameworkEntry": ".red_team_framework_entry",
+    "RedTeamFrameworkEntryBasis": ".red_team_framework_entry_basis",
+    "RedTeamFrameworkEntrySource": ".red_team_framework_entry_source",
+    "RedTeamFrameworkMethodNote": ".red_team_framework_method_note",
+    "RedTeamFrameworkNote": ".red_team_framework_note",
+    "RedTeamFrameworkState": ".red_team_framework_state",
+    "RedTeamFrameworkTag": ".red_team_framework_tag",
     "RedTeamListResultsResponse": ".red_team_list_results_response",
+    "RedTeamMessage": ".red_team_message",
+    "RedTeamMessageAnalysis": ".red_team_message_analysis",
+    "RedTeamMessageAnalysisSignals": ".red_team_message_analysis_signals",
+    "RedTeamMessageAnalysisSignalsCode": ".red_team_message_analysis_signals_code",
+    "RedTeamMessageAnalysisSignalsDenialOfService": ".red_team_message_analysis_signals_denial_of_service",
+    "RedTeamMessageAnalysisSignalsGuardrails": ".red_team_message_analysis_signals_guardrails",
+    "RedTeamMessageAnalysisSignalsLanguage": ".red_team_message_analysis_signals_language",
+    "RedTeamMessageAnalysisSignalsPersonallyIdentifiableInformation": ".red_team_message_analysis_signals_personally_identifiable_information",
+    "RedTeamMessageAnalysisSignalsPromptInjection": ".red_team_message_analysis_signals_prompt_injection",
+    "RedTeamMessageAnalysisSignalsUrl": ".red_team_message_analysis_signals_url",
+    "RedTeamMessageOutcomeCounts": ".red_team_message_outcome_counts",
+    "RedTeamObjectiveBreakdown": ".red_team_objective_breakdown",
+    "RedTeamObjectiveSummary": ".red_team_objective_summary",
+    "RedTeamObjectiveVerdict": ".red_team_objective_verdict",
+    "RedTeamReport": ".red_team_report",
+    "RedTeamReportSummary": ".red_team_report_summary",
     "RedTeamResultItem": ".red_team_result_item",
     "RedTeamResultPayload": ".red_team_result_payload",
+    "RedTeamResultSettings": ".red_team_result_settings",
+    "RedTeamResultSettingsRuntimeSecurityMode": ".red_team_result_settings_runtime_security_mode",
+    "RedTeamRunOutcome": ".red_team_run_outcome",
+    "RedTeamRunOutcomeRunStatus": ".red_team_run_outcome_run_status",
+    "RedTeamRuntimeSecurityCounts": ".red_team_runtime_security_counts",
+    "RedTeamRuntimeSecurityDetection": ".red_team_runtime_security_detection",
+    "RedTeamRuntimeSecurityOutcome": ".red_team_runtime_security_outcome",
+    "RedTeamRuntimeSecurityOutcomeStatus": ".red_team_runtime_security_outcome_status",
+    "RedTeamRuntimeSessionRecord": ".red_team_runtime_session_record",
+    "RedTeamSessionExecutionDetails": ".red_team_session_execution_details",
+    "RedTeamSessionExecutionDetailsStaticPrompt": ".red_team_session_execution_details_static_prompt",
+    "RedTeamTechnique": ".red_team_technique",
+    "RedTeamTechniqueBreakdown": ".red_team_technique_breakdown",
+    "RedTeamTurnNotEvaluated": ".red_team_turn_not_evaluated",
     "RedactConditionConfig": ".redact_condition_config",
     "RedactConfig": ".redact_config",
     "RegionCounts": ".region_counts",
@@ -986,6 +1081,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "StrideCategory": ".stride_category",
     "SubmitAnswersResult": ".submit_answers_result",
     "SubmitTargetResponseResult": ".submit_target_response_result",
+    "SuggestedRule": ".suggested_rule",
     "SuggestionsAssetsRequestAnnotatingService": ".suggestions_assets_request_annotating_service",
     "SuggestionsAssetsRequestAssetType": ".suggestions_assets_request_asset_type",
     "SuggestionsAssetsRequestModelId": ".suggestions_assets_request_model_id",
@@ -1187,6 +1283,7 @@ __all__ = [
     "EulaResponseStatus",
     "EulaResponseValue",
     "EulaVersion",
+    "EvaluationRequestSource",
     "EvaluationResult",
     "EvaluationResultArtifactType",
     "FailedJob",
@@ -1413,13 +1510,58 @@ __all__ = [
     "ProviderPayload",
     "QuestionAnswer",
     "RdsFileAttributes",
+    "RedTeamAnalysis",
+    "RedTeamAnalysisEvidence",
+    "RedTeamAnalysisExposedItem",
+    "RedTeamAnalysisInsight",
+    "RedTeamAttackerSessionResult",
     "RedTeamConfig",
     "RedTeamConfigExecutionStrategyType",
     "RedTeamConfigSummary",
     "RedTeamConfigsResponse",
+    "RedTeamFrameworkCoverage",
+    "RedTeamFrameworkCoverageFramework",
+    "RedTeamFrameworkCoverageItem",
+    "RedTeamFrameworkEntry",
+    "RedTeamFrameworkEntryBasis",
+    "RedTeamFrameworkEntrySource",
+    "RedTeamFrameworkMethodNote",
+    "RedTeamFrameworkNote",
+    "RedTeamFrameworkState",
+    "RedTeamFrameworkTag",
     "RedTeamListResultsResponse",
+    "RedTeamMessage",
+    "RedTeamMessageAnalysis",
+    "RedTeamMessageAnalysisSignals",
+    "RedTeamMessageAnalysisSignalsCode",
+    "RedTeamMessageAnalysisSignalsDenialOfService",
+    "RedTeamMessageAnalysisSignalsGuardrails",
+    "RedTeamMessageAnalysisSignalsLanguage",
+    "RedTeamMessageAnalysisSignalsPersonallyIdentifiableInformation",
+    "RedTeamMessageAnalysisSignalsPromptInjection",
+    "RedTeamMessageAnalysisSignalsUrl",
+    "RedTeamMessageOutcomeCounts",
+    "RedTeamObjectiveBreakdown",
+    "RedTeamObjectiveSummary",
+    "RedTeamObjectiveVerdict",
+    "RedTeamReport",
+    "RedTeamReportSummary",
     "RedTeamResultItem",
     "RedTeamResultPayload",
+    "RedTeamResultSettings",
+    "RedTeamResultSettingsRuntimeSecurityMode",
+    "RedTeamRunOutcome",
+    "RedTeamRunOutcomeRunStatus",
+    "RedTeamRuntimeSecurityCounts",
+    "RedTeamRuntimeSecurityDetection",
+    "RedTeamRuntimeSecurityOutcome",
+    "RedTeamRuntimeSecurityOutcomeStatus",
+    "RedTeamRuntimeSessionRecord",
+    "RedTeamSessionExecutionDetails",
+    "RedTeamSessionExecutionDetailsStaticPrompt",
+    "RedTeamTechnique",
+    "RedTeamTechniqueBreakdown",
+    "RedTeamTurnNotEvaluated",
     "RedactConditionConfig",
     "RedactConfig",
     "RegionCounts",
@@ -1531,6 +1673,7 @@ __all__ = [
     "StrideCategory",
     "SubmitAnswersResult",
     "SubmitTargetResponseResult",
+    "SuggestedRule",
     "SuggestionsAssetsRequestAnnotatingService",
     "SuggestionsAssetsRequestAssetType",
     "SuggestionsAssetsRequestModelId",

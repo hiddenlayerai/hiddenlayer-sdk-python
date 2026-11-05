@@ -5,6 +5,7 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from .evaluation_request_source import EvaluationRequestSource
 
 
 class SystemPromptResultItem(UniversalBaseModel):
@@ -41,6 +42,11 @@ class SystemPromptResultItem(UniversalBaseModel):
     """
     HiddenLayer project UUID the analysis was started under. Omitted
     when the analysis has no project.
+    """
+
+    request_source: typing.Optional[EvaluationRequestSource] = pydantic.Field(default=None)
+    """
+    Where the request that started the evaluation came from.
     """
 
     if IS_PYDANTIC_V2:

@@ -5,7 +5,9 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from .evaluation_request_source import EvaluationRequestSource
 from .highest_severity import HighestSeverity
+from .red_team_objective_summary import RedTeamObjectiveSummary
 
 
 class RedTeamResultItem(UniversalBaseModel):
@@ -38,6 +40,11 @@ class RedTeamResultItem(UniversalBaseModel):
     Objective IDs evaluated
     """
 
+    objectives: typing.Optional[typing.List[RedTeamObjectiveSummary]] = pydantic.Field(default=None)
+    """
+    Objectives evaluated, in `objective_ids` order. Null when `objective_ids` is empty.
+    """
+
     started_at: dt.datetime = pydantic.Field()
     """
     When the workflow started
@@ -46,6 +53,11 @@ class RedTeamResultItem(UniversalBaseModel):
     completed_at: dt.datetime = pydantic.Field()
     """
     When the workflow completed
+    """
+
+    request_source: typing.Optional[EvaluationRequestSource] = pydantic.Field(default=None)
+    """
+    Where the request that started the evaluation came from.
     """
 
     attack_success_rate: typing.Optional[float] = pydantic.Field(default=None)

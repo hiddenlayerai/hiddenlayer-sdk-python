@@ -5,6 +5,7 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from .evaluation_request_source import EvaluationRequestSource
 
 
 class ThreatModelingResultItem(UniversalBaseModel):
@@ -35,6 +36,11 @@ class ThreatModelingResultItem(UniversalBaseModel):
     completed_at: dt.datetime = pydantic.Field()
     """
     When the workflow completed
+    """
+
+    request_source: typing.Optional[EvaluationRequestSource] = pydantic.Field(default=None)
+    """
+    Where the request that started the evaluation came from.
     """
 
     if IS_PYDANTIC_V2:
