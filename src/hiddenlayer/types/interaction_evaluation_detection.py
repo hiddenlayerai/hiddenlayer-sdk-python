@@ -4,7 +4,7 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
-from .interaction_evaluation_detection_risk_level import InteractionEvaluationDetectionRiskLevel
+from .triage_severity import TriageSeverity
 
 
 class InteractionEvaluationDetection(UniversalBaseModel):
@@ -26,7 +26,7 @@ class InteractionEvaluationDetection(UniversalBaseModel):
     The human-readable name of the detection rule (e.g., prompt_injection, sensitive_pii_exposed).
     """
 
-    risk_level: InteractionEvaluationDetectionRiskLevel = pydantic.Field()
+    risk_level: TriageSeverity = pydantic.Field()
     """
     Categorical risk level for this detection.
     """

@@ -34,6 +34,7 @@ if typing.TYPE_CHECKING:
     from .sensors.client import AsyncSensorsClient, SensorsClient
     from .sso_integrations.client import AsyncSsoIntegrationsClient, SsoIntegrationsClient
     from .supply_chain.client import AsyncSupplyChainClient, SupplyChainClient
+    from .triage.client import AsyncTriageClient, TriageClient
     from .users.client import AsyncUsersClient, UsersClient
 
 
@@ -146,6 +147,7 @@ class HiddenLayer:
         self._scan_indices: typing.Optional[ScanIndicesClient] = None
         self._scans: typing.Optional[ScansClient] = None
         self._supply_chain: typing.Optional[SupplyChainClient] = None
+        self._triage: typing.Optional[TriageClient] = None
 
     @property
     def eula_responses(self):
@@ -347,6 +349,14 @@ class HiddenLayer:
             self._supply_chain = SupplyChainClient(client_wrapper=self._client_wrapper)
         return self._supply_chain
 
+    @property
+    def triage(self):
+        if self._triage is None:
+            from .triage.client import TriageClient  # noqa: E402
+
+            self._triage = TriageClient(client_wrapper=self._client_wrapper)
+        return self._triage
+
 
 def _make_default_async_client(
     timeout: typing.Optional[float],
@@ -478,6 +488,7 @@ class AsyncHiddenLayer:
         self._scan_indices: typing.Optional[AsyncScanIndicesClient] = None
         self._scans: typing.Optional[AsyncScansClient] = None
         self._supply_chain: typing.Optional[AsyncSupplyChainClient] = None
+        self._triage: typing.Optional[AsyncTriageClient] = None
 
     @property
     def eula_responses(self):
@@ -678,6 +689,14 @@ class AsyncHiddenLayer:
 
             self._supply_chain = AsyncSupplyChainClient(client_wrapper=self._client_wrapper)
         return self._supply_chain
+
+    @property
+    def triage(self):
+        if self._triage is None:
+            from .triage.client import AsyncTriageClient  # noqa: E402
+
+            self._triage = AsyncTriageClient(client_wrapper=self._client_wrapper)
+        return self._triage
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: HiddenLayerEnvironment) -> str:

@@ -189,7 +189,6 @@ if typing.TYPE_CHECKING:
     from .inference_timeseries_response_v3aggregations import InferenceTimeseriesResponseV3Aggregations
     from .inference_timeseries_response_v3timeseries_item import InferenceTimeseriesResponseV3TimeseriesItem
     from .interaction_evaluation_detection import InteractionEvaluationDetection
-    from .interaction_evaluation_detection_risk_level import InteractionEvaluationDetectionRiskLevel
     from .interaction_evaluation_outcome import InteractionEvaluationOutcome
     from .interaction_evaluation_outcome_action import InteractionEvaluationOutcomeAction
     from .interaction_evaluation_outcome_effective_interaction import InteractionEvaluationOutcomeEffectiveInteraction
@@ -571,6 +570,34 @@ if typing.TYPE_CHECKING:
     from .tool_result_part import ToolResultPart
     from .tool_use_part import ToolUsePart
     from .tool_use_part_tool_input import ToolUsePartToolInput
+    from .triage_alert_spread import TriageAlertSpread
+    from .triage_issue import TriageIssue
+    from .triage_issue_detail import TriageIssueDetail
+    from .triage_issue_list import TriageIssueList
+    from .triage_issue_patch import TriageIssuePatch
+    from .triage_issue_patch_severity import TriageIssuePatchSeverity
+    from .triage_issue_patch_status import TriageIssuePatchStatus
+    from .triage_model_scan_reference import TriageModelScanReference
+    from .triage_note import TriageNote
+    from .triage_note_author_type import TriageNoteAuthorType
+    from .triage_note_text import TriageNoteText
+    from .triage_outcomes_week import TriageOutcomesWeek
+    from .triage_report import TriageReport
+    from .triage_report_totals import TriageReportTotals
+    from .triage_runtime_session_reference import TriageRuntimeSessionReference
+    from .triage_severity import TriageSeverity
+    from .triage_severity_count import TriageSeverityCount
+    from .triage_source import TriageSource
+    from .triage_source_event import TriageSourceEvent
+    from .triage_source_event_list import TriageSourceEventList
+    from .triage_source_reference import (
+        TriageSourceReference,
+        TriageSourceReference_ModelScan,
+        TriageSourceReference_RuntimeSession,
+        TriageSourceReference_Unlinked,
+    )
+    from .triage_status import TriageStatus
+    from .triage_unlinked_reference import TriageUnlinkedReference
     from .unknown_file_attributes import UnknownFileAttributes
     from .unprocessable_entity_error_body import UnprocessableEntityErrorBody
     from .use_policy import UsePolicy
@@ -761,7 +788,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "InferenceTimeseriesResponseV3Aggregations": ".inference_timeseries_response_v3aggregations",
     "InferenceTimeseriesResponseV3TimeseriesItem": ".inference_timeseries_response_v3timeseries_item",
     "InteractionEvaluationDetection": ".interaction_evaluation_detection",
-    "InteractionEvaluationDetectionRiskLevel": ".interaction_evaluation_detection_risk_level",
     "InteractionEvaluationOutcome": ".interaction_evaluation_outcome",
     "InteractionEvaluationOutcomeAction": ".interaction_evaluation_outcome_action",
     "InteractionEvaluationOutcomeEffectiveInteraction": ".interaction_evaluation_outcome_effective_interaction",
@@ -1139,6 +1165,32 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ToolResultPart": ".tool_result_part",
     "ToolUsePart": ".tool_use_part",
     "ToolUsePartToolInput": ".tool_use_part_tool_input",
+    "TriageAlertSpread": ".triage_alert_spread",
+    "TriageIssue": ".triage_issue",
+    "TriageIssueDetail": ".triage_issue_detail",
+    "TriageIssueList": ".triage_issue_list",
+    "TriageIssuePatch": ".triage_issue_patch",
+    "TriageIssuePatchSeverity": ".triage_issue_patch_severity",
+    "TriageIssuePatchStatus": ".triage_issue_patch_status",
+    "TriageModelScanReference": ".triage_model_scan_reference",
+    "TriageNote": ".triage_note",
+    "TriageNoteAuthorType": ".triage_note_author_type",
+    "TriageNoteText": ".triage_note_text",
+    "TriageOutcomesWeek": ".triage_outcomes_week",
+    "TriageReport": ".triage_report",
+    "TriageReportTotals": ".triage_report_totals",
+    "TriageRuntimeSessionReference": ".triage_runtime_session_reference",
+    "TriageSeverity": ".triage_severity",
+    "TriageSeverityCount": ".triage_severity_count",
+    "TriageSource": ".triage_source",
+    "TriageSourceEvent": ".triage_source_event",
+    "TriageSourceEventList": ".triage_source_event_list",
+    "TriageSourceReference": ".triage_source_reference",
+    "TriageSourceReference_ModelScan": ".triage_source_reference",
+    "TriageSourceReference_RuntimeSession": ".triage_source_reference",
+    "TriageSourceReference_Unlinked": ".triage_source_reference",
+    "TriageStatus": ".triage_status",
+    "TriageUnlinkedReference": ".triage_unlinked_reference",
     "UnknownFileAttributes": ".unknown_file_attributes",
     "UnprocessableEntityErrorBody": ".unprocessable_entity_error_body",
     "UsePolicy": ".use_policy",
@@ -1353,7 +1405,6 @@ __all__ = [
     "InferenceTimeseriesResponseV3Aggregations",
     "InferenceTimeseriesResponseV3TimeseriesItem",
     "InteractionEvaluationDetection",
-    "InteractionEvaluationDetectionRiskLevel",
     "InteractionEvaluationOutcome",
     "InteractionEvaluationOutcomeAction",
     "InteractionEvaluationOutcomeEffectiveInteraction",
@@ -1731,6 +1782,32 @@ __all__ = [
     "ToolResultPart",
     "ToolUsePart",
     "ToolUsePartToolInput",
+    "TriageAlertSpread",
+    "TriageIssue",
+    "TriageIssueDetail",
+    "TriageIssueList",
+    "TriageIssuePatch",
+    "TriageIssuePatchSeverity",
+    "TriageIssuePatchStatus",
+    "TriageModelScanReference",
+    "TriageNote",
+    "TriageNoteAuthorType",
+    "TriageNoteText",
+    "TriageOutcomesWeek",
+    "TriageReport",
+    "TriageReportTotals",
+    "TriageRuntimeSessionReference",
+    "TriageSeverity",
+    "TriageSeverityCount",
+    "TriageSource",
+    "TriageSourceEvent",
+    "TriageSourceEventList",
+    "TriageSourceReference",
+    "TriageSourceReference_ModelScan",
+    "TriageSourceReference_RuntimeSession",
+    "TriageSourceReference_Unlinked",
+    "TriageStatus",
+    "TriageUnlinkedReference",
     "UnknownFileAttributes",
     "UnprocessableEntityErrorBody",
     "UsePolicy",

@@ -17710,3 +17710,604 @@ client.supply_chain.scans.guidance(
 </dl>
 </details>
 
+## Triage Issues
+<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py">list</a>(...) -> TriageIssueList</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Lists the tenant's triage issues in the requested sort order. Pass the response's `next` back as `cursor` to read the following page; there is no offset. The cursor is a keyset position, so issues inserted or deleted elsewhere in the list do not shift the page boundary and do not cause a skip or a repeat. It is not stable against updates to the column being sorted on: an issue whose severity, status, or `updated_at` changes while a traversal is in progress moves relative to the cursor, and can be skipped or returned on more than one page. Callers that need exact handling should de-duplicate on issue `id` and treat a full traversal as approximate.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.triage.issues.list(
+    sort="+severity",
+    limit=50,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**q:** `typing.Optional[str]` — Search issues by text (searches identifier, description, asset, detection category, and source event identifier)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**severity:** `typing.Optional[typing.Union[TriageSeverity, typing.Sequence[TriageSeverity]]]` — Filter issues by severity. Repeat the parameter (`severity=CRITICAL&severity=HIGH`) to match any of several.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `typing.Optional[typing.Union[TriageStatus, typing.Sequence[TriageStatus]]]` — Filter issues by status. Repeat the parameter (`status=NEW&status=INVESTIGATING`) to match any of several. The open queue is `status=NEW&status=INVESTIGATING&status=ESCALATED`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort:** `typing.Optional[str]` — Sort field, ascending (+) or the default descending (-). severity and status order by the ranks defined on their schemas, not alphabetically. Ties are broken by issue id ascending, which makes the sort key total and is what the pagination cursor is positioned on. Changing `sort` invalidates a cursor; restart from the unparameterised request.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[Limit]` — Limit the number of items returned
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cursor:** `typing.Optional[str]` — Cursor for pagination, used to navigate through pages of results
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py">get</a>(...) -> TriageIssueDetail</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Returns one issue with its full note history and `alert_spread`, the range of the alerts correlated into it. Read this before changing an issue: its `status` decides whether a `PATCH` is a change, a no-op or a reopen.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.triage.issues.get(
+    issue_id="TRI-1042",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**issue_id:** `str` — Human-readable triage issue identifier, as returned in `id` (for example `TRI-1042`).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py">update</a>(...) -> TriageIssueDetail</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Changes an issue's status, severity, or both. This is how an issue
+moves through triage: escalate it as a true positive, mark it a false
+positive, close it, or reopen it. There is no separate verdict field;
+`ESCALATED` is the true-positive outcome.
+
+**Transitions.** Any status can move to any other status. A change is
+rejected, and nothing is written, in exactly two cases:
+- **422**: the status changes to `ESCALATED` or `FALSE_POSITIVE` and
+  the request carries no `note` explaining why.
+- **409**: the change reopens the issue, moving it from `CLOSED` or
+  `FALSE_POSITIVE` to `NEW`, `INVESTIGATING` or `ESCALATED`, while
+  another of the tenant's open issues holds the same correlation key.
+
+The note check runs first, so a reopen straight to `ESCALATED`
+without a note gets 422 even when it would also conflict.
+
+**Retries are safe.** A field whose value already matches the issue
+is not a change. When neither status nor severity changes, the
+request writes nothing (no change note, no caller `note`, no
+`updated_at` bump) and returns 200 with the issue as it stands.
+Neither rule above applies to such a request, so re-sending an
+escalation after a timeout returns 200, not 422 or 409. A `note` sent
+without a change is dropped: add standalone notes with
+`POST /triage/v1/issues/{issue_id}/notes`.
+
+**What a change records.** The new values, a system note naming the
+change (for example `Changed status to "ESCALATED".`) and the caller's
+`note`, if any, are applied in one transaction, all attributed to the
+caller: either all of them are written or none are. The caller's note
+is recorded just after the system note, so it comes first in the
+newest-first `notes`.
+
+**Severity.** Setting severity pins it. Later correlated alerts no
+longer raise it automatically, as they do for an issue whose severity
+was never set by hand.
+
+**Body.** `application/merge-patch+json` and `application/json` are
+accepted with the same meaning; any other media type gets 415. A
+field that is absent or `null` is left as it is; neither field can be
+cleared.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer, TriageIssuePatchStatus
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.triage.issues.update(
+    issue_id="TRI-1042",
+    request=TriageIssuePatchStatus(
+        status="FALSE_POSITIVE",
+    ),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**issue_id:** `str` — Human-readable triage issue identifier, as returned in `id` (for example `TRI-1042`).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `TriageIssuePatch` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py">notes</a>(...) -> TriageNote</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Appends a note to an issue without changing its status or severity. Works on an issue in any status, including `CLOSED` and `FALSE_POSITIVE`. Notes are immutable and attributed to the caller. Unlike `PATCH`, this is not retry-safe: each successful call adds a note, so a retried request can record the same text twice. To record the reason for an escalation or a false-positive verdict, send it as `note` on the `PATCH` that makes the change instead.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.triage.issues.notes(
+    issue_id="TRI-1042",
+    text="Asked the app owner whether this project is the red-team sandbox; holding until they reply.",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**issue_id:** `str` — Human-readable triage issue identifier, as returned in `id` (for example `TRI-1042`).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**text:** `TriageNoteText` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py">source_events</a>(...) -> TriageSourceEventList</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Every alert the issue aggregates, most recently correlated first,
+including the alert the issue was created from.
+
+- **Count** — equals the issue's `duplicate_count`.
+- **Spread** — an issue groups alerts sharing a capability, a detection
+  category and an affected asset, so these can span many sessions or
+  scans. This list, not the issue's first alert, is where the spread
+  shows.
+- **Scope** — this issue only, not its correlation key. A key can pass
+  to a new issue once the first is closed; alerts correlated into that
+  earlier issue are not returned.
+- **Ordering** — correlation time descending, fixed; there is no
+  `sort`.
+- **Paging** — lenient: an unrecognised or stale `cursor` restarts
+  from the first page, and `limit` is clamped to 1–100, so neither
+  produces a 400. De-duplicate on the alert id across pages.
+
+"Source event" and "alert" name the same thing: a single detection
+raised by a platform capability.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.triage.issues.source_events(
+    issue_id="TRI-1042",
+    limit=50,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**issue_id:** `str` — Human-readable triage issue identifier, as returned in `id` (for example `TRI-1042`).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[Limit]` — Limit the number of items returned
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cursor:** `typing.Optional[str]` — Cursor for pagination, used to navigate through pages of results
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Triage Reports
+<details><summary><code>client.triage.reports.<a href="src/hiddenlayer/triage/reports/client.py">list</a>() -> TriageReport</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Returns a summary of triage outcomes for the tenant: alert volume,
+issues resolved without escalation, escalations by severity, weekly
+outcome trends, and the most recent escalations. "Resolved" counts
+both closed statuses, `CLOSED` and `FALSE_POSITIVE`, for issues that
+were not escalated; it does not distinguish who resolved them.
+
+- **Reporting window**: the current ISO week plus the three ISO weeks
+  before it. It opens at 00:00 UTC on the Monday of that oldest week
+  and runs to the time of the request, so it spans between 21 and 28
+  days depending on which weekday the request is made — not a rolling
+  28-day window.
+- **Windowed**: `totals.ingested`, `totals.resolved_by_soc`,
+  `totals.median_minutes_to_triage` and `outcomes_by_week`.
+  `totals.escalated`, `escalations_by_severity` and
+  `recent_escalations` are not windowed and cover the tenant's issues
+  across all time.
+- **State-based versus transition-based**: `totals.escalated`,
+  `escalations_by_severity` and `recent_escalations` are state-based —
+  they count issues whose status is `ESCALATED` when the report is
+  read, so an issue escalated and later closed drops out of them.
+  `outcomes_by_week[].escalated` and `outcomes_by_week[].resolved` are
+  transition-based — they count status changes recorded during a week
+  and are not re-evaluated against the issue's current status.
+  `totals.resolved_by_soc` mixes both: it needs the transition in the
+  window and a closed status at read time.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    token="<token>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.triage.reports.list()
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
