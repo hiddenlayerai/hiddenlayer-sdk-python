@@ -22,14 +22,14 @@ class AnalysisResult(UniversalBaseModel):
     The original system prompt
     """
 
-    questions: typing.List[str] = pydantic.Field()
+    questions: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
     """
-    Generated questions
+    Generated questions. Null when none were generated.
     """
 
-    question_answers: typing.List[QuestionAnswer] = pydantic.Field()
+    question_answers: typing.Optional[typing.List[QuestionAnswer]] = pydantic.Field(default=None)
     """
-    Question-answer pairs
+    Question-answer pairs. Null when no answers were stored.
     """
 
     compiled_system_prompt: str = pydantic.Field()
@@ -42,9 +42,9 @@ class AnalysisResult(UniversalBaseModel):
     Whether validation passed
     """
 
-    validation_errors: typing.List[str] = pydantic.Field()
+    validation_errors: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
     """
-    Validation error messages
+    Validation error messages. Null when validation found no errors.
     """
 
     hl_project_id: typing.Optional[str] = pydantic.Field(default=None)
