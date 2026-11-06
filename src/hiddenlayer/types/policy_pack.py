@@ -13,7 +13,8 @@ from .settings_details_with_schema import SettingsDetailsWithSchema
 class PolicyPack(PolicyPackSummary):
     settings: typing.List[SettingsDetailsWithSchema] = pydantic.Field()
     """
-    Settings categories in the same format returned by the ruleset settings endpoints
+    The settings categories that are stored for the ruleset of the pack. The array always has one `aidr-genai` entry.
+    When `is_built_in` is true, these are uneditable. Custom entities included under `personally_identifiable_information` are detected only, not redacted.
     """
 
     detection_rules: typing.Optional[typing.List[RulePackDetectionRule]] = pydantic.Field(default=None)

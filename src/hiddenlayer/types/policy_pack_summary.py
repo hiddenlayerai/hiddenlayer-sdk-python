@@ -21,6 +21,11 @@ class PolicyPackSummary(UniversalBaseModel):
 
     description: typing.Optional[str] = None
     type: typing.Optional[PolicyPackType] = None
+    is_built_in: typing.Optional[bool] = pydantic.Field(default=None)
+    """
+    True when the policy pack is provided by HiddenLayer to all tenants. When true, pack is read-only.
+    """
+
     block_rule_count: typing.Optional[int] = pydantic.Field(default=None)
     """
     Number of detection rules in `block`
@@ -33,7 +38,7 @@ class PolicyPackSummary(UniversalBaseModel):
 
     redact_entity_type_count: typing.Optional[int] = pydantic.Field(default=None)
     """
-    Number of entity types in `redact`
+    Number of entity types that are redacted.
     """
 
     rule_pack_ids: typing.List[str] = pydantic.Field()
@@ -43,7 +48,7 @@ class PolicyPackSummary(UniversalBaseModel):
 
     individual_rules: typing.List[PolicyPackRuleAssignment] = pydantic.Field()
     """
-    Rules added individually, in display order. For the built-in Default pack, which wraps the tenant's existing policy, this lists that policy's current rules.
+    Rules added individually, in order.
     """
 
     block: typing.Optional[BlockConfig] = pydantic.Field(default=None)

@@ -20,6 +20,11 @@ class ProjectPolicyPack(UniversalBaseModel):
     PROFILE and APPLICATION packs are HiddenLayer-authored; APPLICATION packs are tuned to an application type; CUSTOM packs are tenant-authored
     """
 
+    is_built_in: bool = pydantic.Field()
+    """
+    True when the policy pack is provided by HiddenLayer to all tenants. When true, pack is read-only.
+    """
+
     block_rule_count: int = pydantic.Field()
     """
     Number of detection rules the pack blocks on

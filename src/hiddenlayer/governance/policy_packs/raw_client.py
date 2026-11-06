@@ -201,7 +201,7 @@ class RawPolicyPacksClient:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-        The pack must assign at least one detection rule through `rule_pack_ids` or `individual_rules`; otherwise returns 422.
+        Creates a custom policy pack from the rule packs, individual rules, redaction configuration, and settings in the request.
 
         Parameters
         ----------
@@ -209,7 +209,7 @@ class RawPolicyPacksClient:
             Display name, unique per tenant among custom packs
 
         settings : typing.Sequence[PolicyPackWriteRequestSettingsItem]
-            Settings categories to apply, identified by settings_id, using the existing ruleset settings payload format
+            Settings categories to apply, identified by settings_id, using the existing ruleset settings payload format. The array must have one `aidr-genai` entry.
 
         description : typing.Optional[str]
 
@@ -559,8 +559,6 @@ class RawPolicyPacksClient:
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
         Replaces the entire pack, including `settings`; omitted optional fields are cleared.
-        - **403** when the pack is HiddenLayer-authored; only custom packs can be modified.
-        - **422** when the pack would assign no detection rules.
 
         Parameters
         ----------
@@ -571,7 +569,7 @@ class RawPolicyPacksClient:
             Display name, unique per tenant among custom packs
 
         settings : typing.Sequence[PolicyPackWriteRequestSettingsItem]
-            Settings categories to apply, identified by settings_id, using the existing ruleset settings payload format
+            Settings categories to apply, identified by settings_id, using the existing ruleset settings payload format. The array must have one `aidr-genai` entry.
 
         description : typing.Optional[str]
 
@@ -969,7 +967,7 @@ class AsyncRawPolicyPacksClient:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-        The pack must assign at least one detection rule through `rule_pack_ids` or `individual_rules`; otherwise returns 422.
+        Creates a custom policy pack from the rule packs, individual rules, redaction configuration, and settings in the request.
 
         Parameters
         ----------
@@ -977,7 +975,7 @@ class AsyncRawPolicyPacksClient:
             Display name, unique per tenant among custom packs
 
         settings : typing.Sequence[PolicyPackWriteRequestSettingsItem]
-            Settings categories to apply, identified by settings_id, using the existing ruleset settings payload format
+            Settings categories to apply, identified by settings_id, using the existing ruleset settings payload format. The array must have one `aidr-genai` entry.
 
         description : typing.Optional[str]
 
@@ -1327,8 +1325,6 @@ class AsyncRawPolicyPacksClient:
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
         Replaces the entire pack, including `settings`; omitted optional fields are cleared.
-        - **403** when the pack is HiddenLayer-authored; only custom packs can be modified.
-        - **422** when the pack would assign no detection rules.
 
         Parameters
         ----------
@@ -1339,7 +1335,7 @@ class AsyncRawPolicyPacksClient:
             Display name, unique per tenant among custom packs
 
         settings : typing.Sequence[PolicyPackWriteRequestSettingsItem]
-            Settings categories to apply, identified by settings_id, using the existing ruleset settings payload format
+            Settings categories to apply, identified by settings_id, using the existing ruleset settings payload format. The array must have one `aidr-genai` entry.
 
         description : typing.Optional[str]
 

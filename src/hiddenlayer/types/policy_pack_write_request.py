@@ -29,7 +29,7 @@ class PolicyPackWriteRequest(UniversalBaseModel):
     redact: typing.Optional[RedactConfig] = None
     settings: typing.List[PolicyPackWriteRequestSettingsItem] = pydantic.Field()
     """
-    Settings categories to apply, identified by settings_id, using the existing ruleset settings payload format
+    Settings categories to apply, identified by settings_id, using the existing ruleset settings payload format. The array must have one `aidr-genai` entry.
     """
 
     if IS_PYDANTIC_V2:
