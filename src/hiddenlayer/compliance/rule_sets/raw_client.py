@@ -7,7 +7,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.http_response import AsyncHttpResponse, HttpResponse
-from ...core.jsonable_encoder import encode_path_param
+from ...core.jsonable_encoder import quote_path_param
 from ...core.pagination import AsyncPager, SyncPager
 from ...core.parse_error import ParsingError
 from ...core.pydantic_utilities import parse_obj_as
@@ -305,7 +305,7 @@ class RawRuleSetsClient:
             Response for successfully created or fetched ruleset
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}",
             method="GET",
             request_options=request_options,
         )
@@ -433,7 +433,7 @@ class RawRuleSetsClient:
         HttpResponse[None]
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}",
             method="PUT",
             json={
                 "created_at": created_at,
@@ -546,7 +546,7 @@ class RawRuleSetsClient:
         HttpResponse[None]
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}",
             method="DELETE",
             request_options=request_options,
         )
@@ -887,7 +887,7 @@ class AsyncRawRuleSetsClient:
             Response for successfully created or fetched ruleset
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}",
             method="GET",
             request_options=request_options,
         )
@@ -1015,7 +1015,7 @@ class AsyncRawRuleSetsClient:
         AsyncHttpResponse[None]
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}",
             method="PUT",
             json={
                 "created_at": created_at,
@@ -1130,7 +1130,7 @@ class AsyncRawRuleSetsClient:
         AsyncHttpResponse[None]
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}",
             method="DELETE",
             request_options=request_options,
         )

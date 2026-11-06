@@ -7,7 +7,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.http_response import AsyncHttpResponse, HttpResponse
-from ...core.jsonable_encoder import encode_path_param
+from ...core.jsonable_encoder import quote_path_param
 from ...core.parse_error import ParsingError
 from ...core.pydantic_utilities import parse_obj_as
 from ...core.request_options import RequestOptions
@@ -370,7 +370,7 @@ class RawPromptSetsClient:
         HttpResponse[None]
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/prompt-sets/{encode_path_param(prompt_set_id)}",
+            f"evaluations/v1/prompt-sets/{quote_path_param(prompt_set_id)}",
             method="DELETE",
             request_options=request_options,
         )
@@ -456,7 +456,7 @@ class RawPromptSetsClient:
             CSV file stream
         """
         with self._client_wrapper.httpx_client.stream(
-            f"evaluations/v1/prompt-sets/{encode_path_param(prompt_set_id)}/csv",
+            f"evaluations/v1/prompt-sets/{quote_path_param(prompt_set_id)}/csv",
             method="GET",
             request_options=request_options,
         ) as _response:
@@ -871,7 +871,7 @@ class AsyncRawPromptSetsClient:
         AsyncHttpResponse[None]
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/prompt-sets/{encode_path_param(prompt_set_id)}",
+            f"evaluations/v1/prompt-sets/{quote_path_param(prompt_set_id)}",
             method="DELETE",
             request_options=request_options,
         )
@@ -957,7 +957,7 @@ class AsyncRawPromptSetsClient:
             CSV file stream
         """
         async with self._client_wrapper.httpx_client.stream(
-            f"evaluations/v1/prompt-sets/{encode_path_param(prompt_set_id)}/csv",
+            f"evaluations/v1/prompt-sets/{quote_path_param(prompt_set_id)}/csv",
             method="GET",
             request_options=request_options,
         ) as _response:

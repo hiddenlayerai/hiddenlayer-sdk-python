@@ -6,7 +6,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.http_response import AsyncHttpResponse, HttpResponse
-from ...core.jsonable_encoder import encode_path_param
+from ...core.jsonable_encoder import quote_path_param
 from ...core.parse_error import ParsingError
 from ...core.pydantic_utilities import parse_obj_as
 from ...core.request_options import RequestOptions
@@ -52,7 +52,7 @@ class RawFileClient:
             File found and returned successfully
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"model-intel/v1/file/{encode_path_param(sha256)}",
+            f"model-intel/v1/file/{quote_path_param(sha256)}",
             method="GET",
             params={
                 "page_size": page_size,
@@ -108,7 +108,7 @@ class RawFileClient:
             File metadata found and returned successfully
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"model-intel/v1/file/{encode_path_param(sha256)}/metadata",
+            f"model-intel/v1/file/{quote_path_param(sha256)}/metadata",
             method="GET",
             request_options=request_options,
         )
@@ -189,7 +189,7 @@ class AsyncRawFileClient:
             File found and returned successfully
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"model-intel/v1/file/{encode_path_param(sha256)}",
+            f"model-intel/v1/file/{quote_path_param(sha256)}",
             method="GET",
             params={
                 "page_size": page_size,
@@ -247,7 +247,7 @@ class AsyncRawFileClient:
             File metadata found and returned successfully
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"model-intel/v1/file/{encode_path_param(sha256)}/metadata",
+            f"model-intel/v1/file/{quote_path_param(sha256)}/metadata",
             method="GET",
             request_options=request_options,
         )

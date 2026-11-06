@@ -6,7 +6,7 @@ from json.decoder import JSONDecodeError
 from ....core.api_error import ApiError
 from ....core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ....core.http_response import AsyncHttpResponse, HttpResponse
-from ....core.jsonable_encoder import encode_path_param
+from ....core.jsonable_encoder import quote_path_param
 from ....core.parse_error import ParsingError
 from ....core.pydantic_utilities import parse_obj_as
 from ....core.request_options import RequestOptions
@@ -147,7 +147,7 @@ class RawSettingsClient:
             Response for successfully created ruleset settings
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}/settings",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}/settings",
             method="POST",
             json={
                 "settings_id": settings_id,
@@ -252,7 +252,7 @@ class RawSettingsClient:
             Response for successfully fetched ruleset settings
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}/settings/{encode_path_param(settings_id)}",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}/settings/{quote_path_param(settings_id)}",
             method="GET",
             params={
                 "overlay": overlay,
@@ -361,7 +361,7 @@ class RawSettingsClient:
         HttpResponse[None]
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}/settings/{encode_path_param(settings_id)}",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}/settings/{quote_path_param(settings_id)}",
             method="PUT",
             json={
                 "settings": settings,
@@ -471,7 +471,7 @@ class RawSettingsClient:
         HttpResponse[None]
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}/settings/{encode_path_param(settings_id)}",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}/settings/{quote_path_param(settings_id)}",
             method="DELETE",
             request_options=request_options,
         )
@@ -652,7 +652,7 @@ class AsyncRawSettingsClient:
             Response for successfully created ruleset settings
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}/settings",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}/settings",
             method="POST",
             json={
                 "settings_id": settings_id,
@@ -757,7 +757,7 @@ class AsyncRawSettingsClient:
             Response for successfully fetched ruleset settings
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}/settings/{encode_path_param(settings_id)}",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}/settings/{quote_path_param(settings_id)}",
             method="GET",
             params={
                 "overlay": overlay,
@@ -866,7 +866,7 @@ class AsyncRawSettingsClient:
         AsyncHttpResponse[None]
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}/settings/{encode_path_param(settings_id)}",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}/settings/{quote_path_param(settings_id)}",
             method="PUT",
             json={
                 "settings": settings,
@@ -976,7 +976,7 @@ class AsyncRawSettingsClient:
         AsyncHttpResponse[None]
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"compliance/v1/rule-sets/{encode_path_param(id)}/settings/{encode_path_param(settings_id)}",
+            f"compliance/v1/rule-sets/{quote_path_param(id)}/settings/{quote_path_param(settings_id)}",
             method="DELETE",
             request_options=request_options,
         )

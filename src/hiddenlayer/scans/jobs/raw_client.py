@@ -8,7 +8,7 @@ from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.datetime_utils import serialize_datetime
 from ...core.http_response import AsyncHttpResponse, HttpResponse
-from ...core.jsonable_encoder import encode_path_param
+from ...core.jsonable_encoder import quote_path_param
 from ...core.pagination import AsyncPager, SyncPager
 from ...core.parse_error import ParsingError
 from ...core.pydantic_utilities import parse_obj_as
@@ -155,7 +155,7 @@ class RawJobsClient:
             Successful response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"scan/v3/results/{encode_path_param(scan_id)}",
+            f"scan/v3/results/{quote_path_param(scan_id)}",
             method="GET",
             params={
                 "has_detections": has_detections,
@@ -519,7 +519,7 @@ class AsyncRawJobsClient:
             Successful response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"scan/v3/results/{encode_path_param(scan_id)}",
+            f"scan/v3/results/{quote_path_param(scan_id)}",
             method="GET",
             params={
                 "has_detections": has_detections,

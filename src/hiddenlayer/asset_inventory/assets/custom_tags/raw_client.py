@@ -6,7 +6,7 @@ from json.decoder import JSONDecodeError
 from ....core.api_error import ApiError
 from ....core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ....core.http_response import AsyncHttpResponse, HttpResponse
-from ....core.jsonable_encoder import encode_path_param
+from ....core.jsonable_encoder import quote_path_param
 from ....core.parse_error import ParsingError
 from ....core.pydantic_utilities import parse_obj_as
 from ....core.request_options import RequestOptions
@@ -52,7 +52,7 @@ class RawCustomTagsClient:
             Tag value updated
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/assets/{encode_path_param(asset_id)}/custom-tags/{encode_path_param(tag_name)}",
+            f"asset-inventory/v1/assets/{quote_path_param(asset_id)}/custom-tags/{quote_path_param(tag_name)}",
             method="PUT",
             json={
                 "value": value,
@@ -148,7 +148,7 @@ class RawCustomTagsClient:
         HttpResponse[None]
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/assets/{encode_path_param(asset_id)}/custom-tags/{encode_path_param(tag_name)}",
+            f"asset-inventory/v1/assets/{quote_path_param(asset_id)}/custom-tags/{quote_path_param(tag_name)}",
             method="DELETE",
             request_options=request_options,
         )
@@ -225,7 +225,7 @@ class RawCustomTagsClient:
             Tag value updated
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/assets/{encode_path_param(asset_id)}/custom-tags/{encode_path_param(tag_name)}",
+            f"asset-inventory/v2/assets/{quote_path_param(asset_id)}/custom-tags/{quote_path_param(tag_name)}",
             method="PUT",
             json={
                 "value": value,
@@ -323,7 +323,7 @@ class RawCustomTagsClient:
         HttpResponse[None]
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/assets/{encode_path_param(asset_id)}/custom-tags/{encode_path_param(tag_name)}",
+            f"asset-inventory/v2/assets/{quote_path_param(asset_id)}/custom-tags/{quote_path_param(tag_name)}",
             method="DELETE",
             request_options=request_options,
         )
@@ -403,7 +403,7 @@ class AsyncRawCustomTagsClient:
             Tag value updated
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/assets/{encode_path_param(asset_id)}/custom-tags/{encode_path_param(tag_name)}",
+            f"asset-inventory/v1/assets/{quote_path_param(asset_id)}/custom-tags/{quote_path_param(tag_name)}",
             method="PUT",
             json={
                 "value": value,
@@ -499,7 +499,7 @@ class AsyncRawCustomTagsClient:
         AsyncHttpResponse[None]
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/assets/{encode_path_param(asset_id)}/custom-tags/{encode_path_param(tag_name)}",
+            f"asset-inventory/v1/assets/{quote_path_param(asset_id)}/custom-tags/{quote_path_param(tag_name)}",
             method="DELETE",
             request_options=request_options,
         )
@@ -576,7 +576,7 @@ class AsyncRawCustomTagsClient:
             Tag value updated
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/assets/{encode_path_param(asset_id)}/custom-tags/{encode_path_param(tag_name)}",
+            f"asset-inventory/v2/assets/{quote_path_param(asset_id)}/custom-tags/{quote_path_param(tag_name)}",
             method="PUT",
             json={
                 "value": value,
@@ -674,7 +674,7 @@ class AsyncRawCustomTagsClient:
         AsyncHttpResponse[None]
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/assets/{encode_path_param(asset_id)}/custom-tags/{encode_path_param(tag_name)}",
+            f"asset-inventory/v2/assets/{quote_path_param(asset_id)}/custom-tags/{quote_path_param(tag_name)}",
             method="DELETE",
             request_options=request_options,
         )

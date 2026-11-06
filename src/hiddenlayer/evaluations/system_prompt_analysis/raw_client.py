@@ -8,7 +8,7 @@ from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.datetime_utils import serialize_datetime
 from ...core.http_response import AsyncHttpResponse, HttpResponse
-from ...core.jsonable_encoder import encode_path_param
+from ...core.jsonable_encoder import quote_path_param
 from ...core.pagination import AsyncPager, SyncPager
 from ...core.parse_error import ParsingError
 from ...core.pydantic_utilities import parse_obj_as
@@ -337,7 +337,7 @@ class RawSystemPromptAnalysisClient:
             Current workflow status
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/system-prompt-analysis/{encode_path_param(workflow_id)}/status",
+            f"evaluations/v1/system-prompt-analysis/{quote_path_param(workflow_id)}/status",
             method="GET",
             request_options=request_options,
         )
@@ -426,7 +426,7 @@ class RawSystemPromptAnalysisClient:
             Complete analysis result
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/system-prompt-analysis/{encode_path_param(workflow_id)}",
+            f"evaluations/v1/system-prompt-analysis/{quote_path_param(workflow_id)}",
             method="GET",
             request_options=request_options,
         )
@@ -525,7 +525,7 @@ class RawSystemPromptAnalysisClient:
         HttpResponse[None]
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/system-prompt-analysis/{encode_path_param(workflow_id)}",
+            f"evaluations/v1/system-prompt-analysis/{quote_path_param(workflow_id)}",
             method="DELETE",
             request_options=request_options,
         )
@@ -616,7 +616,7 @@ class RawSystemPromptAnalysisClient:
             Accepted - answers processing started
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/system-prompt-analysis/{encode_path_param(workflow_id)}/answers",
+            f"evaluations/v1/system-prompt-analysis/{quote_path_param(workflow_id)}/answers",
             method="POST",
             json={
                 "answers": convert_and_respect_annotation_metadata(
@@ -1010,7 +1010,7 @@ class AsyncRawSystemPromptAnalysisClient:
             Current workflow status
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/system-prompt-analysis/{encode_path_param(workflow_id)}/status",
+            f"evaluations/v1/system-prompt-analysis/{quote_path_param(workflow_id)}/status",
             method="GET",
             request_options=request_options,
         )
@@ -1099,7 +1099,7 @@ class AsyncRawSystemPromptAnalysisClient:
             Complete analysis result
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/system-prompt-analysis/{encode_path_param(workflow_id)}",
+            f"evaluations/v1/system-prompt-analysis/{quote_path_param(workflow_id)}",
             method="GET",
             request_options=request_options,
         )
@@ -1198,7 +1198,7 @@ class AsyncRawSystemPromptAnalysisClient:
         AsyncHttpResponse[None]
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/system-prompt-analysis/{encode_path_param(workflow_id)}",
+            f"evaluations/v1/system-prompt-analysis/{quote_path_param(workflow_id)}",
             method="DELETE",
             request_options=request_options,
         )
@@ -1289,7 +1289,7 @@ class AsyncRawSystemPromptAnalysisClient:
             Accepted - answers processing started
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/system-prompt-analysis/{encode_path_param(workflow_id)}/answers",
+            f"evaluations/v1/system-prompt-analysis/{quote_path_param(workflow_id)}/answers",
             method="POST",
             json={
                 "answers": convert_and_respect_annotation_metadata(

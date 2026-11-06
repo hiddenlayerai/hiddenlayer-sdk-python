@@ -6,7 +6,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.http_response import AsyncHttpResponse, HttpResponse
-from ...core.jsonable_encoder import encode_path_param
+from ...core.jsonable_encoder import quote_path_param
 from ...core.pagination import AsyncPager, SyncPager
 from ...core.parse_error import ParsingError
 from ...core.pydantic_utilities import parse_obj_as
@@ -241,7 +241,7 @@ class RawAssetsClient:
             The requested AI asset (without configuration)
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/assets/{encode_path_param(asset_id)}",
+            f"asset-inventory/v1/assets/{quote_path_param(asset_id)}",
             method="GET",
             params={
                 "embed": ",".join(map(str, embed)) if isinstance(embed, (list, tuple, set)) else embed,
@@ -303,7 +303,7 @@ class RawAssetsClient:
             The graph of AI assets and relationships
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/assets/{encode_path_param(asset_id)}/graph",
+            f"asset-inventory/v1/assets/{quote_path_param(asset_id)}/graph",
             method="GET",
             params={
                 "depth": depth,
@@ -411,7 +411,7 @@ class RawAssetsClient:
             Tags for the asset
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/assets/{encode_path_param(asset_id)}/tags",
+            f"asset-inventory/v1/assets/{quote_path_param(asset_id)}/tags",
             method="GET",
             request_options=request_options,
         )
@@ -1222,7 +1222,7 @@ class RawAssetsClient:
             The requested asset.
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/assets/{encode_path_param(asset_id)}",
+            f"asset-inventory/v2/assets/{quote_path_param(asset_id)}",
             method="GET",
             params={
                 "embed": embed,
@@ -1345,7 +1345,7 @@ class RawAssetsClient:
             The outbound discovered-relationship graph rooted at the asset.
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/assets/{encode_path_param(asset_id)}/discovered-graph",
+            f"asset-inventory/v2/assets/{quote_path_param(asset_id)}/discovered-graph",
             method="GET",
             params={
                 "depth": depth,
@@ -1448,7 +1448,7 @@ class RawAssetsClient:
             Tags for the asset
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/assets/{encode_path_param(asset_id)}/tags",
+            f"asset-inventory/v2/assets/{quote_path_param(asset_id)}/tags",
             method="GET",
             request_options=request_options,
         )
@@ -1681,7 +1681,7 @@ class AsyncRawAssetsClient:
             The requested AI asset (without configuration)
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/assets/{encode_path_param(asset_id)}",
+            f"asset-inventory/v1/assets/{quote_path_param(asset_id)}",
             method="GET",
             params={
                 "embed": ",".join(map(str, embed)) if isinstance(embed, (list, tuple, set)) else embed,
@@ -1743,7 +1743,7 @@ class AsyncRawAssetsClient:
             The graph of AI assets and relationships
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/assets/{encode_path_param(asset_id)}/graph",
+            f"asset-inventory/v1/assets/{quote_path_param(asset_id)}/graph",
             method="GET",
             params={
                 "depth": depth,
@@ -1851,7 +1851,7 @@ class AsyncRawAssetsClient:
             Tags for the asset
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/assets/{encode_path_param(asset_id)}/tags",
+            f"asset-inventory/v1/assets/{quote_path_param(asset_id)}/tags",
             method="GET",
             request_options=request_options,
         )
@@ -2665,7 +2665,7 @@ class AsyncRawAssetsClient:
             The requested asset.
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/assets/{encode_path_param(asset_id)}",
+            f"asset-inventory/v2/assets/{quote_path_param(asset_id)}",
             method="GET",
             params={
                 "embed": embed,
@@ -2788,7 +2788,7 @@ class AsyncRawAssetsClient:
             The outbound discovered-relationship graph rooted at the asset.
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/assets/{encode_path_param(asset_id)}/discovered-graph",
+            f"asset-inventory/v2/assets/{quote_path_param(asset_id)}/discovered-graph",
             method="GET",
             params={
                 "depth": depth,
@@ -2891,7 +2891,7 @@ class AsyncRawAssetsClient:
             Tags for the asset
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/assets/{encode_path_param(asset_id)}/tags",
+            f"asset-inventory/v2/assets/{quote_path_param(asset_id)}/tags",
             method="GET",
             request_options=request_options,
         )

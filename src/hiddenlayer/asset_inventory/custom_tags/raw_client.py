@@ -6,7 +6,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.http_response import AsyncHttpResponse, HttpResponse
-from ...core.jsonable_encoder import encode_path_param
+from ...core.jsonable_encoder import quote_path_param
 from ...core.pagination import AsyncPager, SyncPager
 from ...core.parse_error import ParsingError
 from ...core.pydantic_utilities import parse_obj_as
@@ -53,7 +53,7 @@ class RawCustomTagsClient:
             Tag definition updated
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/custom-tags/{encode_path_param(tag_name)}",
+            f"asset-inventory/v1/custom-tags/{quote_path_param(tag_name)}",
             method="PATCH",
             json={
                 "name": name,
@@ -177,7 +177,7 @@ class RawCustomTagsClient:
             A list of tag values
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/custom-tags/{encode_path_param(tag_name)}/values",
+            f"asset-inventory/v1/custom-tags/{quote_path_param(tag_name)}/values",
             method="GET",
             params={
                 "sort": sort,
@@ -264,7 +264,7 @@ class RawCustomTagsClient:
             Tag definition updated
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/custom-tags/{encode_path_param(tag_name)}",
+            f"asset-inventory/v2/custom-tags/{quote_path_param(tag_name)}",
             method="PATCH",
             json={
                 "name": name,
@@ -390,7 +390,7 @@ class RawCustomTagsClient:
             A cursor-paginated list of tag values.
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/custom-tags/{encode_path_param(tag_name)}/values",
+            f"asset-inventory/v2/custom-tags/{quote_path_param(tag_name)}/values",
             method="GET",
             params={
                 "sort": sort,
@@ -480,7 +480,7 @@ class AsyncRawCustomTagsClient:
             Tag definition updated
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/custom-tags/{encode_path_param(tag_name)}",
+            f"asset-inventory/v1/custom-tags/{quote_path_param(tag_name)}",
             method="PATCH",
             json={
                 "name": name,
@@ -604,7 +604,7 @@ class AsyncRawCustomTagsClient:
             A list of tag values
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/custom-tags/{encode_path_param(tag_name)}/values",
+            f"asset-inventory/v1/custom-tags/{quote_path_param(tag_name)}/values",
             method="GET",
             params={
                 "sort": sort,
@@ -694,7 +694,7 @@ class AsyncRawCustomTagsClient:
             Tag definition updated
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/custom-tags/{encode_path_param(tag_name)}",
+            f"asset-inventory/v2/custom-tags/{quote_path_param(tag_name)}",
             method="PATCH",
             json={
                 "name": name,
@@ -820,7 +820,7 @@ class AsyncRawCustomTagsClient:
             A cursor-paginated list of tag values.
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/custom-tags/{encode_path_param(tag_name)}/values",
+            f"asset-inventory/v2/custom-tags/{quote_path_param(tag_name)}/values",
             method="GET",
             params={
                 "sort": sort,

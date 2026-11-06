@@ -9,7 +9,7 @@ from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.datetime_utils import serialize_datetime
 from ...core.http_response import AsyncHttpResponse, HttpResponse
-from ...core.jsonable_encoder import encode_path_param
+from ...core.jsonable_encoder import quote_path_param
 from ...core.pagination import AsyncPager, SyncPager
 from ...core.parse_error import ParsingError
 from ...core.pydantic_utilities import parse_obj_as
@@ -514,7 +514,7 @@ class RawRedTeamClient:
             Current workflow status
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/status",
+            f"evaluations/v1/red-team/{quote_path_param(workflow_id)}/status",
             method="GET",
             request_options=request_options,
         )
@@ -609,7 +609,7 @@ class RawRedTeamClient:
             Next action for client
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/next-action",
+            f"evaluations/v1/red-team/{quote_path_param(workflow_id)}/next-action",
             method="GET",
             request_options=request_options,
         )
@@ -712,7 +712,7 @@ class RawRedTeamClient:
             Accepted - response processing started
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/target-response",
+            f"evaluations/v1/red-team/{quote_path_param(workflow_id)}/target-response",
             method="POST",
             json={
                 "session_id": session_id,
@@ -820,7 +820,7 @@ class RawRedTeamClient:
             Complete workflow result
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}",
+            f"evaluations/v1/red-team/{quote_path_param(workflow_id)}",
             method="GET",
             request_options=request_options,
         )
@@ -908,7 +908,7 @@ class RawRedTeamClient:
         HttpResponse[None]
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}",
+            f"evaluations/v1/red-team/{quote_path_param(workflow_id)}",
             method="DELETE",
             request_options=request_options,
         )
@@ -989,7 +989,7 @@ class RawRedTeamClient:
         HttpResponse[None]
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/jobs/{encode_path_param(workflow_id)}/termination",
+            f"evaluations/v1/jobs/{quote_path_param(workflow_id)}/termination",
             method="POST",
             request_options=request_options,
         )
@@ -1280,7 +1280,7 @@ class RawRedTeamClient:
             CSV file stream
         """
         with self._client_wrapper.httpx_client.stream(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/csv",
+            f"evaluations/v1/red-team/{quote_path_param(workflow_id)}/csv",
             method="GET",
             request_options=request_options,
         ) as _response:
@@ -1831,7 +1831,7 @@ class AsyncRawRedTeamClient:
             Current workflow status
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/status",
+            f"evaluations/v1/red-team/{quote_path_param(workflow_id)}/status",
             method="GET",
             request_options=request_options,
         )
@@ -1926,7 +1926,7 @@ class AsyncRawRedTeamClient:
             Next action for client
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/next-action",
+            f"evaluations/v1/red-team/{quote_path_param(workflow_id)}/next-action",
             method="GET",
             request_options=request_options,
         )
@@ -2029,7 +2029,7 @@ class AsyncRawRedTeamClient:
             Accepted - response processing started
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/target-response",
+            f"evaluations/v1/red-team/{quote_path_param(workflow_id)}/target-response",
             method="POST",
             json={
                 "session_id": session_id,
@@ -2137,7 +2137,7 @@ class AsyncRawRedTeamClient:
             Complete workflow result
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}",
+            f"evaluations/v1/red-team/{quote_path_param(workflow_id)}",
             method="GET",
             request_options=request_options,
         )
@@ -2225,7 +2225,7 @@ class AsyncRawRedTeamClient:
         AsyncHttpResponse[None]
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}",
+            f"evaluations/v1/red-team/{quote_path_param(workflow_id)}",
             method="DELETE",
             request_options=request_options,
         )
@@ -2306,7 +2306,7 @@ class AsyncRawRedTeamClient:
         AsyncHttpResponse[None]
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"evaluations/v1/jobs/{encode_path_param(workflow_id)}/termination",
+            f"evaluations/v1/jobs/{quote_path_param(workflow_id)}/termination",
             method="POST",
             request_options=request_options,
         )
@@ -2597,7 +2597,7 @@ class AsyncRawRedTeamClient:
             CSV file stream
         """
         async with self._client_wrapper.httpx_client.stream(
-            f"evaluations/v1/red-team/{encode_path_param(workflow_id)}/csv",
+            f"evaluations/v1/red-team/{quote_path_param(workflow_id)}/csv",
             method="GET",
             request_options=request_options,
         ) as _response:

@@ -6,7 +6,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.http_response import AsyncHttpResponse, HttpResponse
-from ...core.jsonable_encoder import encode_path_param
+from ...core.jsonable_encoder import quote_path_param
 from ...core.parse_error import ParsingError
 from ...core.pydantic_utilities import parse_obj_as
 from ...core.request_options import RequestOptions
@@ -38,7 +38,7 @@ class RawRelationshipsClient:
             The requested AI asset relationship
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/relationships/{encode_path_param(relationship_id)}",
+            f"asset-inventory/v1/relationships/{quote_path_param(relationship_id)}",
             method="GET",
             request_options=request_options,
         )
@@ -106,7 +106,7 @@ class AsyncRawRelationshipsClient:
             The requested AI asset relationship
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/relationships/{encode_path_param(relationship_id)}",
+            f"asset-inventory/v1/relationships/{quote_path_param(relationship_id)}",
             method="GET",
             request_options=request_options,
         )

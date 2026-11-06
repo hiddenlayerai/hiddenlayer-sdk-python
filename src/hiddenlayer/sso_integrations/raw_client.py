@@ -6,7 +6,7 @@ from json.decoder import JSONDecodeError
 from ..core.api_error import ApiError
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
-from ..core.jsonable_encoder import encode_path_param
+from ..core.jsonable_encoder import quote_path_param
 from ..core.parse_error import ParsingError
 from ..core.pydantic_utilities import parse_obj_as
 from ..core.request_options import RequestOptions
@@ -252,7 +252,7 @@ class RawSsoIntegrationsClient:
             An SSO Integration
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/v2/sso-integrations/{encode_path_param(id)}",
+            f"api/v2/sso-integrations/{quote_path_param(id)}",
             method="GET",
             request_options=request_options,
         )
@@ -360,7 +360,7 @@ class RawSsoIntegrationsClient:
             Updated SSO Integration
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/v2/sso-integrations/{encode_path_param(id)}",
+            f"api/v2/sso-integrations/{quote_path_param(id)}",
             method="PATCH",
             json={
                 "name": name,
@@ -675,7 +675,7 @@ class AsyncRawSsoIntegrationsClient:
             An SSO Integration
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"api/v2/sso-integrations/{encode_path_param(id)}",
+            f"api/v2/sso-integrations/{quote_path_param(id)}",
             method="GET",
             request_options=request_options,
         )
@@ -783,7 +783,7 @@ class AsyncRawSsoIntegrationsClient:
             Updated SSO Integration
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"api/v2/sso-integrations/{encode_path_param(id)}",
+            f"api/v2/sso-integrations/{quote_path_param(id)}",
             method="PATCH",
             json={
                 "name": name,

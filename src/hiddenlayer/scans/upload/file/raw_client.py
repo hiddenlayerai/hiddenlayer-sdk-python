@@ -6,7 +6,7 @@ from json.decoder import JSONDecodeError
 from ....core.api_error import ApiError
 from ....core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ....core.http_response import AsyncHttpResponse, HttpResponse
-from ....core.jsonable_encoder import encode_path_param
+from ....core.jsonable_encoder import quote_path_param
 from ....core.parse_error import ParsingError
 from ....core.pydantic_utilities import parse_obj_as
 from ....core.request_options import RequestOptions
@@ -56,7 +56,7 @@ class RawFileClient:
             Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"scan/v3/upload/{encode_path_param(scan_id)}/file",
+            f"scan/v3/upload/{quote_path_param(scan_id)}/file",
             method="POST",
             headers={
                 "file-content-length": str(file_content_length) if file_content_length is not None else None,
@@ -126,7 +126,7 @@ class RawFileClient:
             Successful Response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"scan/v3/upload/{encode_path_param(scan_id)}/file/{encode_path_param(file_id)}",
+            f"scan/v3/upload/{quote_path_param(scan_id)}/file/{quote_path_param(file_id)}",
             method="PATCH",
             request_options=request_options,
         )
@@ -211,7 +211,7 @@ class AsyncRawFileClient:
             Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"scan/v3/upload/{encode_path_param(scan_id)}/file",
+            f"scan/v3/upload/{quote_path_param(scan_id)}/file",
             method="POST",
             headers={
                 "file-content-length": str(file_content_length) if file_content_length is not None else None,
@@ -281,7 +281,7 @@ class AsyncRawFileClient:
             Successful Response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"scan/v3/upload/{encode_path_param(scan_id)}/file/{encode_path_param(file_id)}",
+            f"scan/v3/upload/{quote_path_param(scan_id)}/file/{quote_path_param(file_id)}",
             method="PATCH",
             request_options=request_options,
         )

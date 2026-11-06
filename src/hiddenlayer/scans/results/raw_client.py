@@ -6,7 +6,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.http_response import AsyncHttpResponse, HttpResponse
-from ...core.jsonable_encoder import encode_path_param
+from ...core.jsonable_encoder import quote_path_param
 from ...core.pagination import AsyncPager, SyncPager
 from ...core.parse_error import ParsingError
 from ...core.pydantic_utilities import parse_obj_as
@@ -70,7 +70,7 @@ class RawResultsClient:
             Paginated file results
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"scan/v3/results/{encode_path_param(scan_id)}/files",
+            f"scan/v3/results/{quote_path_param(scan_id)}/files",
             method="GET",
             params={
                 "has_detections": has_detections,
@@ -159,7 +159,7 @@ class RawResultsClient:
             Successful response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"scan/v3/results/{encode_path_param(scan_id)}/sarif",
+            f"scan/v3/results/{quote_path_param(scan_id)}/sarif",
             method="GET",
             request_options=request_options,
         )
@@ -224,7 +224,7 @@ class RawResultsClient:
             Successful response
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"scan/v3/results/{encode_path_param(scan_id)}/summary",
+            f"scan/v3/results/{quote_path_param(scan_id)}/summary",
             method="GET",
             request_options=request_options,
         )
@@ -340,7 +340,7 @@ class AsyncRawResultsClient:
             Paginated file results
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"scan/v3/results/{encode_path_param(scan_id)}/files",
+            f"scan/v3/results/{quote_path_param(scan_id)}/files",
             method="GET",
             params={
                 "has_detections": has_detections,
@@ -434,7 +434,7 @@ class AsyncRawResultsClient:
             Successful response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"scan/v3/results/{encode_path_param(scan_id)}/sarif",
+            f"scan/v3/results/{quote_path_param(scan_id)}/sarif",
             method="GET",
             request_options=request_options,
         )
@@ -499,7 +499,7 @@ class AsyncRawResultsClient:
             Successful response
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"scan/v3/results/{encode_path_param(scan_id)}/summary",
+            f"scan/v3/results/{quote_path_param(scan_id)}/summary",
             method="GET",
             request_options=request_options,
         )

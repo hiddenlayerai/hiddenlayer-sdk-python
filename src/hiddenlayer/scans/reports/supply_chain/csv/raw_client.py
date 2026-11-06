@@ -9,7 +9,7 @@ from .....core.api_error import ApiError
 from .....core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .....core.datetime_utils import serialize_datetime
 from .....core.http_response import AsyncHttpResponse, HttpResponse
-from .....core.jsonable_encoder import encode_path_param
+from .....core.jsonable_encoder import quote_path_param
 from .....core.parse_error import ParsingError
 from .....core.pydantic_utilities import parse_obj_as
 from .....core.request_options import RequestOptions
@@ -242,7 +242,7 @@ class RawCsvClient:
             CSV file is ready and returned
         """
         with self._client_wrapper.httpx_client.stream(
-            f"scan/v3/reports/supply-chain/csv/{encode_path_param(report_id)}",
+            f"scan/v3/reports/supply-chain/csv/{quote_path_param(report_id)}",
             method="GET",
             request_options=request_options,
         ) as _response:
@@ -520,7 +520,7 @@ class AsyncRawCsvClient:
             CSV file is ready and returned
         """
         async with self._client_wrapper.httpx_client.stream(
-            f"scan/v3/reports/supply-chain/csv/{encode_path_param(report_id)}",
+            f"scan/v3/reports/supply-chain/csv/{quote_path_param(report_id)}",
             method="GET",
             request_options=request_options,
         ) as _response:

@@ -5,7 +5,7 @@ from json.decoder import JSONDecodeError
 
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ...core.jsonable_encoder import encode_path_param
+from ...core.jsonable_encoder import quote_path_param
 from ...core.pagination import AsyncPager, SyncPager
 from ...core.parse_error import ParsingError
 from ...core.pydantic_utilities import parse_obj_as
@@ -60,7 +60,7 @@ class RawDiscoveredTagsClient:
             A list of tag values
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/discovered-tags/{encode_path_param(tag_name)}/values",
+            f"asset-inventory/v1/discovered-tags/{quote_path_param(tag_name)}/values",
             method="GET",
             params={
                 "sort": sort,
@@ -163,7 +163,7 @@ class RawDiscoveredTagsClient:
             A cursor-paginated list of discovered tag values.
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/discovered-tags/{encode_path_param(tag_name)}/values",
+            f"asset-inventory/v2/discovered-tags/{quote_path_param(tag_name)}/values",
             method="GET",
             params={
                 "sort": sort,
@@ -269,7 +269,7 @@ class AsyncRawDiscoveredTagsClient:
             A list of tag values
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v1/discovered-tags/{encode_path_param(tag_name)}/values",
+            f"asset-inventory/v1/discovered-tags/{quote_path_param(tag_name)}/values",
             method="GET",
             params={
                 "sort": sort,
@@ -375,7 +375,7 @@ class AsyncRawDiscoveredTagsClient:
             A cursor-paginated list of discovered tag values.
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"asset-inventory/v2/discovered-tags/{encode_path_param(tag_name)}/values",
+            f"asset-inventory/v2/discovered-tags/{quote_path_param(tag_name)}/values",
             method="GET",
             params={
                 "sort": sort,

@@ -6,7 +6,7 @@ from json.decoder import JSONDecodeError
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.http_response import AsyncHttpResponse, HttpResponse
-from ...core.jsonable_encoder import encode_path_param
+from ...core.jsonable_encoder import quote_path_param
 from ...core.parse_error import ParsingError
 from ...core.pydantic_utilities import parse_obj_as
 from ...core.request_options import RequestOptions
@@ -139,7 +139,7 @@ class RawEvaluationsClient:
             The evaluation results for the specified artifact
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"governance/v1/evaluations/{encode_path_param(artifact_id)}",
+            f"governance/v1/evaluations/{quote_path_param(artifact_id)}",
             method="GET",
             request_options=request_options,
         )
@@ -326,7 +326,7 @@ class AsyncRawEvaluationsClient:
             The evaluation results for the specified artifact
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"governance/v1/evaluations/{encode_path_param(artifact_id)}",
+            f"governance/v1/evaluations/{quote_path_param(artifact_id)}",
             method="GET",
             request_options=request_options,
         )
