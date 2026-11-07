@@ -15,7 +15,7 @@ class SensorSorItemResponse(UniversalBaseModel):
     created_at: dt.datetime
     version: typing.Optional[int] = None
     active: bool
-    tags: typing.Dict[str, typing.Any]
+    tags: typing.Optional[typing.Dict[str, typing.Any]] = None
     adhoc: typing.Optional[bool] = None
 
     if IS_PYDANTIC_V2:
