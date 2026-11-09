@@ -15,6 +15,16 @@ class Asset(UniversalBaseModel):
     An AI asset record paired with a set of typed annotations.
     """
 
+    name: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    Display name computed on asset responses from the first non-empty
+    string in this precedence order: the supply-chain annotation's
+    `attributes.model_card.name`, the discovery annotation's
+    `attributes.name`, then the workstation-discovery annotation's
+    `attributes.name`. Missing, null, and non-string values are skipped.
+    Omitted when no annotation supplies a name.
+    """
+
     id: typing.Optional[str] = pydantic.Field(default=None)
     """
     Server-generated UUID for the asset. Assigned at creation time
