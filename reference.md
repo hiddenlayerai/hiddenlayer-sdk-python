@@ -17925,12 +17925,10 @@ positive, close it, or reopen it. There is no separate verdict field;
 rejected, and nothing is written, in exactly two cases:
 - **422**: the status changes to `ESCALATED` or `FALSE_POSITIVE` and
   the request carries no `note` explaining why.
-- **409**: the change reopens the issue, moving it from `CLOSED` or
-  `FALSE_POSITIVE` to `NEW`, `INVESTIGATING` or `ESCALATED`, while
-  another of the tenant's open issues holds the same correlation key.
-
-The note check runs first, so a reopen straight to `ESCALATED`
-without a note gets 422 even when it would also conflict.
+- **409**: the change moves the issue from `ESCALATED`, `CLOSED` or
+  `FALSE_POSITIVE` back to `NEW` or `INVESTIGATING` while another of
+  the tenant's `NEW` or `INVESTIGATING` issues holds the same
+  correlation key.
 
 **Retries are safe.** A field whose value already matches the issue
 is not a change. When neither status nor severity changes, the
@@ -18133,9 +18131,9 @@ including the alert the issue was created from.
   category and an affected asset, so these can span many sessions or
   scans. This list, not the issue's first alert, is where the spread
   shows.
-- **Scope** — this issue only, not its correlation key. A key can pass
-  to a new issue once the first is closed; alerts correlated into that
-  earlier issue are not returned.
+- **Scope** — this issue only, not its correlation key. A key passes
+  to a new issue once the first is escalated or closed; alerts
+  correlated into that earlier issue are not returned.
 - **Ordering** — correlation time descending, fixed; there is no
   `sort`.
 - **Paging** — lenient: an unrecognised or stale `cursor` restarts
