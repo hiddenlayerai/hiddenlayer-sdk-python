@@ -182,6 +182,7 @@ if typing.TYPE_CHECKING:
     from .incident_timeseries_response_v3 import IncidentTimeseriesResponseV3
     from .incident_timeseries_response_v3aggregations import IncidentTimeseriesResponseV3Aggregations
     from .incident_timeseries_response_v3timeseries_item import IncidentTimeseriesResponseV3TimeseriesItem
+    from .include_threat_types import IncludeThreatTypes
     from .inference_timeseries_response_v2 import InferenceTimeseriesResponseV2
     from .inference_timeseries_response_v2aggregations import InferenceTimeseriesResponseV2Aggregations
     from .inference_timeseries_response_v2timeseries_item import InferenceTimeseriesResponseV2TimeseriesItem
@@ -272,6 +273,8 @@ if typing.TYPE_CHECKING:
     from .list_v3cards_request_model_created import ListV3CardsRequestModelCreated
     from .list_v3cards_request_model_name import ListV3CardsRequestModelName
     from .list_v3cards_request_source import ListV3CardsRequestSource
+    from .mitre_atlas import MitreAtlas
+    from .mitre_atlas_item import MitreAtlasItem
     from .mitre_atlas_sub_technique_ids_v1 import MitreAtlasSubTechniqueIdsV1
     from .mitre_atlas_sub_technique_v1 import MitreAtlasSubTechniqueV1
     from .mitre_atlas_tactic_ids_v1 import MitreAtlasTacticIdsV1
@@ -412,9 +415,11 @@ if typing.TYPE_CHECKING:
     from .rule_pack_detection_rule import RulePackDetectionRule
     from .rule_pack_detection_rule_action import RulePackDetectionRuleAction
     from .rule_pack_type import RulePackType
+    from .rule_response import RuleResponse
     from .rule_set import RuleSet
     from .rule_set_details import RuleSetDetails
     from .rule_set_id import RuleSetId
+    from .rule_set_response import RuleSetResponse
     from .rule_set_settings_id_collection import RuleSetSettingsIdCollection
     from .rule_set_settings_id_collection_settings_item import RuleSetSettingsIdCollectionSettingsItem
     from .saml_identity_provider import SamlIdentityProvider
@@ -431,6 +436,13 @@ if typing.TYPE_CHECKING:
     from .scan_file_result_v3status import ScanFileResultV3Status
     from .scan_file_result_with_compliance_v3 import ScanFileResultWithComplianceV3
     from .scan_file_result_with_compliance_v3compliance import ScanFileResultWithComplianceV3Compliance
+    from .scan_finding_argument_type import ScanFindingArgumentType
+    from .scan_finding_evidence import ScanFindingEvidence
+    from .scan_finding_evidence_metadata_item import ScanFindingEvidenceMetadataItem
+    from .scan_finding_evidence_operations_item import ScanFindingEvidenceOperationsItem
+    from .scan_finding_evidence_structure_segments_item import ScanFindingEvidenceStructureSegmentsItem
+    from .scan_finding_function_call import ScanFindingFunctionCall
+    from .scan_finding_function_call_typed_args_item import ScanFindingFunctionCallTypedArgsItem
     from .scan_header_v3 import ScanHeaderV3
     from .scan_highest_detection_severity import ScanHighestDetectionSeverity
     from .scan_highest_detection_severity_with_safe import ScanHighestDetectionSeverityWithSafe
@@ -445,6 +457,8 @@ if typing.TYPE_CHECKING:
     from .scan_model_inventory_details_v3 import ScanModelInventoryDetailsV3
     from .scan_model_inventory_ids_v3 import ScanModelInventoryIdsV3
     from .scan_model_inventory_v3 import ScanModelInventoryV3
+    from .scan_owasp_issues import ScanOwaspIssues
+    from .scan_owasp_issues_item import ScanOwaspIssuesItem
     from .scan_report import ScanReport
     from .scan_report_of_record_v3 import ScanReportOfRecordV3
     from .scan_report_of_record_v3summary import ScanReportOfRecordV3Summary
@@ -456,6 +470,8 @@ if typing.TYPE_CHECKING:
     from .scan_report_summary_v3summary_mitre_atlas_item import ScanReportSummaryV3SummaryMitreAtlasItem
     from .scan_ruleset_compliance_v3 import ScanRulesetComplianceV3
     from .scan_ruleset_compliance_v3compliance import ScanRulesetComplianceV3Compliance
+    from .scan_threat_type import ScanThreatType
+    from .scan_threat_type_summary import ScanThreatTypeSummary
     from .scan_timeseries_response_v2 import ScanTimeseriesResponseV2
     from .scan_timeseries_response_v2aggregations import ScanTimeseriesResponseV2Aggregations
     from .scan_timeseries_response_v2timeseries_item import ScanTimeseriesResponseV2TimeseriesItem
@@ -468,6 +484,7 @@ if typing.TYPE_CHECKING:
     from .scan_timeseries_response_v3timeseries_item_threat_level_safe import (
         ScanTimeseriesResponseV3TimeseriesItemThreatLevelSafe,
     )
+    from .scan_top_threat_type import ScanTopThreatType
     from .search_response import SearchResponse
     from .search_result import SearchResult
     from .search_result_match_type import SearchResultMatchType
@@ -781,6 +798,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "IncidentTimeseriesResponseV3": ".incident_timeseries_response_v3",
     "IncidentTimeseriesResponseV3Aggregations": ".incident_timeseries_response_v3aggregations",
     "IncidentTimeseriesResponseV3TimeseriesItem": ".incident_timeseries_response_v3timeseries_item",
+    "IncludeThreatTypes": ".include_threat_types",
     "InferenceTimeseriesResponseV2": ".inference_timeseries_response_v2",
     "InferenceTimeseriesResponseV2Aggregations": ".inference_timeseries_response_v2aggregations",
     "InferenceTimeseriesResponseV2TimeseriesItem": ".inference_timeseries_response_v2timeseries_item",
@@ -871,6 +889,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ListV3CardsRequestModelCreated": ".list_v3cards_request_model_created",
     "ListV3CardsRequestModelName": ".list_v3cards_request_model_name",
     "ListV3CardsRequestSource": ".list_v3cards_request_source",
+    "MitreAtlas": ".mitre_atlas",
+    "MitreAtlasItem": ".mitre_atlas_item",
     "MitreAtlasSubTechniqueIdsV1": ".mitre_atlas_sub_technique_ids_v1",
     "MitreAtlasSubTechniqueV1": ".mitre_atlas_sub_technique_v1",
     "MitreAtlasTacticIdsV1": ".mitre_atlas_tactic_ids_v1",
@@ -1009,9 +1029,11 @@ _dynamic_imports: typing.Dict[str, str] = {
     "RulePackDetectionRule": ".rule_pack_detection_rule",
     "RulePackDetectionRuleAction": ".rule_pack_detection_rule_action",
     "RulePackType": ".rule_pack_type",
+    "RuleResponse": ".rule_response",
     "RuleSet": ".rule_set",
     "RuleSetDetails": ".rule_set_details",
     "RuleSetId": ".rule_set_id",
+    "RuleSetResponse": ".rule_set_response",
     "RuleSetSettingsIdCollection": ".rule_set_settings_id_collection",
     "RuleSetSettingsIdCollectionSettingsItem": ".rule_set_settings_id_collection_settings_item",
     "SamlIdentityProvider": ".saml_identity_provider",
@@ -1028,6 +1050,13 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ScanFileResultV3Status": ".scan_file_result_v3status",
     "ScanFileResultWithComplianceV3": ".scan_file_result_with_compliance_v3",
     "ScanFileResultWithComplianceV3Compliance": ".scan_file_result_with_compliance_v3compliance",
+    "ScanFindingArgumentType": ".scan_finding_argument_type",
+    "ScanFindingEvidence": ".scan_finding_evidence",
+    "ScanFindingEvidenceMetadataItem": ".scan_finding_evidence_metadata_item",
+    "ScanFindingEvidenceOperationsItem": ".scan_finding_evidence_operations_item",
+    "ScanFindingEvidenceStructureSegmentsItem": ".scan_finding_evidence_structure_segments_item",
+    "ScanFindingFunctionCall": ".scan_finding_function_call",
+    "ScanFindingFunctionCallTypedArgsItem": ".scan_finding_function_call_typed_args_item",
     "ScanHeaderV3": ".scan_header_v3",
     "ScanHighestDetectionSeverity": ".scan_highest_detection_severity",
     "ScanHighestDetectionSeverityWithSafe": ".scan_highest_detection_severity_with_safe",
@@ -1042,6 +1071,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ScanModelInventoryDetailsV3": ".scan_model_inventory_details_v3",
     "ScanModelInventoryIdsV3": ".scan_model_inventory_ids_v3",
     "ScanModelInventoryV3": ".scan_model_inventory_v3",
+    "ScanOwaspIssues": ".scan_owasp_issues",
+    "ScanOwaspIssuesItem": ".scan_owasp_issues_item",
     "ScanReport": ".scan_report",
     "ScanReportOfRecordV3": ".scan_report_of_record_v3",
     "ScanReportOfRecordV3Summary": ".scan_report_of_record_v3summary",
@@ -1053,6 +1084,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ScanReportSummaryV3SummaryMitreAtlasItem": ".scan_report_summary_v3summary_mitre_atlas_item",
     "ScanRulesetComplianceV3": ".scan_ruleset_compliance_v3",
     "ScanRulesetComplianceV3Compliance": ".scan_ruleset_compliance_v3compliance",
+    "ScanThreatType": ".scan_threat_type",
+    "ScanThreatTypeSummary": ".scan_threat_type_summary",
     "ScanTimeseriesResponseV2": ".scan_timeseries_response_v2",
     "ScanTimeseriesResponseV2Aggregations": ".scan_timeseries_response_v2aggregations",
     "ScanTimeseriesResponseV2TimeseriesItem": ".scan_timeseries_response_v2timeseries_item",
@@ -1061,6 +1094,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ScanTimeseriesResponseV3AggregationsThreatLevelSafe": ".scan_timeseries_response_v3aggregations_threat_level_safe",
     "ScanTimeseriesResponseV3TimeseriesItem": ".scan_timeseries_response_v3timeseries_item",
     "ScanTimeseriesResponseV3TimeseriesItemThreatLevelSafe": ".scan_timeseries_response_v3timeseries_item_threat_level_safe",
+    "ScanTopThreatType": ".scan_top_threat_type",
     "SearchResponse": ".search_response",
     "SearchResult": ".search_result",
     "SearchResultMatchType": ".search_result_match_type",
@@ -1398,6 +1432,7 @@ __all__ = [
     "IncidentTimeseriesResponseV3",
     "IncidentTimeseriesResponseV3Aggregations",
     "IncidentTimeseriesResponseV3TimeseriesItem",
+    "IncludeThreatTypes",
     "InferenceTimeseriesResponseV2",
     "InferenceTimeseriesResponseV2Aggregations",
     "InferenceTimeseriesResponseV2TimeseriesItem",
@@ -1488,6 +1523,8 @@ __all__ = [
     "ListV3CardsRequestModelCreated",
     "ListV3CardsRequestModelName",
     "ListV3CardsRequestSource",
+    "MitreAtlas",
+    "MitreAtlasItem",
     "MitreAtlasSubTechniqueIdsV1",
     "MitreAtlasSubTechniqueV1",
     "MitreAtlasTacticIdsV1",
@@ -1626,9 +1663,11 @@ __all__ = [
     "RulePackDetectionRule",
     "RulePackDetectionRuleAction",
     "RulePackType",
+    "RuleResponse",
     "RuleSet",
     "RuleSetDetails",
     "RuleSetId",
+    "RuleSetResponse",
     "RuleSetSettingsIdCollection",
     "RuleSetSettingsIdCollectionSettingsItem",
     "SamlIdentityProvider",
@@ -1645,6 +1684,13 @@ __all__ = [
     "ScanFileResultV3Status",
     "ScanFileResultWithComplianceV3",
     "ScanFileResultWithComplianceV3Compliance",
+    "ScanFindingArgumentType",
+    "ScanFindingEvidence",
+    "ScanFindingEvidenceMetadataItem",
+    "ScanFindingEvidenceOperationsItem",
+    "ScanFindingEvidenceStructureSegmentsItem",
+    "ScanFindingFunctionCall",
+    "ScanFindingFunctionCallTypedArgsItem",
     "ScanHeaderV3",
     "ScanHighestDetectionSeverity",
     "ScanHighestDetectionSeverityWithSafe",
@@ -1659,6 +1705,8 @@ __all__ = [
     "ScanModelInventoryDetailsV3",
     "ScanModelInventoryIdsV3",
     "ScanModelInventoryV3",
+    "ScanOwaspIssues",
+    "ScanOwaspIssuesItem",
     "ScanReport",
     "ScanReportOfRecordV3",
     "ScanReportOfRecordV3Summary",
@@ -1670,6 +1718,8 @@ __all__ = [
     "ScanReportSummaryV3SummaryMitreAtlasItem",
     "ScanRulesetComplianceV3",
     "ScanRulesetComplianceV3Compliance",
+    "ScanThreatType",
+    "ScanThreatTypeSummary",
     "ScanTimeseriesResponseV2",
     "ScanTimeseriesResponseV2Aggregations",
     "ScanTimeseriesResponseV2TimeseriesItem",
@@ -1678,6 +1728,7 @@ __all__ = [
     "ScanTimeseriesResponseV3AggregationsThreatLevelSafe",
     "ScanTimeseriesResponseV3TimeseriesItem",
     "ScanTimeseriesResponseV3TimeseriesItemThreatLevelSafe",
+    "ScanTopThreatType",
     "SearchResponse",
     "SearchResult",
     "SearchResultMatchType",

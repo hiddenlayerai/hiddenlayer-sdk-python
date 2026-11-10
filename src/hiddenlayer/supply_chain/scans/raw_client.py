@@ -14,6 +14,7 @@ from ...errors.bad_request_error import BadRequestError
 from ...errors.forbidden_error import ForbiddenError
 from ...errors.not_found_error import NotFoundError
 from ...errors.unsupported_media_type_error import UnsupportedMediaTypeError
+from ...types.include_threat_types import IncludeThreatTypes
 from .types.get_scans_request_accept import GetScansRequestAccept
 from .types.guidance_scans_response import GuidanceScansResponse
 from pydantic import ValidationError
@@ -27,6 +28,7 @@ class RawScansClient:
         self,
         scan_id: str,
         *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
         accept: typing.Optional[GetScansRequestAccept] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[typing.Optional[typing.Dict[str, typing.Any]]]:
@@ -35,6 +37,9 @@ class RawScansClient:
         ----------
         scan_id : str
             A Model Scan ID
+
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, returns the AIBOM that keeps threat types and rates advisories with their own severity, or the usual AIBOM for a scan saved without one. Without it, the AIBOM leaves threat types out and rates advisories `info`, as it did before threat types. Ignored when threat types are disabled. Any value other than true or false returns 400.
 
         accept : typing.Optional[GetScansRequestAccept]
 
@@ -49,6 +54,9 @@ class RawScansClient:
         _response = self._client_wrapper.httpx_client.request(
             f"supply-chain/v3/scans/{quote_path_param(scan_id)}",
             method="GET",
+            params={
+                "include_threat_types": include_threat_types,
+            },
             headers={
                 "Accept": str(accept) if accept is not None else None,
             },
@@ -196,6 +204,7 @@ class AsyncRawScansClient:
         self,
         scan_id: str,
         *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
         accept: typing.Optional[GetScansRequestAccept] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[typing.Optional[typing.Dict[str, typing.Any]]]:
@@ -204,6 +213,9 @@ class AsyncRawScansClient:
         ----------
         scan_id : str
             A Model Scan ID
+
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, returns the AIBOM that keeps threat types and rates advisories with their own severity, or the usual AIBOM for a scan saved without one. Without it, the AIBOM leaves threat types out and rates advisories `info`, as it did before threat types. Ignored when threat types are disabled. Any value other than true or false returns 400.
 
         accept : typing.Optional[GetScansRequestAccept]
 
@@ -218,6 +230,9 @@ class AsyncRawScansClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"supply-chain/v3/scans/{quote_path_param(scan_id)}",
             method="GET",
+            params={
+                "include_threat_types": include_threat_types,
+            },
             headers={
                 "Accept": str(accept) if accept is not None else None,
             },

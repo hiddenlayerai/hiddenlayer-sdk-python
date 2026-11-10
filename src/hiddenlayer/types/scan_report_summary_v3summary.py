@@ -7,29 +7,35 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from .scan_highest_detection_severity import ScanHighestDetectionSeverity
 from .scan_highest_detection_severity_with_safe import ScanHighestDetectionSeverityWithSafe
 from .scan_report_summary_v3summary_mitre_atlas_item import ScanReportSummaryV3SummaryMitreAtlasItem
+from .scan_threat_type_summary import ScanThreatTypeSummary
+from .scan_top_threat_type import ScanTopThreatType
 
 
 class ScanReportSummaryV3Summary(UniversalBaseModel):
     severity: typing.Optional[ScanHighestDetectionSeverityWithSafe] = None
-    highest_severity: typing.Optional[ScanHighestDetectionSeverity] = None
+    highest_severity: typing.Optional[ScanHighestDetectionSeverity] = pydantic.Field(default=None)
+    """
+    Highest severity among detections only, excluding advisories.
+    """
+
     detection_count: typing.Optional[int] = pydantic.Field(default=None)
     """
-    total number of detections found
+    Total detections, excluding advisories. Counts findings rather than distinct files.
     """
 
     advisory_count: typing.Optional[int] = pydantic.Field(default=None)
     """
-    total number of advisories found
+    Total advisories, excluding detections.
     """
 
     file_count: typing.Optional[int] = pydantic.Field(default=None)
     """
-    total number of files scanned
+    Total file results counted by the scan, including failed files and unknown file types; not a count of successfully analyzed files.
     """
 
     files_with_detections_count: typing.Optional[int] = pydantic.Field(default=None)
     """
-    number of files that contain detections
+    Number of files containing detections; files with only advisories do not contribute.
     """
 
     detection_categories: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
@@ -55,6 +61,21 @@ class ScanReportSummaryV3Summary(UniversalBaseModel):
     mitre_atlas: typing.Optional[typing.List[ScanReportSummaryV3SummaryMitreAtlasItem]] = pydantic.Field(default=None)
     """
     deduped list of MITRE Atlas tactic/technique pairs across all detections in the scan
+    """
+
+    top_threat_type: typing.Optional[ScanTopThreatType] = pydantic.Field(default=None)
+    """
+    The scan's top threat type. Absent while the scan has no findings and has not completed.
+    """
+
+    findings_count: typing.Optional[int] = pydantic.Field(default=None)
+    """
+    Findings in the scan, detections and advisories together. Absent until the scan completes, and for scans completed before threat types.
+    """
+
+    threat_types: typing.Optional[typing.Dict[str, ScanThreatTypeSummary]] = pydantic.Field(default=None)
+    """
+    The scan's findings by threat type, keyed by malicious, suspicious, vulnerable, advisory or unclassified. Absent until the scan completes, for scans completed before threat types, and for scans without findings.
     """
 
     if IS_PYDANTIC_V2:

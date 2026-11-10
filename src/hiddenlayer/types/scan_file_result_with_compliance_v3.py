@@ -4,12 +4,17 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from .scan_detection_severity import ScanDetectionSeverity
 from .scan_file_result_v3 import ScanFileResultV3
 from .scan_file_result_with_compliance_v3compliance import ScanFileResultWithComplianceV3Compliance
 
 
 class ScanFileResultWithComplianceV3(ScanFileResultV3):
     compliance: typing.Optional[ScanFileResultWithComplianceV3Compliance] = None
+    top_severity: typing.Optional[ScanDetectionSeverity] = pydantic.Field(default=None)
+    """
+    The highest severity across the file's detections and advisories. Absent when no finding has a severity. The scan files endpoint groups files by threat level with `sort=top_severity_order`, as `ScanFileThreatLevelCountsV3` describes.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

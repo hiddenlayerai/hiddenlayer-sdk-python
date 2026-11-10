@@ -4,6 +4,7 @@ import typing
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.request_options import RequestOptions
+from ...types.include_threat_types import IncludeThreatTypes
 from .raw_client import AsyncRawScansClient, RawScansClient
 from .types.get_scans_request_accept import GetScansRequestAccept
 from .types.guidance_scans_response import GuidanceScansResponse
@@ -28,6 +29,7 @@ class ScansClient:
         self,
         scan_id: str,
         *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
         accept: typing.Optional[GetScansRequestAccept] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Optional[typing.Dict[str, typing.Any]]:
@@ -36,6 +38,9 @@ class ScansClient:
         ----------
         scan_id : str
             A Model Scan ID
+
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, returns the AIBOM that keeps threat types and rates advisories with their own severity, or the usual AIBOM for a scan saved without one. Without it, the AIBOM leaves threat types out and rates advisories `info`, as it did before threat types. Ignored when threat types are disabled. Any value other than true or false returns 400.
 
         accept : typing.Optional[GetScansRequestAccept]
 
@@ -58,7 +63,9 @@ class ScansClient:
             scan_id="00000000-0000-0000-0000-000000000000",
         )
         """
-        _response = self._raw_client.get(scan_id, accept=accept, request_options=request_options)
+        _response = self._raw_client.get(
+            scan_id, include_threat_types=include_threat_types, accept=accept, request_options=request_options
+        )
         return _response.data
 
     def guidance(
@@ -117,6 +124,7 @@ class AsyncScansClient:
         self,
         scan_id: str,
         *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
         accept: typing.Optional[GetScansRequestAccept] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> typing.Optional[typing.Dict[str, typing.Any]]:
@@ -125,6 +133,9 @@ class AsyncScansClient:
         ----------
         scan_id : str
             A Model Scan ID
+
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, returns the AIBOM that keeps threat types and rates advisories with their own severity, or the usual AIBOM for a scan saved without one. Without it, the AIBOM leaves threat types out and rates advisories `info`, as it did before threat types. Ignored when threat types are disabled. Any value other than true or false returns 400.
 
         accept : typing.Optional[GetScansRequestAccept]
 
@@ -155,7 +166,9 @@ class AsyncScansClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get(scan_id, accept=accept, request_options=request_options)
+        _response = await self._raw_client.get(
+            scan_id, include_threat_types=include_threat_types, accept=accept, request_options=request_options
+        )
         return _response.data
 
     async def guidance(

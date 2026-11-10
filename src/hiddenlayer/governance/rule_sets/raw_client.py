@@ -19,7 +19,7 @@ from ...errors.not_found_error import NotFoundError
 from ...errors.service_unavailable_error import ServiceUnavailableError
 from ...errors.unprocessable_entity_error import UnprocessableEntityError
 from ...types.rule import Rule
-from ...types.rule_set import RuleSet
+from ...types.rule_set_response import RuleSetResponse
 from .types.list_rule_sets_response import ListRuleSetsResponse
 from pydantic import ValidationError
 
@@ -38,7 +38,7 @@ class RawRuleSetsClient:
         cursor: typing.Optional[str] = None,
         include_disabled: typing.Optional[bool] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> SyncPager[RuleSet, ListRuleSetsResponse]:
+    ) -> SyncPager[RuleSetResponse, ListRuleSetsResponse]:
         """
         Retrieve a list of rule sets that can be used to evaluate artifacts against governance policies.
         This endpoint supports pagination with the `page_size` and `cursor` parameters.
@@ -60,7 +60,7 @@ class RawRuleSetsClient:
 
         Returns
         -------
-        SyncPager[RuleSet, ListRuleSetsResponse]
+        SyncPager[RuleSetResponse, ListRuleSetsResponse]
             The rule sets which were successfully retrieved
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -143,7 +143,7 @@ class RawRuleSetsClient:
         id: typing.Optional[str] = OMIT,
         previous_rule_set_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[RuleSet]:
+    ) -> HttpResponse[RuleSetResponse]:
         """
         Create a new rule set for evaluating artifacts against governance policies.
         Rule sets can contain multiple rules, each with a set of conditions to evaluate.
@@ -177,7 +177,7 @@ class RawRuleSetsClient:
 
         Returns
         -------
-        HttpResponse[RuleSet]
+        HttpResponse[RuleSetResponse]
             The rule set which was successfully created
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -203,9 +203,9 @@ class RawRuleSetsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    RuleSet,
+                    RuleSetResponse,
                     parse_obj_as(
-                        type_=RuleSet,  # type: ignore
+                        type_=RuleSetResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -280,9 +280,16 @@ class RawRuleSetsClient:
         *,
         include_disabled: typing.Optional[bool] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[RuleSet]:
+    ) -> HttpResponse[RuleSetResponse]:
         """
-        Retrieve a specific rule set by its unique identifier. This endpoint returns the details of the rule set, including its rules and compliance criteria.
+        For active policy views, use [Retrieve rule sets](#operation/get_governance_rule_sets)
+        (`GET /governance/v1/rule-sets`) and select the required rule set from the paginated results.
+        Use `include_disabled=true` when disabled rules are needed. This parameter includes disabled
+        rules within returned rule sets; it does not guarantee access to disabled or historical rule sets.
+        Contact support before migrating workflows that require historical rule-set retrieval.
+
+        Retrieve a specific rule set by its unique identifier. This endpoint returns
+        the details of the rule set, including its rules and compliance criteria.
         The response includes the rule set's ID, display name, and the list of rules it contains.
         If the rule set does not exist, a 404 Not Found error is returned.
 
@@ -299,7 +306,7 @@ class RawRuleSetsClient:
 
         Returns
         -------
-        HttpResponse[RuleSet]
+        HttpResponse[RuleSetResponse]
             The rule set which was successfully retrieved
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -313,9 +320,9 @@ class RawRuleSetsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    RuleSet,
+                    RuleSetResponse,
                     parse_obj_as(
-                        type_=RuleSet,  # type: ignore
+                        type_=RuleSetResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -466,7 +473,7 @@ class AsyncRawRuleSetsClient:
         cursor: typing.Optional[str] = None,
         include_disabled: typing.Optional[bool] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncPager[RuleSet, ListRuleSetsResponse]:
+    ) -> AsyncPager[RuleSetResponse, ListRuleSetsResponse]:
         """
         Retrieve a list of rule sets that can be used to evaluate artifacts against governance policies.
         This endpoint supports pagination with the `page_size` and `cursor` parameters.
@@ -488,7 +495,7 @@ class AsyncRawRuleSetsClient:
 
         Returns
         -------
-        AsyncPager[RuleSet, ListRuleSetsResponse]
+        AsyncPager[RuleSetResponse, ListRuleSetsResponse]
             The rule sets which were successfully retrieved
         """
         _response = await self._client_wrapper.httpx_client.request(
@@ -574,7 +581,7 @@ class AsyncRawRuleSetsClient:
         id: typing.Optional[str] = OMIT,
         previous_rule_set_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[RuleSet]:
+    ) -> AsyncHttpResponse[RuleSetResponse]:
         """
         Create a new rule set for evaluating artifacts against governance policies.
         Rule sets can contain multiple rules, each with a set of conditions to evaluate.
@@ -608,7 +615,7 @@ class AsyncRawRuleSetsClient:
 
         Returns
         -------
-        AsyncHttpResponse[RuleSet]
+        AsyncHttpResponse[RuleSetResponse]
             The rule set which was successfully created
         """
         _response = await self._client_wrapper.httpx_client.request(
@@ -634,9 +641,9 @@ class AsyncRawRuleSetsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    RuleSet,
+                    RuleSetResponse,
                     parse_obj_as(
-                        type_=RuleSet,  # type: ignore
+                        type_=RuleSetResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -711,9 +718,16 @@ class AsyncRawRuleSetsClient:
         *,
         include_disabled: typing.Optional[bool] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[RuleSet]:
+    ) -> AsyncHttpResponse[RuleSetResponse]:
         """
-        Retrieve a specific rule set by its unique identifier. This endpoint returns the details of the rule set, including its rules and compliance criteria.
+        For active policy views, use [Retrieve rule sets](#operation/get_governance_rule_sets)
+        (`GET /governance/v1/rule-sets`) and select the required rule set from the paginated results.
+        Use `include_disabled=true` when disabled rules are needed. This parameter includes disabled
+        rules within returned rule sets; it does not guarantee access to disabled or historical rule sets.
+        Contact support before migrating workflows that require historical rule-set retrieval.
+
+        Retrieve a specific rule set by its unique identifier. This endpoint returns
+        the details of the rule set, including its rules and compliance criteria.
         The response includes the rule set's ID, display name, and the list of rules it contains.
         If the rule set does not exist, a 404 Not Found error is returned.
 
@@ -730,7 +744,7 @@ class AsyncRawRuleSetsClient:
 
         Returns
         -------
-        AsyncHttpResponse[RuleSet]
+        AsyncHttpResponse[RuleSetResponse]
             The rule set which was successfully retrieved
         """
         _response = await self._client_wrapper.httpx_client.request(
@@ -744,9 +758,9 @@ class AsyncRawRuleSetsClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    RuleSet,
+                    RuleSetResponse,
                     parse_obj_as(
-                        type_=RuleSet,  # type: ignore
+                        type_=RuleSetResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

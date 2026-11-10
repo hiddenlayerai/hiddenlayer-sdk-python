@@ -16,6 +16,7 @@ from ...errors.forbidden_error import ForbiddenError
 from ...errors.not_found_error import NotFoundError
 from ...errors.unauthorized_error import UnauthorizedError
 from ...errors.unprocessable_entity_error import UnprocessableEntityError
+from ...types.include_threat_types import IncludeThreatTypes
 from ...types.scan_file_result_with_compliance_v3 import ScanFileResultWithComplianceV3
 from ...types.scan_report_summary_response_v3 import ScanReportSummaryResponseV3
 from .types.list_files_results_response import ListFilesResultsResponse
@@ -30,6 +31,7 @@ class RawResultsClient:
         self,
         scan_id: str,
         *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
         has_detections: typing.Optional[bool] = None,
         page_size: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -43,6 +45,9 @@ class RawResultsClient:
         ----------
         scan_id : str
             A Model Scan ID
+
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, the response keeps findings' threat types and advisories' severities, each file's `top_threat_type` and `top_severity` on the files endpoint, and each scan's `top_threat_type`, `findings_count` and `threat_types`, SARIF reports advisories that have a threat type, and the supply chain CSV export fills its `threat_type` column. Without it, they are left out, as they were before threat types. Ignored when threat types are disabled. Filters and sorts on threat types work without it. Any value other than true or false returns 400. Even with true, findings from scanners that predate threat types may have no `threat_type`.
 
         has_detections : typing.Optional[bool]
             When true, only return files that have detections
@@ -73,6 +78,7 @@ class RawResultsClient:
             f"scan/v3/results/{quote_path_param(scan_id)}/files",
             method="GET",
             params={
+                "include_threat_types": include_threat_types,
                 "has_detections": has_detections,
                 "page_size": page_size,
                 "cursor": cursor,
@@ -94,6 +100,7 @@ class RawResultsClient:
                 _has_next = _parsed_next is not None and _parsed_next != ""
                 _get_next = lambda: self.list_files(
                     scan_id,
+                    include_threat_types=include_threat_types,
                     has_detections=has_detections,
                     page_size=page_size,
                     cursor=_parsed_next,
@@ -143,12 +150,21 @@ class RawResultsClient:
             )
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def sarif(self, scan_id: str, *, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[str]:
+    def sarif(
+        self,
+        scan_id: str,
+        *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[str]:
         """
         Parameters
         ----------
         scan_id : str
             A Model Scan ID
+
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, the response keeps findings' threat types and advisories' severities, each file's `top_threat_type` and `top_severity` on the files endpoint, and each scan's `top_threat_type`, `findings_count` and `threat_types`, SARIF reports advisories that have a threat type, and the supply chain CSV export fills its `threat_type` column. Without it, they are left out, as they were before threat types. Ignored when threat types are disabled. Filters and sorts on threat types work without it. Any value other than true or false returns 400. Even with true, findings from scanners that predate threat types may have no `threat_type`.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -161,6 +177,9 @@ class RawResultsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"scan/v3/results/{quote_path_param(scan_id)}/sarif",
             method="GET",
+            params={
+                "include_threat_types": include_threat_types,
+            },
             request_options=request_options,
         )
         try:
@@ -205,7 +224,11 @@ class RawResultsClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def retrieve_summary(
-        self, scan_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        scan_id: str,
+        *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ScanReportSummaryResponseV3]:
         """
         Returns aggregated summary information for a scan without file-level results.
@@ -214,6 +237,9 @@ class RawResultsClient:
         ----------
         scan_id : str
             A Model Scan ID
+
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, the response keeps findings' threat types and advisories' severities, each file's `top_threat_type` and `top_severity` on the files endpoint, and each scan's `top_threat_type`, `findings_count` and `threat_types`, SARIF reports advisories that have a threat type, and the supply chain CSV export fills its `threat_type` column. Without it, they are left out, as they were before threat types. Ignored when threat types are disabled. Filters and sorts on threat types work without it. Any value other than true or false returns 400. Even with true, findings from scanners that predate threat types may have no `threat_type`.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -226,6 +252,9 @@ class RawResultsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"scan/v3/results/{quote_path_param(scan_id)}/summary",
             method="GET",
+            params={
+                "include_threat_types": include_threat_types,
+            },
             request_options=request_options,
         )
         try:
@@ -300,6 +329,7 @@ class AsyncRawResultsClient:
         self,
         scan_id: str,
         *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
         has_detections: typing.Optional[bool] = None,
         page_size: typing.Optional[int] = None,
         cursor: typing.Optional[str] = None,
@@ -313,6 +343,9 @@ class AsyncRawResultsClient:
         ----------
         scan_id : str
             A Model Scan ID
+
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, the response keeps findings' threat types and advisories' severities, each file's `top_threat_type` and `top_severity` on the files endpoint, and each scan's `top_threat_type`, `findings_count` and `threat_types`, SARIF reports advisories that have a threat type, and the supply chain CSV export fills its `threat_type` column. Without it, they are left out, as they were before threat types. Ignored when threat types are disabled. Filters and sorts on threat types work without it. Any value other than true or false returns 400. Even with true, findings from scanners that predate threat types may have no `threat_type`.
 
         has_detections : typing.Optional[bool]
             When true, only return files that have detections
@@ -343,6 +376,7 @@ class AsyncRawResultsClient:
             f"scan/v3/results/{quote_path_param(scan_id)}/files",
             method="GET",
             params={
+                "include_threat_types": include_threat_types,
                 "has_detections": has_detections,
                 "page_size": page_size,
                 "cursor": cursor,
@@ -366,6 +400,7 @@ class AsyncRawResultsClient:
                 async def _get_next():
                     return await self.list_files(
                         scan_id,
+                        include_threat_types=include_threat_types,
                         has_detections=has_detections,
                         page_size=page_size,
                         cursor=_parsed_next,
@@ -417,13 +452,20 @@ class AsyncRawResultsClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def sarif(
-        self, scan_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        scan_id: str,
+        *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[str]:
         """
         Parameters
         ----------
         scan_id : str
             A Model Scan ID
+
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, the response keeps findings' threat types and advisories' severities, each file's `top_threat_type` and `top_severity` on the files endpoint, and each scan's `top_threat_type`, `findings_count` and `threat_types`, SARIF reports advisories that have a threat type, and the supply chain CSV export fills its `threat_type` column. Without it, they are left out, as they were before threat types. Ignored when threat types are disabled. Filters and sorts on threat types work without it. Any value other than true or false returns 400. Even with true, findings from scanners that predate threat types may have no `threat_type`.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -436,6 +478,9 @@ class AsyncRawResultsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"scan/v3/results/{quote_path_param(scan_id)}/sarif",
             method="GET",
+            params={
+                "include_threat_types": include_threat_types,
+            },
             request_options=request_options,
         )
         try:
@@ -480,7 +525,11 @@ class AsyncRawResultsClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def retrieve_summary(
-        self, scan_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        scan_id: str,
+        *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ScanReportSummaryResponseV3]:
         """
         Returns aggregated summary information for a scan without file-level results.
@@ -489,6 +538,9 @@ class AsyncRawResultsClient:
         ----------
         scan_id : str
             A Model Scan ID
+
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, the response keeps findings' threat types and advisories' severities, each file's `top_threat_type` and `top_severity` on the files endpoint, and each scan's `top_threat_type`, `findings_count` and `threat_types`, SARIF reports advisories that have a threat type, and the supply chain CSV export fills its `threat_type` column. Without it, they are left out, as they were before threat types. Ignored when threat types are disabled. Filters and sorts on threat types work without it. Any value other than true or false returns 400. Even with true, findings from scanners that predate threat types may have no `threat_type`.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -501,6 +553,9 @@ class AsyncRawResultsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"scan/v3/results/{quote_path_param(scan_id)}/summary",
             method="GET",
+            params={
+                "include_threat_types": include_threat_types,
+            },
             request_options=request_options,
         )
         try:

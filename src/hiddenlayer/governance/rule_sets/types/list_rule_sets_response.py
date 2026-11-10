@@ -5,11 +5,11 @@ import typing
 import pydantic
 from ....core.pydantic_utilities import IS_PYDANTIC_V2
 from ....types.cursors import Cursors
-from ....types.rule_set import RuleSet
+from ....types.rule_set_response import RuleSetResponse
 
 
 class ListRuleSetsResponse(Cursors):
-    items: typing.Optional[typing.List[RuleSet]] = None
+    items: typing.Optional[typing.List[RuleSetResponse]] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

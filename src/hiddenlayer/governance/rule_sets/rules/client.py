@@ -43,7 +43,16 @@ class RulesClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> RuleSet:
         """
-        Add a new rule to an existing rule set. This endpoint allows you to define a rule with its compliance criteria and conditions.
+        This operation remains supported at least as long as the legacy policy editor.
+        For new integrations, use [Create a rule set](#operation/create_governance_rule_set)
+        (`POST /governance/v1/rule-sets?replace_active_policy=true`) to submit the complete policy
+        with the new rule included. Preserve existing rules, their order, and disabled states;
+        submitting only the new rule would replace the active policy with an incomplete rule set.
+        Provide `previous_rule_set_id` to reject stale replacements and `previous_rule_id` for
+        each retained rule; omit `previous_rule_id` only for newly added rules.
+
+        Add a new rule to an existing rule set. This endpoint allows you to
+        define a rule with its compliance criteria and conditions.
         The new rule will be appended to the existing rules in the specified rule set.
         If the rule set does not exist, a 404 Not Found error is returned.
 
@@ -131,6 +140,13 @@ class RulesClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> RuleSet:
         """
+        Use [Create a rule set](#operation/create_governance_rule_set)
+        (`POST /governance/v1/rule-sets?replace_active_policy=true`) to submit the complete updated policy.
+        Preserve all rules, their order, and disabled states, and provide `previous_rule_set_id`
+        and applicable `previous_rule_id` values to link the replacement to the previous policy.
+        This creates a replacement rule set rather than updating a single rule in place;
+        submitting only the modified rule would discard the rest of the active policy.
+
         Replace an existing rule in a rule set with a new definition. This endpoint allows you to update the compliance criteria and conditions of a rule, preserving
          the rule's order in the rule set. If the rule set or the rule does not exist, a 404 Not Found error is returned.
 
@@ -211,6 +227,15 @@ class RulesClient:
         self, rule_set_id: str, rule_id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> RuleSet:
         """
+        This operation remains supported at least as long as the legacy policy editor.
+        For new integrations, use [Create a rule set](#operation/create_governance_rule_set)
+        (`POST /governance/v1/rule-sets?replace_active_policy=true`) to submit the complete policy
+        with the target rule marked `is_disabled: true`. Preserve the remaining rules, their order,
+        and disabled states. Provide `previous_rule_set_id` to reject stale replacements and
+        `previous_rule_id` for each retained rule, including the rule being disabled; omit
+        `previous_rule_id` only for newly added rules. To reset the entire policy to defaults, use
+        `DELETE /governance/v1/rule-sets/{rule_set_id}`.
+
         Disable a rule in a rule set. This endpoint allows you to remove a rule. It will no longer affect artifact evaluations.
         If the rule set or the rule does not exist, a 404 Not Found error is returned.
 
@@ -276,7 +301,16 @@ class AsyncRulesClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> RuleSet:
         """
-        Add a new rule to an existing rule set. This endpoint allows you to define a rule with its compliance criteria and conditions.
+        This operation remains supported at least as long as the legacy policy editor.
+        For new integrations, use [Create a rule set](#operation/create_governance_rule_set)
+        (`POST /governance/v1/rule-sets?replace_active_policy=true`) to submit the complete policy
+        with the new rule included. Preserve existing rules, their order, and disabled states;
+        submitting only the new rule would replace the active policy with an incomplete rule set.
+        Provide `previous_rule_set_id` to reject stale replacements and `previous_rule_id` for
+        each retained rule; omit `previous_rule_id` only for newly added rules.
+
+        Add a new rule to an existing rule set. This endpoint allows you to
+        define a rule with its compliance criteria and conditions.
         The new rule will be appended to the existing rules in the specified rule set.
         If the rule set does not exist, a 404 Not Found error is returned.
 
@@ -372,6 +406,13 @@ class AsyncRulesClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> RuleSet:
         """
+        Use [Create a rule set](#operation/create_governance_rule_set)
+        (`POST /governance/v1/rule-sets?replace_active_policy=true`) to submit the complete updated policy.
+        Preserve all rules, their order, and disabled states, and provide `previous_rule_set_id`
+        and applicable `previous_rule_id` values to link the replacement to the previous policy.
+        This creates a replacement rule set rather than updating a single rule in place;
+        submitting only the modified rule would discard the rest of the active policy.
+
         Replace an existing rule in a rule set with a new definition. This endpoint allows you to update the compliance criteria and conditions of a rule, preserving
          the rule's order in the rule set. If the rule set or the rule does not exist, a 404 Not Found error is returned.
 
@@ -460,6 +501,15 @@ class AsyncRulesClient:
         self, rule_set_id: str, rule_id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> RuleSet:
         """
+        This operation remains supported at least as long as the legacy policy editor.
+        For new integrations, use [Create a rule set](#operation/create_governance_rule_set)
+        (`POST /governance/v1/rule-sets?replace_active_policy=true`) to submit the complete policy
+        with the target rule marked `is_disabled: true`. Preserve the remaining rules, their order,
+        and disabled states. Provide `previous_rule_set_id` to reject stale replacements and
+        `previous_rule_id` for each retained rule, including the rule being disabled; omit
+        `previous_rule_id` only for newly added rules. To reset the entire policy to defaults, use
+        `DELETE /governance/v1/rule-sets/{rule_set_id}`.
+
         Disable a rule in a rule set. This endpoint allows you to remove a rule. It will no longer affect artifact evaluations.
         If the rule set or the rule does not exist, a 404 Not Found error is returned.
 

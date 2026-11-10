@@ -21,8 +21,11 @@ from .....errors.unprocessable_entity_error import UnprocessableEntityError
 from .....types.create_csv_request_model_name import CreateCsvRequestModelName
 from .....types.create_csv_request_severity import CreateCsvRequestSeverity
 from .....types.create_csv_request_source import CreateCsvRequestSource
+from .....types.include_threat_types import IncludeThreatTypes
 from .....types.policy_status import PolicyStatus
 from .....types.scan_job_request_source import ScanJobRequestSource
+from .....types.scan_top_threat_type import ScanTopThreatType
+from .types.create_csv_request_finding_severity_item import CreateCsvRequestFindingSeverityItem
 from .types.create_csv_response import CreateCsvResponse
 from pydantic import ValidationError
 
@@ -34,12 +37,17 @@ class RawCsvClient:
     def create(
         self,
         *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
         column_list: typing.Optional[str] = None,
         model_version_ids: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         model_ids: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         start_time: typing.Optional[dt.datetime] = None,
         end_time: typing.Optional[dt.datetime] = None,
         severity: typing.Optional[CreateCsvRequestSeverity] = None,
+        threat_type: typing.Optional[typing.Union[ScanTopThreatType, typing.Sequence[ScanTopThreatType]]] = None,
+        finding_severity: typing.Optional[
+            typing.Union[CreateCsvRequestFindingSeverityItem, typing.Sequence[CreateCsvRequestFindingSeverityItem]]
+        ] = None,
         status: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         compliance_status: typing.Optional[typing.Union[PolicyStatus, typing.Sequence[PolicyStatus]]] = None,
         request_source: typing.Optional[
@@ -73,6 +81,9 @@ class RawCsvClient:
 
         Parameters
         ----------
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, the response keeps findings' threat types and advisories' severities, each file's `top_threat_type` and `top_severity` on the files endpoint, and each scan's `top_threat_type`, `findings_count` and `threat_types`, SARIF reports advisories that have a threat type, and the supply chain CSV export fills its `threat_type` column. Without it, they are left out, as they were before threat types. Ignored when threat types are disabled. Filters and sorts on threat types work without it. Any value other than true or false returns 400. Even with true, findings from scanners that predate threat types may have no `threat_type`.
+
         column_list : typing.Optional[str]
             Comma-separated list of columns to include in the CSV export.
             Allowed values: name, detections, scanned_on, policy_status, origin, region, provider, threat_level.
@@ -92,6 +103,21 @@ class RawCsvClient:
 
         severity : typing.Optional[CreateCsvRequestSeverity]
             Comma-separated severities. A scan matches when its highest detection severity is a listed severity. Advisories don't count.
+
+        threat_type : typing.Optional[typing.Union[ScanTopThreatType, typing.Sequence[ScanTopThreatType]]]
+            Comma-separated threat types. Returns 400 for an unknown value, when threat types are disabled, or with `severity`.
+            A scan matches when it has a finding of a listed type. `none` matches a done scan with no findings.
+            `unclassified` matches a scan with at least one detection that has no threat type, whatever its top threat type.
+            `finding_severity` pairs with this filter: a scan matches when a listed threat type's highest severity is a listed severity.
+            `sort` also accepts `threat_type`, which orders scans by top threat type. Descending puts them in the order that ranks the top threat type: malicious, suspicious, unclassified, vulnerable, advisory, none.
+            `sort` also accepts `top_severity`, which orders scans by the highest severity across all findings. Sorting by `severity` or `threat_level` uses the scan's highest detection severity.
+            `column_list` also accepts `threat_type`, with the header Threat Type: the scan's top threat type, as the scan list returns it. Its cells are empty unless `include_threat_types` is true and threat types are enabled. It is not a default column.
+
+        finding_severity : typing.Optional[typing.Union[CreateCsvRequestFindingSeverityItem, typing.Sequence[CreateCsvRequestFindingSeverityItem]]]
+            Comma-separated severities: critical, high, medium, low, safe. Returns 400 for any other value, when threat types are disabled, or with `severity`.
+            Alone it matches when any of the scan's threat types has a listed highest severity.
+            Paired with `threat_type`, a scan matches when a listed threat type's highest severity is a listed severity.
+            `safe` means findings without a severity. Alone it matches scans whose findings all lack one, and scans with no findings and a `safe` severity. Paired with `threat_type`, it matches a listed type whose findings all lack one.
 
         status : typing.Optional[typing.Union[str, typing.Sequence[str]]]
             Filter by scan status (comma-separated)
@@ -147,6 +173,7 @@ class RawCsvClient:
             "scan/v3/reports/supply-chain/csv",
             method="POST",
             params={
+                "include_threat_types": include_threat_types,
                 "column_list": column_list,
                 "model_version_ids": ",".join(map(str, model_version_ids))
                 if isinstance(model_version_ids, (list, tuple, set))
@@ -155,6 +182,12 @@ class RawCsvClient:
                 "start_time": serialize_datetime(start_time) if start_time is not None else None,
                 "end_time": serialize_datetime(end_time) if end_time is not None else None,
                 "severity": severity,
+                "threat_type": ",".join(map(str, threat_type))
+                if isinstance(threat_type, (list, tuple, set))
+                else threat_type,
+                "finding_severity": ",".join(map(str, finding_severity))
+                if isinstance(finding_severity, (list, tuple, set))
+                else finding_severity,
                 "status": ",".join(map(str, status)) if isinstance(status, (list, tuple, set)) else status,
                 "compliance_status": ",".join(map(str, compliance_status))
                 if isinstance(compliance_status, (list, tuple, set))
@@ -312,12 +345,17 @@ class AsyncRawCsvClient:
     async def create(
         self,
         *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
         column_list: typing.Optional[str] = None,
         model_version_ids: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         model_ids: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         start_time: typing.Optional[dt.datetime] = None,
         end_time: typing.Optional[dt.datetime] = None,
         severity: typing.Optional[CreateCsvRequestSeverity] = None,
+        threat_type: typing.Optional[typing.Union[ScanTopThreatType, typing.Sequence[ScanTopThreatType]]] = None,
+        finding_severity: typing.Optional[
+            typing.Union[CreateCsvRequestFindingSeverityItem, typing.Sequence[CreateCsvRequestFindingSeverityItem]]
+        ] = None,
         status: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         compliance_status: typing.Optional[typing.Union[PolicyStatus, typing.Sequence[PolicyStatus]]] = None,
         request_source: typing.Optional[
@@ -351,6 +389,9 @@ class AsyncRawCsvClient:
 
         Parameters
         ----------
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, the response keeps findings' threat types and advisories' severities, each file's `top_threat_type` and `top_severity` on the files endpoint, and each scan's `top_threat_type`, `findings_count` and `threat_types`, SARIF reports advisories that have a threat type, and the supply chain CSV export fills its `threat_type` column. Without it, they are left out, as they were before threat types. Ignored when threat types are disabled. Filters and sorts on threat types work without it. Any value other than true or false returns 400. Even with true, findings from scanners that predate threat types may have no `threat_type`.
+
         column_list : typing.Optional[str]
             Comma-separated list of columns to include in the CSV export.
             Allowed values: name, detections, scanned_on, policy_status, origin, region, provider, threat_level.
@@ -370,6 +411,21 @@ class AsyncRawCsvClient:
 
         severity : typing.Optional[CreateCsvRequestSeverity]
             Comma-separated severities. A scan matches when its highest detection severity is a listed severity. Advisories don't count.
+
+        threat_type : typing.Optional[typing.Union[ScanTopThreatType, typing.Sequence[ScanTopThreatType]]]
+            Comma-separated threat types. Returns 400 for an unknown value, when threat types are disabled, or with `severity`.
+            A scan matches when it has a finding of a listed type. `none` matches a done scan with no findings.
+            `unclassified` matches a scan with at least one detection that has no threat type, whatever its top threat type.
+            `finding_severity` pairs with this filter: a scan matches when a listed threat type's highest severity is a listed severity.
+            `sort` also accepts `threat_type`, which orders scans by top threat type. Descending puts them in the order that ranks the top threat type: malicious, suspicious, unclassified, vulnerable, advisory, none.
+            `sort` also accepts `top_severity`, which orders scans by the highest severity across all findings. Sorting by `severity` or `threat_level` uses the scan's highest detection severity.
+            `column_list` also accepts `threat_type`, with the header Threat Type: the scan's top threat type, as the scan list returns it. Its cells are empty unless `include_threat_types` is true and threat types are enabled. It is not a default column.
+
+        finding_severity : typing.Optional[typing.Union[CreateCsvRequestFindingSeverityItem, typing.Sequence[CreateCsvRequestFindingSeverityItem]]]
+            Comma-separated severities: critical, high, medium, low, safe. Returns 400 for any other value, when threat types are disabled, or with `severity`.
+            Alone it matches when any of the scan's threat types has a listed highest severity.
+            Paired with `threat_type`, a scan matches when a listed threat type's highest severity is a listed severity.
+            `safe` means findings without a severity. Alone it matches scans whose findings all lack one, and scans with no findings and a `safe` severity. Paired with `threat_type`, it matches a listed type whose findings all lack one.
 
         status : typing.Optional[typing.Union[str, typing.Sequence[str]]]
             Filter by scan status (comma-separated)
@@ -425,6 +481,7 @@ class AsyncRawCsvClient:
             "scan/v3/reports/supply-chain/csv",
             method="POST",
             params={
+                "include_threat_types": include_threat_types,
                 "column_list": column_list,
                 "model_version_ids": ",".join(map(str, model_version_ids))
                 if isinstance(model_version_ids, (list, tuple, set))
@@ -433,6 +490,12 @@ class AsyncRawCsvClient:
                 "start_time": serialize_datetime(start_time) if start_time is not None else None,
                 "end_time": serialize_datetime(end_time) if end_time is not None else None,
                 "severity": severity,
+                "threat_type": ",".join(map(str, threat_type))
+                if isinstance(threat_type, (list, tuple, set))
+                else threat_type,
+                "finding_severity": ",".join(map(str, finding_severity))
+                if isinstance(finding_severity, (list, tuple, set))
+                else finding_severity,
                 "status": ",".join(map(str, status)) if isinstance(status, (list, tuple, set)) else status,
                 "compliance_status": ",".join(map(str, compliance_status))
                 if isinstance(compliance_status, (list, tuple, set))

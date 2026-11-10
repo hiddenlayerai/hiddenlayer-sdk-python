@@ -17,6 +17,7 @@ from ...core.serialization import convert_and_respect_annotation_metadata
 from ...errors.bad_request_error import BadRequestError
 from ...errors.not_found_error import NotFoundError
 from ...errors.unprocessable_entity_error import UnprocessableEntityError
+from ...types.include_threat_types import IncludeThreatTypes
 from ...types.list_jobs_request_model_name import ListJobsRequestModelName
 from ...types.list_jobs_request_severity import ListJobsRequestSeverity
 from ...types.list_jobs_request_source import ListJobsRequestSource
@@ -26,7 +27,9 @@ from ...types.scan_job_inventory import ScanJobInventory
 from ...types.scan_job_request_source import ScanJobRequestSource
 from ...types.scan_report_of_record_v3 import ScanReportOfRecordV3
 from ...types.scan_report_of_record_v3summary import ScanReportOfRecordV3Summary
+from ...types.scan_top_threat_type import ScanTopThreatType
 from ...types.status import Status
+from .types.list_jobs_request_finding_severity_item import ListJobsRequestFindingSeverityItem
 from .types.list_jobs_response import ListJobsResponse
 from .types.scan_job_request_access import ScanJobRequestAccess
 from pydantic import ValidationError
@@ -135,6 +138,7 @@ class RawJobsClient:
         scan_id: str,
         *,
         has_detections: typing.Optional[bool] = None,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ScanReportOfRecordV3]:
         """
@@ -145,6 +149,9 @@ class RawJobsClient:
 
         has_detections : typing.Optional[bool]
             Filter file_results to only those that have detections (and parents)
+
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, the response keeps findings' threat types and advisories' severities, each file's `top_threat_type` and `top_severity` on the files endpoint, and each scan's `top_threat_type`, `findings_count` and `threat_types`, SARIF reports advisories that have a threat type, and the supply chain CSV export fills its `threat_type` column. Without it, they are left out, as they were before threat types. Ignored when threat types are disabled. Filters and sorts on threat types work without it. Any value other than true or false returns 400. Even with true, findings from scanners that predate threat types may have no `threat_type`.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -159,6 +166,7 @@ class RawJobsClient:
             method="GET",
             params={
                 "has_detections": has_detections,
+                "include_threat_types": include_threat_types,
             },
             request_options=request_options,
         )
@@ -206,11 +214,16 @@ class RawJobsClient:
     def list(
         self,
         *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
         model_version_ids: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         model_ids: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         start_time: typing.Optional[dt.datetime] = None,
         end_time: typing.Optional[dt.datetime] = None,
         severity: typing.Optional[ListJobsRequestSeverity] = None,
+        threat_type: typing.Optional[typing.Union[ScanTopThreatType, typing.Sequence[ScanTopThreatType]]] = None,
+        finding_severity: typing.Optional[
+            typing.Union[ListJobsRequestFindingSeverityItem, typing.Sequence[ListJobsRequestFindingSeverityItem]]
+        ] = None,
         status: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         request_source: typing.Optional[
             typing.Union[ScanJobRequestSource, typing.Sequence[ScanJobRequestSource]]
@@ -232,6 +245,9 @@ class RawJobsClient:
         """
         Parameters
         ----------
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, the response keeps findings' threat types and advisories' severities, each file's `top_threat_type` and `top_severity` on the files endpoint, and each scan's `top_threat_type`, `findings_count` and `threat_types`, SARIF reports advisories that have a threat type, and the supply chain CSV export fills its `threat_type` column. Without it, they are left out, as they were before threat types. Ignored when threat types are disabled. Filters and sorts on threat types work without it. Any value other than true or false returns 400. Even with true, findings from scanners that predate threat types may have no `threat_type`.
+
         model_version_ids : typing.Optional[typing.Union[str, typing.Sequence[str]]]
             Model Version IDs
 
@@ -246,6 +262,20 @@ class RawJobsClient:
 
         severity : typing.Optional[ListJobsRequestSeverity]
             Comma-separated severities. A scan matches when its highest detection severity is a listed severity. Advisories don't count.
+
+        threat_type : typing.Optional[typing.Union[ScanTopThreatType, typing.Sequence[ScanTopThreatType]]]
+            Comma-separated threat types. Returns 400 for an unknown value, when threat types are disabled, or with `severity`.
+            A scan matches when it has a finding of a listed type. `none` matches a done scan with no findings.
+            `unclassified` matches a scan with at least one detection that has no threat type, whatever its top threat type.
+            `finding_severity` pairs with this filter: a scan matches when a listed threat type's highest severity is a listed severity.
+            `sort` also accepts `threat_type`, which orders scans by top threat type. Descending puts them in the order that ranks the top threat type: malicious, suspicious, unclassified, vulnerable, advisory, none.
+            `sort` also accepts `top_severity`, which orders scans by the highest severity across all findings. Sorting by `severity` uses the scan's highest detection severity.
+
+        finding_severity : typing.Optional[typing.Union[ListJobsRequestFindingSeverityItem, typing.Sequence[ListJobsRequestFindingSeverityItem]]]
+            Comma-separated severities: critical, high, medium, low, safe. Returns 400 for any other value, when threat types are disabled, or with `severity`.
+            Alone it matches when any of the scan's threat types has a listed highest severity.
+            Paired with `threat_type`, a scan matches when a listed threat type's highest severity is a listed severity.
+            `safe` means findings without a severity. Alone it matches scans whose findings all lack one, and scans with no findings and a `safe` severity. Paired with `threat_type`, it matches a listed type whose findings all lack one.
 
         status : typing.Optional[typing.Union[str, typing.Sequence[str]]]
             Statuses
@@ -301,6 +331,7 @@ class RawJobsClient:
             "scan/v3/results",
             method="GET",
             params={
+                "include_threat_types": include_threat_types,
                 "model_version_ids": ",".join(map(str, model_version_ids))
                 if isinstance(model_version_ids, (list, tuple, set))
                 else model_version_ids,
@@ -308,6 +339,12 @@ class RawJobsClient:
                 "start_time": serialize_datetime(start_time) if start_time is not None else None,
                 "end_time": serialize_datetime(end_time) if end_time is not None else None,
                 "severity": severity,
+                "threat_type": ",".join(map(str, threat_type))
+                if isinstance(threat_type, (list, tuple, set))
+                else threat_type,
+                "finding_severity": ",".join(map(str, finding_severity))
+                if isinstance(finding_severity, (list, tuple, set))
+                else finding_severity,
                 "status": ",".join(map(str, status)) if isinstance(status, (list, tuple, set)) else status,
                 "request_source": ",".join(map(str, request_source))
                 if isinstance(request_source, (list, tuple, set))
@@ -345,11 +382,14 @@ class RawJobsClient:
                 _items = _parsed_response.items
                 _has_next = len(_items or []) > 0
                 _get_next = lambda: self.list(
+                    include_threat_types=include_threat_types,
                     model_version_ids=model_version_ids,
                     model_ids=model_ids,
                     start_time=start_time,
                     end_time=end_time,
                     severity=severity,
+                    threat_type=threat_type,
+                    finding_severity=finding_severity,
                     status=status,
                     request_source=request_source,
                     region=region,
@@ -499,6 +539,7 @@ class AsyncRawJobsClient:
         scan_id: str,
         *,
         has_detections: typing.Optional[bool] = None,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ScanReportOfRecordV3]:
         """
@@ -509,6 +550,9 @@ class AsyncRawJobsClient:
 
         has_detections : typing.Optional[bool]
             Filter file_results to only those that have detections (and parents)
+
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, the response keeps findings' threat types and advisories' severities, each file's `top_threat_type` and `top_severity` on the files endpoint, and each scan's `top_threat_type`, `findings_count` and `threat_types`, SARIF reports advisories that have a threat type, and the supply chain CSV export fills its `threat_type` column. Without it, they are left out, as they were before threat types. Ignored when threat types are disabled. Filters and sorts on threat types work without it. Any value other than true or false returns 400. Even with true, findings from scanners that predate threat types may have no `threat_type`.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -523,6 +567,7 @@ class AsyncRawJobsClient:
             method="GET",
             params={
                 "has_detections": has_detections,
+                "include_threat_types": include_threat_types,
             },
             request_options=request_options,
         )
@@ -570,11 +615,16 @@ class AsyncRawJobsClient:
     async def list(
         self,
         *,
+        include_threat_types: typing.Optional[IncludeThreatTypes] = None,
         model_version_ids: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         model_ids: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         start_time: typing.Optional[dt.datetime] = None,
         end_time: typing.Optional[dt.datetime] = None,
         severity: typing.Optional[ListJobsRequestSeverity] = None,
+        threat_type: typing.Optional[typing.Union[ScanTopThreatType, typing.Sequence[ScanTopThreatType]]] = None,
+        finding_severity: typing.Optional[
+            typing.Union[ListJobsRequestFindingSeverityItem, typing.Sequence[ListJobsRequestFindingSeverityItem]]
+        ] = None,
         status: typing.Optional[typing.Union[str, typing.Sequence[str]]] = None,
         request_source: typing.Optional[
             typing.Union[ScanJobRequestSource, typing.Sequence[ScanJobRequestSource]]
@@ -596,6 +646,9 @@ class AsyncRawJobsClient:
         """
         Parameters
         ----------
+        include_threat_types : typing.Optional[IncludeThreatTypes]
+            With true, the response keeps findings' threat types and advisories' severities, each file's `top_threat_type` and `top_severity` on the files endpoint, and each scan's `top_threat_type`, `findings_count` and `threat_types`, SARIF reports advisories that have a threat type, and the supply chain CSV export fills its `threat_type` column. Without it, they are left out, as they were before threat types. Ignored when threat types are disabled. Filters and sorts on threat types work without it. Any value other than true or false returns 400. Even with true, findings from scanners that predate threat types may have no `threat_type`.
+
         model_version_ids : typing.Optional[typing.Union[str, typing.Sequence[str]]]
             Model Version IDs
 
@@ -610,6 +663,20 @@ class AsyncRawJobsClient:
 
         severity : typing.Optional[ListJobsRequestSeverity]
             Comma-separated severities. A scan matches when its highest detection severity is a listed severity. Advisories don't count.
+
+        threat_type : typing.Optional[typing.Union[ScanTopThreatType, typing.Sequence[ScanTopThreatType]]]
+            Comma-separated threat types. Returns 400 for an unknown value, when threat types are disabled, or with `severity`.
+            A scan matches when it has a finding of a listed type. `none` matches a done scan with no findings.
+            `unclassified` matches a scan with at least one detection that has no threat type, whatever its top threat type.
+            `finding_severity` pairs with this filter: a scan matches when a listed threat type's highest severity is a listed severity.
+            `sort` also accepts `threat_type`, which orders scans by top threat type. Descending puts them in the order that ranks the top threat type: malicious, suspicious, unclassified, vulnerable, advisory, none.
+            `sort` also accepts `top_severity`, which orders scans by the highest severity across all findings. Sorting by `severity` uses the scan's highest detection severity.
+
+        finding_severity : typing.Optional[typing.Union[ListJobsRequestFindingSeverityItem, typing.Sequence[ListJobsRequestFindingSeverityItem]]]
+            Comma-separated severities: critical, high, medium, low, safe. Returns 400 for any other value, when threat types are disabled, or with `severity`.
+            Alone it matches when any of the scan's threat types has a listed highest severity.
+            Paired with `threat_type`, a scan matches when a listed threat type's highest severity is a listed severity.
+            `safe` means findings without a severity. Alone it matches scans whose findings all lack one, and scans with no findings and a `safe` severity. Paired with `threat_type`, it matches a listed type whose findings all lack one.
 
         status : typing.Optional[typing.Union[str, typing.Sequence[str]]]
             Statuses
@@ -665,6 +732,7 @@ class AsyncRawJobsClient:
             "scan/v3/results",
             method="GET",
             params={
+                "include_threat_types": include_threat_types,
                 "model_version_ids": ",".join(map(str, model_version_ids))
                 if isinstance(model_version_ids, (list, tuple, set))
                 else model_version_ids,
@@ -672,6 +740,12 @@ class AsyncRawJobsClient:
                 "start_time": serialize_datetime(start_time) if start_time is not None else None,
                 "end_time": serialize_datetime(end_time) if end_time is not None else None,
                 "severity": severity,
+                "threat_type": ",".join(map(str, threat_type))
+                if isinstance(threat_type, (list, tuple, set))
+                else threat_type,
+                "finding_severity": ",".join(map(str, finding_severity))
+                if isinstance(finding_severity, (list, tuple, set))
+                else finding_severity,
                 "status": ",".join(map(str, status)) if isinstance(status, (list, tuple, set)) else status,
                 "request_source": ",".join(map(str, request_source))
                 if isinstance(request_source, (list, tuple, set))
@@ -711,11 +785,14 @@ class AsyncRawJobsClient:
 
                 async def _get_next():
                     return await self.list(
+                        include_threat_types=include_threat_types,
                         model_version_ids=model_version_ids,
                         model_ids=model_ids,
                         start_time=start_time,
                         end_time=end_time,
                         severity=severity,
+                        threat_type=threat_type,
+                        finding_severity=finding_severity,
                         status=status,
                         request_source=request_source,
                         region=region,

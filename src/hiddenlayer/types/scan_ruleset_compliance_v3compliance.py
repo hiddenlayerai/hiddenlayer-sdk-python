@@ -9,7 +9,11 @@ from .policy_status import PolicyStatus
 
 
 class ScanRulesetComplianceV3Compliance(UniversalBaseModel):
-    status: typing.Optional[PolicyStatus] = None
+    status: typing.Optional[PolicyStatus] = pydantic.Field(default=None)
+    """
+    Policy evaluation outcome, separate from scan severity and threat classification. An absent compliance result does not imply COMPLIANT.
+    """
+
     evaluated_at: typing.Optional[dt.datetime] = pydantic.Field(default=None)
     """
     The datetime when the rule set was evaluated against the scan result

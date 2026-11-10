@@ -8,7 +8,7 @@ from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...core.pagination import AsyncPager, SyncPager
 from ...core.request_options import RequestOptions
 from ...types.rule import Rule
-from ...types.rule_set import RuleSet
+from ...types.rule_set_response import RuleSetResponse
 from .raw_client import AsyncRawRuleSetsClient, RawRuleSetsClient
 from .types.list_rule_sets_response import ListRuleSetsResponse
 
@@ -42,7 +42,7 @@ class RuleSetsClient:
         cursor: typing.Optional[str] = None,
         include_disabled: typing.Optional[bool] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> SyncPager[RuleSet, ListRuleSetsResponse]:
+    ) -> SyncPager[RuleSetResponse, ListRuleSetsResponse]:
         """
         Retrieve a list of rule sets that can be used to evaluate artifacts against governance policies.
         This endpoint supports pagination with the `page_size` and `cursor` parameters.
@@ -64,7 +64,7 @@ class RuleSetsClient:
 
         Returns
         -------
-        SyncPager[RuleSet, ListRuleSetsResponse]
+        SyncPager[RuleSetResponse, ListRuleSetsResponse]
             The rule sets which were successfully retrieved
 
         Examples
@@ -96,7 +96,7 @@ class RuleSetsClient:
         id: typing.Optional[str] = OMIT,
         previous_rule_set_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> RuleSet:
+    ) -> RuleSetResponse:
         """
         Create a new rule set for evaluating artifacts against governance policies.
         Rule sets can contain multiple rules, each with a set of conditions to evaluate.
@@ -130,7 +130,7 @@ class RuleSetsClient:
 
         Returns
         -------
-        RuleSet
+        RuleSetResponse
             The rule set which was successfully created
 
         Examples
@@ -141,14 +141,16 @@ class RuleSetsClient:
             token="YOUR_TOKEN",
         )
         client.governance.rule_sets.create(
-            display_name="display_name",
+            display_name="License policy",
             rules=[
                 Rule(
+                    display_name="Allow MIT licensed models",
                     is_compliant_when_conditions_met=True,
                     conditions=[
                         Condition(
-                            field="field",
+                            field="license",
                             condition_operator="equals",
+                            field_value="mit",
                         )
                     ],
                 )
@@ -171,9 +173,16 @@ class RuleSetsClient:
         *,
         include_disabled: typing.Optional[bool] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> RuleSet:
+    ) -> RuleSetResponse:
         """
-        Retrieve a specific rule set by its unique identifier. This endpoint returns the details of the rule set, including its rules and compliance criteria.
+        For active policy views, use [Retrieve rule sets](#operation/get_governance_rule_sets)
+        (`GET /governance/v1/rule-sets`) and select the required rule set from the paginated results.
+        Use `include_disabled=true` when disabled rules are needed. This parameter includes disabled
+        rules within returned rule sets; it does not guarantee access to disabled or historical rule sets.
+        Contact support before migrating workflows that require historical rule-set retrieval.
+
+        Retrieve a specific rule set by its unique identifier. This endpoint returns
+        the details of the rule set, including its rules and compliance criteria.
         The response includes the rule set's ID, display name, and the list of rules it contains.
         If the rule set does not exist, a 404 Not Found error is returned.
 
@@ -190,7 +199,7 @@ class RuleSetsClient:
 
         Returns
         -------
-        RuleSet
+        RuleSetResponse
             The rule set which was successfully retrieved
 
         Examples
@@ -274,7 +283,7 @@ class AsyncRuleSetsClient:
         cursor: typing.Optional[str] = None,
         include_disabled: typing.Optional[bool] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncPager[RuleSet, ListRuleSetsResponse]:
+    ) -> AsyncPager[RuleSetResponse, ListRuleSetsResponse]:
         """
         Retrieve a list of rule sets that can be used to evaluate artifacts against governance policies.
         This endpoint supports pagination with the `page_size` and `cursor` parameters.
@@ -296,7 +305,7 @@ class AsyncRuleSetsClient:
 
         Returns
         -------
-        AsyncPager[RuleSet, ListRuleSetsResponse]
+        AsyncPager[RuleSetResponse, ListRuleSetsResponse]
             The rule sets which were successfully retrieved
 
         Examples
@@ -337,7 +346,7 @@ class AsyncRuleSetsClient:
         id: typing.Optional[str] = OMIT,
         previous_rule_set_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> RuleSet:
+    ) -> RuleSetResponse:
         """
         Create a new rule set for evaluating artifacts against governance policies.
         Rule sets can contain multiple rules, each with a set of conditions to evaluate.
@@ -371,7 +380,7 @@ class AsyncRuleSetsClient:
 
         Returns
         -------
-        RuleSet
+        RuleSetResponse
             The rule set which was successfully created
 
         Examples
@@ -387,14 +396,16 @@ class AsyncRuleSetsClient:
 
         async def main() -> None:
             await client.governance.rule_sets.create(
-                display_name="display_name",
+                display_name="License policy",
                 rules=[
                     Rule(
+                        display_name="Allow MIT licensed models",
                         is_compliant_when_conditions_met=True,
                         conditions=[
                             Condition(
-                                field="field",
+                                field="license",
                                 condition_operator="equals",
+                                field_value="mit",
                             )
                         ],
                     )
@@ -420,9 +431,16 @@ class AsyncRuleSetsClient:
         *,
         include_disabled: typing.Optional[bool] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> RuleSet:
+    ) -> RuleSetResponse:
         """
-        Retrieve a specific rule set by its unique identifier. This endpoint returns the details of the rule set, including its rules and compliance criteria.
+        For active policy views, use [Retrieve rule sets](#operation/get_governance_rule_sets)
+        (`GET /governance/v1/rule-sets`) and select the required rule set from the paginated results.
+        Use `include_disabled=true` when disabled rules are needed. This parameter includes disabled
+        rules within returned rule sets; it does not guarantee access to disabled or historical rule sets.
+        Contact support before migrating workflows that require historical rule-set retrieval.
+
+        Retrieve a specific rule set by its unique identifier. This endpoint returns
+        the details of the rule set, including its rules and compliance criteria.
         The response includes the rule set's ID, display name, and the list of rules it contains.
         If the rule set does not exist, a 404 Not Found error is returned.
 
@@ -439,7 +457,7 @@ class AsyncRuleSetsClient:
 
         Returns
         -------
-        RuleSet
+        RuleSetResponse
             The rule set which was successfully retrieved
 
         Examples

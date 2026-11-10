@@ -8,6 +8,9 @@ from .scan_detection_severity import ScanDetectionSeverity
 from .scan_detection_v3mitre_atlas_item import ScanDetectionV3MitreAtlasItem
 from .scan_detection_v3risk import ScanDetectionV3Risk
 from .scan_detection_v3rule_details_item import ScanDetectionV3RuleDetailsItem
+from .scan_finding_evidence import ScanFindingEvidence
+from .scan_owasp_issues import ScanOwaspIssues
+from .scan_threat_type import ScanThreatType
 
 
 class ScanDetectionV3(UniversalBaseModel):
@@ -23,7 +26,7 @@ class ScanDetectionV3(UniversalBaseModel):
 
     risk: ScanDetectionV3Risk = pydantic.Field()
     """
-    detection risk
+    Legacy risk classification. Use threat_type instead.
     """
 
     category: str = pydantic.Field()
@@ -47,9 +50,16 @@ class ScanDetectionV3(UniversalBaseModel):
     """
 
     severity: ScanDetectionSeverity
+    threat_type: typing.Optional[ScanThreatType] = None
     rule_details: typing.Optional[typing.List[ScanDetectionV3RuleDetailsItem]] = None
     mitre_atlas: typing.List[ScanDetectionV3MitreAtlasItem]
-    owasp: typing.List[str]
+    owasp: typing.List[str] = pydantic.Field()
+    """
+    Legacy OWASP identifiers. Use owasp_issues for identifiers and reference links.
+    """
+
+    owasp_issues: typing.Optional[ScanOwaspIssues] = None
+    evidence: typing.Optional[ScanFindingEvidence] = None
     cve: typing.List[str]
     cwe: str
     cwe_href: str = pydantic.Field()

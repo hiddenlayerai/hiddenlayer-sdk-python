@@ -4,6 +4,10 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from .scan_detection_severity import ScanDetectionSeverity
+from .scan_finding_evidence import ScanFindingEvidence
+from .scan_owasp_issues import ScanOwaspIssues
+from .scan_threat_type import ScanThreatType
 
 
 class ScanAdvisoryV3(UniversalBaseModel):
@@ -32,6 +36,11 @@ class ScanAdvisoryV3(UniversalBaseModel):
     """
     advisory description
     """
+
+    severity: typing.Optional[ScanDetectionSeverity] = None
+    threat_type: typing.Optional[ScanThreatType] = None
+    owasp_issues: typing.Optional[ScanOwaspIssues] = None
+    evidence: typing.Optional[ScanFindingEvidence] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

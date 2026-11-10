@@ -7,13 +7,19 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from . import jobs, reports, results, upload
-    from .jobs import ListJobsResponse, ScanJobRequestAccess, ScanJobRequestAccessSource
+    from .jobs import (
+        ListJobsRequestFindingSeverityItem,
+        ListJobsResponse,
+        ScanJobRequestAccess,
+        ScanJobRequestAccessSource,
+    )
     from .reports import ListReportsResponse
     from .results import ListFilesResultsResponse
     from .upload import CompleteAllUploadResponse, StartUploadResponse
 _dynamic_imports: typing.Dict[str, str] = {
     "CompleteAllUploadResponse": ".upload",
     "ListFilesResultsResponse": ".results",
+    "ListJobsRequestFindingSeverityItem": ".jobs",
     "ListJobsResponse": ".jobs",
     "ListReportsResponse": ".reports",
     "ScanJobRequestAccess": ".jobs",
@@ -50,6 +56,7 @@ def __dir__():
 __all__ = [
     "CompleteAllUploadResponse",
     "ListFilesResultsResponse",
+    "ListJobsRequestFindingSeverityItem",
     "ListJobsResponse",
     "ListReportsResponse",
     "ScanJobRequestAccess",

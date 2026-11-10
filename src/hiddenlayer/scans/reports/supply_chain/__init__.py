@@ -7,8 +7,12 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from . import csv
-    from .csv import CreateCsvResponse
-_dynamic_imports: typing.Dict[str, str] = {"CreateCsvResponse": ".csv", "csv": ".csv"}
+    from .csv import CreateCsvRequestFindingSeverityItem, CreateCsvResponse
+_dynamic_imports: typing.Dict[str, str] = {
+    "CreateCsvRequestFindingSeverityItem": ".csv",
+    "CreateCsvResponse": ".csv",
+    "csv": ".csv",
+}
 
 
 def __getattr__(attr_name: str) -> typing.Any:
@@ -32,4 +36,4 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["CreateCsvResponse", "csv"]
+__all__ = ["CreateCsvRequestFindingSeverityItem", "CreateCsvResponse", "csv"]
