@@ -24,7 +24,7 @@ class TriageAlertSpread(UniversalBaseModel):
 
     distinct_sessions: typing.Optional[int] = pydantic.Field(default=None)
     """
-    Number of distinct runtime sessions represented. Present only on runtime issues, and counts only alerts that carried a session identifier. Omitted when no correlated alert carried one, so an absent field means either a non-runtime issue or a count of zero.
+    Number of distinct runtime sessions represented. Present only on runtime issues (`RUNTIME`), and counts only alerts that carried a session identifier. Omitted when no correlated alert carried one, so an absent field means either another source or a count of zero. Runtime v1 convictions carry no session identifier, so `RUNTIME_V1` issues never have it.
     """
 
     if IS_PYDANTIC_V2:

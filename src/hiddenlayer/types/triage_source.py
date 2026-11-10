@@ -2,4 +2,4 @@
 
 import typing
 
-TriageSource = typing.Union[typing.Literal["RUNTIME", "SUPPLY_CHAIN"], typing.Any]
+TriageSource = typing.Union[typing.Literal["RUNTIME", "SUPPLY_CHAIN", "RUNTIME_V1"], typing.Any]
