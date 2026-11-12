@@ -299,7 +299,6 @@ if typing.TYPE_CHECKING:
     from .nullable_policy_status import NullablePolicyStatus
     from .numpy_file_attributes import NumpyFileAttributes
     from .o_auth2error import OAuth2Error
-    from .oauth_scope import OauthScope
     from .objectives_list_response import ObjectivesListResponse
     from .offset import Offset
     from .org import Org
@@ -915,7 +914,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "NullablePolicyStatus": ".nullable_policy_status",
     "NumpyFileAttributes": ".numpy_file_attributes",
     "OAuth2Error": ".o_auth2error",
-    "OauthScope": ".oauth_scope",
     "ObjectivesListResponse": ".objectives_list_response",
     "Offset": ".offset",
     "Org": ".org",
@@ -1549,7 +1547,6 @@ __all__ = [
     "NullablePolicyStatus",
     "NumpyFileAttributes",
     "OAuth2Error",
-    "OauthScope",
     "ObjectivesListResponse",
     "Offset",
     "Org",

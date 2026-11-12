@@ -59,7 +59,8 @@ class FileClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.model_intel.file.get(
             sha256="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -91,7 +92,8 @@ class FileClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.model_intel.file.metadata(
             sha256="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -153,7 +155,8 @@ class AsyncFileClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -195,7 +198,8 @@ class AsyncFileClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 

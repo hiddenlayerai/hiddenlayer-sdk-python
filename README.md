@@ -20,6 +20,7 @@ The Hiddenlayer Python library provides convenient access to the Hiddenlayer API
 - [Pagination](#pagination)
 - [Nested Params](#nested-params)
 - [Handling Errors](#handling-errors)
+- [Oauth Token Override](#oauth-token-override)
 - [Advanced](#advanced)
   - [Access Raw Response Data](#access-raw-response-data)
   - [Retries](#retries)
@@ -58,7 +59,8 @@ Instantiate and use the client with the following:
 from hiddenlayer import HiddenLayer
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
 )
 
 client.credentials.create(
@@ -178,7 +180,8 @@ import asyncio
 from hiddenlayer import AsyncHiddenLayer
 
 client = AsyncHiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
 )
 
 
@@ -214,7 +217,8 @@ Paginated requests will return a `SyncPager` or `AsyncPager`, which can be used 
 from hiddenlayer import HiddenLayer
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
 )
 
 client.sensors.query_legacy()
@@ -375,6 +379,27 @@ client.with_options(timeout=5.0).interactions.analyze(
 On timeout, an `APITimeoutError` is thrown.
 
 Note that requests that time out are [retried twice by default](#retries).
+
+## Oauth Token Override
+
+This SDK supports two authentication methods: OAuth client credentials flow (automatic token management) or direct bearer token authentication. You can choose between these options when initializing the client:
+
+```python
+from hiddenlayer import HiddenLayer
+
+# Option 1: Direct bearer token (bypass OAuth flow)
+client = HiddenLayer(
+    ...,
+    token="my-pre-generated-bearer-token",
+)
+
+# Option 2: OAuth client credentials flow (automatic token management)
+client = HiddenLayer(
+    ...,
+    client_id="your-client-id",
+    client_secret="your-client-secret",
+)
+```
 
 ## Advanced
 

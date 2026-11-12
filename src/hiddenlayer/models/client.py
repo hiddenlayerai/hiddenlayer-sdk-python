@@ -56,7 +56,8 @@ class ModelsClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.models.retrieve(
             model_id="model_id",
@@ -83,7 +84,8 @@ class ModelsClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.models.delete(
             model_id="model_id",
@@ -109,7 +111,8 @@ class ModelsClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.models.list()
         """
@@ -137,7 +140,8 @@ class ModelsClient:
         from hiddenlayer import HiddenLayer, SensorSorModel
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.models.update(
             request=[
@@ -218,7 +222,8 @@ class AsyncModelsClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -253,7 +258,8 @@ class AsyncModelsClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -287,7 +293,8 @@ class AsyncModelsClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -323,7 +330,8 @@ class AsyncModelsClient:
         from hiddenlayer import AsyncHiddenLayer, SensorSorModel
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 

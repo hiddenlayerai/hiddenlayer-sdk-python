@@ -140,7 +140,8 @@ class SearchClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         response = client.asset_inventory.assets.search.list(
             q="q",
@@ -251,7 +252,8 @@ class SearchClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.asset_inventory.assets.search.suggestions(
             q="q",
@@ -387,7 +389,8 @@ class AsyncSearchClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -507,7 +510,8 @@ class AsyncSearchClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 

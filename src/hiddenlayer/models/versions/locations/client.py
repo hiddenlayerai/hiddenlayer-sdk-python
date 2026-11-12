@@ -50,7 +50,8 @@ class LocationsClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.models.versions.locations.get(
             version_id="version_id",
@@ -85,7 +86,8 @@ class LocationsClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.models.versions.locations.update(
             version_id="version_id",
@@ -137,7 +139,8 @@ class AsyncLocationsClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -180,7 +183,8 @@ class AsyncLocationsClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 

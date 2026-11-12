@@ -117,7 +117,8 @@ class CardsClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         response = client.models.cards.list_v3(
             limit=50,
@@ -222,7 +223,8 @@ class CardsClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         response = client.models.cards.list(
             limit=50,
@@ -274,7 +276,8 @@ class CardsClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.models.cards.suggestions(
             q="tes",
@@ -374,7 +377,8 @@ class AsyncCardsClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -488,7 +492,8 @@ class AsyncCardsClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -549,7 +554,8 @@ class AsyncCardsClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 

@@ -65,7 +65,8 @@ class InteractionsClient:
         from hiddenlayer import HiddenLayer, InteractionsMetadata
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.interactions.analyze(
             hl_project_id="internal-search-chatbot",
@@ -135,7 +136,8 @@ class AsyncInteractionsClient:
         from hiddenlayer import AsyncHiddenLayer, InteractionsMetadata
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 

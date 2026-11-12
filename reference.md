@@ -31,7 +31,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -64,7 +65,7 @@ client.eula_responses.self_()
 </details>
 
 ## Credentials
-<details><summary><code>client.credentials.<a href="src/hiddenlayer/credentials/client.py#L31-L60">list</a>(...) -> ListCredentialsResponse</code></summary>
+<details><summary><code>client.credentials.<a href="src/hiddenlayer/credentials/client.py#L31-L61">list</a>(...) -> ListCredentialsResponse</code></summary>
 <dl>
 <dd>
 
@@ -95,7 +96,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -135,7 +137,7 @@ client.credentials.list()
 </dl>
 </details>
 
-<details><summary><code>client.credentials.<a href="src/hiddenlayer/credentials/client.py#L62-L113">create</a>(...) -> CredentialsWithSecret</code></summary>
+<details><summary><code>client.credentials.<a href="src/hiddenlayer/credentials/client.py#L63-L115">create</a>(...) -> CredentialsWithSecret</code></summary>
 <dl>
 <dd>
 
@@ -172,7 +174,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -234,7 +237,7 @@ more than 365 days in the future.
 </dl>
 </details>
 
-<details><summary><code>client.credentials.<a href="src/hiddenlayer/credentials/client.py#L115-L143">delete</a>(...)</code></summary>
+<details><summary><code>client.credentials.<a href="src/hiddenlayer/credentials/client.py#L117-L146">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -265,7 +268,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -308,7 +312,7 @@ client.credentials.delete(
 </details>
 
 ## Permissions
-<details><summary><code>client.permissions.<a href="src/hiddenlayer/permissions/client.py#L26-L57">list</a>() -> ListPermissionsResponse</code></summary>
+<details><summary><code>client.permissions.<a href="src/hiddenlayer/permissions/client.py#L26-L58">list</a>() -> ListPermissionsResponse</code></summary>
 <dl>
 <dd>
 
@@ -346,7 +350,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -379,7 +384,7 @@ client.permissions.list()
 </details>
 
 ## Roles
-<details><summary><code>client.roles.<a href="src/hiddenlayer/roles/client.py#L26-L72">list</a>() -> ListRolesResponse</code></summary>
+<details><summary><code>client.roles.<a href="src/hiddenlayer/roles/client.py#L26-L73">list</a>() -> ListRolesResponse</code></summary>
 <dl>
 <dd>
 
@@ -432,7 +437,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -465,7 +471,7 @@ client.roles.list()
 </details>
 
 ## Users
-<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L35-L59">list</a>() -> ListUsersResponse</code></summary>
+<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L35-L60">list</a>() -> ListUsersResponse</code></summary>
 <dl>
 <dd>
 
@@ -496,7 +502,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -528,7 +535,7 @@ client.users.list()
 </dl>
 </details>
 
-<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L61-L125">create</a>(...) -> CreateUsersResponse</code></summary>
+<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L62-L127">create</a>(...) -> CreateUsersResponse</code></summary>
 <dl>
 <dd>
 
@@ -559,7 +566,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -599,7 +607,7 @@ client.users.create()
 </dl>
 </details>
 
-<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L127-L156">get</a>(...) -> GetUsersResponse</code></summary>
+<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L129-L159">get</a>(...) -> GetUsersResponse</code></summary>
 <dl>
 <dd>
 
@@ -630,7 +638,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -672,7 +681,7 @@ client.users.get(
 </dl>
 </details>
 
-<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L158-L229">update</a>(...) -> User</code></summary>
+<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L161-L233">update</a>(...) -> User</code></summary>
 <dl>
 <dd>
 
@@ -703,7 +712,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -753,7 +763,7 @@ client.users.update(
 </dl>
 </details>
 
-<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L231-L259">delete</a>(...)</code></summary>
+<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L235-L264">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -784,7 +794,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -826,7 +837,7 @@ client.users.delete(
 </dl>
 </details>
 
-<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L261-L292">reset</a>(...) -> ResetUsersResponse</code></summary>
+<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L266-L298">reset</a>(...) -> ResetUsersResponse</code></summary>
 <dl>
 <dd>
 
@@ -859,7 +870,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -901,7 +913,7 @@ client.users.reset(
 </dl>
 </details>
 
-<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L294-L318">me</a>() -> MeUsersResponse</code></summary>
+<details><summary><code>client.users.<a href="src/hiddenlayer/users/client.py#L300-L325">me</a>() -> MeUsersResponse</code></summary>
 <dl>
 <dd>
 
@@ -932,7 +944,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -965,7 +978,7 @@ client.users.me()
 </details>
 
 ## Oauth2
-<details><summary><code>client.oauth2.<a href="src/hiddenlayer/oauth2/client.py#L30-L76">token</a>(...) -> AccessToken</code></summary>
+<details><summary><code>client.oauth2.<a href="src/hiddenlayer/oauth2/client.py#L30-L77">token</a>(...) -> AccessToken</code></summary>
 <dl>
 <dd>
 
@@ -998,7 +1011,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -1041,7 +1055,7 @@ client.oauth2.token(
 </details>
 
 ## SsoIntegrations
-<details><summary><code>client.sso_integrations.<a href="src/hiddenlayer/sso_integrations/client.py#L35-L59">list</a>() -> ListSsoIntegrationsResponse</code></summary>
+<details><summary><code>client.sso_integrations.<a href="src/hiddenlayer/sso_integrations/client.py#L35-L60">list</a>() -> ListSsoIntegrationsResponse</code></summary>
 <dl>
 <dd>
 
@@ -1072,7 +1086,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -1104,7 +1119,7 @@ client.sso_integrations.list()
 </dl>
 </details>
 
-<details><summary><code>client.sso_integrations.<a href="src/hiddenlayer/sso_integrations/client.py#L61-L100">create</a>(...) -> SsoIntegrationSamlV2</code></summary>
+<details><summary><code>client.sso_integrations.<a href="src/hiddenlayer/sso_integrations/client.py#L62-L102">create</a>(...) -> SsoIntegrationSamlV2</code></summary>
 <dl>
 <dd>
 
@@ -1137,7 +1152,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -1188,7 +1204,7 @@ client.sso_integrations.create(
 </dl>
 </details>
 
-<details><summary><code>client.sso_integrations.<a href="src/hiddenlayer/sso_integrations/client.py#L102-L131">get</a>(...) -> SsoIntegrationSamlV2</code></summary>
+<details><summary><code>client.sso_integrations.<a href="src/hiddenlayer/sso_integrations/client.py#L104-L134">get</a>(...) -> SsoIntegrationSamlV2</code></summary>
 <dl>
 <dd>
 
@@ -1219,7 +1235,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -1261,7 +1278,7 @@ client.sso_integrations.get(
 </dl>
 </details>
 
-<details><summary><code>client.sso_integrations.<a href="src/hiddenlayer/sso_integrations/client.py#L133-L193">update</a>(...) -> SsoIntegrationSamlV2</code></summary>
+<details><summary><code>client.sso_integrations.<a href="src/hiddenlayer/sso_integrations/client.py#L136-L197">update</a>(...) -> SsoIntegrationSamlV2</code></summary>
 <dl>
 <dd>
 
@@ -1294,7 +1311,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -1377,7 +1395,7 @@ client.sso_integrations.update(
 </details>
 
 ## Interactions
-<details><summary><code>client.interactions.<a href="src/hiddenlayer/interactions/client.py#L32-L82">analyze</a>(...) -> EnrichedResponse</code></summary>
+<details><summary><code>client.interactions.<a href="src/hiddenlayer/interactions/client.py#L32-L83">analyze</a>(...) -> EnrichedResponse</code></summary>
 <dl>
 <dd>
 
@@ -1408,7 +1426,8 @@ from hiddenlayer import HiddenLayer, InteractionsMetadata
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -1480,7 +1499,7 @@ client.interactions.analyze(
 </details>
 
 ## PromptAnalyzer
-<details><summary><code>client.prompt_analyzer.<a href="src/hiddenlayer/prompt_analyzer/client.py#L29-L86">create</a>(...) -> HiddenLayerPromptAnalyzerResponse</code></summary>
+<details><summary><code>client.prompt_analyzer.<a href="src/hiddenlayer/prompt_analyzer/client.py#L29-L87">create</a>(...) -> HiddenLayerPromptAnalyzerResponse</code></summary>
 <dl>
 <dd>
 
@@ -1511,7 +1530,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -1589,7 +1609,7 @@ client.prompt_analyzer.create(
 </details>
 
 ## Runtime
-<details><summary><code>client.runtime.<a href="src/hiddenlayer/runtime/client.py#L32-L141">evaluate_interaction</a>(...) -> InteractionEvaluationResponse</code></summary>
+<details><summary><code>client.runtime.<a href="src/hiddenlayer/runtime/client.py#L32-L142">evaluate_interaction</a>(...) -> InteractionEvaluationResponse</code></summary>
 <dl>
 <dd>
 
@@ -1646,7 +1666,8 @@ from hiddenlayer import HiddenLayer, InteractionEvaluationRequestMetadata, Canon
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -1739,7 +1760,7 @@ constraints.
 </dl>
 </details>
 
-<details><summary><code>client.runtime.<a href="src/hiddenlayer/runtime/client.py#L143-L222">evaluate_request</a>(...) -> ProviderPayload</code></summary>
+<details><summary><code>client.runtime.<a href="src/hiddenlayer/runtime/client.py#L144-L224">evaluate_request</a>(...) -> ProviderPayload</code></summary>
 <dl>
 <dd>
 
@@ -1791,7 +1812,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -1859,7 +1881,7 @@ single session. The identifier should be unique across the all sessions.
 </dl>
 </details>
 
-<details><summary><code>client.runtime.<a href="src/hiddenlayer/runtime/client.py#L224-L312">evaluate_response</a>(...) -> ProviderPayload</code></summary>
+<details><summary><code>client.runtime.<a href="src/hiddenlayer/runtime/client.py#L226-L315">evaluate_response</a>(...) -> ProviderPayload</code></summary>
 <dl>
 <dd>
 
@@ -1909,7 +1931,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -1980,7 +2003,7 @@ single session. The identifier should be unique across the all sessions.
 </details>
 
 ## Sensors
-<details><summary><code>client.sensors.<a href="src/hiddenlayer/sensors/client.py#L34-L86">create</a>(...) -> SensorSorItemResponse</code></summary>
+<details><summary><code>client.sensors.<a href="src/hiddenlayer/sensors/client.py#L34-L87">create</a>(...) -> SensorSorItemResponse</code></summary>
 <dl>
 <dd>
 
@@ -2011,7 +2034,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2085,7 +2109,7 @@ client.sensors.create(
 </dl>
 </details>
 
-<details><summary><code>client.sensors.<a href="src/hiddenlayer/sensors/client.py#L88-L118">retrieve</a>(...) -> SensorSorItemResponse</code></summary>
+<details><summary><code>client.sensors.<a href="src/hiddenlayer/sensors/client.py#L89-L120">retrieve</a>(...) -> SensorSorItemResponse</code></summary>
 <dl>
 <dd>
 
@@ -2116,7 +2140,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2158,7 +2183,7 @@ client.sensors.retrieve(
 </dl>
 </details>
 
-<details><summary><code>client.sensors.<a href="src/hiddenlayer/sensors/client.py#L120-L164">update</a>(...) -> SensorSorUpdateResponseModel</code></summary>
+<details><summary><code>client.sensors.<a href="src/hiddenlayer/sensors/client.py#L122-L167">update</a>(...) -> SensorSorUpdateResponseModel</code></summary>
 <dl>
 <dd>
 
@@ -2189,7 +2214,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2255,7 +2281,7 @@ client.sensors.update(
 </dl>
 </details>
 
-<details><summary><code>client.sensors.<a href="src/hiddenlayer/sensors/client.py#L166-L193">delete</a>(...)</code></summary>
+<details><summary><code>client.sensors.<a href="src/hiddenlayer/sensors/client.py#L169-L197">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -2286,7 +2312,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2328,7 +2355,7 @@ client.sensors.delete(
 </dl>
 </details>
 
-<details><summary><code>client.sensors.<a href="src/hiddenlayer/sensors/client.py#L195-L249">query_legacy</a>(...) -> SensorSorQueryResponse</code></summary>
+<details><summary><code>client.sensors.<a href="src/hiddenlayer/sensors/client.py#L199-L254">query_legacy</a>(...) -> SensorSorQueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -2359,7 +2386,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2399,7 +2427,7 @@ client.sensors.query_legacy()
 </dl>
 </details>
 
-<details><summary><code>client.sensors.<a href="src/hiddenlayer/sensors/client.py#L251-L305">query</a>(...) -> SensorSorQueryResponse</code></summary>
+<details><summary><code>client.sensors.<a href="src/hiddenlayer/sensors/client.py#L256-L311">query</a>(...) -> SensorSorQueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -2430,7 +2458,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2471,7 +2500,7 @@ client.sensors.query()
 </details>
 
 ## Models
-<details><summary><code>client.models.<a href="src/hiddenlayer/models/client.py#L40-L66">retrieve</a>(...) -> SensorSorModel</code></summary>
+<details><summary><code>client.models.<a href="src/hiddenlayer/models/client.py#L40-L67">retrieve</a>(...) -> SensorSorModel</code></summary>
 <dl>
 <dd>
 
@@ -2488,7 +2517,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2530,7 +2560,7 @@ client.models.retrieve(
 </dl>
 </details>
 
-<details><summary><code>client.models.<a href="src/hiddenlayer/models/client.py#L68-L93">delete</a>(...)</code></summary>
+<details><summary><code>client.models.<a href="src/hiddenlayer/models/client.py#L69-L95">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -2547,7 +2577,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2589,7 +2620,7 @@ client.models.delete(
 </dl>
 </details>
 
-<details><summary><code>client.models.<a href="src/hiddenlayer/models/client.py#L95-L117">list</a>() -> typing.List[SensorSorModel]</code></summary>
+<details><summary><code>client.models.<a href="src/hiddenlayer/models/client.py#L97-L120">list</a>() -> typing.List[SensorSorModel]</code></summary>
 <dl>
 <dd>
 
@@ -2606,7 +2637,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2638,7 +2670,7 @@ client.models.list()
 </dl>
 </details>
 
-<details><summary><code>client.models.<a href="src/hiddenlayer/models/client.py#L119-L152">update</a>(...) -> UpdateModelsResponse</code></summary>
+<details><summary><code>client.models.<a href="src/hiddenlayer/models/client.py#L122-L156">update</a>(...) -> UpdateModelsResponse</code></summary>
 <dl>
 <dd>
 
@@ -2655,7 +2687,8 @@ from hiddenlayer import HiddenLayer, SensorSorModel
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2703,7 +2736,7 @@ client.models.update(
 </details>
 
 ## Access ApiKeys
-<details><summary><code>client.access.api_keys.<a href="src/hiddenlayer/access/api_keys/client.py#L42-L84">list</a>(...) -> ListApiKeysResponse</code></summary>
+<details><summary><code>client.access.api_keys.<a href="src/hiddenlayer/access/api_keys/client.py#L42-L85">list</a>(...) -> ListApiKeysResponse</code></summary>
 <dl>
 <dd>
 
@@ -2734,7 +2767,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2784,7 +2818,7 @@ client.access.api_keys.list(
 </dl>
 </details>
 
-<details><summary><code>client.access.api_keys.<a href="src/hiddenlayer/access/api_keys/client.py#L86-L135">create</a>(...) -> StaticApiKeyWithValue</code></summary>
+<details><summary><code>client.access.api_keys.<a href="src/hiddenlayer/access/api_keys/client.py#L87-L137">create</a>(...) -> StaticApiKeyWithValue</code></summary>
 <dl>
 <dd>
 
@@ -2819,7 +2853,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2884,7 +2919,7 @@ Defaults to 365 days from now.
 </dl>
 </details>
 
-<details><summary><code>client.access.api_keys.<a href="src/hiddenlayer/access/api_keys/client.py#L137-L166">get</a>(...) -> StaticApiKey</code></summary>
+<details><summary><code>client.access.api_keys.<a href="src/hiddenlayer/access/api_keys/client.py#L139-L169">get</a>(...) -> StaticApiKey</code></summary>
 <dl>
 <dd>
 
@@ -2915,7 +2950,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -2957,7 +2993,7 @@ client.access.api_keys.get(
 </dl>
 </details>
 
-<details><summary><code>client.access.api_keys.<a href="src/hiddenlayer/access/api_keys/client.py#L168-L202">delete</a>(...)</code></summary>
+<details><summary><code>client.access.api_keys.<a href="src/hiddenlayer/access/api_keys/client.py#L171-L206">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -2990,7 +3026,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -3042,7 +3079,7 @@ client.access.api_keys.delete(
 </details>
 
 ## Access Users
-<details><summary><code>client.access.users.<a href="src/hiddenlayer/access/users/client.py#L29-L75">list</a>(...) -> ListUsersResponse</code></summary>
+<details><summary><code>client.access.users.<a href="src/hiddenlayer/access/users/client.py#L29-L76">list</a>(...) -> ListUsersResponse</code></summary>
 <dl>
 <dd>
 
@@ -3073,7 +3110,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -3132,7 +3170,7 @@ client.access.users.list(
 </details>
 
 ## Access Permissions
-<details><summary><code>client.access.permissions.<a href="src/hiddenlayer/access/permissions/client.py#L26-L61">list</a>() -> ListPermissionsResponse</code></summary>
+<details><summary><code>client.access.permissions.<a href="src/hiddenlayer/access/permissions/client.py#L26-L62">list</a>() -> ListPermissionsResponse</code></summary>
 <dl>
 <dd>
 
@@ -3173,7 +3211,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -3206,7 +3245,7 @@ client.access.permissions.list()
 </details>
 
 ## Access Tokens
-<details><summary><code>client.access.tokens.<a href="src/hiddenlayer/access/tokens/client.py#L26-L50">short_lived</a>() -> ShortLivedTokenResponse</code></summary>
+<details><summary><code>client.access.tokens.<a href="src/hiddenlayer/access/tokens/client.py#L26-L51">short_lived</a>() -> ShortLivedTokenResponse</code></summary>
 <dl>
 <dd>
 
@@ -3237,7 +3276,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -3270,7 +3310,7 @@ client.access.tokens.short_lived()
 </details>
 
 ## Access ApiKeys Secrets
-<details><summary><code>client.access.api_keys.secrets.<a href="src/hiddenlayer/access/api_keys/secrets/client.py#L31-L79">create</a>(...) -> StaticApiKeySecretWithValue</code></summary>
+<details><summary><code>client.access.api_keys.secrets.<a href="src/hiddenlayer/access/api_keys/secrets/client.py#L31-L80">create</a>(...) -> StaticApiKeySecretWithValue</code></summary>
 <dl>
 <dd>
 
@@ -3303,7 +3343,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -3362,7 +3403,7 @@ client.access.api_keys.secrets.create(
 </dl>
 </details>
 
-<details><summary><code>client.access.api_keys.secrets.<a href="src/hiddenlayer/access/api_keys/secrets/client.py#L81-L125">delete</a>(...)</code></summary>
+<details><summary><code>client.access.api_keys.secrets.<a href="src/hiddenlayer/access/api_keys/secrets/client.py#L82-L127">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -3395,7 +3436,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -3456,7 +3498,7 @@ client.access.api_keys.secrets.delete(
 </details>
 
 ## AssetInventory Assets
-<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L80-L180">list_v1</a>(...) -> ListV1AssetsResponse</code></summary>
+<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L80-L181">list_v1</a>(...) -> ListV1AssetsResponse</code></summary>
 <dl>
 <dd>
 
@@ -3473,7 +3515,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -3619,7 +3662,7 @@ client.asset_inventory.assets.list_v1(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L182-L218">get_v1</a>(...) -> AiAsset</code></summary>
+<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L183-L220">get_v1</a>(...) -> AiAsset</code></summary>
 <dl>
 <dd>
 
@@ -3636,7 +3679,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -3686,7 +3730,7 @@ client.asset_inventory.assets.get_v1(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L220-L256">graph</a>(...) -> AiAssetInventoryV1AssetGraphNode</code></summary>
+<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L222-L259">graph</a>(...) -> AiAssetInventoryV1AssetGraphNode</code></summary>
 <dl>
 <dd>
 
@@ -3703,7 +3747,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -3753,7 +3798,7 @@ client.asset_inventory.assets.graph(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L258-L282">filters_v1</a>() -> FiltersV1AssetsResponse</code></summary>
+<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L261-L286">filters_v1</a>() -> FiltersV1AssetsResponse</code></summary>
 <dl>
 <dd>
 
@@ -3784,7 +3829,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -3816,7 +3862,7 @@ client.asset_inventory.assets.filters_v1()
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L284-L315">tags_v1</a>(...) -> AiAssetInventoryV1AssetTagMap</code></summary>
+<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L288-L320">tags_v1</a>(...) -> AiAssetInventoryV1AssetTagMap</code></summary>
 <dl>
 <dd>
 
@@ -3847,7 +3893,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -3889,7 +3936,7 @@ client.asset_inventory.assets.tags_v1(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L317-L550">list</a>(...) -> ListAssetsResponse</code></summary>
+<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L322-L556">list</a>(...) -> ListAssetsResponse</code></summary>
 <dl>
 <dd>
 
@@ -3946,7 +3993,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -4216,7 +4264,7 @@ descending (most recently scanned first).
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L552-L705">suggestions</a>(...) -> SuggestionsAssetsResponse</code></summary>
+<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L558-L712">suggestions</a>(...) -> SuggestionsAssetsResponse</code></summary>
 <dl>
 <dd>
 
@@ -4253,7 +4301,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -4458,7 +4507,7 @@ one inventory has never seen, matches nothing.
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L707-L797">filters</a>(...) -> FilterFacetsResponse</code></summary>
+<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L714-L805">filters</a>(...) -> FilterFacetsResponse</code></summary>
 <dl>
 <dd>
 
@@ -4527,7 +4576,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -4593,7 +4643,7 @@ one inventory has never seen, matches nothing.
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L799-L847">get</a>(...) -> Asset</code></summary>
+<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L807-L856">get</a>(...) -> Asset</code></summary>
 <dl>
 <dd>
 
@@ -4632,7 +4682,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -4682,7 +4733,7 @@ client.asset_inventory.assets.get(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L849-L902">discovered_graph</a>(...) -> AssetGraphNode</code></summary>
+<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L858-L912">discovered_graph</a>(...) -> AssetGraphNode</code></summary>
 <dl>
 <dd>
 
@@ -4727,7 +4778,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -4780,7 +4832,7 @@ asset.
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L904-L935">tags</a>(...) -> AssetTagMap</code></summary>
+<details><summary><code>client.asset_inventory.assets.<a href="src/hiddenlayer/asset_inventory/assets/client.py#L914-L946">tags</a>(...) -> AssetTagMap</code></summary>
 <dl>
 <dd>
 
@@ -4813,7 +4865,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -4856,7 +4909,7 @@ client.asset_inventory.assets.tags(
 </details>
 
 ## AssetInventory Relationships
-<details><summary><code>client.asset_inventory.relationships.<a href="src/hiddenlayer/asset_inventory/relationships/client.py#L26-L55">get</a>(...) -> AiAssetInventoryV1AssetRelationship</code></summary>
+<details><summary><code>client.asset_inventory.relationships.<a href="src/hiddenlayer/asset_inventory/relationships/client.py#L26-L56">get</a>(...) -> AiAssetInventoryV1AssetRelationship</code></summary>
 <dl>
 <dd>
 
@@ -4873,7 +4926,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -4916,7 +4970,7 @@ client.asset_inventory.relationships.get(
 </details>
 
 ## AssetInventory Metrics
-<details><summary><code>client.asset_inventory.metrics.<a href="src/hiddenlayer/asset_inventory/metrics/client.py#L31-L55">provider_counts_v1</a>() -> AiAssetInventoryV1ProviderCounts</code></summary>
+<details><summary><code>client.asset_inventory.metrics.<a href="src/hiddenlayer/asset_inventory/metrics/client.py#L31-L56">provider_counts_v1</a>() -> AiAssetInventoryV1ProviderCounts</code></summary>
 <dl>
 <dd>
 
@@ -4933,7 +4987,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -4965,7 +5020,7 @@ client.asset_inventory.metrics.provider_counts_v1()
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.metrics.<a href="src/hiddenlayer/asset_inventory/metrics/client.py#L57-L81">region_counts_v1</a>() -> AiAssetInventoryV1RegionCounts</code></summary>
+<details><summary><code>client.asset_inventory.metrics.<a href="src/hiddenlayer/asset_inventory/metrics/client.py#L58-L83">region_counts_v1</a>() -> AiAssetInventoryV1RegionCounts</code></summary>
 <dl>
 <dd>
 
@@ -4982,7 +5037,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -5014,7 +5070,7 @@ client.asset_inventory.metrics.region_counts_v1()
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.metrics.<a href="src/hiddenlayer/asset_inventory/metrics/client.py#L83-L107">asset_type_counts_v1</a>() -> AiAssetInventoryV1AssetTypeCounts</code></summary>
+<details><summary><code>client.asset_inventory.metrics.<a href="src/hiddenlayer/asset_inventory/metrics/client.py#L85-L110">asset_type_counts_v1</a>() -> AiAssetInventoryV1AssetTypeCounts</code></summary>
 <dl>
 <dd>
 
@@ -5031,7 +5087,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -5063,7 +5120,7 @@ client.asset_inventory.metrics.asset_type_counts_v1()
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.metrics.<a href="src/hiddenlayer/asset_inventory/metrics/client.py#L109-L138">provider_counts</a>() -> ProviderCounts</code></summary>
+<details><summary><code>client.asset_inventory.metrics.<a href="src/hiddenlayer/asset_inventory/metrics/client.py#L112-L142">provider_counts</a>() -> ProviderCounts</code></summary>
 <dl>
 <dd>
 
@@ -5099,7 +5156,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -5131,7 +5189,7 @@ client.asset_inventory.metrics.provider_counts()
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.metrics.<a href="src/hiddenlayer/asset_inventory/metrics/client.py#L140-L169">region_counts</a>() -> RegionCounts</code></summary>
+<details><summary><code>client.asset_inventory.metrics.<a href="src/hiddenlayer/asset_inventory/metrics/client.py#L144-L174">region_counts</a>() -> RegionCounts</code></summary>
 <dl>
 <dd>
 
@@ -5167,7 +5225,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -5199,7 +5258,7 @@ client.asset_inventory.metrics.region_counts()
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.metrics.<a href="src/hiddenlayer/asset_inventory/metrics/client.py#L171-L198">asset_type_counts</a>() -> AssetTypeCounts</code></summary>
+<details><summary><code>client.asset_inventory.metrics.<a href="src/hiddenlayer/asset_inventory/metrics/client.py#L176-L204">asset_type_counts</a>() -> AssetTypeCounts</code></summary>
 <dl>
 <dd>
 
@@ -5233,7 +5292,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -5266,7 +5326,7 @@ client.asset_inventory.metrics.asset_type_counts()
 </details>
 
 ## AssetInventory Resources
-<details><summary><code>client.asset_inventory.resources.<a href="src/hiddenlayer/asset_inventory/resources/client.py#L31-L95">list</a>(...) -> ListResourcesResponse</code></summary>
+<details><summary><code>client.asset_inventory.resources.<a href="src/hiddenlayer/asset_inventory/resources/client.py#L31-L96">list</a>(...) -> ListResourcesResponse</code></summary>
 <dl>
 <dd>
 
@@ -5283,7 +5343,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -5366,7 +5427,7 @@ client.asset_inventory.resources.list(
 </details>
 
 ## AssetInventory Scans
-<details><summary><code>client.asset_inventory.scans.<a href="src/hiddenlayer/asset_inventory/scans/client.py#L26-L53">get</a>(...) -> AssetScan</code></summary>
+<details><summary><code>client.asset_inventory.scans.<a href="src/hiddenlayer/asset_inventory/scans/client.py#L26-L54">get</a>(...) -> AssetScan</code></summary>
 <dl>
 <dd>
 
@@ -5383,7 +5444,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -5426,7 +5488,7 @@ client.asset_inventory.scans.get(
 </details>
 
 ## AssetInventory Tags
-<details><summary><code>client.asset_inventory.tags.<a href="src/hiddenlayer/asset_inventory/tags/client.py#L32-L89">list_v1</a>(...) -> AiAssetInventoryV1TagDefinitionList</code></summary>
+<details><summary><code>client.asset_inventory.tags.<a href="src/hiddenlayer/asset_inventory/tags/client.py#L32-L90">list_v1</a>(...) -> AiAssetInventoryV1TagDefinitionList</code></summary>
 <dl>
 <dd>
 
@@ -5457,7 +5519,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -5532,7 +5595,7 @@ client.asset_inventory.tags.list_v1(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.tags.<a href="src/hiddenlayer/asset_inventory/tags/client.py#L91-L150">list</a>(...) -> TagDefinitionList</code></summary>
+<details><summary><code>client.asset_inventory.tags.<a href="src/hiddenlayer/asset_inventory/tags/client.py#L92-L152">list</a>(...) -> TagDefinitionList</code></summary>
 <dl>
 <dd>
 
@@ -5565,7 +5628,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -5641,7 +5705,7 @@ client.asset_inventory.tags.list(
 </details>
 
 ## AssetInventory CustomTags
-<details><summary><code>client.asset_inventory.custom_tags.<a href="src/hiddenlayer/asset_inventory/custom_tags/client.py#L33-L68">update_v1</a>(...) -> AiAssetInventoryV1TagDefinition</code></summary>
+<details><summary><code>client.asset_inventory.custom_tags.<a href="src/hiddenlayer/asset_inventory/custom_tags/client.py#L33-L69">update_v1</a>(...) -> AiAssetInventoryV1TagDefinition</code></summary>
 <dl>
 <dd>
 
@@ -5672,7 +5736,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -5723,7 +5788,7 @@ client.asset_inventory.custom_tags.update_v1(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.custom_tags.<a href="src/hiddenlayer/asset_inventory/custom_tags/client.py#L70-L128">values_v1</a>(...) -> AiAssetInventoryV1TagValueList</code></summary>
+<details><summary><code>client.asset_inventory.custom_tags.<a href="src/hiddenlayer/asset_inventory/custom_tags/client.py#L71-L130">values_v1</a>(...) -> AiAssetInventoryV1TagValueList</code></summary>
 <dl>
 <dd>
 
@@ -5754,7 +5819,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -5830,7 +5896,7 @@ client.asset_inventory.custom_tags.values_v1(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.custom_tags.<a href="src/hiddenlayer/asset_inventory/custom_tags/client.py#L130-L167">update</a>(...) -> TagDefinition</code></summary>
+<details><summary><code>client.asset_inventory.custom_tags.<a href="src/hiddenlayer/asset_inventory/custom_tags/client.py#L132-L170">update</a>(...) -> TagDefinition</code></summary>
 <dl>
 <dd>
 
@@ -5863,7 +5929,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -5914,7 +5981,7 @@ client.asset_inventory.custom_tags.update(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.custom_tags.<a href="src/hiddenlayer/asset_inventory/custom_tags/client.py#L169-L229">values</a>(...) -> TagValueList</code></summary>
+<details><summary><code>client.asset_inventory.custom_tags.<a href="src/hiddenlayer/asset_inventory/custom_tags/client.py#L172-L233">values</a>(...) -> TagValueList</code></summary>
 <dl>
 <dd>
 
@@ -5947,7 +6014,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -6024,7 +6092,7 @@ client.asset_inventory.custom_tags.values(
 </details>
 
 ## AssetInventory DiscoveredTags
-<details><summary><code>client.asset_inventory.discovered_tags.<a href="src/hiddenlayer/asset_inventory/discovered_tags/client.py#L28-L86">values_v1</a>(...) -> AiAssetInventoryV1TagValueList</code></summary>
+<details><summary><code>client.asset_inventory.discovered_tags.<a href="src/hiddenlayer/asset_inventory/discovered_tags/client.py#L28-L87">values_v1</a>(...) -> AiAssetInventoryV1TagValueList</code></summary>
 <dl>
 <dd>
 
@@ -6055,7 +6123,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -6131,7 +6200,7 @@ client.asset_inventory.discovered_tags.values_v1(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.discovered_tags.<a href="src/hiddenlayer/asset_inventory/discovered_tags/client.py#L88-L148">values</a>(...) -> TagValueList</code></summary>
+<details><summary><code>client.asset_inventory.discovered_tags.<a href="src/hiddenlayer/asset_inventory/discovered_tags/client.py#L89-L150">values</a>(...) -> TagValueList</code></summary>
 <dl>
 <dd>
 
@@ -6164,7 +6233,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -6241,7 +6311,7 @@ client.asset_inventory.discovered_tags.values(
 </details>
 
 ## AssetInventory Annotations
-<details><summary><code>client.asset_inventory.annotations.<a href="src/hiddenlayer/asset_inventory/annotations/client.py#L27-L80">get</a>(...) -> Asset</code></summary>
+<details><summary><code>client.asset_inventory.annotations.<a href="src/hiddenlayer/asset_inventory/annotations/client.py#L27-L81">get</a>(...) -> Asset</code></summary>
 <dl>
 <dd>
 
@@ -6276,7 +6346,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -6342,7 +6413,7 @@ URL-encoded if it contains special characters, including `/`.
 </details>
 
 ## AssetInventory Jobs
-<details><summary><code>client.asset_inventory.jobs.<a href="src/hiddenlayer/asset_inventory/jobs/client.py#L32-L113">custom_tags</a>(...) -> SyncJob</code></summary>
+<details><summary><code>client.asset_inventory.jobs.<a href="src/hiddenlayer/asset_inventory/jobs/client.py#L32-L114">custom_tags</a>(...) -> SyncJob</code></summary>
 <dl>
 <dd>
 
@@ -6379,7 +6450,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 from hiddenlayer.asset_inventory.jobs import BulkCustomTagJobRequestV2Filter
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -6471,7 +6543,7 @@ client.asset_inventory.jobs.custom_tags(
 </details>
 
 ## AssetInventory Assets Search
-<details><summary><code>client.asset_inventory.assets.search.<a href="src/hiddenlayer/asset_inventory/assets/search/client.py#L50-L175">list</a>(...) -> SearchResponse</code></summary>
+<details><summary><code>client.asset_inventory.assets.search.<a href="src/hiddenlayer/asset_inventory/assets/search/client.py#L50-L176">list</a>(...) -> SearchResponse</code></summary>
 <dl>
 <dd>
 
@@ -6488,7 +6560,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -6667,7 +6740,7 @@ client.asset_inventory.assets.search.list(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.search.<a href="src/hiddenlayer/asset_inventory/assets/search/client.py#L177-L277">suggestions</a>(...) -> SearchSuggestionsResponse</code></summary>
+<details><summary><code>client.asset_inventory.assets.search.<a href="src/hiddenlayer/asset_inventory/assets/search/client.py#L178-L279">suggestions</a>(...) -> SearchSuggestionsResponse</code></summary>
 <dl>
 <dd>
 
@@ -6684,7 +6757,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -6831,7 +6905,7 @@ client.asset_inventory.assets.search.suggestions(
 </details>
 
 ## AssetInventory Assets CustomTags
-<details><summary><code>client.asset_inventory.assets.custom_tags.<a href="src/hiddenlayer/asset_inventory/assets/custom_tags/client.py#L30-L69">update_v1</a>(...) -> AiAssetInventoryV1TagValue</code></summary>
+<details><summary><code>client.asset_inventory.assets.custom_tags.<a href="src/hiddenlayer/asset_inventory/assets/custom_tags/client.py#L30-L70">update_v1</a>(...) -> AiAssetInventoryV1TagValue</code></summary>
 <dl>
 <dd>
 
@@ -6862,7 +6936,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -6922,7 +6997,7 @@ client.asset_inventory.assets.custom_tags.update_v1(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.custom_tags.<a href="src/hiddenlayer/asset_inventory/assets/custom_tags/client.py#L71-L105">delete_v1</a>(...)</code></summary>
+<details><summary><code>client.asset_inventory.assets.custom_tags.<a href="src/hiddenlayer/asset_inventory/assets/custom_tags/client.py#L72-L107">delete_v1</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -6953,7 +7028,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -7004,7 +7080,7 @@ client.asset_inventory.assets.custom_tags.delete_v1(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.custom_tags.<a href="src/hiddenlayer/asset_inventory/assets/custom_tags/client.py#L107-L148">update</a>(...) -> TagValue</code></summary>
+<details><summary><code>client.asset_inventory.assets.custom_tags.<a href="src/hiddenlayer/asset_inventory/assets/custom_tags/client.py#L109-L151">update</a>(...) -> TagValue</code></summary>
 <dl>
 <dd>
 
@@ -7037,7 +7113,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -7097,7 +7174,7 @@ client.asset_inventory.assets.custom_tags.update(
 </dl>
 </details>
 
-<details><summary><code>client.asset_inventory.assets.custom_tags.<a href="src/hiddenlayer/asset_inventory/assets/custom_tags/client.py#L150-L184">delete</a>(...)</code></summary>
+<details><summary><code>client.asset_inventory.assets.custom_tags.<a href="src/hiddenlayer/asset_inventory/assets/custom_tags/client.py#L153-L188">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -7130,7 +7207,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -7182,7 +7260,7 @@ client.asset_inventory.assets.custom_tags.delete(
 </details>
 
 ## Audit Entries
-<details><summary><code>client.audit.entries.<a href="src/hiddenlayer/audit/entries/client.py#L30-L116">list</a>(...) -> ListEntriesResponse</code></summary>
+<details><summary><code>client.audit.entries.<a href="src/hiddenlayer/audit/entries/client.py#L30-L117">list</a>(...) -> ListEntriesResponse</code></summary>
 <dl>
 <dd>
 
@@ -7214,7 +7292,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 import datetime
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -7322,7 +7401,7 @@ client.audit.entries.list(
 </details>
 
 ## Audit ActivityTypes
-<details><summary><code>client.audit.activity_types.<a href="src/hiddenlayer/audit/activity_types/client.py#L26-L50">list</a>() -> ActivityTypeList</code></summary>
+<details><summary><code>client.audit.activity_types.<a href="src/hiddenlayer/audit/activity_types/client.py#L26-L51">list</a>() -> ActivityTypeList</code></summary>
 <dl>
 <dd>
 
@@ -7353,7 +7432,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -7386,7 +7466,7 @@ client.audit.activity_types.list()
 </details>
 
 ## Compliance Projects
-<details><summary><code>client.compliance.projects.<a href="src/hiddenlayer/compliance/projects/client.py#L43-L122">list</a>(...) -> ListProjectsResponse</code></summary>
+<details><summary><code>client.compliance.projects.<a href="src/hiddenlayer/compliance/projects/client.py#L43-L123">list</a>(...) -> ListProjectsResponse</code></summary>
 <dl>
 <dd>
 
@@ -7403,7 +7483,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -7509,7 +7590,7 @@ client.compliance.projects.list(
 </dl>
 </details>
 
-<details><summary><code>client.compliance.projects.<a href="src/hiddenlayer/compliance/projects/client.py#L124-L240">create</a>(...) -> ProjectId</code></summary>
+<details><summary><code>client.compliance.projects.<a href="src/hiddenlayer/compliance/projects/client.py#L125-L242">create</a>(...) -> ProjectId</code></summary>
 <dl>
 <dd>
 
@@ -7540,7 +7621,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -7726,7 +7808,7 @@ On update, omission preserves the stored value; send false explicitly to disable
 </dl>
 </details>
 
-<details><summary><code>client.compliance.projects.<a href="src/hiddenlayer/compliance/projects/client.py#L242-L269">get</a>(...) -> GetProjectsResponse</code></summary>
+<details><summary><code>client.compliance.projects.<a href="src/hiddenlayer/compliance/projects/client.py#L244-L272">get</a>(...) -> GetProjectsResponse</code></summary>
 <dl>
 <dd>
 
@@ -7743,7 +7825,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -7785,7 +7868,7 @@ client.compliance.projects.get(
 </dl>
 </details>
 
-<details><summary><code>client.compliance.projects.<a href="src/hiddenlayer/compliance/projects/client.py#L271-L406">update</a>(...) -> ProjectId</code></summary>
+<details><summary><code>client.compliance.projects.<a href="src/hiddenlayer/compliance/projects/client.py#L274-L410">update</a>(...) -> ProjectId</code></summary>
 <dl>
 <dd>
 
@@ -7816,7 +7899,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8029,7 +8113,7 @@ On update, omission preserves the stored value; send false explicitly to disable
 </dl>
 </details>
 
-<details><summary><code>client.compliance.projects.<a href="src/hiddenlayer/compliance/projects/client.py#L408-L434">delete</a>(...)</code></summary>
+<details><summary><code>client.compliance.projects.<a href="src/hiddenlayer/compliance/projects/client.py#L412-L439">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -8046,7 +8130,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8089,7 +8174,7 @@ client.compliance.projects.delete(
 </details>
 
 ## Compliance RuleSets
-<details><summary><code>client.compliance.rule_sets.<a href="src/hiddenlayer/compliance/rule_sets/client.py#L41-L111">list</a>(...) -> ListRuleSetsResponse</code></summary>
+<details><summary><code>client.compliance.rule_sets.<a href="src/hiddenlayer/compliance/rule_sets/client.py#L41-L112">list</a>(...) -> ListRuleSetsResponse</code></summary>
 <dl>
 <dd>
 
@@ -8106,7 +8191,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8197,7 +8283,7 @@ client.compliance.rule_sets.list(
 </dl>
 </details>
 
-<details><summary><code>client.compliance.rule_sets.<a href="src/hiddenlayer/compliance/rule_sets/client.py#L113-L184">create</a>(...) -> GetRuleSetItem</code></summary>
+<details><summary><code>client.compliance.rule_sets.<a href="src/hiddenlayer/compliance/rule_sets/client.py#L114-L186">create</a>(...) -> GetRuleSetItem</code></summary>
 <dl>
 <dd>
 
@@ -8214,7 +8300,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8257,7 +8344,7 @@ client.compliance.rule_sets.create(
 </dl>
 </details>
 
-<details><summary><code>client.compliance.rule_sets.<a href="src/hiddenlayer/compliance/rule_sets/client.py#L186-L213">get</a>(...) -> GetRuleSetItem</code></summary>
+<details><summary><code>client.compliance.rule_sets.<a href="src/hiddenlayer/compliance/rule_sets/client.py#L188-L216">get</a>(...) -> GetRuleSetItem</code></summary>
 <dl>
 <dd>
 
@@ -8274,7 +8361,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8316,7 +8404,7 @@ client.compliance.rule_sets.get(
 </dl>
 </details>
 
-<details><summary><code>client.compliance.rule_sets.<a href="src/hiddenlayer/compliance/rule_sets/client.py#L215-L303">update</a>(...)</code></summary>
+<details><summary><code>client.compliance.rule_sets.<a href="src/hiddenlayer/compliance/rule_sets/client.py#L218-L307">update</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -8333,7 +8421,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8402,7 +8491,7 @@ https://www.rfc-editor.org/rfc/rfc7232.html#section-3.4
 </dl>
 </details>
 
-<details><summary><code>client.compliance.rule_sets.<a href="src/hiddenlayer/compliance/rule_sets/client.py#L305-L331">delete</a>(...)</code></summary>
+<details><summary><code>client.compliance.rule_sets.<a href="src/hiddenlayer/compliance/rule_sets/client.py#L309-L336">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -8419,7 +8508,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8462,7 +8552,7 @@ client.compliance.rule_sets.delete(
 </details>
 
 ## Compliance RuleSets Settings
-<details><summary><code>client.compliance.rule_sets.settings.<a href="src/hiddenlayer/compliance/rule_sets/settings/client.py#L32-L67">list</a>(...) -> ListSettingsResponse</code></summary>
+<details><summary><code>client.compliance.rule_sets.settings.<a href="src/hiddenlayer/compliance/rule_sets/settings/client.py#L32-L68">list</a>(...) -> ListSettingsResponse</code></summary>
 <dl>
 <dd>
 
@@ -8479,7 +8569,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8530,7 +8621,7 @@ constraints that apply for the entire object in the settings property
 </dl>
 </details>
 
-<details><summary><code>client.compliance.rule_sets.settings.<a href="src/hiddenlayer/compliance/rule_sets/settings/client.py#L69-L112">create</a>(...) -> SettingsId</code></summary>
+<details><summary><code>client.compliance.rule_sets.settings.<a href="src/hiddenlayer/compliance/rule_sets/settings/client.py#L70-L114">create</a>(...) -> SettingsId</code></summary>
 <dl>
 <dd>
 
@@ -8547,7 +8638,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8609,7 +8701,7 @@ client.compliance.rule_sets.settings.create(
 </dl>
 </details>
 
-<details><summary><code>client.compliance.rule_sets.settings.<a href="src/hiddenlayer/compliance/rule_sets/settings/client.py#L114-L156">get</a>(...) -> SettingsDetailsWithSchema</code></summary>
+<details><summary><code>client.compliance.rule_sets.settings.<a href="src/hiddenlayer/compliance/rule_sets/settings/client.py#L116-L159">get</a>(...) -> SettingsDetailsWithSchema</code></summary>
 <dl>
 <dd>
 
@@ -8626,7 +8718,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8688,7 +8781,7 @@ constraints that apply for the entire object in the settings property
 </dl>
 </details>
 
-<details><summary><code>client.compliance.rule_sets.settings.<a href="src/hiddenlayer/compliance/rule_sets/settings/client.py#L158-L213">update</a>(...)</code></summary>
+<details><summary><code>client.compliance.rule_sets.settings.<a href="src/hiddenlayer/compliance/rule_sets/settings/client.py#L161-L217">update</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -8705,7 +8798,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8785,7 +8879,7 @@ https://www.rfc-editor.org/rfc/rfc7232.html#section-3.1
 </dl>
 </details>
 
-<details><summary><code>client.compliance.rule_sets.settings.<a href="src/hiddenlayer/compliance/rule_sets/settings/client.py#L215-L245">delete</a>(...)</code></summary>
+<details><summary><code>client.compliance.rule_sets.settings.<a href="src/hiddenlayer/compliance/rule_sets/settings/client.py#L219-L250">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -8802,7 +8896,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8854,7 +8949,7 @@ client.compliance.rule_sets.settings.delete(
 </details>
 
 ## Evaluations RedTeam
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L50-L76">target_models</a>() -> TargetModelResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L50-L77">target_models</a>() -> TargetModelResponse</code></summary>
 <dl>
 <dd>
 
@@ -8887,7 +8982,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -8919,7 +9015,7 @@ client.evaluations.red_team.target_models()
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L78-L163">list</a>(...) -> RedTeamListResultsResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L79-L165">list</a>(...) -> RedTeamListResultsResponse</code></summary>
 <dl>
 <dd>
 
@@ -8955,7 +9051,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -9062,7 +9159,7 @@ projects. Evaluations without a project never match.
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L165-L311">create</a>(...) -> StartWorkflowResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L167-L314">create</a>(...) -> StartWorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -9096,7 +9193,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -9307,7 +9405,7 @@ No-op for the `STATIC_PROMPT_SET` execution strategy.
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L313-L346">retrieve_status</a>(...) -> WorkflowStatusResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L316-L350">retrieve_status</a>(...) -> WorkflowStatusResponse</code></summary>
 <dl>
 <dd>
 
@@ -9340,7 +9438,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -9382,7 +9481,7 @@ client.evaluations.red_team.retrieve_status(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L348-L387">retrieve_next_action</a>(...) -> NextActionResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L352-L392">retrieve_next_action</a>(...) -> NextActionResponse</code></summary>
 <dl>
 <dd>
 
@@ -9421,7 +9520,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -9463,7 +9563,7 @@ client.evaluations.red_team.retrieve_next_action(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L389-L440">submit_target_response</a>(...) -> SubmitTargetResponseResult</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L394-L446">submit_target_response</a>(...) -> SubmitTargetResponseResult</code></summary>
 <dl>
 <dd>
 
@@ -9499,7 +9599,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -9559,7 +9660,7 @@ client.evaluations.red_team.submit_target_response(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L442-L475">retrieve_evaluation_results</a>(...) -> WorkflowResultResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L448-L482">retrieve_evaluation_results</a>(...) -> WorkflowResultResponse</code></summary>
 <dl>
 <dd>
 
@@ -9592,7 +9693,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -9634,7 +9736,7 @@ client.evaluations.red_team.retrieve_evaluation_results(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L477-L507">delete</a>(...)</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L484-L515">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -9667,7 +9769,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -9709,7 +9812,7 @@ client.evaluations.red_team.delete(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L509-L539">terminate</a>(...)</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L517-L548">terminate</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -9742,7 +9845,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -9784,7 +9888,7 @@ client.evaluations.red_team.terminate(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L541-L678">simulated</a>(...) -> StartWorkflowResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L550-L688">simulated</a>(...) -> StartWorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -9817,7 +9921,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -10020,7 +10125,7 @@ for the `STATIC_PROMPT_SET` execution strategy.
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L680-L713">csv</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L690-L724">csv</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -10053,7 +10158,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -10096,7 +10202,7 @@ client.evaluations.red_team.csv(
 </details>
 
 ## Evaluations PromptSets
-<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py#L35-L65">list</a>() -> PromptSetsResponse</code></summary>
+<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py#L35-L66">list</a>() -> PromptSetsResponse</code></summary>
 <dl>
 <dd>
 
@@ -10133,7 +10239,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -10165,7 +10272,7 @@ client.evaluations.prompt_sets.list()
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py#L67-L157">create</a>(...) -> CreatePromptSetResponse</code></summary>
+<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py#L68-L159">create</a>(...) -> CreatePromptSetResponse</code></summary>
 <dl>
 <dd>
 
@@ -10203,7 +10310,8 @@ from hiddenlayer import HiddenLayer, CreatePromptRequest
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -10315,7 +10423,7 @@ client.evaluations.prompt_sets.create(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py#L159-L190">mutations</a>() -> AvailableMutationsResponse</code></summary>
+<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py#L161-L193">mutations</a>() -> AvailableMutationsResponse</code></summary>
 <dl>
 <dd>
 
@@ -10353,7 +10461,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -10385,7 +10494,7 @@ client.evaluations.prompt_sets.mutations()
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py#L192-L222">delete</a>(...)</code></summary>
+<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py#L195-L226">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -10418,7 +10527,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -10460,7 +10570,7 @@ client.evaluations.prompt_sets.delete(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py#L224-L260">csv</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.evaluations.prompt_sets.<a href="src/hiddenlayer/evaluations/prompt_sets/client.py#L228-L265">csv</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -10496,7 +10606,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -10539,7 +10650,7 @@ client.evaluations.prompt_sets.csv(
 </details>
 
 ## Evaluations SystemPromptAnalysis
-<details><summary><code>client.evaluations.system_prompt_analysis.<a href="src/hiddenlayer/evaluations/system_prompt_analysis/client.py#L38-L122">list</a>(...) -> SystemPromptListResultsResponse</code></summary>
+<details><summary><code>client.evaluations.system_prompt_analysis.<a href="src/hiddenlayer/evaluations/system_prompt_analysis/client.py#L38-L123">list</a>(...) -> SystemPromptListResultsResponse</code></summary>
 <dl>
 <dd>
 
@@ -10574,7 +10685,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -10681,7 +10793,7 @@ projects. Analyses without a project never match.
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.system_prompt_analysis.<a href="src/hiddenlayer/evaluations/system_prompt_analysis/client.py#L124-L184">create</a>(...) -> StartWorkflowResponse</code></summary>
+<details><summary><code>client.evaluations.system_prompt_analysis.<a href="src/hiddenlayer/evaluations/system_prompt_analysis/client.py#L125-L186">create</a>(...) -> StartWorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -10717,7 +10829,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -10788,7 +10901,7 @@ for the tenant returns 422.
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.system_prompt_analysis.<a href="src/hiddenlayer/evaluations/system_prompt_analysis/client.py#L186-L220">status</a>(...) -> AnalysisStatus</code></summary>
+<details><summary><code>client.evaluations.system_prompt_analysis.<a href="src/hiddenlayer/evaluations/system_prompt_analysis/client.py#L188-L223">status</a>(...) -> AnalysisStatus</code></summary>
 <dl>
 <dd>
 
@@ -10824,7 +10937,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -10866,7 +10980,7 @@ client.evaluations.system_prompt_analysis.status(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.system_prompt_analysis.<a href="src/hiddenlayer/evaluations/system_prompt_analysis/client.py#L222-L253">get</a>(...) -> AnalysisResult</code></summary>
+<details><summary><code>client.evaluations.system_prompt_analysis.<a href="src/hiddenlayer/evaluations/system_prompt_analysis/client.py#L225-L257">get</a>(...) -> AnalysisResult</code></summary>
 <dl>
 <dd>
 
@@ -10899,7 +11013,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -10941,7 +11056,7 @@ client.evaluations.system_prompt_analysis.get(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.system_prompt_analysis.<a href="src/hiddenlayer/evaluations/system_prompt_analysis/client.py#L255-L285">delete</a>(...)</code></summary>
+<details><summary><code>client.evaluations.system_prompt_analysis.<a href="src/hiddenlayer/evaluations/system_prompt_analysis/client.py#L259-L290">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -10974,7 +11089,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -11016,7 +11132,7 @@ client.evaluations.system_prompt_analysis.delete(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.system_prompt_analysis.<a href="src/hiddenlayer/evaluations/system_prompt_analysis/client.py#L287-L335">answers</a>(...) -> SubmitAnswersResult</code></summary>
+<details><summary><code>client.evaluations.system_prompt_analysis.<a href="src/hiddenlayer/evaluations/system_prompt_analysis/client.py#L292-L341">answers</a>(...) -> SubmitAnswersResult</code></summary>
 <dl>
 <dd>
 
@@ -11052,7 +11168,8 @@ from hiddenlayer import HiddenLayer, QuestionAnswer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -11109,7 +11226,7 @@ client.evaluations.system_prompt_analysis.answers(
 </details>
 
 ## Evaluations ThreatModeling
-<details><summary><code>client.evaluations.threat_modeling.<a href="src/hiddenlayer/evaluations/threat_modeling/client.py#L36-L114">list</a>(...) -> ThreatModelingListResultsResponse</code></summary>
+<details><summary><code>client.evaluations.threat_modeling.<a href="src/hiddenlayer/evaluations/threat_modeling/client.py#L36-L115">list</a>(...) -> ThreatModelingListResultsResponse</code></summary>
 <dl>
 <dd>
 
@@ -11144,7 +11261,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -11240,7 +11358,7 @@ client.evaluations.threat_modeling.list()
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.threat_modeling.<a href="src/hiddenlayer/evaluations/threat_modeling/client.py#L116-L175">create</a>(...) -> StartWorkflowResponse</code></summary>
+<details><summary><code>client.evaluations.threat_modeling.<a href="src/hiddenlayer/evaluations/threat_modeling/client.py#L117-L177">create</a>(...) -> StartWorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -11276,7 +11394,8 @@ from hiddenlayer import HiddenLayer, ThreatModelingSystem
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -11342,7 +11461,7 @@ client.evaluations.threat_modeling.create(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.threat_modeling.<a href="src/hiddenlayer/evaluations/threat_modeling/client.py#L177-L211">status</a>(...) -> ThreatModelingStatus</code></summary>
+<details><summary><code>client.evaluations.threat_modeling.<a href="src/hiddenlayer/evaluations/threat_modeling/client.py#L179-L214">status</a>(...) -> ThreatModelingStatus</code></summary>
 <dl>
 <dd>
 
@@ -11376,7 +11495,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -11418,7 +11538,7 @@ client.evaluations.threat_modeling.status(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.threat_modeling.<a href="src/hiddenlayer/evaluations/threat_modeling/client.py#L213-L244">get</a>(...) -> ThreatModelingResult</code></summary>
+<details><summary><code>client.evaluations.threat_modeling.<a href="src/hiddenlayer/evaluations/threat_modeling/client.py#L216-L248">get</a>(...) -> ThreatModelingResult</code></summary>
 <dl>
 <dd>
 
@@ -11451,7 +11571,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -11493,7 +11614,7 @@ client.evaluations.threat_modeling.get(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.threat_modeling.<a href="src/hiddenlayer/evaluations/threat_modeling/client.py#L246-L276">delete</a>(...)</code></summary>
+<details><summary><code>client.evaluations.threat_modeling.<a href="src/hiddenlayer/evaluations/threat_modeling/client.py#L250-L281">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -11526,7 +11647,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -11569,7 +11691,7 @@ client.evaluations.threat_modeling.delete(
 </details>
 
 ## Evaluations RedTeam Objectives
-<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py#L33-L81">list</a>(...) -> ObjectivesListResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py#L33-L82">list</a>(...) -> ObjectivesListResponse</code></summary>
 <dl>
 <dd>
 
@@ -11606,7 +11728,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -11656,7 +11779,7 @@ client.evaluations.red_team.objectives.list(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py#L83-L151">create</a>(...) -> ApeObjective</code></summary>
+<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py#L84-L153">create</a>(...) -> ApeObjective</code></summary>
 <dl>
 <dd>
 
@@ -11697,7 +11820,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -11774,7 +11898,7 @@ server-side using the same rules as run/config attacker guidance.
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py#L153-L185">get</a>(...) -> ApeObjective</code></summary>
+<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py#L155-L188">get</a>(...) -> ApeObjective</code></summary>
 <dl>
 <dd>
 
@@ -11808,7 +11932,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -11850,7 +11975,7 @@ client.evaluations.red_team.objectives.get(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py#L187-L222">delete</a>(...)</code></summary>
+<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py#L190-L226">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -11888,7 +12013,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -11930,7 +12056,7 @@ client.evaluations.red_team.objectives.delete(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py#L224-L285">update</a>(...) -> ApeObjective</code></summary>
+<details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py#L228-L290">update</a>(...) -> ApeObjective</code></summary>
 <dl>
 <dd>
 
@@ -11968,7 +12094,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -12043,7 +12170,7 @@ client.evaluations.red_team.objectives.update(
 </details>
 
 ## Evaluations RedTeam Configs
-<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py#L40-L88">list</a>(...) -> RedTeamConfigsResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py#L40-L89">list</a>(...) -> RedTeamConfigsResponse</code></summary>
 <dl>
 <dd>
 
@@ -12080,7 +12207,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -12130,7 +12258,7 @@ client.evaluations.red_team.configs.list(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py#L90-L197">create</a>(...) -> RedTeamConfig</code></summary>
+<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py#L91-L199">create</a>(...) -> RedTeamConfig</code></summary>
 <dl>
 <dd>
 
@@ -12168,7 +12296,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -12326,7 +12455,7 @@ cap + strict character whitelist after NFKC normalization). See
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py#L199-L234">get</a>(...) -> RedTeamConfig</code></summary>
+<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py#L201-L237">get</a>(...) -> RedTeamConfig</code></summary>
 <dl>
 <dd>
 
@@ -12363,7 +12492,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -12405,7 +12535,7 @@ client.evaluations.red_team.configs.get(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py#L236-L268">delete</a>(...)</code></summary>
+<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py#L239-L272">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -12440,7 +12570,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -12482,7 +12613,7 @@ client.evaluations.red_team.configs.delete(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py#L270-L386">update</a>(...) -> RedTeamConfig</code></summary>
+<details><summary><code>client.evaluations.red_team.configs.<a href="src/hiddenlayer/evaluations/red_team/configs/client.py#L274-L391">update</a>(...) -> RedTeamConfig</code></summary>
 <dl>
 <dd>
 
@@ -12525,7 +12656,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -12690,7 +12822,7 @@ semantics.
 </details>
 
 ## Governance Evaluations
-<details><summary><code>client.governance.evaluations.<a href="src/hiddenlayer/governance/evaluations/client.py#L27-L62">list</a>(...) -> BulkEvaluationResults</code></summary>
+<details><summary><code>client.governance.evaluations.<a href="src/hiddenlayer/governance/evaluations/client.py#L27-L63">list</a>(...) -> BulkEvaluationResults</code></summary>
 <dl>
 <dd>
 
@@ -12722,7 +12854,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -12766,7 +12899,7 @@ client.governance.evaluations.list(
 </dl>
 </details>
 
-<details><summary><code>client.governance.evaluations.<a href="src/hiddenlayer/governance/evaluations/client.py#L64-L94">get</a>(...) -> EvaluationResult</code></summary>
+<details><summary><code>client.governance.evaluations.<a href="src/hiddenlayer/governance/evaluations/client.py#L65-L96">get</a>(...) -> EvaluationResult</code></summary>
 <dl>
 <dd>
 
@@ -12798,7 +12931,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -12841,7 +12975,7 @@ client.governance.evaluations.get(
 </details>
 
 ## Governance Licenses
-<details><summary><code>client.governance.licenses.<a href="src/hiddenlayer/governance/licenses/client.py#L26-L51">list</a>() -> ListLicensesResponse</code></summary>
+<details><summary><code>client.governance.licenses.<a href="src/hiddenlayer/governance/licenses/client.py#L26-L52">list</a>() -> ListLicensesResponse</code></summary>
 <dl>
 <dd>
 
@@ -12873,7 +13007,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -12906,7 +13041,7 @@ client.governance.licenses.list()
 </details>
 
 ## Governance RuleSets
-<details><summary><code>client.governance.rule_sets.<a href="src/hiddenlayer/governance/rule_sets/client.py#L38-L88">list</a>(...) -> ListRuleSetsResponse</code></summary>
+<details><summary><code>client.governance.rule_sets.<a href="src/hiddenlayer/governance/rule_sets/client.py#L38-L89">list</a>(...) -> ListRuleSetsResponse</code></summary>
 <dl>
 <dd>
 
@@ -12939,7 +13074,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -12997,7 +13133,7 @@ client.governance.rule_sets.list(
 </dl>
 </details>
 
-<details><summary><code>client.governance.rule_sets.<a href="src/hiddenlayer/governance/rule_sets/client.py#L90-L168">create</a>(...) -> RuleSetResponse</code></summary>
+<details><summary><code>client.governance.rule_sets.<a href="src/hiddenlayer/governance/rule_sets/client.py#L91-L170">create</a>(...) -> RuleSetResponse</code></summary>
 <dl>
 <dd>
 
@@ -13037,7 +13173,8 @@ from hiddenlayer import HiddenLayer, Rule, Condition
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -13100,7 +13237,7 @@ client.governance.rule_sets.create(
 </dl>
 </details>
 
-<details><summary><code>client.governance.rule_sets.<a href="src/hiddenlayer/governance/rule_sets/client.py#L170-L219">get</a>(...) -> RuleSetResponse</code></summary>
+<details><summary><code>client.governance.rule_sets.<a href="src/hiddenlayer/governance/rule_sets/client.py#L172-L222">get</a>(...) -> RuleSetResponse</code></summary>
 <dl>
 <dd>
 
@@ -13140,7 +13277,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -13190,7 +13328,7 @@ client.governance.rule_sets.get(
 </dl>
 </details>
 
-<details><summary><code>client.governance.rule_sets.<a href="src/hiddenlayer/governance/rule_sets/client.py#L221-L251">delete</a>(...)</code></summary>
+<details><summary><code>client.governance.rule_sets.<a href="src/hiddenlayer/governance/rule_sets/client.py#L224-L255">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -13223,7 +13361,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -13266,7 +13405,7 @@ client.governance.rule_sets.delete(
 </details>
 
 ## Governance PolicyPacks
-<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py#L43-L116">list</a>(...) -> ListPolicyPacksResponse</code></summary>
+<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py#L43-L117">list</a>(...) -> ListPolicyPacksResponse</code></summary>
 <dl>
 <dd>
 
@@ -13299,7 +13438,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -13389,7 +13529,7 @@ client.governance.policy_packs.list(
 </dl>
 </details>
 
-<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py#L118-L186">create</a>(...) -> PolicyPack</code></summary>
+<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py#L119-L188">create</a>(...) -> PolicyPack</code></summary>
 <dl>
 <dd>
 
@@ -13422,7 +13562,8 @@ from hiddenlayer import HiddenLayer, PolicyPackWriteRequestSettingsItem
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -13472,7 +13613,7 @@ client.governance.policy_packs.create(
 </dl>
 </details>
 
-<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py#L188-L236">recommendations</a>(...) -> PolicyPackRecommendation</code></summary>
+<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py#L190-L239">recommendations</a>(...) -> PolicyPackRecommendation</code></summary>
 <dl>
 <dd>
 
@@ -13505,7 +13646,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -13563,7 +13705,7 @@ client.governance.policy_packs.recommendations(
 </dl>
 </details>
 
-<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py#L238-L267">get</a>(...) -> PolicyPack</code></summary>
+<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py#L241-L271">get</a>(...) -> PolicyPack</code></summary>
 <dl>
 <dd>
 
@@ -13594,7 +13736,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -13636,7 +13779,7 @@ client.governance.policy_packs.get(
 </dl>
 </details>
 
-<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py#L269-L343">update</a>(...) -> PolicyPack</code></summary>
+<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py#L273-L348">update</a>(...) -> PolicyPack</code></summary>
 <dl>
 <dd>
 
@@ -13669,7 +13812,8 @@ from hiddenlayer import HiddenLayer, PolicyPackWriteRequestSettingsItem
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -13728,7 +13872,7 @@ client.governance.policy_packs.update(
 </dl>
 </details>
 
-<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py#L345-L376">delete</a>(...)</code></summary>
+<details><summary><code>client.governance.policy_packs.<a href="src/hiddenlayer/governance/policy_packs/client.py#L350-L382">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -13762,7 +13906,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -13805,7 +13950,7 @@ client.governance.policy_packs.delete(
 </details>
 
 ## Governance RulePacks
-<details><summary><code>client.governance.rule_packs.<a href="src/hiddenlayer/governance/rule_packs/client.py#L30-L80">list</a>(...) -> ListRulePacksResponse</code></summary>
+<details><summary><code>client.governance.rule_packs.<a href="src/hiddenlayer/governance/rule_packs/client.py#L30-L81">list</a>(...) -> ListRulePacksResponse</code></summary>
 <dl>
 <dd>
 
@@ -13836,7 +13981,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -13903,7 +14049,7 @@ client.governance.rule_packs.list(
 </details>
 
 ## Governance RuleSets Rules
-<details><summary><code>client.governance.rule_sets.rules.<a href="src/hiddenlayer/governance/rule_sets/rules/client.py#L31-L125">create</a>(...) -> RuleSet</code></summary>
+<details><summary><code>client.governance.rule_sets.rules.<a href="src/hiddenlayer/governance/rule_sets/rules/client.py#L31-L126">create</a>(...) -> RuleSet</code></summary>
 <dl>
 <dd>
 
@@ -13945,7 +14091,8 @@ from hiddenlayer import HiddenLayer, Condition
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -14002,7 +14149,7 @@ client.governance.rule_sets.rules.create(
 </dl>
 </details>
 
-<details><summary><code>client.governance.rule_sets.rules.<a href="src/hiddenlayer/governance/rule_sets/rules/client.py#L127-L224">update</a>(...) -> RuleSet</code></summary>
+<details><summary><code>client.governance.rule_sets.rules.<a href="src/hiddenlayer/governance/rule_sets/rules/client.py#L128-L226">update</a>(...) -> RuleSet</code></summary>
 <dl>
 <dd>
 
@@ -14041,7 +14188,8 @@ from hiddenlayer import HiddenLayer, Condition
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -14107,7 +14255,7 @@ client.governance.rule_sets.rules.update(
 </dl>
 </details>
 
-<details><summary><code>client.governance.rule_sets.rules.<a href="src/hiddenlayer/governance/rule_sets/rules/client.py#L226-L271">delete</a>(...) -> RuleSet</code></summary>
+<details><summary><code>client.governance.rule_sets.rules.<a href="src/hiddenlayer/governance/rule_sets/rules/client.py#L228-L274">delete</a>(...) -> RuleSet</code></summary>
 <dl>
 <dd>
 
@@ -14148,7 +14296,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -14200,7 +14349,7 @@ client.governance.rule_sets.rules.delete(
 </details>
 
 ## Integrations Assets
-<details><summary><code>client.integrations.assets.<a href="src/hiddenlayer/integrations/assets/client.py#L26-L57">scans</a>(...) -> AssetScanTriggerResponse</code></summary>
+<details><summary><code>client.integrations.assets.<a href="src/hiddenlayer/integrations/assets/client.py#L26-L58">scans</a>(...) -> AssetScanTriggerResponse</code></summary>
 <dl>
 <dd>
 
@@ -14231,7 +14380,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -14274,7 +14424,7 @@ client.integrations.assets.scans(
 </details>
 
 ## Metrics TimeseriesInferences
-<details><summary><code>client.metrics.timeseries_inferences.<a href="src/hiddenlayer/metrics/timeseries_inferences/client.py#L28-L84">list_v2</a>(...) -> InferenceTimeseriesResponseV2</code></summary>
+<details><summary><code>client.metrics.timeseries_inferences.<a href="src/hiddenlayer/metrics/timeseries_inferences/client.py#L28-L85">list_v2</a>(...) -> InferenceTimeseriesResponseV2</code></summary>
 <dl>
 <dd>
 
@@ -14292,7 +14442,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 import datetime
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -14359,7 +14510,7 @@ The point in time to end the time series. If not provided, the current time is u
 </dl>
 </details>
 
-<details><summary><code>client.metrics.timeseries_inferences.<a href="src/hiddenlayer/metrics/timeseries_inferences/client.py#L86-L142">list</a>(...) -> InferenceTimeseriesResponseV3</code></summary>
+<details><summary><code>client.metrics.timeseries_inferences.<a href="src/hiddenlayer/metrics/timeseries_inferences/client.py#L87-L144">list</a>(...) -> InferenceTimeseriesResponseV3</code></summary>
 <dl>
 <dd>
 
@@ -14377,7 +14528,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 import datetime
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -14445,7 +14597,7 @@ The point in time to end the time series. If not provided, the current time is u
 </details>
 
 ## Metrics TimeseriesIncidents
-<details><summary><code>client.metrics.timeseries_incidents.<a href="src/hiddenlayer/metrics/timeseries_incidents/client.py#L28-L84">list_v2</a>(...) -> IncidentTimeseriesResponseV2</code></summary>
+<details><summary><code>client.metrics.timeseries_incidents.<a href="src/hiddenlayer/metrics/timeseries_incidents/client.py#L28-L85">list_v2</a>(...) -> IncidentTimeseriesResponseV2</code></summary>
 <dl>
 <dd>
 
@@ -14463,7 +14615,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 import datetime
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -14530,7 +14683,7 @@ The point in time to end the time series. If not provided, the current time is u
 </dl>
 </details>
 
-<details><summary><code>client.metrics.timeseries_incidents.<a href="src/hiddenlayer/metrics/timeseries_incidents/client.py#L86-L142">list</a>(...) -> IncidentTimeseriesResponseV3</code></summary>
+<details><summary><code>client.metrics.timeseries_incidents.<a href="src/hiddenlayer/metrics/timeseries_incidents/client.py#L87-L144">list</a>(...) -> IncidentTimeseriesResponseV3</code></summary>
 <dl>
 <dd>
 
@@ -14548,7 +14701,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 import datetime
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -14616,7 +14770,7 @@ The point in time to end the time series. If not provided, the current time is u
 </details>
 
 ## Metrics TimeseriesConvictions
-<details><summary><code>client.metrics.timeseries_convictions.<a href="src/hiddenlayer/metrics/timeseries_convictions/client.py#L28-L84">list_v2</a>(...) -> ConvictionTimeseriesResponseV2</code></summary>
+<details><summary><code>client.metrics.timeseries_convictions.<a href="src/hiddenlayer/metrics/timeseries_convictions/client.py#L28-L85">list_v2</a>(...) -> ConvictionTimeseriesResponseV2</code></summary>
 <dl>
 <dd>
 
@@ -14634,7 +14788,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 import datetime
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -14701,7 +14856,7 @@ The point in time to end the time series. If not provided, the current time is u
 </dl>
 </details>
 
-<details><summary><code>client.metrics.timeseries_convictions.<a href="src/hiddenlayer/metrics/timeseries_convictions/client.py#L86-L142">list</a>(...) -> ConvictionTimeseriesResponseV3</code></summary>
+<details><summary><code>client.metrics.timeseries_convictions.<a href="src/hiddenlayer/metrics/timeseries_convictions/client.py#L87-L144">list</a>(...) -> ConvictionTimeseriesResponseV3</code></summary>
 <dl>
 <dd>
 
@@ -14719,7 +14874,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 import datetime
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -14787,7 +14943,7 @@ The point in time to end the time series. If not provided, the current time is u
 </details>
 
 ## Metrics TimeseriesScans
-<details><summary><code>client.metrics.timeseries_scans.<a href="src/hiddenlayer/metrics/timeseries_scans/client.py#L29-L85">list_v2</a>(...) -> ScanTimeseriesResponseV2</code></summary>
+<details><summary><code>client.metrics.timeseries_scans.<a href="src/hiddenlayer/metrics/timeseries_scans/client.py#L29-L86">list_v2</a>(...) -> ScanTimeseriesResponseV2</code></summary>
 <dl>
 <dd>
 
@@ -14805,7 +14961,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 import datetime
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -14872,7 +15029,7 @@ The point in time to end the time series. If not provided, the current time is u
 </dl>
 </details>
 
-<details><summary><code>client.metrics.timeseries_scans.<a href="src/hiddenlayer/metrics/timeseries_scans/client.py#L87-L148">list</a>(...) -> ScanTimeseriesResponseV3</code></summary>
+<details><summary><code>client.metrics.timeseries_scans.<a href="src/hiddenlayer/metrics/timeseries_scans/client.py#L88-L150">list</a>(...) -> ScanTimeseriesResponseV3</code></summary>
 <dl>
 <dd>
 
@@ -14890,7 +15047,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 import datetime
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -14966,7 +15124,7 @@ The point in time to end the time series. If not provided, the current time is u
 </details>
 
 ## Mitre Atlas Tactics
-<details><summary><code>client.mitre.atlas.tactics.<a href="src/hiddenlayer/mitre/atlas/tactics/client.py#L26-L53">get</a>(...) -> MitreAtlasTacticV1</code></summary>
+<details><summary><code>client.mitre.atlas.tactics.<a href="src/hiddenlayer/mitre/atlas/tactics/client.py#L26-L54">get</a>(...) -> MitreAtlasTacticV1</code></summary>
 <dl>
 <dd>
 
@@ -14983,7 +15141,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -15026,7 +15185,7 @@ client.mitre.atlas.tactics.get(
 </details>
 
 ## Mitre Atlas Techniques
-<details><summary><code>client.mitre.atlas.techniques.<a href="src/hiddenlayer/mitre/atlas/techniques/client.py#L26-L64">get</a>(...) -> GetTechniquesResponse</code></summary>
+<details><summary><code>client.mitre.atlas.techniques.<a href="src/hiddenlayer/mitre/atlas/techniques/client.py#L26-L65">get</a>(...) -> GetTechniquesResponse</code></summary>
 <dl>
 <dd>
 
@@ -15043,7 +15202,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -15094,7 +15254,7 @@ client.mitre.atlas.techniques.get(
 </details>
 
 ## ModelIntel File
-<details><summary><code>client.model_intel.file.<a href="src/hiddenlayer/model_intel/file/client.py#L27-L70">get</a>(...) -> GetFileResponse</code></summary>
+<details><summary><code>client.model_intel.file.<a href="src/hiddenlayer/model_intel/file/client.py#L27-L71">get</a>(...) -> GetFileResponse</code></summary>
 <dl>
 <dd>
 
@@ -15125,7 +15285,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -15184,7 +15345,7 @@ client.model_intel.file.get(
 </dl>
 </details>
 
-<details><summary><code>client.model_intel.file.<a href="src/hiddenlayer/model_intel/file/client.py#L72-L101">metadata</a>(...) -> File</code></summary>
+<details><summary><code>client.model_intel.file.<a href="src/hiddenlayer/model_intel/file/client.py#L73-L103">metadata</a>(...) -> File</code></summary>
 <dl>
 <dd>
 
@@ -15215,7 +15376,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -15258,7 +15420,7 @@ client.model_intel.file.metadata(
 </details>
 
 ## Models Cards
-<details><summary><code>client.models.cards.<a href="src/hiddenlayer/models/cards/client.py#L47-L145">list_v3</a>(...) -> ModelCardV3QueryResponse</code></summary>
+<details><summary><code>client.models.cards.<a href="src/hiddenlayer/models/cards/client.py#L47-L146">list_v3</a>(...) -> ModelCardV3QueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -15275,7 +15437,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -15405,7 +15568,7 @@ client.models.cards.list_v3(
 </dl>
 </details>
 
-<details><summary><code>client.models.cards.<a href="src/hiddenlayer/models/cards/client.py#L147-L250">list</a>(...) -> ModelCardV4QueryResponse</code></summary>
+<details><summary><code>client.models.cards.<a href="src/hiddenlayer/models/cards/client.py#L148-L252">list</a>(...) -> ModelCardV4QueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -15441,7 +15604,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -15571,7 +15735,7 @@ client.models.cards.list(
 </dl>
 </details>
 
-<details><summary><code>client.models.cards.<a href="src/hiddenlayer/models/cards/client.py#L252-L284">suggestions</a>(...) -> SuggestionsCardsResponse</code></summary>
+<details><summary><code>client.models.cards.<a href="src/hiddenlayer/models/cards/client.py#L254-L287">suggestions</a>(...) -> SuggestionsCardsResponse</code></summary>
 <dl>
 <dd>
 
@@ -15588,7 +15752,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -15639,7 +15804,7 @@ client.models.cards.suggestions(
 </details>
 
 ## Models PolicyCompliance
-<details><summary><code>client.models.policy_compliance.<a href="src/hiddenlayer/models/policy_compliance/client.py#L28-L61">update</a>(...)</code></summary>
+<details><summary><code>client.models.policy_compliance.<a href="src/hiddenlayer/models/policy_compliance/client.py#L28-L62">update</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -15670,7 +15835,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -15721,7 +15887,7 @@ client.models.policy_compliance.update(
 </dl>
 </details>
 
-<details><summary><code>client.models.policy_compliance.<a href="src/hiddenlayer/models/policy_compliance/client.py#L63-L90">delete</a>(...)</code></summary>
+<details><summary><code>client.models.policy_compliance.<a href="src/hiddenlayer/models/policy_compliance/client.py#L64-L92">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -15752,7 +15918,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -15795,7 +15962,7 @@ client.models.policy_compliance.delete(
 </details>
 
 ## Models Versions Location
-<details><summary><code>client.models.versions.location.<a href="src/hiddenlayer/models/versions/location/client.py#L26-L54">internal</a>(...) -> InternalLocationResponse</code></summary>
+<details><summary><code>client.models.versions.location.<a href="src/hiddenlayer/models/versions/location/client.py#L26-L55">internal</a>(...) -> InternalLocationResponse</code></summary>
 <dl>
 <dd>
 
@@ -15812,7 +15979,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -15855,7 +16023,7 @@ client.models.versions.location.internal(
 </details>
 
 ## Models Versions Locations
-<details><summary><code>client.models.versions.locations.<a href="src/hiddenlayer/models/versions/locations/client.py#L30-L61">get</a>(...) -> GetLocationsResponse</code></summary>
+<details><summary><code>client.models.versions.locations.<a href="src/hiddenlayer/models/versions/locations/client.py#L30-L62">get</a>(...) -> GetLocationsResponse</code></summary>
 <dl>
 <dd>
 
@@ -15872,7 +16040,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -15923,7 +16092,7 @@ client.models.versions.locations.get(
 </dl>
 </details>
 
-<details><summary><code>client.models.versions.locations.<a href="src/hiddenlayer/models/versions/locations/client.py#L63-L97">update</a>(...) -> UpdateLocationsResponse</code></summary>
+<details><summary><code>client.models.versions.locations.<a href="src/hiddenlayer/models/versions/locations/client.py#L64-L99">update</a>(...) -> UpdateLocationsResponse</code></summary>
 <dl>
 <dd>
 
@@ -15940,7 +16109,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -16001,7 +16171,7 @@ client.models.versions.locations.update(
 </details>
 
 ## ScanIndices Submission
-<details><summary><code>client.scan_indices.submission.<a href="src/hiddenlayer/scan_indices/submission/client.py#L29-L86">create</a>(...)</code></summary>
+<details><summary><code>client.scan_indices.submission.<a href="src/hiddenlayer/scan_indices/submission/client.py#L29-L87">create</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -16019,7 +16189,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 from hiddenlayer.scan_indices.submission import ScanSubmissionSource, ScanSubmissionSourceSaas
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -16086,7 +16257,7 @@ client.scan_indices.submission.create(
 </details>
 
 ## Scans Jobs
-<details><summary><code>client.scans.jobs.<a href="src/hiddenlayer/scans/jobs/client.py#L45-L98">request</a>(...) -> ScanJob</code></summary>
+<details><summary><code>client.scans.jobs.<a href="src/hiddenlayer/scans/jobs/client.py#L45-L99">request</a>(...) -> ScanJob</code></summary>
 <dl>
 <dd>
 
@@ -16104,7 +16275,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 from hiddenlayer.scans.jobs import ScanJobRequestAccess
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -16177,7 +16349,7 @@ client.scans.jobs.request(
 </dl>
 </details>
 
-<details><summary><code>client.scans.jobs.<a href="src/hiddenlayer/scans/jobs/client.py#L100-L145">retrieve</a>(...) -> ScanReportOfRecordV3</code></summary>
+<details><summary><code>client.scans.jobs.<a href="src/hiddenlayer/scans/jobs/client.py#L101-L147">retrieve</a>(...) -> ScanReportOfRecordV3</code></summary>
 <dl>
 <dd>
 
@@ -16194,7 +16366,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -16252,7 +16425,7 @@ client.scans.jobs.retrieve(
 </dl>
 </details>
 
-<details><summary><code>client.scans.jobs.<a href="src/hiddenlayer/scans/jobs/client.py#L147-L310">list</a>(...) -> ListJobsResponse</code></summary>
+<details><summary><code>client.scans.jobs.<a href="src/hiddenlayer/scans/jobs/client.py#L149-L313">list</a>(...) -> ListJobsResponse</code></summary>
 <dl>
 <dd>
 
@@ -16270,7 +16443,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 import datetime
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -16496,7 +16670,7 @@ Paired with `threat_type`, a scan matches when a listed threat type's highest se
 </details>
 
 ## Scans Upload
-<details><summary><code>client.scans.upload.<a href="src/hiddenlayer/scans/upload/client.py#L37-L98">start</a>(...) -> StartUploadResponse</code></summary>
+<details><summary><code>client.scans.upload.<a href="src/hiddenlayer/scans/upload/client.py#L37-L99">start</a>(...) -> StartUploadResponse</code></summary>
 <dl>
 <dd>
 
@@ -16513,7 +16687,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -16597,7 +16772,7 @@ client.scans.upload.start(
 </dl>
 </details>
 
-<details><summary><code>client.scans.upload.<a href="src/hiddenlayer/scans/upload/client.py#L100-L129">complete_all</a>(...) -> CompleteAllUploadResponse</code></summary>
+<details><summary><code>client.scans.upload.<a href="src/hiddenlayer/scans/upload/client.py#L101-L131">complete_all</a>(...) -> CompleteAllUploadResponse</code></summary>
 <dl>
 <dd>
 
@@ -16614,7 +16789,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -16657,7 +16833,7 @@ client.scans.upload.complete_all(
 </details>
 
 ## Scans Results
-<details><summary><code>client.scans.results.<a href="src/hiddenlayer/scans/results/client.py#L30-L103">list_files</a>(...) -> ListFilesResultsResponse</code></summary>
+<details><summary><code>client.scans.results.<a href="src/hiddenlayer/scans/results/client.py#L30-L104">list_files</a>(...) -> ListFilesResultsResponse</code></summary>
 <dl>
 <dd>
 
@@ -16688,7 +16864,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -16779,7 +16956,7 @@ An unknown sort field returns 422.
 </dl>
 </details>
 
-<details><summary><code>client.scans.results.<a href="src/hiddenlayer/scans/results/client.py#L105-L143">sarif</a>(...) -> str</code></summary>
+<details><summary><code>client.scans.results.<a href="src/hiddenlayer/scans/results/client.py#L106-L145">sarif</a>(...) -> str</code></summary>
 <dl>
 <dd>
 
@@ -16796,7 +16973,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -16846,7 +17024,7 @@ client.scans.results.sarif(
 </dl>
 </details>
 
-<details><summary><code>client.scans.results.<a href="src/hiddenlayer/scans/results/client.py#L145-L185">retrieve_summary</a>(...) -> ScanReportSummaryResponseV3</code></summary>
+<details><summary><code>client.scans.results.<a href="src/hiddenlayer/scans/results/client.py#L147-L188">retrieve_summary</a>(...) -> ScanReportSummaryResponseV3</code></summary>
 <dl>
 <dd>
 
@@ -16877,7 +17055,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -16928,7 +17107,7 @@ client.scans.results.retrieve_summary(
 </details>
 
 ## Scans Reports
-<details><summary><code>client.scans.reports.<a href="src/hiddenlayer/scans/reports/client.py#L38-L92">list</a>(...) -> ListReportsResponse</code></summary>
+<details><summary><code>client.scans.reports.<a href="src/hiddenlayer/scans/reports/client.py#L38-L93">list</a>(...) -> ListReportsResponse</code></summary>
 <dl>
 <dd>
 
@@ -16959,7 +17138,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -17030,7 +17210,7 @@ The use of `limit` is preferred, and it takes precedence over `page_size`.
 </details>
 
 ## Scans Reports Csv
-<details><summary><code>client.scans.reports.csv.<a href="src/hiddenlayer/scans/reports/csv/client.py#L27-L76">create</a>(...) -> CreateCsvResponse</code></summary>
+<details><summary><code>client.scans.reports.csv.<a href="src/hiddenlayer/scans/reports/csv/client.py#L27-L77">create</a>(...) -> CreateCsvResponse</code></summary>
 <dl>
 <dd>
 
@@ -17071,7 +17251,8 @@ from hiddenlayer.scans.reports.csv import CreateCsvRequestTime
 import datetime
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -17116,7 +17297,7 @@ client.scans.reports.csv.create(
 </dl>
 </details>
 
-<details><summary><code>client.scans.reports.csv.<a href="src/hiddenlayer/scans/reports/csv/client.py#L78-L106">get</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.scans.reports.csv.<a href="src/hiddenlayer/scans/reports/csv/client.py#L79-L108">get</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -17147,7 +17328,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -17190,7 +17372,7 @@ client.scans.reports.csv.get(
 </details>
 
 ## Scans Reports SupplyChain Csv
-<details><summary><code>client.scans.reports.supply_chain.csv.<a href="src/hiddenlayer/scans/reports/supply_chain/csv/client.py#L35-L217">create</a>(...) -> CreateCsvResponse</code></summary>
+<details><summary><code>client.scans.reports.supply_chain.csv.<a href="src/hiddenlayer/scans/reports/supply_chain/csv/client.py#L35-L218">create</a>(...) -> CreateCsvResponse</code></summary>
 <dl>
 <dd>
 
@@ -17233,7 +17415,8 @@ from hiddenlayer.environment import HiddenLayerEnvironment
 import datetime
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -17470,7 +17653,7 @@ Note: If multiple sort parameters are provided, only the first one will be appli
 </dl>
 </details>
 
-<details><summary><code>client.scans.reports.supply_chain.csv.<a href="src/hiddenlayer/scans/reports/supply_chain/csv/client.py#L219-L249">get</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.scans.reports.supply_chain.csv.<a href="src/hiddenlayer/scans/reports/supply_chain/csv/client.py#L220-L251">get</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -17503,7 +17686,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -17546,7 +17730,7 @@ client.scans.reports.supply_chain.csv.get(
 </details>
 
 ## Scans Upload File
-<details><summary><code>client.scans.upload.file.<a href="src/hiddenlayer/scans/upload/file/client.py#L27-L81">add</a>(...) -> AddFileResponse</code></summary>
+<details><summary><code>client.scans.upload.file.<a href="src/hiddenlayer/scans/upload/file/client.py#L27-L82">add</a>(...) -> AddFileResponse</code></summary>
 <dl>
 <dd>
 
@@ -17563,7 +17747,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -17637,7 +17822,7 @@ One of `file-name` or `file-name-base64` must be provided.
 </dl>
 </details>
 
-<details><summary><code>client.scans.upload.file.<a href="src/hiddenlayer/scans/upload/file/client.py#L83-L115">complete</a>(...) -> CompleteFileResponse</code></summary>
+<details><summary><code>client.scans.upload.file.<a href="src/hiddenlayer/scans/upload/file/client.py#L84-L117">complete</a>(...) -> CompleteFileResponse</code></summary>
 <dl>
 <dd>
 
@@ -17654,7 +17839,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -17706,7 +17892,7 @@ client.scans.upload.file.complete(
 </details>
 
 ## SupplyChain Scans
-<details><summary><code>client.supply_chain.scans.<a href="src/hiddenlayer/supply_chain/scans/client.py#L28-L69">get</a>(...) -> typing.Optional[typing.Dict[str, typing.Any]]</code></summary>
+<details><summary><code>client.supply_chain.scans.<a href="src/hiddenlayer/supply_chain/scans/client.py#L28-L70">get</a>(...) -> typing.Optional[typing.Dict[str, typing.Any]]</code></summary>
 <dl>
 <dd>
 
@@ -17723,7 +17909,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -17781,7 +17968,7 @@ client.supply_chain.scans.get(
 </dl>
 </details>
 
-<details><summary><code>client.supply_chain.scans.<a href="src/hiddenlayer/supply_chain/scans/client.py#L71-L105">guidance</a>(...) -> GuidanceScansResponse</code></summary>
+<details><summary><code>client.supply_chain.scans.<a href="src/hiddenlayer/supply_chain/scans/client.py#L72-L107">guidance</a>(...) -> GuidanceScansResponse</code></summary>
 <dl>
 <dd>
 
@@ -17815,7 +18002,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -17858,7 +18046,7 @@ client.supply_chain.scans.guidance(
 </details>
 
 ## Triage Issues
-<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py#L40-L109">list</a>(...) -> TriageIssueList</code></summary>
+<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py#L40-L110">list</a>(...) -> TriageIssueList</code></summary>
 <dl>
 <dd>
 
@@ -17891,7 +18079,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -17974,7 +18163,7 @@ client.triage.issues.list(
 </dl>
 </details>
 
-<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py#L111-L142">get</a>(...) -> TriageIssueDetail</code></summary>
+<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py#L112-L144">get</a>(...) -> TriageIssueDetail</code></summary>
 <dl>
 <dd>
 
@@ -18007,7 +18196,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -18049,7 +18239,7 @@ client.triage.issues.get(
 </dl>
 </details>
 
-<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py#L144-L219">update</a>(...) -> TriageIssueDetail</code></summary>
+<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py#L146-L222">update</a>(...) -> TriageIssueDetail</code></summary>
 <dl>
 <dd>
 
@@ -18119,7 +18309,8 @@ from hiddenlayer import HiddenLayer, TriageIssuePatchStatus
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -18172,7 +18363,7 @@ client.triage.issues.update(
 </dl>
 </details>
 
-<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py#L221-L257">notes</a>(...) -> TriageNote</code></summary>
+<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py#L224-L261">notes</a>(...) -> TriageNote</code></summary>
 <dl>
 <dd>
 
@@ -18205,7 +18396,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -18256,7 +18448,7 @@ client.triage.issues.notes(
 </dl>
 </details>
 
-<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py#L259-L326">source_events</a>(...) -> TriageSourceEventList</code></summary>
+<details><summary><code>client.triage.issues.<a href="src/hiddenlayer/triage/issues/client.py#L263-L331">source_events</a>(...) -> TriageSourceEventList</code></summary>
 <dl>
 <dd>
 
@@ -18307,7 +18499,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 
@@ -18367,7 +18560,7 @@ client.triage.issues.source_events(
 </details>
 
 ## Triage Reports
-<details><summary><code>client.triage.reports.<a href="src/hiddenlayer/triage/reports/client.py#L26-L76">list</a>() -> TriageReport</code></summary>
+<details><summary><code>client.triage.reports.<a href="src/hiddenlayer/triage/reports/client.py#L26-L77">list</a>() -> TriageReport</code></summary>
 <dl>
 <dd>
 
@@ -18424,7 +18617,8 @@ from hiddenlayer import HiddenLayer
 from hiddenlayer.environment import HiddenLayerEnvironment
 
 client = HiddenLayer(
-    token="<token>",
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
     environment=HiddenLayerEnvironment.PROD_US,
 )
 

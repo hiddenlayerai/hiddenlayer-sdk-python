@@ -59,7 +59,8 @@ class CsvClient:
         from hiddenlayer.scans.reports.csv import CreateCsvRequestTime
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.scans.reports.csv.create(
             time=CreateCsvRequestTime(
@@ -96,7 +97,8 @@ class CsvClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.scans.reports.csv.get(
             report_id="report_id",
@@ -157,7 +159,8 @@ class AsyncCsvClient:
         from hiddenlayer.scans.reports.csv import CreateCsvRequestTime
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -204,7 +207,8 @@ class AsyncCsvClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 

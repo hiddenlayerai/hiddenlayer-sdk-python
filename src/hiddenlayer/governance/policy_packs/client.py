@@ -93,7 +93,8 @@ class PolicyPacksClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         response = client.governance.policy_packs.list(
             limit=50,
@@ -162,7 +163,8 @@ class PolicyPacksClient:
         from hiddenlayer import HiddenLayer, PolicyPackWriteRequestSettingsItem
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.governance.policy_packs.create(
             name="name",
@@ -221,7 +223,8 @@ class PolicyPacksClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.governance.policy_packs.recommendations(
             application_type="GENERAL",
@@ -257,7 +260,8 @@ class PolicyPacksClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.governance.policy_packs.get(
             policy_pack_id="policy_pack_id",
@@ -317,7 +321,8 @@ class PolicyPacksClient:
         from hiddenlayer import HiddenLayer, PolicyPackWriteRequestSettingsItem
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.governance.policy_packs.update(
             policy_pack_id="policy_pack_id",
@@ -366,7 +371,8 @@ class PolicyPacksClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.governance.policy_packs.delete(
             policy_pack_id="policy_pack_id",
@@ -446,7 +452,8 @@ class AsyncPolicyPacksClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -524,7 +531,8 @@ class AsyncPolicyPacksClient:
         from hiddenlayer import AsyncHiddenLayer, PolicyPackWriteRequestSettingsItem
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -591,7 +599,8 @@ class AsyncPolicyPacksClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -635,7 +644,8 @@ class AsyncPolicyPacksClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -703,7 +713,8 @@ class AsyncPolicyPacksClient:
         from hiddenlayer import AsyncHiddenLayer, PolicyPackWriteRequestSettingsItem
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -760,7 +771,8 @@ class AsyncPolicyPacksClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 

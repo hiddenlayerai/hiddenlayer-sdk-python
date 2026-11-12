@@ -99,7 +99,8 @@ class SystemPromptAnalysisClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         response = client.evaluations.system_prompt_analysis.list()
         for item in response:
@@ -167,7 +168,8 @@ class SystemPromptAnalysisClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.evaluations.system_prompt_analysis.create(
             name="name",
@@ -210,7 +212,8 @@ class SystemPromptAnalysisClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.evaluations.system_prompt_analysis.status(
             workflow_id="workflow_id",
@@ -243,7 +246,8 @@ class SystemPromptAnalysisClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.evaluations.system_prompt_analysis.get(
             workflow_id="workflow_id",
@@ -275,7 +279,8 @@ class SystemPromptAnalysisClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.evaluations.system_prompt_analysis.delete(
             workflow_id="workflow_id",
@@ -319,7 +324,8 @@ class SystemPromptAnalysisClient:
         from hiddenlayer import HiddenLayer, QuestionAnswer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.evaluations.system_prompt_analysis.answers(
             workflow_id="workflow_id",
@@ -416,7 +422,8 @@ class AsyncSystemPromptAnalysisClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -493,7 +500,8 @@ class AsyncSystemPromptAnalysisClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -546,7 +554,8 @@ class AsyncSystemPromptAnalysisClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -587,7 +596,8 @@ class AsyncSystemPromptAnalysisClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -627,7 +637,8 @@ class AsyncSystemPromptAnalysisClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -679,7 +690,8 @@ class AsyncSystemPromptAnalysisClient:
         from hiddenlayer import AsyncHiddenLayer, QuestionAnswer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 

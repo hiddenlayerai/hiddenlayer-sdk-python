@@ -59,7 +59,8 @@ class SubmissionClient:
         )
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.scan_indices.submission.create(
             scanner_type="hl_model_scanner",
@@ -136,7 +137,8 @@ class AsyncSubmissionClient:
         )
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 

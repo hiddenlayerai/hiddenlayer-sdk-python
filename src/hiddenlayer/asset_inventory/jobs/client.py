@@ -76,7 +76,8 @@ class JobsClient:
         from hiddenlayer.asset_inventory.jobs import BulkCustomTagJobRequestV2Filter
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.asset_inventory.jobs.custom_tags(
             filter=BulkCustomTagJobRequestV2Filter(
@@ -177,7 +178,8 @@ class AsyncJobsClient:
         from hiddenlayer.asset_inventory.jobs import BulkCustomTagJobRequestV2Filter
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 

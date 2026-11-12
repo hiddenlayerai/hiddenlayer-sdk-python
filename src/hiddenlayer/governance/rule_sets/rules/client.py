@@ -97,7 +97,8 @@ class RulesClient:
         from hiddenlayer import Condition, HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.governance.rule_sets.rules.create(
             rule_set_id="rule_set_id",
@@ -194,7 +195,8 @@ class RulesClient:
         from hiddenlayer import Condition, HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.governance.rule_sets.rules.update(
             rule_set_id="rule_set_id",
@@ -260,7 +262,8 @@ class RulesClient:
         from hiddenlayer import HiddenLayer
 
         client = HiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
         client.governance.rule_sets.rules.delete(
             rule_set_id="rule_set_id",
@@ -357,7 +360,8 @@ class AsyncRulesClient:
         from hiddenlayer import AsyncHiddenLayer, Condition
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -462,7 +466,8 @@ class AsyncRulesClient:
         from hiddenlayer import AsyncHiddenLayer, Condition
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
@@ -536,7 +541,8 @@ class AsyncRulesClient:
         from hiddenlayer import AsyncHiddenLayer
 
         client = AsyncHiddenLayer(
-            token="YOUR_TOKEN",
+            client_id="YOUR_CLIENT_ID",
+            client_secret="YOUR_CLIENT_SECRET",
         )
 
 
