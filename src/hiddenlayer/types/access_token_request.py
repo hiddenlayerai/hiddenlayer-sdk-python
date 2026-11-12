@@ -13,6 +13,16 @@ class AccessTokenRequest(UniversalBaseModel):
     The OAuth2 grant type. Only `client_credentials` is supported.
     """
 
+    client_id: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    The Client ID, when it isn't sent as the HTTP Basic username.
+    """
+
+    client_secret: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    The Client Secret, when it isn't sent as the HTTP Basic password.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:

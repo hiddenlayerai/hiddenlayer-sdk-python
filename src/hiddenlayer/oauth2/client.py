@@ -28,10 +28,15 @@ class Oauth2Client:
         return self._raw_client
 
     def token(
-        self, *, grant_type: AccessTokenRequestGrantType, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        grant_type: AccessTokenRequestGrantType,
+        client_id: typing.Optional[str] = OMIT,
+        client_secret: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AccessToken:
         """
-        Exchanges the Client ID and Client Secret of an [API credential](#operation/create_credentials_api_v2_credentials_post) for an access token, using the OAuth2 client credentials grant. Send the Client ID and Client Secret as the HTTP Basic username and password.
+        Exchanges the Client ID and Client Secret of an [API credential](#operation/create_credentials_api_v2_credentials_post) for an access token, using the OAuth2 client credentials grant. Send the Client ID and Client Secret either as the HTTP Basic username and password, or as the `client_id` and `client_secret` form fields.
 
         Send the token as `Authorization: Bearer <access_token>` on every other request. It expires `expires_in` seconds after it is issued, so request a new one before then.
 
@@ -39,6 +44,12 @@ class Oauth2Client:
         ----------
         grant_type : AccessTokenRequestGrantType
             The OAuth2 grant type. Only `client_credentials` is supported.
+
+        client_id : typing.Optional[str]
+            The Client ID, when it isn't sent as the HTTP Basic username.
+
+        client_secret : typing.Optional[str]
+            The Client Secret, when it isn't sent as the HTTP Basic password.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -59,7 +70,9 @@ class Oauth2Client:
             grant_type="client_credentials",
         )
         """
-        _response = self._raw_client.token(grant_type=grant_type, request_options=request_options)
+        _response = self._raw_client.token(
+            grant_type=grant_type, client_id=client_id, client_secret=client_secret, request_options=request_options
+        )
         return _response.data
 
 
@@ -79,10 +92,15 @@ class AsyncOauth2Client:
         return self._raw_client
 
     async def token(
-        self, *, grant_type: AccessTokenRequestGrantType, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        grant_type: AccessTokenRequestGrantType,
+        client_id: typing.Optional[str] = OMIT,
+        client_secret: typing.Optional[str] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AccessToken:
         """
-        Exchanges the Client ID and Client Secret of an [API credential](#operation/create_credentials_api_v2_credentials_post) for an access token, using the OAuth2 client credentials grant. Send the Client ID and Client Secret as the HTTP Basic username and password.
+        Exchanges the Client ID and Client Secret of an [API credential](#operation/create_credentials_api_v2_credentials_post) for an access token, using the OAuth2 client credentials grant. Send the Client ID and Client Secret either as the HTTP Basic username and password, or as the `client_id` and `client_secret` form fields.
 
         Send the token as `Authorization: Bearer <access_token>` on every other request. It expires `expires_in` seconds after it is issued, so request a new one before then.
 
@@ -90,6 +108,12 @@ class AsyncOauth2Client:
         ----------
         grant_type : AccessTokenRequestGrantType
             The OAuth2 grant type. Only `client_credentials` is supported.
+
+        client_id : typing.Optional[str]
+            The Client ID, when it isn't sent as the HTTP Basic username.
+
+        client_secret : typing.Optional[str]
+            The Client Secret, when it isn't sent as the HTTP Basic password.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -118,5 +142,7 @@ class AsyncOauth2Client:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.token(grant_type=grant_type, request_options=request_options)
+        _response = await self._raw_client.token(
+            grant_type=grant_type, client_id=client_id, client_secret=client_secret, request_options=request_options
+        )
         return _response.data

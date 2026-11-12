@@ -965,7 +965,7 @@ client.users.me()
 </details>
 
 ## Oauth2
-<details><summary><code>client.oauth2.<a href="src/hiddenlayer/oauth2/client.py#L30-L63">token</a>(...) -> AccessToken</code></summary>
+<details><summary><code>client.oauth2.<a href="src/hiddenlayer/oauth2/client.py#L30-L76">token</a>(...) -> AccessToken</code></summary>
 <dl>
 <dd>
 
@@ -977,7 +977,7 @@ client.users.me()
 <dl>
 <dd>
 
-Exchanges the Client ID and Client Secret of an [API credential](#operation/create_credentials_api_v2_credentials_post) for an access token, using the OAuth2 client credentials grant. Send the Client ID and Client Secret as the HTTP Basic username and password.
+Exchanges the Client ID and Client Secret of an [API credential](#operation/create_credentials_api_v2_credentials_post) for an access token, using the OAuth2 client credentials grant. Send the Client ID and Client Secret either as the HTTP Basic username and password, or as the `client_id` and `client_secret` form fields.
 
 Send the token as `Authorization: Bearer <access_token>` on every other request. It expires `expires_in` seconds after it is issued, so request a new one before then.
 </dd>

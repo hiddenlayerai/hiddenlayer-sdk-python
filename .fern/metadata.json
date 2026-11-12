@@ -9,7 +9,7 @@
     "offset_semantics": "item-index",
     "encode_path_params": true
   },
-  "originGitCommit": "f355dc9163dd2b30a5b35b62f0fa055d6ad0a7f1",
+  "originGitCommit": "1354c74449978151cdc6dc36386baddac045e0c4",
   "originGitCommitIsDirty": true,
   "invokedBy": "ci",
   "requestedVersion": "3.10.0",
