@@ -16425,7 +16425,7 @@ client.scans.jobs.retrieve(
 </dl>
 </details>
 
-<details><summary><code>client.scans.jobs.<a href="src/hiddenlayer/scans/jobs/client.py#L149-L313">list</a>(...) -> ListJobsResponse</code></summary>
+<details><summary><code>client.scans.jobs.<a href="src/hiddenlayer/scans/jobs/client.py#L149-L315">list</a>(...) -> ListJobsResponse</code></summary>
 <dl>
 <dd>
 
@@ -16593,7 +16593,11 @@ Paired with `threat_type`, a scan matches when a listed threat type's highest se
 <dl>
 <dd>
 
-**sort:** `typing.Optional[str]` — allow sorting by model name, status, severity, scan start time, asset region, or model provider ascending (+) or the default descending (-)
+**sort:** `typing.Optional[str]` 
+
+allow sorting by model name, status, severity, scan start time, asset region, model provider, or policy status ascending (+) or the default descending (-)
+
+`policy_status` sorts by the scan's policy verdict. Descending puts `NONCOMPLIANT` first, then `COMPLIANT`, then scans without a verdict; ascending is the reverse.
     
 </dd>
 </dl>
