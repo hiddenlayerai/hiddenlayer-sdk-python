@@ -17376,7 +17376,7 @@ client.scans.reports.csv.get(
 </details>
 
 ## Scans Reports SupplyChain Csv
-<details><summary><code>client.scans.reports.supply_chain.csv.<a href="src/hiddenlayer/scans/reports/supply_chain/csv/client.py#L35-L218">create</a>(...) -> CreateCsvResponse</code></summary>
+<details><summary><code>client.scans.reports.supply_chain.csv.<a href="src/hiddenlayer/scans/reports/supply_chain/csv/client.py#L35-L220">create</a>(...) -> CreateCsvResponse</code></summary>
 <dl>
 <dd>
 
@@ -17634,8 +17634,10 @@ Paired with `threat_type`, a scan matches when a listed threat type's highest se
 
 **sort:** `typing.Optional[typing.Union[str, typing.Sequence[str]]]` 
 
-Sort results by specified field. Prefix with `-` for descending order, `+` or no prefix for ascending.
+Sort results by specified field. Prefix with `+` for ascending order, `-` or no prefix for descending.
 Supported fields: name, detections, scanned_on, policy_status, origin, region, provider, threat_level, start_time, model_name, severity, status.
+
+`policy_status` sorts by the scan's policy verdict. Descending puts `NONCOMPLIANT` first, then `COMPLIANT`, then scans without a verdict; ascending is the reverse.
 
 Note: If multiple sort parameters are provided, only the first one will be applied.
     
@@ -17657,7 +17659,7 @@ Note: If multiple sort parameters are provided, only the first one will be appli
 </dl>
 </details>
 
-<details><summary><code>client.scans.reports.supply_chain.csv.<a href="src/hiddenlayer/scans/reports/supply_chain/csv/client.py#L220-L251">get</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.scans.reports.supply_chain.csv.<a href="src/hiddenlayer/scans/reports/supply_chain/csv/client.py#L222-L253">get</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
