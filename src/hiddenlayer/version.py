@@ -1,3 +1,3 @@
 from importlib import metadata
 
-__version__ = metadata.version("hiddenlayer")
+__version__ = metadata.version("hiddenlayer-sdk")
