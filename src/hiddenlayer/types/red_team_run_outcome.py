@@ -4,7 +4,7 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
-from .red_team_run_outcome_run_status import RedTeamRunOutcomeRunStatus
+from .red_team_run_status import RedTeamRunStatus
 
 
 class RedTeamRunOutcome(UniversalBaseModel):
@@ -12,7 +12,7 @@ class RedTeamRunOutcome(UniversalBaseModel):
     Run-level verdict. A run that measured too small a share of its planned sessions is `FAILED`.
     """
 
-    run_status: RedTeamRunOutcomeRunStatus = pydantic.Field()
+    run_status: RedTeamRunStatus = pydantic.Field()
     """
     Run verdict
     """

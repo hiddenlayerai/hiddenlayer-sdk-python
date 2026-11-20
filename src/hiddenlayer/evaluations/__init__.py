@@ -6,13 +6,14 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
-    from . import prompt_sets, red_team, system_prompt_analysis, threat_modeling
+    from . import prompt_sets, red_team, red_team_v2, system_prompt_analysis, threat_modeling
     from .red_team import ClientRedTeamBodyExecutionStrategyType, StartRedTeamBodyExecutionStrategyType
 _dynamic_imports: typing.Dict[str, str] = {
     "ClientRedTeamBodyExecutionStrategyType": ".red_team",
     "StartRedTeamBodyExecutionStrategyType": ".red_team",
     "prompt_sets": ".prompt_sets",
     "red_team": ".red_team",
+    "red_team_v2": ".red_team_v2",
     "system_prompt_analysis": ".system_prompt_analysis",
     "threat_modeling": ".threat_modeling",
 }
@@ -44,6 +45,7 @@ __all__ = [
     "StartRedTeamBodyExecutionStrategyType",
     "prompt_sets",
     "red_team",
+    "red_team_v2",
     "system_prompt_analysis",
     "threat_modeling",
 ]

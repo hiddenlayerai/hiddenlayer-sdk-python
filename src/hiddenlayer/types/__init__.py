@@ -238,6 +238,7 @@ if typing.TYPE_CHECKING:
     from .list_projects_request_policy_pack_id import ListProjectsRequestPolicyPackId
     from .list_projects_request_rule_set_id import ListProjectsRequestRuleSetId
     from .list_red_team_request_project_id import ListRedTeamRequestProjectId
+    from .list_red_team_v2request_project_id import ListRedTeamV2RequestProjectId
     from .list_reports_request_time import ListReportsRequestTime
     from .list_resources_request_linked_at import ListResourcesRequestLinkedAt
     from .list_resources_request_resource_id import ListResourcesRequestResourceId
@@ -352,21 +353,64 @@ if typing.TYPE_CHECKING:
     from .red_team_analysis_exposed_item import RedTeamAnalysisExposedItem
     from .red_team_analysis_insight import RedTeamAnalysisInsight
     from .red_team_attacker_session_result import RedTeamAttackerSessionResult
+    from .red_team_caught_by_policy import RedTeamCaughtByPolicy
+    from .red_team_citation import RedTeamCitation
     from .red_team_config import RedTeamConfig
     from .red_team_config_execution_strategy_type import RedTeamConfigExecutionStrategyType
     from .red_team_config_summary import RedTeamConfigSummary
     from .red_team_configs_response import RedTeamConfigsResponse
+    from .red_team_conversation_message import RedTeamConversationMessage
+    from .red_team_coverage_framework import RedTeamCoverageFramework
+    from .red_team_coverage_item import RedTeamCoverageItem
+    from .red_team_coverage_method import RedTeamCoverageMethod
+    from .red_team_coverage_note import RedTeamCoverageNote
+    from .red_team_coverage_report import RedTeamCoverageReport
+    from .red_team_create_attacker_attempts import RedTeamCreateAttackerAttempts
+    from .red_team_create_attacker_guidance import RedTeamCreateAttackerGuidance
+    from .red_team_create_config_id import RedTeamCreateConfigId
+    from .red_team_create_max_parallel_sessions import RedTeamCreateMaxParallelSessions
+    from .red_team_create_max_turns import RedTeamCreateMaxTurns
+    from .red_team_create_model import RedTeamCreateModel
+    from .red_team_create_name import RedTeamCreateName
+    from .red_team_create_objective_i_ds import RedTeamCreateObjectiveIDs
+    from .red_team_create_project_id import RedTeamCreateProjectId
+    from .red_team_create_random_run import RedTeamCreateRandomRun
+    from .red_team_create_run_request import (
+        RedTeamCreateRunRequest,
+        RedTeamCreateRunRequest_Random,
+        RedTeamCreateRunRequest_Single,
+        RedTeamCreateRunRequest_StaticPromptSet,
+    )
+    from .red_team_create_runtime_trace import RedTeamCreateRuntimeTrace
+    from .red_team_create_sessions_per_technique import RedTeamCreateSessionsPerTechnique
+    from .red_team_create_single_run import RedTeamCreateSingleRun
+    from .red_team_create_static_prompt_set_run import RedTeamCreateStaticPromptSetRun
+    from .red_team_create_target_model import RedTeamCreateTargetModel
+    from .red_team_create_target_system_prompt import RedTeamCreateTargetSystemPrompt
+    from .red_team_custom_objective import RedTeamCustomObjective
+    from .red_team_defense_evasion import RedTeamDefenseEvasion
+    from .red_team_defense_evasion_group import RedTeamDefenseEvasionGroup
+    from .red_team_defense_evasion_row import RedTeamDefenseEvasionRow
+    from .red_team_evidence_passage import RedTeamEvidencePassage
+    from .red_team_exposed_item import RedTeamExposedItem
+    from .red_team_framework_basis import RedTeamFrameworkBasis
     from .red_team_framework_coverage import RedTeamFrameworkCoverage
     from .red_team_framework_coverage_framework import RedTeamFrameworkCoverageFramework
     from .red_team_framework_coverage_item import RedTeamFrameworkCoverageItem
     from .red_team_framework_entry import RedTeamFrameworkEntry
     from .red_team_framework_entry_basis import RedTeamFrameworkEntryBasis
     from .red_team_framework_entry_source import RedTeamFrameworkEntrySource
+    from .red_team_framework_item_state import RedTeamFrameworkItemState
     from .red_team_framework_method_note import RedTeamFrameworkMethodNote
     from .red_team_framework_note import RedTeamFrameworkNote
+    from .red_team_framework_source import RedTeamFrameworkSource
     from .red_team_framework_state import RedTeamFrameworkState
     from .red_team_framework_tag import RedTeamFrameworkTag
+    from .red_team_insight import RedTeamInsight
+    from .red_team_insight_evidence import RedTeamInsightEvidence
     from .red_team_list_results_response import RedTeamListResultsResponse
+    from .red_team_matched_rule import RedTeamMatchedRule
+    from .red_team_matched_rules_by_role import RedTeamMatchedRulesByRole
     from .red_team_message import RedTeamMessage
     from .red_team_message_analysis import RedTeamMessageAnalysis
     from .red_team_message_analysis_signals import RedTeamMessageAnalysisSignals
@@ -380,27 +424,96 @@ if typing.TYPE_CHECKING:
     from .red_team_message_analysis_signals_prompt_injection import RedTeamMessageAnalysisSignalsPromptInjection
     from .red_team_message_analysis_signals_url import RedTeamMessageAnalysisSignalsUrl
     from .red_team_message_outcome_counts import RedTeamMessageOutcomeCounts
+    from .red_team_message_policy import RedTeamMessagePolicy
+    from .red_team_message_role import RedTeamMessageRole
+    from .red_team_message_signals import RedTeamMessageSignals
+    from .red_team_message_signals_signals import RedTeamMessageSignalsSignals
+    from .red_team_message_signals_signals_code import RedTeamMessageSignalsSignalsCode
+    from .red_team_message_signals_signals_denial_of_service import RedTeamMessageSignalsSignalsDenialOfService
+    from .red_team_message_signals_signals_guardrails import RedTeamMessageSignalsSignalsGuardrails
+    from .red_team_message_signals_signals_language import RedTeamMessageSignalsSignalsLanguage
+    from .red_team_message_signals_signals_personally_identifiable_information import (
+        RedTeamMessageSignalsSignalsPersonallyIdentifiableInformation,
+    )
+    from .red_team_message_signals_signals_prompt_injection import RedTeamMessageSignalsSignalsPromptInjection
+    from .red_team_message_signals_signals_url import RedTeamMessageSignalsSignalsUrl
+    from .red_team_next_action import RedTeamNextAction
+    from .red_team_next_action_type import RedTeamNextActionType
+    from .red_team_not_placed_reason import RedTeamNotPlacedReason
     from .red_team_objective_breakdown import RedTeamObjectiveBreakdown
+    from .red_team_objective_ref import RedTeamObjectiveRef
+    from .red_team_objective_report import RedTeamObjectiveReport
     from .red_team_objective_summary import RedTeamObjectiveSummary
     from .red_team_objective_verdict import RedTeamObjectiveVerdict
+    from .red_team_outcome import RedTeamOutcome
+    from .red_team_policy_at_exposure import RedTeamPolicyAtExposure
+    from .red_team_policy_at_exposure_result import RedTeamPolicyAtExposureResult
+    from .red_team_policy_coverage import RedTeamPolicyCoverage
+    from .red_team_policy_coverage_rule import RedTeamPolicyCoverageRule
+    from .red_team_policy_coverage_status import RedTeamPolicyCoverageStatus
+    from .red_team_policy_outcomes import RedTeamPolicyOutcomes
+    from .red_team_policy_report import RedTeamPolicyReport
+    from .red_team_policy_role_counts import RedTeamPolicyRoleCounts
+    from .red_team_policy_status import RedTeamPolicyStatus
+    from .red_team_reply_not_evaluated import RedTeamReplyNotEvaluated
     from .red_team_report import RedTeamReport
     from .red_team_report_summary import RedTeamReportSummary
     from .red_team_result_item import RedTeamResultItem
     from .red_team_result_payload import RedTeamResultPayload
     from .red_team_result_settings import RedTeamResultSettings
     from .red_team_result_settings_runtime_security_mode import RedTeamResultSettingsRuntimeSecurityMode
+    from .red_team_rule_count import RedTeamRuleCount
+    from .red_team_rule_framework import RedTeamRuleFramework
+    from .red_team_rule_framework_item import RedTeamRuleFrameworkItem
+    from .red_team_rule_framework_source import RedTeamRuleFrameworkSource
+    from .red_team_run import RedTeamRun
+    from .red_team_run_analysis import RedTeamRunAnalysis
+    from .red_team_run_created import RedTeamRunCreated
+    from .red_team_run_failure_reason import RedTeamRunFailureReason
+    from .red_team_run_list import RedTeamRunList
+    from .red_team_run_list_item import RedTeamRunListItem
+    from .red_team_run_measurement import RedTeamRunMeasurement
+    from .red_team_run_models import RedTeamRunModels
     from .red_team_run_outcome import RedTeamRunOutcome
-    from .red_team_run_outcome_run_status import RedTeamRunOutcomeRunStatus
+    from .red_team_run_phase import RedTeamRunPhase
+    from .red_team_run_progress import RedTeamRunProgress
+    from .red_team_run_report import RedTeamRunReport
+    from .red_team_run_settings import RedTeamRunSettings
+    from .red_team_run_settings_execution_strategy_type import RedTeamRunSettingsExecutionStrategyType
+    from .red_team_run_status import RedTeamRunStatus
+    from .red_team_run_summary import RedTeamRunSummary
     from .red_team_runtime_security_counts import RedTeamRuntimeSecurityCounts
     from .red_team_runtime_security_detection import RedTeamRuntimeSecurityDetection
+    from .red_team_runtime_security_mode import RedTeamRuntimeSecurityMode
     from .red_team_runtime_security_outcome import RedTeamRuntimeSecurityOutcome
     from .red_team_runtime_security_outcome_status import RedTeamRuntimeSecurityOutcomeStatus
+    from .red_team_runtime_session_calls import RedTeamRuntimeSessionCalls
+    from .red_team_runtime_session_lookup import RedTeamRuntimeSessionLookup
     from .red_team_runtime_session_record import RedTeamRuntimeSessionRecord
+    from .red_team_runtime_session_status import RedTeamRuntimeSessionStatus
+    from .red_team_session import RedTeamSession
+    from .red_team_session_detail import RedTeamSessionDetail
     from .red_team_session_execution_details import RedTeamSessionExecutionDetails
     from .red_team_session_execution_details_static_prompt import RedTeamSessionExecutionDetailsStaticPrompt
+    from .red_team_session_framework_entry import RedTeamSessionFrameworkEntry
+    from .red_team_session_list import RedTeamSessionList
+    from .red_team_session_message import RedTeamSessionMessage
+    from .red_team_session_not_measured_reason import RedTeamSessionNotMeasuredReason
+    from .red_team_severity_mapping import RedTeamSeverityMapping
+    from .red_team_static_prompt import RedTeamStaticPrompt
+    from .red_team_suggested_rule import RedTeamSuggestedRule
+    from .red_team_target_response_result import RedTeamTargetResponseResult
     from .red_team_technique import RedTeamTechnique
     from .red_team_technique_breakdown import RedTeamTechniqueBreakdown
+    from .red_team_technique_ref import RedTeamTechniqueRef
+    from .red_team_technique_report import RedTeamTechniqueReport
+    from .red_team_tenant_settings import RedTeamTenantSettings
     from .red_team_turn_not_evaluated import RedTeamTurnNotEvaluated
+    from .red_team_usage import RedTeamUsage
+    from .red_team_verdict import RedTeamVerdict
+    from .red_team_verdict_not_measured_reason import RedTeamVerdictNotMeasuredReason
+    from .red_team_workflow_status import RedTeamWorkflowStatus
+    from .red_team_workflow_type import RedTeamWorkflowType
     from .redact_condition_config import RedactConditionConfig
     from .redact_config import RedactConfig
     from .region_counts import RegionCounts
@@ -853,6 +966,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ListProjectsRequestPolicyPackId": ".list_projects_request_policy_pack_id",
     "ListProjectsRequestRuleSetId": ".list_projects_request_rule_set_id",
     "ListRedTeamRequestProjectId": ".list_red_team_request_project_id",
+    "ListRedTeamV2RequestProjectId": ".list_red_team_v2request_project_id",
     "ListReportsRequestTime": ".list_reports_request_time",
     "ListResourcesRequestLinkedAt": ".list_resources_request_linked_at",
     "ListResourcesRequestResourceId": ".list_resources_request_resource_id",
@@ -967,21 +1081,62 @@ _dynamic_imports: typing.Dict[str, str] = {
     "RedTeamAnalysisExposedItem": ".red_team_analysis_exposed_item",
     "RedTeamAnalysisInsight": ".red_team_analysis_insight",
     "RedTeamAttackerSessionResult": ".red_team_attacker_session_result",
+    "RedTeamCaughtByPolicy": ".red_team_caught_by_policy",
+    "RedTeamCitation": ".red_team_citation",
     "RedTeamConfig": ".red_team_config",
     "RedTeamConfigExecutionStrategyType": ".red_team_config_execution_strategy_type",
     "RedTeamConfigSummary": ".red_team_config_summary",
     "RedTeamConfigsResponse": ".red_team_configs_response",
+    "RedTeamConversationMessage": ".red_team_conversation_message",
+    "RedTeamCoverageFramework": ".red_team_coverage_framework",
+    "RedTeamCoverageItem": ".red_team_coverage_item",
+    "RedTeamCoverageMethod": ".red_team_coverage_method",
+    "RedTeamCoverageNote": ".red_team_coverage_note",
+    "RedTeamCoverageReport": ".red_team_coverage_report",
+    "RedTeamCreateAttackerAttempts": ".red_team_create_attacker_attempts",
+    "RedTeamCreateAttackerGuidance": ".red_team_create_attacker_guidance",
+    "RedTeamCreateConfigId": ".red_team_create_config_id",
+    "RedTeamCreateMaxParallelSessions": ".red_team_create_max_parallel_sessions",
+    "RedTeamCreateMaxTurns": ".red_team_create_max_turns",
+    "RedTeamCreateModel": ".red_team_create_model",
+    "RedTeamCreateName": ".red_team_create_name",
+    "RedTeamCreateObjectiveIDs": ".red_team_create_objective_i_ds",
+    "RedTeamCreateProjectId": ".red_team_create_project_id",
+    "RedTeamCreateRandomRun": ".red_team_create_random_run",
+    "RedTeamCreateRunRequest": ".red_team_create_run_request",
+    "RedTeamCreateRunRequest_Random": ".red_team_create_run_request",
+    "RedTeamCreateRunRequest_Single": ".red_team_create_run_request",
+    "RedTeamCreateRunRequest_StaticPromptSet": ".red_team_create_run_request",
+    "RedTeamCreateRuntimeTrace": ".red_team_create_runtime_trace",
+    "RedTeamCreateSessionsPerTechnique": ".red_team_create_sessions_per_technique",
+    "RedTeamCreateSingleRun": ".red_team_create_single_run",
+    "RedTeamCreateStaticPromptSetRun": ".red_team_create_static_prompt_set_run",
+    "RedTeamCreateTargetModel": ".red_team_create_target_model",
+    "RedTeamCreateTargetSystemPrompt": ".red_team_create_target_system_prompt",
+    "RedTeamCustomObjective": ".red_team_custom_objective",
+    "RedTeamDefenseEvasion": ".red_team_defense_evasion",
+    "RedTeamDefenseEvasionGroup": ".red_team_defense_evasion_group",
+    "RedTeamDefenseEvasionRow": ".red_team_defense_evasion_row",
+    "RedTeamEvidencePassage": ".red_team_evidence_passage",
+    "RedTeamExposedItem": ".red_team_exposed_item",
+    "RedTeamFrameworkBasis": ".red_team_framework_basis",
     "RedTeamFrameworkCoverage": ".red_team_framework_coverage",
     "RedTeamFrameworkCoverageFramework": ".red_team_framework_coverage_framework",
     "RedTeamFrameworkCoverageItem": ".red_team_framework_coverage_item",
     "RedTeamFrameworkEntry": ".red_team_framework_entry",
     "RedTeamFrameworkEntryBasis": ".red_team_framework_entry_basis",
     "RedTeamFrameworkEntrySource": ".red_team_framework_entry_source",
+    "RedTeamFrameworkItemState": ".red_team_framework_item_state",
     "RedTeamFrameworkMethodNote": ".red_team_framework_method_note",
     "RedTeamFrameworkNote": ".red_team_framework_note",
+    "RedTeamFrameworkSource": ".red_team_framework_source",
     "RedTeamFrameworkState": ".red_team_framework_state",
     "RedTeamFrameworkTag": ".red_team_framework_tag",
+    "RedTeamInsight": ".red_team_insight",
+    "RedTeamInsightEvidence": ".red_team_insight_evidence",
     "RedTeamListResultsResponse": ".red_team_list_results_response",
+    "RedTeamMatchedRule": ".red_team_matched_rule",
+    "RedTeamMatchedRulesByRole": ".red_team_matched_rules_by_role",
     "RedTeamMessage": ".red_team_message",
     "RedTeamMessageAnalysis": ".red_team_message_analysis",
     "RedTeamMessageAnalysisSignals": ".red_team_message_analysis_signals",
@@ -993,27 +1148,94 @@ _dynamic_imports: typing.Dict[str, str] = {
     "RedTeamMessageAnalysisSignalsPromptInjection": ".red_team_message_analysis_signals_prompt_injection",
     "RedTeamMessageAnalysisSignalsUrl": ".red_team_message_analysis_signals_url",
     "RedTeamMessageOutcomeCounts": ".red_team_message_outcome_counts",
+    "RedTeamMessagePolicy": ".red_team_message_policy",
+    "RedTeamMessageRole": ".red_team_message_role",
+    "RedTeamMessageSignals": ".red_team_message_signals",
+    "RedTeamMessageSignalsSignals": ".red_team_message_signals_signals",
+    "RedTeamMessageSignalsSignalsCode": ".red_team_message_signals_signals_code",
+    "RedTeamMessageSignalsSignalsDenialOfService": ".red_team_message_signals_signals_denial_of_service",
+    "RedTeamMessageSignalsSignalsGuardrails": ".red_team_message_signals_signals_guardrails",
+    "RedTeamMessageSignalsSignalsLanguage": ".red_team_message_signals_signals_language",
+    "RedTeamMessageSignalsSignalsPersonallyIdentifiableInformation": ".red_team_message_signals_signals_personally_identifiable_information",
+    "RedTeamMessageSignalsSignalsPromptInjection": ".red_team_message_signals_signals_prompt_injection",
+    "RedTeamMessageSignalsSignalsUrl": ".red_team_message_signals_signals_url",
+    "RedTeamNextAction": ".red_team_next_action",
+    "RedTeamNextActionType": ".red_team_next_action_type",
+    "RedTeamNotPlacedReason": ".red_team_not_placed_reason",
     "RedTeamObjectiveBreakdown": ".red_team_objective_breakdown",
+    "RedTeamObjectiveRef": ".red_team_objective_ref",
+    "RedTeamObjectiveReport": ".red_team_objective_report",
     "RedTeamObjectiveSummary": ".red_team_objective_summary",
     "RedTeamObjectiveVerdict": ".red_team_objective_verdict",
+    "RedTeamOutcome": ".red_team_outcome",
+    "RedTeamPolicyAtExposure": ".red_team_policy_at_exposure",
+    "RedTeamPolicyAtExposureResult": ".red_team_policy_at_exposure_result",
+    "RedTeamPolicyCoverage": ".red_team_policy_coverage",
+    "RedTeamPolicyCoverageRule": ".red_team_policy_coverage_rule",
+    "RedTeamPolicyCoverageStatus": ".red_team_policy_coverage_status",
+    "RedTeamPolicyOutcomes": ".red_team_policy_outcomes",
+    "RedTeamPolicyReport": ".red_team_policy_report",
+    "RedTeamPolicyRoleCounts": ".red_team_policy_role_counts",
+    "RedTeamPolicyStatus": ".red_team_policy_status",
+    "RedTeamReplyNotEvaluated": ".red_team_reply_not_evaluated",
     "RedTeamReport": ".red_team_report",
     "RedTeamReportSummary": ".red_team_report_summary",
     "RedTeamResultItem": ".red_team_result_item",
     "RedTeamResultPayload": ".red_team_result_payload",
     "RedTeamResultSettings": ".red_team_result_settings",
     "RedTeamResultSettingsRuntimeSecurityMode": ".red_team_result_settings_runtime_security_mode",
+    "RedTeamRuleCount": ".red_team_rule_count",
+    "RedTeamRuleFramework": ".red_team_rule_framework",
+    "RedTeamRuleFrameworkItem": ".red_team_rule_framework_item",
+    "RedTeamRuleFrameworkSource": ".red_team_rule_framework_source",
+    "RedTeamRun": ".red_team_run",
+    "RedTeamRunAnalysis": ".red_team_run_analysis",
+    "RedTeamRunCreated": ".red_team_run_created",
+    "RedTeamRunFailureReason": ".red_team_run_failure_reason",
+    "RedTeamRunList": ".red_team_run_list",
+    "RedTeamRunListItem": ".red_team_run_list_item",
+    "RedTeamRunMeasurement": ".red_team_run_measurement",
+    "RedTeamRunModels": ".red_team_run_models",
     "RedTeamRunOutcome": ".red_team_run_outcome",
-    "RedTeamRunOutcomeRunStatus": ".red_team_run_outcome_run_status",
+    "RedTeamRunPhase": ".red_team_run_phase",
+    "RedTeamRunProgress": ".red_team_run_progress",
+    "RedTeamRunReport": ".red_team_run_report",
+    "RedTeamRunSettings": ".red_team_run_settings",
+    "RedTeamRunSettingsExecutionStrategyType": ".red_team_run_settings_execution_strategy_type",
+    "RedTeamRunStatus": ".red_team_run_status",
+    "RedTeamRunSummary": ".red_team_run_summary",
     "RedTeamRuntimeSecurityCounts": ".red_team_runtime_security_counts",
     "RedTeamRuntimeSecurityDetection": ".red_team_runtime_security_detection",
+    "RedTeamRuntimeSecurityMode": ".red_team_runtime_security_mode",
     "RedTeamRuntimeSecurityOutcome": ".red_team_runtime_security_outcome",
     "RedTeamRuntimeSecurityOutcomeStatus": ".red_team_runtime_security_outcome_status",
+    "RedTeamRuntimeSessionCalls": ".red_team_runtime_session_calls",
+    "RedTeamRuntimeSessionLookup": ".red_team_runtime_session_lookup",
     "RedTeamRuntimeSessionRecord": ".red_team_runtime_session_record",
+    "RedTeamRuntimeSessionStatus": ".red_team_runtime_session_status",
+    "RedTeamSession": ".red_team_session",
+    "RedTeamSessionDetail": ".red_team_session_detail",
     "RedTeamSessionExecutionDetails": ".red_team_session_execution_details",
     "RedTeamSessionExecutionDetailsStaticPrompt": ".red_team_session_execution_details_static_prompt",
+    "RedTeamSessionFrameworkEntry": ".red_team_session_framework_entry",
+    "RedTeamSessionList": ".red_team_session_list",
+    "RedTeamSessionMessage": ".red_team_session_message",
+    "RedTeamSessionNotMeasuredReason": ".red_team_session_not_measured_reason",
+    "RedTeamSeverityMapping": ".red_team_severity_mapping",
+    "RedTeamStaticPrompt": ".red_team_static_prompt",
+    "RedTeamSuggestedRule": ".red_team_suggested_rule",
+    "RedTeamTargetResponseResult": ".red_team_target_response_result",
     "RedTeamTechnique": ".red_team_technique",
     "RedTeamTechniqueBreakdown": ".red_team_technique_breakdown",
+    "RedTeamTechniqueRef": ".red_team_technique_ref",
+    "RedTeamTechniqueReport": ".red_team_technique_report",
+    "RedTeamTenantSettings": ".red_team_tenant_settings",
     "RedTeamTurnNotEvaluated": ".red_team_turn_not_evaluated",
+    "RedTeamUsage": ".red_team_usage",
+    "RedTeamVerdict": ".red_team_verdict",
+    "RedTeamVerdictNotMeasuredReason": ".red_team_verdict_not_measured_reason",
+    "RedTeamWorkflowStatus": ".red_team_workflow_status",
+    "RedTeamWorkflowType": ".red_team_workflow_type",
     "RedactConditionConfig": ".redact_condition_config",
     "RedactConfig": ".redact_config",
     "RegionCounts": ".region_counts",
@@ -1486,6 +1708,7 @@ __all__ = [
     "ListProjectsRequestPolicyPackId",
     "ListProjectsRequestRuleSetId",
     "ListRedTeamRequestProjectId",
+    "ListRedTeamV2RequestProjectId",
     "ListReportsRequestTime",
     "ListResourcesRequestLinkedAt",
     "ListResourcesRequestResourceId",
@@ -1600,21 +1823,62 @@ __all__ = [
     "RedTeamAnalysisExposedItem",
     "RedTeamAnalysisInsight",
     "RedTeamAttackerSessionResult",
+    "RedTeamCaughtByPolicy",
+    "RedTeamCitation",
     "RedTeamConfig",
     "RedTeamConfigExecutionStrategyType",
     "RedTeamConfigSummary",
     "RedTeamConfigsResponse",
+    "RedTeamConversationMessage",
+    "RedTeamCoverageFramework",
+    "RedTeamCoverageItem",
+    "RedTeamCoverageMethod",
+    "RedTeamCoverageNote",
+    "RedTeamCoverageReport",
+    "RedTeamCreateAttackerAttempts",
+    "RedTeamCreateAttackerGuidance",
+    "RedTeamCreateConfigId",
+    "RedTeamCreateMaxParallelSessions",
+    "RedTeamCreateMaxTurns",
+    "RedTeamCreateModel",
+    "RedTeamCreateName",
+    "RedTeamCreateObjectiveIDs",
+    "RedTeamCreateProjectId",
+    "RedTeamCreateRandomRun",
+    "RedTeamCreateRunRequest",
+    "RedTeamCreateRunRequest_Random",
+    "RedTeamCreateRunRequest_Single",
+    "RedTeamCreateRunRequest_StaticPromptSet",
+    "RedTeamCreateRuntimeTrace",
+    "RedTeamCreateSessionsPerTechnique",
+    "RedTeamCreateSingleRun",
+    "RedTeamCreateStaticPromptSetRun",
+    "RedTeamCreateTargetModel",
+    "RedTeamCreateTargetSystemPrompt",
+    "RedTeamCustomObjective",
+    "RedTeamDefenseEvasion",
+    "RedTeamDefenseEvasionGroup",
+    "RedTeamDefenseEvasionRow",
+    "RedTeamEvidencePassage",
+    "RedTeamExposedItem",
+    "RedTeamFrameworkBasis",
     "RedTeamFrameworkCoverage",
     "RedTeamFrameworkCoverageFramework",
     "RedTeamFrameworkCoverageItem",
     "RedTeamFrameworkEntry",
     "RedTeamFrameworkEntryBasis",
     "RedTeamFrameworkEntrySource",
+    "RedTeamFrameworkItemState",
     "RedTeamFrameworkMethodNote",
     "RedTeamFrameworkNote",
+    "RedTeamFrameworkSource",
     "RedTeamFrameworkState",
     "RedTeamFrameworkTag",
+    "RedTeamInsight",
+    "RedTeamInsightEvidence",
     "RedTeamListResultsResponse",
+    "RedTeamMatchedRule",
+    "RedTeamMatchedRulesByRole",
     "RedTeamMessage",
     "RedTeamMessageAnalysis",
     "RedTeamMessageAnalysisSignals",
@@ -1626,27 +1890,94 @@ __all__ = [
     "RedTeamMessageAnalysisSignalsPromptInjection",
     "RedTeamMessageAnalysisSignalsUrl",
     "RedTeamMessageOutcomeCounts",
+    "RedTeamMessagePolicy",
+    "RedTeamMessageRole",
+    "RedTeamMessageSignals",
+    "RedTeamMessageSignalsSignals",
+    "RedTeamMessageSignalsSignalsCode",
+    "RedTeamMessageSignalsSignalsDenialOfService",
+    "RedTeamMessageSignalsSignalsGuardrails",
+    "RedTeamMessageSignalsSignalsLanguage",
+    "RedTeamMessageSignalsSignalsPersonallyIdentifiableInformation",
+    "RedTeamMessageSignalsSignalsPromptInjection",
+    "RedTeamMessageSignalsSignalsUrl",
+    "RedTeamNextAction",
+    "RedTeamNextActionType",
+    "RedTeamNotPlacedReason",
     "RedTeamObjectiveBreakdown",
+    "RedTeamObjectiveRef",
+    "RedTeamObjectiveReport",
     "RedTeamObjectiveSummary",
     "RedTeamObjectiveVerdict",
+    "RedTeamOutcome",
+    "RedTeamPolicyAtExposure",
+    "RedTeamPolicyAtExposureResult",
+    "RedTeamPolicyCoverage",
+    "RedTeamPolicyCoverageRule",
+    "RedTeamPolicyCoverageStatus",
+    "RedTeamPolicyOutcomes",
+    "RedTeamPolicyReport",
+    "RedTeamPolicyRoleCounts",
+    "RedTeamPolicyStatus",
+    "RedTeamReplyNotEvaluated",
     "RedTeamReport",
     "RedTeamReportSummary",
     "RedTeamResultItem",
     "RedTeamResultPayload",
     "RedTeamResultSettings",
     "RedTeamResultSettingsRuntimeSecurityMode",
+    "RedTeamRuleCount",
+    "RedTeamRuleFramework",
+    "RedTeamRuleFrameworkItem",
+    "RedTeamRuleFrameworkSource",
+    "RedTeamRun",
+    "RedTeamRunAnalysis",
+    "RedTeamRunCreated",
+    "RedTeamRunFailureReason",
+    "RedTeamRunList",
+    "RedTeamRunListItem",
+    "RedTeamRunMeasurement",
+    "RedTeamRunModels",
     "RedTeamRunOutcome",
-    "RedTeamRunOutcomeRunStatus",
+    "RedTeamRunPhase",
+    "RedTeamRunProgress",
+    "RedTeamRunReport",
+    "RedTeamRunSettings",
+    "RedTeamRunSettingsExecutionStrategyType",
+    "RedTeamRunStatus",
+    "RedTeamRunSummary",
     "RedTeamRuntimeSecurityCounts",
     "RedTeamRuntimeSecurityDetection",
+    "RedTeamRuntimeSecurityMode",
     "RedTeamRuntimeSecurityOutcome",
     "RedTeamRuntimeSecurityOutcomeStatus",
+    "RedTeamRuntimeSessionCalls",
+    "RedTeamRuntimeSessionLookup",
     "RedTeamRuntimeSessionRecord",
+    "RedTeamRuntimeSessionStatus",
+    "RedTeamSession",
+    "RedTeamSessionDetail",
     "RedTeamSessionExecutionDetails",
     "RedTeamSessionExecutionDetailsStaticPrompt",
+    "RedTeamSessionFrameworkEntry",
+    "RedTeamSessionList",
+    "RedTeamSessionMessage",
+    "RedTeamSessionNotMeasuredReason",
+    "RedTeamSeverityMapping",
+    "RedTeamStaticPrompt",
+    "RedTeamSuggestedRule",
+    "RedTeamTargetResponseResult",
     "RedTeamTechnique",
     "RedTeamTechniqueBreakdown",
+    "RedTeamTechniqueRef",
+    "RedTeamTechniqueReport",
+    "RedTeamTenantSettings",
     "RedTeamTurnNotEvaluated",
+    "RedTeamUsage",
+    "RedTeamVerdict",
+    "RedTeamVerdictNotMeasuredReason",
+    "RedTeamWorkflowStatus",
+    "RedTeamWorkflowType",
     "RedactConditionConfig",
     "RedactConfig",
     "RegionCounts",

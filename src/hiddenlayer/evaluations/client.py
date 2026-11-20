@@ -10,6 +10,7 @@ from .raw_client import AsyncRawEvaluationsClient, RawEvaluationsClient
 if typing.TYPE_CHECKING:
     from .prompt_sets.client import AsyncPromptSetsClient, PromptSetsClient
     from .red_team.client import AsyncRedTeamClient, RedTeamClient
+    from .red_team_v2.client import AsyncRedTeamV2Client, RedTeamV2Client
     from .system_prompt_analysis.client import AsyncSystemPromptAnalysisClient, SystemPromptAnalysisClient
     from .threat_modeling.client import AsyncThreatModelingClient, ThreatModelingClient
 
@@ -22,6 +23,7 @@ class EvaluationsClient:
         self._prompt_sets: typing.Optional[PromptSetsClient] = None
         self._system_prompt_analysis: typing.Optional[SystemPromptAnalysisClient] = None
         self._threat_modeling: typing.Optional[ThreatModelingClient] = None
+        self._red_team_v2: typing.Optional[RedTeamV2Client] = None
 
     @property
     def with_raw_response(self) -> RawEvaluationsClient:
@@ -66,6 +68,14 @@ class EvaluationsClient:
             self._threat_modeling = ThreatModelingClient(client_wrapper=self._client_wrapper)
         return self._threat_modeling
 
+    @property
+    def red_team_v2(self):
+        if self._red_team_v2 is None:
+            from .red_team_v2.client import RedTeamV2Client  # noqa: E402
+
+            self._red_team_v2 = RedTeamV2Client(client_wrapper=self._client_wrapper)
+        return self._red_team_v2
+
 
 class AsyncEvaluationsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -75,6 +85,7 @@ class AsyncEvaluationsClient:
         self._prompt_sets: typing.Optional[AsyncPromptSetsClient] = None
         self._system_prompt_analysis: typing.Optional[AsyncSystemPromptAnalysisClient] = None
         self._threat_modeling: typing.Optional[AsyncThreatModelingClient] = None
+        self._red_team_v2: typing.Optional[AsyncRedTeamV2Client] = None
 
     @property
     def with_raw_response(self) -> AsyncRawEvaluationsClient:
@@ -118,3 +129,11 @@ class AsyncEvaluationsClient:
 
             self._threat_modeling = AsyncThreatModelingClient(client_wrapper=self._client_wrapper)
         return self._threat_modeling
+
+    @property
+    def red_team_v2(self):
+        if self._red_team_v2 is None:
+            from .red_team_v2.client import AsyncRedTeamV2Client  # noqa: E402
+
+            self._red_team_v2 = AsyncRedTeamV2Client(client_wrapper=self._client_wrapper)
+        return self._red_team_v2

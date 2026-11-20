@@ -11690,6 +11690,838 @@ client.evaluations.threat_modeling.delete(
 </dl>
 </details>
 
+## Evaluations RedTeamV2
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L49-L128">list</a>(...) -> RedTeamRunList</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Lists finished runs, newest first. A cursor is valid only with the filters it was issued for.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.list(
+    limit=50,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**target_model:** `typing.Optional[str]` — Only runs against this target model
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `typing.Optional[RedTeamRunStatus]` — Only runs with this status
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**workflow_type:** `typing.Optional[RedTeamWorkflowType]` — Only runs of this workflow type
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**start_time_from:** `typing.Optional[datetime.datetime]` — Only runs started at or after this time
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**start_time_to:** `typing.Optional[datetime.datetime]` — Only runs started at or before this time
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**project_id:** `typing.Optional[ListRedTeamV2RequestProjectId]` — Only runs started under one of these HiddenLayer projects
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[Limit]` — Limit the number of items returned
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cursor:** `typing.Optional[str]` — Cursor for pagination, used to navigate through pages of results
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L130-L166">create</a>(...) -> RedTeamRunCreated</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Starts a run against a target that the client calls. Poll `next-action` for each attack prompt and post the target's reply to `target-response` until `action_type` is `COMPLETED` or `FAILED`.
+The body's fields depend on `execution_strategy_type`; a field that strategy does not use is a 422. `is_runtime_trace_enabled: true` also requires the `inference:read` scope.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer, RedTeamCreateRunRequest_Single
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.create(
+    request=RedTeamCreateRunRequest_Single(
+        name="name",
+    ),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `RedTeamCreateRunRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L168-L204">simulated</a>(...) -> RedTeamRunCreated</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Starts a run that attacks a built-in target model, with no client calls after this one. `target_model` must be in the target model catalog.
+The body's fields depend on `execution_strategy_type`; a field that strategy does not use is a 422. `is_runtime_trace_enabled: true` also requires the `inference:read` scope.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer, RedTeamCreateRunRequest_Single
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.simulated(
+    request=RedTeamCreateRunRequest_Single(
+        name="name",
+    ),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `RedTeamCreateRunRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L206-L233">settings</a>() -> RedTeamTenantSettings</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Returns the settings the calling tenant's next run uses.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.settings()
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L235-L267">get</a>(...) -> RedTeamRun</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Returns a finished run without its sessions; a run that has not finished is a 404. Read its sessions from the sessions sub-collection.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.get(
+    workflow_id="workflow_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_id:** `str` — The run's workflow ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L269-L298">delete</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.delete(
+    workflow_id="workflow_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_id:** `str` — The run's workflow ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L300-L334">status</a>(...) -> RedTeamRunProgress</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Returns a run's progress, whether or not it has finished. Once the run's result is stored, `status` and `phase` are the run's status, `COMPLETED` or `FAILED`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.status(
+    workflow_id="workflow_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_id:** `str` — The run's workflow ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L336-L373">next_action</a>(...) -> RedTeamNextAction</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Returns the next step of a client-driven run. Poll it until `action_type` is `COMPLETED` or `FAILED`:
+- **`ATTACK_TASK`**: send `attack_prompt` to the target, then post its reply to `target-response`.
+- **null with `is_processing`**: no prompt is ready yet; poll again.
+- **`COMPLETED` or `FAILED`**: the run has ended; `FAILED` carries the failure in `message`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.next_action(
+    workflow_id="workflow_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_id:** `str` — The run's workflow ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L375-L424">target_response</a>(...) -> RedTeamTargetResponseResult</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Submits the target's reply to the attack prompt of a `next-action` `ATTACK_TASK`; poll `next-action` again afterwards. A session that is not waiting for a reply is a 422.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.target_response(
+    workflow_id="workflow_id",
+    session_id="session_id",
+    target_response="target_response",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_id:** `str` — The run's workflow ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `str` — The session of the attack task.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**target_response:** `str` — The target's reply.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L426-L460">csv</a>(...) -> typing.Iterator[bytes]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Exports one row per message of every session of a finished run, in one response. Each of the run's objectives adds four columns, prefixed with its objective ID. To read a run in pages, use `GET /evaluations/v2/red-team/{workflow_id}/sessions`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.csv(
+    workflow_id="workflow_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_id:** `str` — The run's workflow ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Evaluations RedTeam Objectives
 <details><summary><code>client.evaluations.red_team.objectives.<a href="src/hiddenlayer/evaluations/red_team/objectives/client.py#L33-L82">list</a>(...) -> ObjectivesListResponse</code></summary>
 <dl>
@@ -12802,6 +13634,268 @@ within the configured APE objectives. Send `""` to clear. Sanitized
 server-side (length cap + strict character whitelist after NFKC
 normalization). See `RedTeamConfig.attacker_guidance` for full
 semantics.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Evaluations RedTeamV2 Sessions
+<details><summary><code>client.evaluations.red_team_v2.sessions.<a href="src/hiddenlayer/evaluations/red_team_v2/sessions/client.py#L31-L81">list</a>(...) -> RedTeamSessionList</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Lists a finished run's sessions in run order, without their messages. Get a single session for its messages.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.sessions.list(
+    workflow_id="workflow_id",
+    limit=50,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_id:** `str` — The run's workflow ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `typing.Optional[Limit]` — Limit the number of items returned
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cursor:** `typing.Optional[str]` — Cursor for pagination, used to navigate through pages of results
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team_v2.sessions.<a href="src/hiddenlayer/evaluations/red_team_v2/sessions/client.py#L83-L119">get</a>(...) -> RedTeamSessionDetail</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.sessions.get(
+    workflow_id="workflow_id",
+    session_id="session_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_id:** `str` — The run's workflow ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `str` — The session's ID within the run
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.red_team_v2.sessions.<a href="src/hiddenlayer/evaluations/red_team_v2/sessions/client.py#L121-L159">runtime_session</a>(...) -> RedTeamRuntimeSessionLookup</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+[BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
+
+Returns the Runtime Security session ID of one session of a finished run, or the reason it has none. Only `NOT_FOUND` can change on a later call.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from hiddenlayer import HiddenLayer
+from hiddenlayer.environment import HiddenLayerEnvironment
+
+client = HiddenLayer(
+    client_id="<clientId>",
+    client_secret="<clientSecret>",
+    environment=HiddenLayerEnvironment.PROD_US,
+)
+
+client.evaluations.red_team_v2.sessions.runtime_session(
+    workflow_id="workflow_id",
+    session_id="session_id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_id:** `str` — The run's workflow ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**session_id:** `str` — The session's ID within the run
     
 </dd>
 </dl>
