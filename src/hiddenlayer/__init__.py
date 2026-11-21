@@ -774,6 +774,7 @@ if typing.TYPE_CHECKING:
     from .credentials import ListCredentialsResponse
     from .environment import HiddenLayerEnvironment
     from .eula_responses import SelfEulaResponsesResponse
+    from .lib import AsyncCommunityScanner, AsyncModelScanner, BetaWarning, CommunityScanner, ModelScanner, warn_beta
     from .models import UpdateModelsResponse
     from .permissions import ListPermissionsResponse
     from .roles import ListRolesResponse
@@ -826,7 +827,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "AssetTagMap": ".types",
     "AssetType": ".types",
     "AssetTypeCounts": ".types",
+    "AsyncCommunityScanner": ".lib",
     "AsyncHiddenLayer": ".client",
+    "AsyncModelScanner": ".lib",
     "AttackMonitoringThreatLevel": ".types",
     "AttributeCondition": ".types",
     "AttributeFilter": ".types",
@@ -837,12 +840,14 @@ _dynamic_imports: typing.Dict[str, str] = {
     "BadGatewayError": ".errors",
     "BadRequestError": ".errors",
     "BadRequestErrorBody": ".types",
+    "BetaWarning": ".lib",
     "BlockConfig": ".types",
     "BulkEvaluationResults": ".types",
     "CanonicalInteraction": ".types",
     "CanonicalInteractionMessage": ".types",
     "CanonicalInteractionMessageTimestamp": ".types",
     "Category": ".types",
+    "CommunityScanner": ".lib",
     "CompletedJob": ".types",
     "CompletedJobFailuresItem": ".types",
     "Condition": ".types",
@@ -1084,6 +1089,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ModelCardV4QueryResponse": ".types",
     "ModelIntelligence": ".types",
     "ModelLicense": ".types",
+    "ModelScanner": ".lib",
     "ModelUsagePolicy": ".types",
     "MutationType": ".types",
     "NamedObject": ".types",
@@ -1558,6 +1564,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "supply_chain": ".supply_chain",
     "triage": ".triage",
     "users": ".users",
+    "warn_beta": ".lib",
 }
 
 
@@ -1627,7 +1634,9 @@ __all__ = [
     "AssetTagMap",
     "AssetType",
     "AssetTypeCounts",
+    "AsyncCommunityScanner",
     "AsyncHiddenLayer",
+    "AsyncModelScanner",
     "AttackMonitoringThreatLevel",
     "AttributeCondition",
     "AttributeFilter",
@@ -1638,12 +1647,14 @@ __all__ = [
     "BadGatewayError",
     "BadRequestError",
     "BadRequestErrorBody",
+    "BetaWarning",
     "BlockConfig",
     "BulkEvaluationResults",
     "CanonicalInteraction",
     "CanonicalInteractionMessage",
     "CanonicalInteractionMessageTimestamp",
     "Category",
+    "CommunityScanner",
     "CompletedJob",
     "CompletedJobFailuresItem",
     "Condition",
@@ -1885,6 +1896,7 @@ __all__ = [
     "ModelCardV4QueryResponse",
     "ModelIntelligence",
     "ModelLicense",
+    "ModelScanner",
     "ModelUsagePolicy",
     "MutationType",
     "NamedObject",
@@ -2359,4 +2371,5 @@ __all__ = [
     "supply_chain",
     "triage",
     "users",
+    "warn_beta",
 ]

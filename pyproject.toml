@@ -1,14 +1,19 @@
 [project]
 name = "hiddenlayer-sdk"
 dynamic = ["version"]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 
 [tool.poetry]
 name = "hiddenlayer-sdk"
 version = "3.10.0"
-description = ""
+description = "The official Python library for the HiddenLayer API"
 readme = "README.md"
-authors = []
+authors = [
+    "HiddenLayer <sdks@hiddenlayer.com>"
+]
 keywords = []
+license = "Apache-2.0"
 classifiers = [
     "Intended Audience :: Developers",
     "Programming Language :: Python",

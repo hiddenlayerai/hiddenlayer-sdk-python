@@ -1,7 +1,7 @@
 # Hiddenlayer Python Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fhiddenlayerai%2Fhiddenlayer-sdk-python)
-[![pypi](https://img.shields.io/pypi/v/hiddenlayer)](https://pypi.python.org/pypi/hiddenlayer)
+[![pypi](https://img.shields.io/pypi/v/hiddenlayer-sdk)](https://pypi.python.org/pypi/hiddenlayer-sdk)
 
 The Hiddenlayer Python library provides convenient access to the Hiddenlayer APIs from Python.
 
@@ -44,7 +44,7 @@ Some HiddenLayer APIs are marked as **Beta**, meaning they are not yet generally
 ## Installation
 
 ```sh
-pip install hiddenlayer
+pip install hiddenlayer-sdk
 ```
 
 ## Reference

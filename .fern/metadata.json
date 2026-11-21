@@ -4,12 +4,29 @@
   "generatorVersion": "5.42.1",
   "generatorConfig": {
     "client": {
-      "class_name": "HiddenLayer"
+      "class_name": "BaseClient",
+      "filename": "base_client.py",
+      "exported_class_name": "HiddenLayer",
+      "exported_filename": "client.py"
     },
+    "additional_init_exports": [
+      {
+        "from": "lib",
+        "imports": [
+          "BetaWarning",
+          "warn_beta",
+          "ModelScanner",
+          "AsyncModelScanner",
+          "CommunityScanner",
+          "AsyncCommunityScanner"
+        ]
+      }
+    ],
+    "pyproject_python_version": "^3.10",
     "offset_semantics": "item-index",
     "encode_path_params": true
   },
-  "originGitCommit": "516f8f23c53f6d916bff6a08c4c4d40311a7004f",
+  "originGitCommit": "dcf9c732078112fe5408fc3962ee9fda64109766",
   "originGitCommitIsDirty": true,
   "invokedBy": "ci",
   "requestedVersion": "3.10.0",
