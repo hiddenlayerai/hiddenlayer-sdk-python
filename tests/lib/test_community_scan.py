@@ -1,332 +1,139 @@
-# Tests for custom community scan functionality
-
 from __future__ import annotations
 
-from unittest.mock import Mock, AsyncMock, patch
-
+import httpx
 import pytest
+from fake_scan_api import API_URL, SCAN_ID, FakeScanApi
 
-from hiddenlayer import HiddenLayer, AsyncHiddenLayer
-from hiddenlayer.types.scans import ScanJob
-from hiddenlayer.lib.scan_utils import ScanStatus
-from hiddenlayer.lib.community_scan import CommunityScanner, CommunityScanSource, AsyncCommunityScanner
+from hiddenlayer import AsyncHiddenLayer, HiddenLayer
+from hiddenlayer.lib import CommunityScanSource, scan_utils
+
+JOBS_PATH = "/scan/v3/jobs"
+PRESIGNED_MODEL_URL = "https://acme-models.s3.amazonaws.com/release/model.pkl?X-Amz-Signature=3f9c"
 
 
-def _mock_report_reconstruction(mock_client: Mock, *, status: str = "done") -> None:
-    """Configure retrieve_summary + list_files so helpers can assemble a report."""
-    summary = Mock()
-    summary.status = status
-    summary.model_dump.return_value = {
-        "scan_id": "test-scan-id-123",
-        "status": status,
-        "summary": {"detection_count": 0, "file_count": 1, "files_with_detections_count": 0},
+def sync_client(api: FakeScanApi) -> HiddenLayer:
+    return HiddenLayer(
+        token="test-token", base_url=API_URL, httpx_client=httpx.Client(transport=api.transport), max_retries=0
+    )
+
+
+def async_client(api: FakeScanApi) -> AsyncHiddenLayer:
+    return AsyncHiddenLayer(
+        token="test-token", base_url=API_URL, httpx_client=httpx.AsyncClient(transport=api.transport), max_retries=0
+    )
+
+
+@pytest.fixture(autouse=True)
+def no_sleep(monkeypatch: pytest.MonkeyPatch) -> None:
+    async def skip(delay: float) -> None:
+        return None
+
+    monkeypatch.setattr(scan_utils.time, "sleep", lambda delay: None)
+    monkeypatch.setattr(scan_utils.asyncio, "sleep", skip)
+
+
+def test_community_scan_requests_the_scan_and_waits_for_its_report() -> None:
+    api = FakeScanApi(summaries=["pending", "running", "done"])
+
+    report = sync_client(api).community_scanner.community_scan(
+        model_name="sentiment-classifier",
+        model_path=PRESIGNED_MODEL_URL,
+        model_source=CommunityScanSource.AWS_PRESIGNED,
+    )
+
+    assert api.body("POST", JOBS_PATH) == {
+        "access": {"source": "AWS_PRESIGNED"},
+        "inventory": {
+            "model_name": "sentiment-classifier",
+            "model_version": "main",
+            "requested_scan_location": PRESIGNED_MODEL_URL,
+            "requesting_entity": "hiddenlayer-python-sdk",
+            "request_source": "API Upload",
+            "origin": "",
+        },
     }
-    file_result = Mock()
-    file_result.model_dump.return_value = {"file_instance_id": "file-1", "file_location": "model.pkl"}
-    page = Mock()
-    page.items = [file_result]
-    page.has_next_page.return_value = False
-    mock_client.scans.results.retrieve_summary.return_value = summary
-    mock_client.scans.results.list_files.return_value = page
+    assert report.scan_id == SCAN_ID
+    assert report.status == "done"
 
 
-class TestCommunityScannerIntegration:
-    """Test that community scanner is properly integrated into the main clients."""
+def test_community_scan_without_waiting_returns_the_report_as_it_stands() -> None:
+    api = FakeScanApi(summaries=["running"])
 
-    def test_sync_client_has_community_scanner(self) -> None:
-        """Test that HiddenLayer client has community_scanner property."""
-        client = HiddenLayer(bearer_token="test-token")
+    report = sync_client(api).community_scanner.community_scan(
+        "sentiment-classifier", "acme/sentiment-classifier", "HUGGING_FACE", wait_for_results=False
+    )
 
-        assert hasattr(client, "community_scanner")
-        assert isinstance(client.community_scanner, CommunityScanner)
-
-    def test_async_client_has_community_scanner(self) -> None:
-        """Test that AsyncHiddenLayer client has community_scanner property."""
-        client = AsyncHiddenLayer(bearer_token="test-token")
-
-        assert hasattr(client, "community_scanner")
-        assert isinstance(client.community_scanner, AsyncCommunityScanner)
+    assert report.status == "running"
+    assert len(api.calls("GET", f"/scan/v3/results/{SCAN_ID}/summary")) == 1
 
 
-class TestCommunityScanner:
-    """Test the CommunityScanner class functionality."""
+def test_community_scan_passes_the_version_request_source_and_origin() -> None:
+    api = FakeScanApi()
 
-    def setup_method(self) -> None:
-        """Set up test fixtures."""
-        self.mock_client = Mock()
-        self.scanner = CommunityScanner(self.mock_client)
+    sync_client(api).community_scanner.community_scan(
+        model_name="sentiment-classifier",
+        model_path="acme/sentiment-classifier",
+        model_source="HUGGING_FACE",
+        model_version="v2.1",
+        request_source="Integration",
+        origin="Hugging Face",
+    )
 
-    def test_init(self) -> None:
-        """Test CommunityScanner initialization."""
-        assert self.scanner._client is self.mock_client
+    inventory = api.body("POST", JOBS_PATH)["inventory"]
+    assert (inventory["model_version"], inventory["request_source"], inventory["origin"]) == (
+        "v2.1",
+        "Integration",
+        "Hugging Face",
+    )
 
-    def test_community_scan_without_waiting(self) -> None:
-        """Test community_scan with wait_for_results=False."""
-        # Mock the scan job response
-        mock_scan_job = Mock(spec=ScanJob)
-        mock_scan_job.scan_id = "test-scan-id-123"
 
-        # Mock the jobs.request method
-        self.mock_client.scans.jobs.request.return_value = mock_scan_job
+def test_community_scan_fails_when_the_api_returns_no_scan_id() -> None:
+    api = FakeScanApi()
+    del api.scan_job_response["scan_id"]
 
-        # Mock the summary + file results used to assemble the report
-        _mock_report_reconstruction(self.mock_client, status="pending")
-
-        # Call community_scan without waiting
-        result = self.scanner.community_scan(
-            model_name="test-model",
-            model_path="https://example.com/model.pkl",
-            model_source="AWS_PRESIGNED",
-            wait_for_results=False,
+    with pytest.raises(ValueError, match="scan_id must have a value"):
+        sync_client(api).community_scanner.community_scan(
+            "sentiment-classifier", PRESIGNED_MODEL_URL, CommunityScanSource.AWS_PRESIGNED
         )
 
-        # Verify the request was made correctly
-        self.mock_client.scans.jobs.request.assert_called_once()
-        call_args = self.mock_client.scans.jobs.request.call_args
 
-        assert call_args[1]["access"]["source"] == "AWS_PRESIGNED"
-        assert call_args[1]["inventory"]["model_name"] == "test-model"
-        assert call_args[1]["inventory"]["requested_scan_location"] == "https://example.com/model.pkl"
-        assert call_args[1]["inventory"]["requesting_entity"] == "hiddenlayer-python-sdk"
+def test_scan_result_returns_the_report_of_an_earlier_scan() -> None:
+    report = sync_client(FakeScanApi(summaries=["canceled"])).community_scanner.scan_result(scan_id=SCAN_ID)
 
-        # Should fetch the summary once and never touch the legacy results endpoint
-        self.mock_client.scans.results.retrieve_summary.assert_called_once_with("test-scan-id-123")
-        self.mock_client.scans.jobs.retrieve.assert_not_called()
-        assert result.scan_id == "test-scan-id-123"
-        assert result.status == "pending"
-        assert result.file_results is not None and len(result.file_results) == 1
+    assert report.status == "canceled"
 
-    @patch("hiddenlayer.lib.scan_utils.time.sleep")
-    @patch("hiddenlayer.lib.scan_utils.logger")
-    def test_community_scan_with_waiting_success(self, mock_logger: Mock, mock_sleep: Mock) -> None:
-        """Test community_scan with wait_for_results=True until success."""
-        # Mock the scan job response
-        mock_scan_job = Mock(spec=ScanJob)
-        mock_scan_job.scan_id = "test-scan-id-123"
-        self.mock_client.scans.jobs.request.return_value = mock_scan_job
 
-        # Mock the polling sequence: pending -> running -> done
-        mock_summaries: list[Mock] = []
-        for status in ["pending", "running", "done"]:
-            mock_summary = Mock()
-            mock_summary.scan_id = "test-scan-id-123"
-            mock_summary.status = status
-            mock_summaries.append(mock_summary)
+async def test_async_community_scan_requests_the_scan_and_waits_for_its_report() -> None:
+    api = FakeScanApi(summaries=["running", "done"])
 
-        mock_summaries[-1].model_dump.return_value = {
-            "scan_id": "test-scan-id-123",
-            "status": "done",
-            "summary": {"detection_count": 1, "file_count": 2, "files_with_detections_count": 1},
-        }
-        self.mock_client.scans.results.retrieve_summary.side_effect = mock_summaries
+    report = await async_client(api).community_scanner.community_scan(
+        model_name="sentiment-classifier",
+        model_path=PRESIGNED_MODEL_URL,
+        model_source=CommunityScanSource.AWS_PRESIGNED,
+        model_version="v2.1",
+    )
 
-        # File results are collected from the paginated endpoint once the scan is done
-        mock_file_result = Mock()
-        mock_file_result.model_dump.return_value = {"file_instance_id": "file-1", "file_location": "model.pkl"}
-        mock_page = Mock()
-        mock_page.items = [mock_file_result]
-        mock_page.has_next_page.return_value = False
-        self.mock_client.scans.results.list_files.return_value = mock_page
+    body = api.body("POST", JOBS_PATH)
+    assert body["access"] == {"source": "AWS_PRESIGNED"}
+    assert body["inventory"]["model_version"] == "v2.1"
+    assert report.status == "done"
 
-        # Call community_scan with waiting
-        result = self.scanner.community_scan(
-            model_name="test-model",
-            model_path="https://example.com/model.pkl",
-            model_source="AWS_PRESIGNED",
-            wait_for_results=True,
+
+async def test_async_community_scan_without_waiting_returns_the_report_as_it_stands() -> None:
+    api = FakeScanApi(summaries=["pending"])
+
+    report = await async_client(api).community_scanner.community_scan(
+        "sentiment-classifier", "acme/sentiment-classifier", "HUGGING_FACE", wait_for_results=False
+    )
+
+    assert report.status == "pending"
+
+
+async def test_async_community_scan_fails_when_the_api_returns_no_scan_id() -> None:
+    api = FakeScanApi()
+    del api.scan_job_response["scan_id"]
+
+    with pytest.raises(ValueError, match="scan_id must have a value"):
+        await async_client(api).community_scanner.community_scan(
+            "sentiment-classifier", PRESIGNED_MODEL_URL, CommunityScanSource.AWS_PRESIGNED
         )
-
-        # Should make the request
-        self.mock_client.scans.jobs.request.assert_called_once()
-
-        # Should poll the summary endpoint, then collect file results; the legacy
-        # unpaginated results endpoint is never called
-        assert self.mock_client.scans.results.retrieve_summary.call_count == 3
-        self.mock_client.scans.results.list_files.assert_called_once()
-        self.mock_client.scans.jobs.retrieve.assert_not_called()
-
-        # Should have slept between polls
-        assert mock_sleep.call_count == 2
-
-        # Should have logged status updates
-        assert mock_logger.info.call_count == 2
-
-        # Final result is assembled from the summary plus file results
-        assert result.scan_id == "test-scan-id-123"
-        assert result.status == "done"
-        assert result.file_results is not None and len(result.file_results) == 1
-        # Deprecated top-level counts are mirrored from the nested summary
-        assert result.detection_count == 1
-        assert result.file_count == 2
-
-    def test_community_scan_no_scan_id_raises_error(self) -> None:
-        """Test that missing scan_id raises ValueError."""
-        mock_scan_job = Mock(spec=ScanJob)
-        mock_scan_job.scan_id = None  # No scan ID
-        self.mock_client.scans.jobs.request.return_value = mock_scan_job
-
-        with pytest.raises(ValueError, match="scan_id must have a value"):
-            self.scanner.community_scan(
-                model_name="test-model", model_path="https://example.com/model.pkl", model_source="AWS_PRESIGNED"
-            )
-
-    def test_community_scan_with_custom_parameters(self) -> None:
-        """Test community_scan with all custom parameters."""
-        mock_scan_job = Mock(spec=ScanJob)
-        mock_scan_job.scan_id = "test-scan-id-123"
-        self.mock_client.scans.jobs.request.return_value = mock_scan_job
-
-        _mock_report_reconstruction(self.mock_client)
-
-        self.scanner.community_scan(
-            model_name="custom-model",
-            model_path="https://custom.com/model.bin",
-            model_source="HUGGING_FACE",
-            model_version="v2.0",
-            wait_for_results=False,
-            request_source="Integration",
-            origin="CustomOrigin",
-        )
-
-        call_args = self.mock_client.scans.jobs.request.call_args
-        inventory = call_args[1]["inventory"]
-
-        assert inventory["model_name"] == "custom-model"
-        assert inventory["model_version"] == "v2.0"
-        assert inventory["requested_scan_location"] == "https://custom.com/model.bin"
-        assert inventory["request_source"] == "Integration"
-        assert inventory["origin"] == "CustomOrigin"
-        assert call_args[1]["access"]["source"] == "HUGGING_FACE"
-
-
-class TestAsyncCommunityScanner:
-    """Test the AsyncCommunityScanner class functionality."""
-
-    def setup_method(self) -> None:
-        """Set up test fixtures."""
-        self.mock_client = AsyncMock()
-        self.scanner = AsyncCommunityScanner(self.mock_client)
-
-    def test_init(self) -> None:
-        """Test AsyncCommunityScanner initialization."""
-        assert self.scanner._client is self.mock_client
-
-    @pytest.mark.asyncio
-    async def test_async_community_scan_without_waiting(self) -> None:
-        """Test async community_scan with wait_for_results=False."""
-        # Mock the scan job response
-        mock_scan_job = Mock(spec=ScanJob)
-        mock_scan_job.scan_id = "test-scan-id-123"
-        self.mock_client.scans.jobs.request.return_value = mock_scan_job
-
-        # Mock the summary + file results used to assemble the report
-        _mock_report_reconstruction(self.mock_client, status="pending")
-
-        # Call community_scan without waiting
-        result = await self.scanner.community_scan(
-            model_name="test-model",
-            model_path="https://example.com/model.pkl",
-            model_source="AWS_PRESIGNED",
-            wait_for_results=False,
-        )
-
-        # Verify the request was made correctly
-        self.mock_client.scans.jobs.request.assert_called_once()
-        call_args = self.mock_client.scans.jobs.request.call_args
-
-        assert call_args[1]["access"]["source"] == "AWS_PRESIGNED"
-        assert call_args[1]["inventory"]["model_name"] == "test-model"
-
-        # Should fetch the summary once and never touch the legacy results endpoint
-        self.mock_client.scans.results.retrieve_summary.assert_called_once_with("test-scan-id-123")
-        self.mock_client.scans.jobs.retrieve.assert_not_called()
-        assert result.scan_id == "test-scan-id-123"
-        assert result.status == "pending"
-        assert result.file_results is not None and len(result.file_results) == 1
-
-    @pytest.mark.asyncio
-    @patch("hiddenlayer.lib.scan_utils.asyncio.sleep", new_callable=AsyncMock)
-    @patch("hiddenlayer.lib.scan_utils.logger")
-    async def test_async_community_scan_with_waiting_success(self, mock_logger: Mock, mock_sleep: AsyncMock) -> None:
-        """Test async community_scan with wait_for_results=True until success."""
-        # Mock the scan job response
-        mock_scan_job = Mock(spec=ScanJob)
-        mock_scan_job.scan_id = "test-scan-id-123"
-        self.mock_client.scans.jobs.request.return_value = mock_scan_job
-
-        # Mock the polling sequence: pending -> running -> done
-        mock_summaries: list[Mock] = []
-        for status in ["pending", "running", "done"]:
-            mock_summary = Mock()
-            mock_summary.scan_id = "test-scan-id-123"
-            mock_summary.status = status
-            mock_summaries.append(mock_summary)
-
-        mock_summaries[-1].model_dump.return_value = {
-            "scan_id": "test-scan-id-123",
-            "status": "done",
-            "summary": {"detection_count": 1, "file_count": 2, "files_with_detections_count": 1},
-        }
-        self.mock_client.scans.results.retrieve_summary.side_effect = mock_summaries
-
-        # File results are collected from the paginated endpoint once the scan is done
-        mock_file_result = Mock()
-        mock_file_result.model_dump.return_value = {"file_instance_id": "file-1", "file_location": "model.pkl"}
-        mock_page = Mock()
-        mock_page.items = [mock_file_result]
-        mock_page.has_next_page.return_value = False
-        self.mock_client.scans.results.list_files.return_value = mock_page
-
-        # Call community_scan with waiting
-        result = await self.scanner.community_scan(
-            model_name="test-model",
-            model_path="https://example.com/model.pkl",
-            model_source="AWS_PRESIGNED",
-            wait_for_results=True,
-        )
-
-        # Should make the request
-        self.mock_client.scans.jobs.request.assert_called_once()
-
-        # Should poll the summary endpoint, then collect file results; the legacy
-        # unpaginated results endpoint is never called
-        assert self.mock_client.scans.results.retrieve_summary.call_count == 3
-        self.mock_client.scans.results.list_files.assert_called_once()
-        self.mock_client.scans.jobs.retrieve.assert_not_called()
-
-        # Should have slept between polls
-        assert mock_sleep.call_count == 2
-
-        # Should have logged status updates
-        assert mock_logger.info.call_count == 2
-
-        # Final result is assembled from the summary plus file results
-        assert result.scan_id == "test-scan-id-123"
-        assert result.status == "done"
-        assert result.file_results is not None and len(result.file_results) == 1
-        # Deprecated top-level counts are mirrored from the nested summary
-        assert result.detection_count == 1
-        assert result.file_count == 2
-
-
-class TestCommunityScanConstants:
-    """Test the constants used by community scan."""
-
-    def test_community_scan_source_constants(self) -> None:
-        """Test CommunityScanSource constants."""
-        assert CommunityScanSource.LOCAL == "LOCAL"
-        assert CommunityScanSource.AWS_PRESIGNED == "AWS_PRESIGNED"
-        assert CommunityScanSource.AWS_IAM_ROLE == "AWS_IAM_ROLE"
-        assert CommunityScanSource.AZURE_BLOB_SAS == "AZURE_BLOB_SAS"
-        assert CommunityScanSource.AZURE_BLOB_AD == "AZURE_BLOB_AD"
-        assert CommunityScanSource.GOOGLE_SIGNED == "GOOGLE_SIGNED"
-        assert CommunityScanSource.GOOGLE_OAUTH == "GOOGLE_OAUTH"
-        assert CommunityScanSource.HUGGING_FACE == "HUGGING_FACE"
-
-    def test_scan_status_constants(self) -> None:
-        """Test ScanStatus constants."""
-        assert ScanStatus.DONE == "done"
-        assert ScanStatus.FAILED == "failed"
-        assert ScanStatus.PENDING == "pending"
-        assert ScanStatus.RUNNING == "running"
-        assert ScanStatus.CANCELED == "canceled"

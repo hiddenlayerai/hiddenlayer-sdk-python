@@ -1,147 +1,155 @@
-# Tests for scan report reconstruction from the summary and paginated file-results endpoints
-
 from __future__ import annotations
 
-from typing import Any, Dict
-from unittest.mock import Mock, call, patch
+from typing import List
 
+import httpx
+import pytest
+from fake_scan_api import API_URL, NOT_FOUND, SCAN_ID, FakeScanApi
+
+from hiddenlayer import AsyncHiddenLayer, HiddenLayer
+from hiddenlayer.errors import NotFoundError
+from hiddenlayer.lib import scan_utils
 from hiddenlayer.lib.scan_utils import (
-    FILE_RESULTS_PAGE_SIZE,
-    FILE_RESULTS_PAGE_DELAY_SECONDS,
-    _build_scan_report,
-    _collect_file_results,
+    get_scan_results,
+    get_scan_results_async,
+    wait_for_scan_results,
+    wait_for_scan_results_async,
 )
+from hiddenlayer.types import ScanReportSummaryV3Summary
+
+SUMMARY_PATH = f"/scan/v3/results/{SCAN_ID}/summary"
+FILES_PATH = f"/scan/v3/results/{SCAN_ID}/files"
 
 
-def _mock_file_result(file_id: str) -> Mock:
-    file_result = Mock()
-    file_result.model_dump.return_value = {"file_instance_id": file_id, "file_location": f"{file_id}.pkl"}
-    return file_result
+def sync_client(api: FakeScanApi) -> HiddenLayer:
+    return HiddenLayer(
+        token="test-token", base_url=API_URL, httpx_client=httpx.Client(transport=api.transport), max_retries=0
+    )
 
 
-class TestCollectFileResults:
-    """Test paginated file-result collection."""
-
-    def test_single_page(self) -> None:
-        client = Mock()
-        page = Mock()
-        page.items = [_mock_file_result("file-1")]
-        page.has_next_page.return_value = False
-        client.scans.results.list_files.return_value = page
-
-        with patch("hiddenlayer.lib.scan_utils.time.sleep") as mock_sleep:
-            results = _collect_file_results(client, scan_id="scan-1")
-
-        assert len(results) == 1
-        client.scans.results.list_files.assert_called_once_with("scan-1", page_size=FILE_RESULTS_PAGE_SIZE)
-        mock_sleep.assert_not_called()
-
-    def test_multiple_pages_are_throttled(self) -> None:
-        client = Mock()
-        page3 = Mock()
-        page3.items = [_mock_file_result("file-3")]
-        page3.has_next_page.return_value = False
-        page2 = Mock()
-        page2.items = [_mock_file_result("file-2")]
-        page2.has_next_page.return_value = True
-        page2.get_next_page.return_value = page3
-        page1 = Mock()
-        page1.items = [_mock_file_result("file-1")]
-        page1.has_next_page.return_value = True
-        page1.get_next_page.return_value = page2
-        client.scans.results.list_files.return_value = page1
-
-        with patch("hiddenlayer.lib.scan_utils.time.sleep") as mock_sleep:
-            results = _collect_file_results(client, scan_id="scan-1")
-
-        # Every file from every page, exactly once, in page order
-        assert [r.model_dump()["file_instance_id"] for r in results] == ["file-1", "file-2", "file-3"]
-
-        # One throttle sleep before each subsequent page fetch
-        assert mock_sleep.call_args_list == [
-            call(FILE_RESULTS_PAGE_DELAY_SECONDS),
-            call(FILE_RESULTS_PAGE_DELAY_SECONDS),
-        ]
-
-    def test_empty_page(self) -> None:
-        client = Mock()
-        page = Mock()
-        page.items = []
-        page.has_next_page.return_value = False
-        client.scans.results.list_files.return_value = page
-
-        assert _collect_file_results(client, scan_id="scan-1") == []
+def async_client(api: FakeScanApi) -> AsyncHiddenLayer:
+    return AsyncHiddenLayer(
+        token="test-token", base_url=API_URL, httpx_client=httpx.AsyncClient(transport=api.transport), max_retries=0
+    )
 
 
-class TestBuildScanReport:
-    """Test assembling a full ScanReport from a summary plus file results."""
+@pytest.fixture
+def sleeps(monkeypatch: pytest.MonkeyPatch) -> List[float]:
+    """The delays the helpers asked for, in order, with the jitter taken out and nothing actually slept."""
+    delays: List[float] = []
 
-    def test_maps_summary_files_and_deprecated_fields(self) -> None:
-        summary = Mock()
-        summary.model_dump.return_value = {
-            "scan_id": "scan-1",
-            "status": "done",
-            "start_time": "2026-01-01T00:00:00Z",
-            "version": "1.0.0",
-            "inventory": {"model_name": "test-model", "requested_scan_location": "model.pkl"},
-            "summary": {
-                "detection_count": 3,
-                "file_count": 5,
-                "files_with_detections_count": 2,
-                "detection_categories": ["malware"],
-            },
-        }
-        file_results = [_mock_file_result("file-1"), _mock_file_result("file-2")]
+    async def record(delay: float) -> None:
+        delays.append(delay)
 
-        report = _build_scan_report(summary, file_results)
+    monkeypatch.setattr(scan_utils.time, "sleep", delays.append)
+    monkeypatch.setattr(scan_utils.asyncio, "sleep", record)
+    monkeypatch.setattr(scan_utils.random, "uniform", lambda low, high: 0.0)
+    return delays
 
-        assert report.scan_id == "scan-1"
-        assert report.status == "done"
-        assert report.file_results is not None and len(report.file_results) == 2
 
-        # Deprecated top-level fields are mirrored from the nested summary
-        assert report.detection_count == 3
-        assert report.file_count == 5
-        assert report.files_with_detections_count == 2
-        assert report.detection_categories == ["malware"]
+def test_get_scan_results_reads_every_page_with_a_pause_between_pages(sleeps: List[float]) -> None:
+    names = [f"weights-{number:03}.bin" for number in range(250)]
+    api = FakeScanApi(files=names)
 
-    def test_existing_top_level_fields_are_not_overwritten(self) -> None:
-        summary = Mock()
-        summary.model_dump.return_value = {
-            "scan_id": "scan-1",
-            "status": "done",
-            "detection_count": 7,
-            "summary": {"detection_count": 3, "file_count": 1, "files_with_detections_count": 1},
-        }
+    report = get_scan_results(sync_client(api), scan_id=SCAN_ID)
 
-        report = _build_scan_report(summary, [])
+    assert [result.file_location for result in report.file_results or []] == names
+    assert [request.url.params["page_size"] for request in api.calls("GET", FILES_PATH)] == ["100", "100", "100"]
+    assert sleeps == [0.25, 0.25]
 
-        assert report.detection_count == 7
 
-    def test_preserves_aliased_fields(self) -> None:
-        # A real model (not a Mock) so the model_dump/construct round-trip is exercised:
-        # `$schema_version` is only reachable through its alias. `construct` (rather than
-        # model_validate) keeps the test compatible with both pydantic v1 and v2.
-        from hiddenlayer.types.scans.scan_report_summary import ScanReportSummary
+def test_report_mirrors_the_deprecated_top_level_fields_from_the_summary(sleeps: List[float]) -> None:
+    report = get_scan_results(sync_client(FakeScanApi(files=["model.pkl", "config.json"])), scan_id=SCAN_ID)
 
-        payload: Dict[str, Any] = {
-            "scan_id": "scan-1",
-            "status": "done",
-            "version": "1.0.0",
-            "start_time": "2026-01-01T00:00:00Z",
-            "$schema_version": "1.2.3",
-            "inventory": {
-                "model_id": "model-1",
-                "model_name": "test-model",
-                "model_version_id": "version-1",
-                "requested_scan_location": "model.pkl",
-            },
-            "summary": {"detection_count": 3},
-        }
-        summary = ScanReportSummary.construct(**payload)
+    assert report.detection_count == 3
+    assert report.file_count == 2
+    assert report.files_with_detections_count == 2
+    assert report.detection_categories == ["Arbitrary Code Execution"]
+    assert report.severity == "high"
 
-        report = _build_scan_report(summary, [])
 
-        assert report.schema_version == "1.2.3"
-        assert report.scan_id == "scan-1"
-        assert report.detection_count == 3
+def test_report_keeps_a_top_level_field_the_api_returns(sleeps: List[float]) -> None:
+    api = FakeScanApi(summary_fields={"detection_count": 7})
+
+    report = get_scan_results(sync_client(api), scan_id=SCAN_ID)
+
+    assert report.detection_count == 7
+
+
+def test_report_keeps_aliased_fields_and_nested_models(sleeps: List[float]) -> None:
+    report = get_scan_results(sync_client(FakeScanApi()), scan_id=SCAN_ID)
+
+    assert report.scan_id == SCAN_ID
+    assert report.schema_version == "3.2.0"
+    assert report.inventory.model_name == "sentiment-classifier"
+    assert isinstance(report.summary, ScanReportSummaryV3Summary)
+    assert report.file_results is not None
+    assert report.file_results[0].details.file_type == "pickle"
+
+
+def test_get_scan_results_retries_a_scan_that_is_not_found_yet(sleeps: List[float]) -> None:
+    api = FakeScanApi(summaries=[NOT_FOUND, NOT_FOUND, "running"])
+
+    report = get_scan_results(sync_client(api), scan_id=SCAN_ID)
+
+    assert report.status == "running"
+    assert sleeps == [0.5, 1.0]
+
+
+def test_get_scan_results_gives_up_after_five_attempts(sleeps: List[float]) -> None:
+    api = FakeScanApi(summaries=[NOT_FOUND])
+
+    with pytest.raises(NotFoundError):
+        get_scan_results(sync_client(api), scan_id=SCAN_ID)
+
+    assert len(api.calls("GET", SUMMARY_PATH)) == 5
+    assert sleeps == [0.5, 1.0, 1.5, 2.0]
+
+
+@pytest.mark.parametrize("final_status", ["done", "failed", "canceled"])
+def test_wait_for_scan_results_polls_until_the_scan_ends(final_status: str, sleeps: List[float]) -> None:
+    api = FakeScanApi(summaries=[NOT_FOUND, "pending", "running", final_status])
+
+    report = wait_for_scan_results(sync_client(api), scan_id=SCAN_ID)
+
+    assert report.status == final_status
+    assert sleeps == [0.2, 0.4, 0.8]
+
+
+def test_wait_for_scan_results_backs_off_to_30_seconds_at_most(sleeps: List[float]) -> None:
+    api = FakeScanApi(summaries=["running"] * 12 + ["done"])
+
+    wait_for_scan_results(sync_client(api), scan_id=SCAN_ID)
+
+    assert sleeps[:3] == [0.2, 0.4, 0.8]
+    assert max(sleeps) == 30
+    assert sleeps[-1] == 30
+
+
+async def test_async_get_scan_results_reads_every_page_and_retries_not_found(sleeps: List[float]) -> None:
+    names = [f"weights-{number:03}.bin" for number in range(150)]
+    api = FakeScanApi(summaries=[NOT_FOUND, "done"], files=names)
+
+    report = await get_scan_results_async(async_client(api), scan_id=SCAN_ID)
+
+    assert [result.file_location for result in report.file_results or []] == names
+    assert report.detection_count == 3
+    assert sleeps == [0.5, 0.25]
+
+
+async def test_async_get_scan_results_gives_up_after_five_attempts(sleeps: List[float]) -> None:
+    api = FakeScanApi(summaries=[NOT_FOUND])
+
+    with pytest.raises(NotFoundError):
+        await get_scan_results_async(async_client(api), scan_id=SCAN_ID)
+
+    assert len(api.calls("GET", SUMMARY_PATH)) == 5
+
+
+async def test_async_wait_for_scan_results_polls_until_the_scan_ends(sleeps: List[float]) -> None:
+    api = FakeScanApi(summaries=[NOT_FOUND, "running", "done"])
+
+    report = await wait_for_scan_results_async(async_client(api), scan_id=SCAN_ID)
+
+    assert report.status == "done"
+    assert sleeps == [0.2, 0.4]

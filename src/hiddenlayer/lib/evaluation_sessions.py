@@ -1,18 +1,29 @@
-import logging
+"""Evaluation sessions the SDK drives itself, reached as `client.evaluation_sessions`."""
 
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .red_team_session import RedTeamSessionsResource, AsyncRedTeamSessionsResource
+from __future__ import annotations
 
-logger = logging.getLogger(__name__)
+from functools import cached_property
+from typing import TYPE_CHECKING
 
-class EvaluationSessionsResource(SyncAPIResource):
+from .red_team_session import AsyncRedTeamSessionsResource, RedTeamSessionsResource
+
+if TYPE_CHECKING:
+    from ..client import AsyncHiddenLayer, HiddenLayer
+
+
+class EvaluationSessionsResource:
+    def __init__(self, client: "HiddenLayer") -> None:
+        self._client = client
+
     @cached_property
     def red_team(self) -> RedTeamSessionsResource:
         return RedTeamSessionsResource(client=self._client)
 
 
-class AsyncEvaluationSessionsResource(AsyncAPIResource):
+class AsyncEvaluationSessionsResource:
+    def __init__(self, client: "AsyncHiddenLayer") -> None:
+        self._client = client
+
     @cached_property
     def red_team(self) -> AsyncRedTeamSessionsResource:
         return AsyncRedTeamSessionsResource(client=self._client)
