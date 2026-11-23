@@ -1,31 +1,355 @@
-# This workflow is triggered when a GitHub release is created.
-# It can also be run manually to re-publish to PyPI in case it failed for some reason.
-# You can run this workflow by navigating to https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python/actions/workflows/publish-pypi.yml
-name: Publish PyPI
-on:
-  workflow_dispatch:
+# .github/workflows/publish-pypi.yml
+#
+# Release flow, copied from visiblelayer (PLT-1360) by hl-sdk-gen's SDK repo
+# template (PLT-1425): publishing the bot's draft release consumes the pending
+# changesets, publishes to PyPI, and commits the version bump to main as
+# HL-OpenSource-Exporter. Guards fail the run, before anything is published or
+# committed, when the release doesn't match the changeset state.
+#
+# Invariants:
+#   - Both jobs work from the commit the release was published at
+#     (github.sha), never from main's tip, so what's published, what's
+#     committed and what the tag points at are one tree even when a PR merges
+#     while the run is going.
+#   - Guards 1-3 run before any side effect, so a bad release leaves main
+#     untouched and nothing published.
+#   - Publish runs before the commit-back and skips a version that's already
+#     on PyPI, so a failure anywhere after the build is fixed by re-running
+#     the workflow (all jobs or failed jobs, either works), not by publishing
+#     by hand from a tag.
+#   - build runs npm and the Python build backend with no environment and no
+#     secret. It hands publish the wheel and sdist, CHANGELOG.md and the list
+#     of consumed changesets. publish runs neither, checks the artifact's
+#     name and version against the tag before uploading, accepts only plain
+#     .changeset/<name>.md paths, and rebuilds the version commit itself with
+#     scripts/sync-version.mjs, which uses only Node's builtins. A compromised
+#     dependency can't reach the exporter key, publish another package or put
+#     code on main.
+#   - The exporter token is minted after the publish. It is a bypass actor on
+#     main's ruleset.
+#   - If main moved during the run, the version commit is merged into main
+#     rather than rebased, so the tag stays on the published tree and a
+#     changeset merged meanwhile stays pending for the next release.
+#
+# Admin prerequisites (the run fails at token minting until they exist):
+#   - the repo on HL-OpenSource-Exporter's allow-list, and the exporter as a
+#     bypass actor on the main branch ruleset
+#   - an os-export environment holding OS_EXPORTER_APP_PRIVATE_KEY, with a
+#     deployment policy of main plus v* tags
+#
+# Accepted trade-offs (platform team, 2026-09-18): release events run this
+# file from the tag's commit and tag creation is unrestricted, so anyone who
+# can push a v* tag can run a modified copy of it with the key. The upload
+# precedes the version commit, so PyPI's metadata points at the commit before
+# the bump. Changesets pre mode isn't supported: PyPI normalizes prerelease
+# versions, which Guard 3 doesn't.
 
+name: Publish PyPI
+
+on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  PACKAGE: hiddenlayer-sdk
+  SDK_LANGUAGE: python
+  TAG: ${{ github.event.release.tag_name }}
+
 jobs:
-  publish:
-    name: publish
+  build:
+    # hiddenlayerai has no scale-set runners
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      # @changesets/changelog-github reads each changeset commit's associatedPullRequests.
+      pull-requests: read
+    outputs:
+      mode: ${{ steps.guard1.outputs.mode }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Resolve the version
+        run: echo "VERSION=${TAG#v}" >> "$GITHUB_ENV"
 
-      - name: Install Rye
+      - name: Checkout the published commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The commit the release was published at, not main's tip.
+          ref: ${{ github.sha }}
+          # The changeset changelog generator reads commit history.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          # A restored cache must not be able to change what a release ships.
+          package-manager-cache: false
+
+      - name: Install the release tooling
+        # Only changesets runs here, so no install script needs to.
         run: |
-          curl -sSf https://rye.astral.sh/get | bash
-          echo "$HOME/.rye/shims" >> $GITHUB_PATH
+          # The package manager comes from package.json's packageManager pin, which Corepack enforces; the ledgers have none.
+          case "$(node -p "(require('./package.json').packageManager ?? 'npm').split('@')[0]")" in
+            pnpm) corepack enable && pnpm install --frozen-lockfile --ignore-scripts ;;
+            yarn) corepack enable && YARN_ENABLE_SCRIPTS=false yarn install --immutable ;;
+            *) npm ci --ignore-scripts ;;
+          esac
+
+      - name: "Guard 1: pending changesets exist, or the published commit already carries this release"
+        id: guard1
+        run: |
+          if find .changeset -maxdepth 1 -name '*.md' ! -name README.md | grep -q .; then
+            echo "mode=release" >> "$GITHUB_OUTPUT"
+          elif [ "$(node -p "require('./package.json').version")" = "$VERSION" ]; then
+            echo "The published commit already carries $VERSION: resuming at the publish check and the tag move."
+            echo "mode=resume" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::No pending changesets in .changeset/ and the published commit isn't at $VERSION: nothing to version or publish for this release."
+            exit 1
+          fi
+
+      - name: Apply changesets (version bump, changelog, sync)
+        if: steps.guard1.outputs.mode == 'release'
         env:
-          RYE_VERSION: '0.44.0'
-          RYE_INSTALL_OPTION: '--yes'
+          # @changesets/changelog-github looks up each changeset's PR and author.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run version-packages
+
+      - name: "Guard 2: release tag matches the computed version"
+        if: steps.guard1.outputs.mode == 'release'
+        run: |
+          COMPUTED=$(node -p "require('./package.json').version")
+          if [ "$VERSION" != "$COMPUTED" ]; then
+            echo "::error::Release tag '$TAG' does not match the changeset-computed version '$COMPUTED'. Nothing was committed or published: delete this release and publish one tagged v$COMPUTED."
+            exit 1
+          fi
+
+      - name: Setup uv
+        if: steps.guard1.outputs.mode == 'release'
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+
+      - name: Build the wheel and sdist
+        if: steps.guard1.outputs.mode == 'release'
+        run: uv build --out-dir "$RUNNER_TEMP/release/dist"
+
+      - name: "Guard 3: the wheel carries the package name and the tag's version"
+        if: steps.guard1.outputs.mode == 'release'
+        run: |
+          METADATA=$(unzip -p "$RUNNER_TEMP"/release/dist/*.whl '*.dist-info/METADATA')
+          NAME=$(sed -n 's/^Name: //p' <<< "$METADATA")
+          BUILT=$(sed -n 's/^Version: //p' <<< "$METADATA")
+          # PEP 503: compare names case-insensitively, with runs of -_. as one -.
+          normalize() { tr '[:upper:]' '[:lower:]' <<< "$1" | sed -E 's/[-_.]+/-/g'; }
+          if [ "$(normalize "$NAME")" != "$PACKAGE" ] || [ "$BUILT" != "$VERSION" ]; then
+            echo "::error::Built $NAME $BUILT, expected $PACKAGE $VERSION. Nothing was committed or published."
+            exit 1
+          fi
+          ls "$RUNNER_TEMP/release/dist"
+
+      - name: Collect what publish needs
+        if: steps.guard1.outputs.mode == 'release'
+        run: |
+          cp CHANGELOG.md "$RUNNER_TEMP/release/"
+          git diff --name-only --diff-filter=D -- .changeset > "$RUNNER_TEMP/release/consumed-changesets.txt"
+
+      - name: Upload release
+        if: steps.guard1.outputs.mode == 'release'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release
+          path: ${{ runner.temp }}/release/
+          if-no-files-found: error
+          # A re-run of all jobs rebuilds from the same commit and replaces it.
+          overwrite: true
+          retention-days: 7
+
+  publish:
+    needs: build
+    # hiddenlayerai has no scale-set runners
+    runs-on: ubuntu-latest
+    environment: os-export
+    permissions:
+      # The release notes tidy-up; the commit and tag push use the exporter's token.
+      contents: write
+    env:
+      MODE: ${{ needs.build.outputs.mode }}
+    steps:
+      - name: Resolve the version
+        run: echo "VERSION=${TAG#v}" >> "$GITHUB_ENV"
+
+      - name: Checkout the published commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The commit the release was published at, not main's tip.
+          ref: ${{ github.sha }}
+          # The changeset changelog generator reads commit history.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download release
+        if: env.MODE == 'release'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release
+          path: ${{ runner.temp }}/release
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+
+      - name: "Check the artifact: one wheel and one sdist, named and versioned as the tag"
+        if: env.MODE == 'release'
+        run: |
+          cd "$RUNNER_TEMP/release/dist"
+          if [ "$(find . -maxdepth 1 -name '*.whl' | wc -l)" -ne 1 ] || [ "$(find . -maxdepth 1 -name '*.tar.gz' | wc -l)" -ne 1 ]; then
+            echo "::error::Expected exactly one wheel and one sdist, found: $(ls)"
+            exit 1
+          fi
+          METADATA=$(unzip -p ./*.whl '*.dist-info/METADATA')
+          NAME=$(sed -n 's/^Name: //p' <<< "$METADATA")
+          BUILT=$(sed -n 's/^Version: //p' <<< "$METADATA")
+          normalize() { tr '[:upper:]' '[:lower:]' <<< "$1" | sed -E 's/[-_.]+/-/g'; }
+          if [ "$(normalize "$NAME")" != "$PACKAGE" ] || [ "$BUILT" != "$VERSION" ]; then
+            echo "::error::The artifact is $NAME $BUILT, expected $PACKAGE $VERSION. Nothing was published or committed."
+            exit 1
+          fi
 
       - name: Publish to PyPI
-        run: |
-          bash ./bin/publish-pypi
         env:
-          PYPI_TOKEN: ${{ secrets.HIDDENLAYER_PYPI_TOKEN || secrets.PYPI_TOKEN }}
+          UV_PUBLISH_TOKEN: ${{ secrets.HIDDENLAYER_PYPI_TOKEN || secrets.PYPI_TOKEN }}
+        run: |
+          if curl -sf "https://pypi.org/pypi/$PACKAGE/$VERSION/json" > /dev/null; then
+            echo "$PACKAGE $VERSION is already on PyPI; skipping (re-run after a later failure)."
+          elif [ "$MODE" = "resume" ]; then
+            echo "::error::The published commit carries $VERSION but PyPI has no $PACKAGE $VERSION. Publish it from the version commit by hand, then re-run."
+            exit 1
+          else
+            uv publish "$RUNNER_TEMP"/release/dist/*
+          fi
+
+      - name: Mint HL-OpenSource-Exporter token
+        id: app
+        # app-token-action is private to hiddenlayer-engineering, so a hiddenlayerai repo can't use it.
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: Iv23liEbo0PaG2pWfdGX # HL-OpenSource-Exporter, from app-token-action's registry
+          private-key: ${{ secrets.OS_EXPORTER_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
+
+      - name: Commit the version bump to main
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          APP_SLUG: ${{ steps.app.outputs.app-slug }}
+        run: |
+          # The helper reads the token from the environment when git runs it, so it's never written to disk.
+          # shellcheck disable=SC2016
+          token_git() { git -c credential.helper='!f() { echo username=x-access-token; echo "password=${GH_TOKEN}"; }; f' "$@"; }
+          token_git fetch -q origin main
+          if [ -n "$(git log -1 --format=%H --grep="^chore(release): version ${VERSION//./\\.}\$" origin/main)" ]; then
+            echo "main already carries the version commit for $VERSION; nothing to commit."
+            exit 0
+          fi
+          if [ "$(node -p "require('./package.json').version")" = "$VERSION" ]; then
+            echo "The published commit already carries $VERSION; no version commit to make."
+            exit 0
+          fi
+          node scripts/sync-version.mjs "$SDK_LANGUAGE" "$VERSION"
+          cp "$RUNNER_TEMP/release/CHANGELOG.md" CHANGELOG.md
+          while read -r changeset; do
+            [ "$changeset" = .changeset/README.md ] && continue
+            if [[ ! "$changeset" =~ ^\.changeset/[A-Za-z0-9_-]+\.md$ ]]; then
+              echo "::error::'$changeset' is not a changeset path; refusing the hand-off."
+              exit 1
+            fi
+            git rm -q -- "$changeset"
+          done < "$RUNNER_TEMP/release/consumed-changesets.txt"
+          git add -u .
+          git add -- CHANGELOG.md
+          if git diff --cached --quiet; then
+            echo "::error::The version bump staged no changes; refusing to push a release commit without one."
+            exit 1
+          fi
+          echo "Committing:"
+          git diff --cached --name-status
+          BOT="${APP_SLUG}[bot]"
+          BOT_ID=$(gh api "users/$BOT" --jq .id)
+          bot_git() {
+            token_git -c user.name="$BOT" -c user.email="$BOT_ID+$BOT@users.noreply.github.com" -c core.hooksPath=/dev/null "$@"
+          }
+          bot_git commit -q -m "chore(release): version $VERSION"
+          BUMP=$(git rev-parse HEAD)
+          echo "Version commit $BUMP"
+          # If main moved during the run, merge the bump into it rather than rebase: the
+          # tag then points at the published tree, and a changeset merged meanwhile stays pending.
+          for _ in 1 2 3; do
+            token_git fetch -q origin main
+            if git merge-base --is-ancestor origin/main "$BUMP"; then
+              bot_git push -q origin "$BUMP:refs/heads/main" && exit 0
+            else
+              git checkout -q -B release-merge origin/main
+              bot_git merge -q --no-ff -m "chore(release): merge version $VERSION into main" "$BUMP" \
+                || { echo "::error::The version commit conflicts with what landed on main after the commit this run worked from. Re-run all jobs, not only the failed ones: a re-run of this job alone replays the same commit and conflicts again. If all jobs conflict too, reconcile the change on main by hand first (hl-sdk-gen docs/releasing-*.md, Recovery)."; exit 1; }
+              bot_git push -q origin HEAD:refs/heads/main && exit 0
+              git checkout -q "$BUMP"
+            fi
+          done
+          echo "::error::main kept moving; re-run all jobs to try again."
+          exit 1
+
+      - name: Point the release tag at the version commit
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          # shellcheck disable=SC2016
+          token_git() { git -c credential.helper='!f() { echo username=x-access-token; echo "password=${GH_TOKEN}"; }; f' "$@"; }
+          token_git fetch -q origin main
+          COMMIT=$(git log -1 --format=%H --grep="^chore(release): version ${VERSION//./\\.}\$" origin/main)
+          if [ -z "$COMMIT" ]; then
+            echo "::error::No version commit for $VERSION on main."
+            exit 1
+          fi
+          git tag -f "$TAG" "$COMMIT"
+          token_git push -f origin "refs/tags/$TAG"
+
+      - name: Tidy the published release notes
+        # Cosmetic only: replace the draft's marker, instruction and preview with
+        # the changelog section the version commit wrote. Never fail a release
+        # that already shipped over release-note formatting.
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_ID: ${{ github.event.release.id }}
+          MARKER: "<!-- ${{ github.event.repository.name }}-draft-release-bot -->"
+        run: |
+          BODY=$(gh api "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" --jq '.body // ""')
+          case "$BODY" in
+            "$MARKER"*)
+              # origin/main was fetched by the tag step.
+              COMMIT=$(git log -1 --format=%H --grep="^chore(release): version ${VERSION//./\\.}\$" origin/main)
+              git show "$COMMIT:CHANGELOG.md" | awk -v v="$VERSION" '/^## /{p = ($2 == v)} p' > "$RUNNER_TEMP/notes.md"
+              gh api -X PATCH "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" \
+                -F body=@"$RUNNER_TEMP/notes.md" > /dev/null
+              echo "Release notes set to the changelog section for $VERSION."
+              ;;
+            *)
+              echo "Release notes are not bot-authored; left unchanged."
+              ;;
+          esac

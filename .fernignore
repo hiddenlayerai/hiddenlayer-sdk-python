@@ -1,6 +1,27 @@
 # Files this repo owns. Fern deletes anything it does not generate unless it is listed here.
-.changeset/
+# Never list a file Fern writes the version into, or Fern's version and the release's drift apart.
 .github/
 CHANGELOG.md
+README.md
+docs/
+# Fern generates CONTRIBUTING.md, but none of these
+LICENSE
+SECURITY.md
+CODE_OF_CONDUCT.md
+# Safe only because hl-sdk-gen deletes a fern/sdk with no open PR before Fern pushes, and replaces
+# its own changeset when it updates an open one (PLT-1422): Fern's push keeps whatever is here.
+.changeset/
+# The version ledger and its release tooling
 package.json
 package-lock.json
+scripts/
+# Fern's .gitignore plus node_modules/
+.gitignore
+
+# Wrapper code and its tests (PLT-1428)
+# client.py replaces the stub Fern writes there with the wrapper, per Fern's Python custom-code guide.
+src/hiddenlayer/client.py
+src/hiddenlayer/lib/
+tests/wrapper/
+tests/lib/
+examples/

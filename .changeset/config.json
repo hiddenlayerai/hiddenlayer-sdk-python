@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@4.0.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
+  "changelog": ["@changesets/changelog-github", { "repo": "hiddenlayerai/hiddenlayer-sdk-python" }],
   "commit": false,
   "fixed": [],
   "linked": [],
@@ -8,5 +8,6 @@
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "privatePackages": { "version": true, "tag": true },
-  "ignore": []
+  "ignore": [],
+  "changedFilePatterns": ["src/**"]
 }

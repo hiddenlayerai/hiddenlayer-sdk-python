@@ -1,0 +1,35 @@
+{
+  "cliVersion": "5.191.2",
+  "generatorName": "fernapi/fern-python-sdk",
+  "generatorVersion": "5.42.1",
+  "generatorConfig": {
+    "client": {
+      "class_name": "BaseClient",
+      "filename": "base_client.py",
+      "exported_class_name": "HiddenLayer",
+      "exported_filename": "client.py"
+    },
+    "additional_init_exports": [
+      {
+        "from": "lib",
+        "imports": [
+          "BetaWarning",
+          "warn_beta",
+          "ModelScanner",
+          "AsyncModelScanner",
+          "CommunityScanner",
+          "AsyncCommunityScanner"
+        ]
+      }
+    ],
+    "pyproject_python_version": "^3.10",
+    "offset_semantics": "item-index",
+    "encode_path_params": true
+  },
+  "originGitCommit": "bd5f6071047581d6e18b076994bc1427fa8eb59b",
+  "originGitCommitIsDirty": true,
+  "invokedBy": "ci",
+  "requestedVersion": "3.10.0",
+  "ciProvider": "github",
+  "sdkVersion": "3.10.0"
+}

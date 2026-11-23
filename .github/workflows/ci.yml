@@ -1,81 +1,156 @@
+# .github/workflows/ci.yml
+#
+# Lints, type-checks, builds and tests the package on every PR and every push
+# to main: the generated client with Fern's tests, and the wrapper with its
+# own (PLT-1428). Fern PRs merge on green, so this is the gate between a
+# generation and main.
+#
+# Invariants:
+#   - The package's dependencies are the ones poetry.lock pins, installed
+#     with its hashes. Fern locks with Poetry, so Poetry exports the lock and
+#     uv installs it. The tools themselves (uv, Poetry, the build backend)
+#     are fetched as their own pins allow, not by hash.
+#   - No secret, no write permission and no cache: this runs on PRs from
+#     anyone, and a restored cache must not decide what a Fern PR merges on.
+#   - Keep lint, build and test as one job each, under those names: main's
+#     ruleset requires the three contexts, and the hand-off waits for every
+#     required one. test covers every Python in PYTHON_VERSIONS in a loop,
+#     because a version matrix would rename its context.
+#   - PYTHON_VERSIONS starts at the oldest Python pyproject.toml allows, and
+#     lint runs on that one, so syntax newer than it fails the type check.
+#   - The tests run without the aiohttp extra first, as most consumers
+#     install the package, then the tests marked aiohttp run with it. Fern's
+#     conftest skips those tests when the extra doesn't import, so the loop
+#     imports it first.
+#   - Each job's timeout stays within the 15 minutes the hand-off waits for
+#     a Fern PR's checks.
+#
+# From hl-sdk-gen's template/; edit it there and copy it into the repo.
+
 name: CI
+
 on:
-  push:
-    branches:
-      - '**'
-      - '!integrated/**'
-      - '!stl-preview-head/**'
-      - '!stl-preview-base/**'
-      - '!generated'
-      - '!codegen/**'
-      - 'codegen/stl/**'
   pull_request:
-    branches-ignore:
-      - 'stl-preview-head/**'
-      - 'stl-preview-base/**'
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  PACKAGE: hiddenlayer-sdk
+  PYTHON_VERSIONS: "3.10 3.11 3.12 3.13 3.14"
+  # The Poetry that Fern's poetry.lock says wrote it.
+  POETRY: poetry==2.4.1
+  POETRY_EXPORT: poetry-plugin-export==1.10.1
 
 jobs:
   lint:
-    timeout-minutes: 10
-    name: lint
+    # hiddenlayerai has no scale-set runners
     runs-on: ubuntu-latest
-
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - name: Install Rye
+      - name: Setup uv
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          enable-cache: false
+
+      - name: Export the locked dev dependencies
         run: |
-          curl -sSf https://rye.astral.sh/get | bash
-          echo "$HOME/.rye/shims" >> $GITHUB_PATH
-        env:
-          RYE_VERSION: '0.44.0'
-          RYE_INSTALL_OPTION: '--yes'
+          poetry() { uvx --from "$POETRY" --with "$POETRY_EXPORT" poetry "$@"; }
+          poetry export --with dev -f requirements.txt -o "$RUNNER_TEMP/requirements.txt"
 
-      - name: Install dependencies
-        run: rye sync --all-features
+      - name: Install them on the oldest Python
+        run: |
+          uv venv --python "${PYTHON_VERSIONS%% *}" "$RUNNER_TEMP/venv"
+          uv pip install --python "$RUNNER_TEMP/venv" --require-hashes -r "$RUNNER_TEMP/requirements.txt"
+          uv pip install --python "$RUNNER_TEMP/venv" --no-deps --editable .
+          echo "$RUNNER_TEMP/venv/bin" >> "$GITHUB_PATH"
 
-      - name: Run lints
-        run: ./scripts/lint
+      - name: Lint
+        run: ruff check . && ruff format --check .
+
+      - name: Type check
+        run: mypy .
 
   build:
-    timeout-minutes: 10
-    name: build
+    # hiddenlayerai has no scale-set runners
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - name: Install Rye
+      - name: Setup uv
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          enable-cache: false
+
+      - name: Build the wheel and sdist
+        run: uv build --out-dir "$RUNNER_TEMP/release/dist"
+
+      - name: Check the wheel's name
         run: |
-          curl -sSf https://rye.astral.sh/get | bash
-          echo "$HOME/.rye/shims" >> $GITHUB_PATH
-        env:
-          RYE_VERSION: '0.44.0'
-          RYE_INSTALL_OPTION: '--yes'
-
-      - name: Install dependencies
-        run: rye sync --all-features
-
-      - name: Run build
-        run: rye build
+          NAME=$(unzip -p "$RUNNER_TEMP"/release/dist/*.whl '*.dist-info/METADATA' | sed -n 's/^Name: //p')
+          # PEP 503: compare names case-insensitively, with runs of -_. as one -.
+          normalize() { tr '[:upper:]' '[:lower:]' <<< "$1" | sed -E 's/[-_.]+/-/g'; }
+          if [ "$(normalize "$NAME")" != "$PACKAGE" ]; then
+            echo "::error::Built $NAME, expected $PACKAGE, the name hl-sdk-gen's generator config gives Fern. Fern's own default is hiddenlayer, another project's on PyPI, and publish-pypi.yml refuses any name but $PACKAGE."
+            exit 1
+          fi
 
   test:
-    timeout-minutes: 10
-    name: test
+    # hiddenlayerai has no scale-set runners
     runs-on: ubuntu-latest
-
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - name: Install Rye
+      - name: Setup uv
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          enable-cache: false
+
+      - name: Export the locked dependencies
         run: |
-          curl -sSf https://rye.astral.sh/get | bash
-          echo "$HOME/.rye/shims" >> $GITHUB_PATH
-        env:
-          RYE_VERSION: '0.44.0'
-          RYE_INSTALL_OPTION: '--yes'
+          poetry() { uvx --from "$POETRY" --with "$POETRY_EXPORT" poetry "$@"; }
+          poetry export --with dev -f requirements.txt -o "$RUNNER_TEMP/requirements.txt"
+          poetry export --with dev --extras aiohttp -f requirements.txt -o "$RUNNER_TEMP/requirements-aiohttp.txt"
 
-      - name: Bootstrap
-        run: ./scripts/bootstrap
-
-      - name: Run tests
-        run: ./scripts/test
+      - name: Test on every supported Python
+        run: |
+          for python in $PYTHON_VERSIONS; do
+            echo "::group::Python $python"
+            venv="$RUNNER_TEMP/venv-$python"
+            uv venv --python "$python" "$venv"
+            uv pip install --python "$venv" --require-hashes -r "$RUNNER_TEMP/requirements.txt"
+            uv pip install --python "$venv" --no-deps --editable .
+            "$venv/bin/pytest" -n auto
+            uv pip install --python "$venv" --require-hashes -r "$RUNNER_TEMP/requirements-aiohttp.txt"
+            "$venv/bin/python" -c "import httpx_aiohttp"
+            "$venv/bin/pytest" -n auto -m aiohttp || {
+              code=$?
+              # pytest exits 5 when nothing is selected.
+              [ "$code" -ne 5 ] || echo "::error::No test carries the aiohttp marker any more, so the extra went untested. A generator upgrade moved Fern's aiohttp tests: update this step in hl-sdk-gen's template."
+              exit "$code"
+            }
+            echo "::endgroup::"
+          done
