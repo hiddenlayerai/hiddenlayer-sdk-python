@@ -163,7 +163,7 @@ for sensor in client.sensors.query(filter=SensorSorQueryFilter(active=True)):
     print(sensor.sensor_id)
 ```
 
-`page.items` holds the current page's items, `page.response` the whole response, and `page.has_next` and `page.next_page()` move through pages by hand. The async client's pager is awaited first: `async for sensor in await client.sensors.query()`.
+`page.items` holds the current page's items, `page.response` the whole response, and `page.has_next` and `page.next_page()` move through pages by hand. Call `page.next_page()` only while `page.has_next` is true: after the last page it sends another request instead of returning `None`. The async client's pager is awaited first: `async for sensor in await client.sensors.query()`.
 
 ## Retries and timeouts
 

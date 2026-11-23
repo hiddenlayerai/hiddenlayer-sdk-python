@@ -12,6 +12,7 @@ import random
 import time
 from typing import TYPE_CHECKING, Any, Dict, List
 
+import httpx
 from ..errors.not_found_error import NotFoundError
 from ..types.scan_file_result_with_compliance_v3 import ScanFileResultWithComplianceV3
 from ..types.scan_report_of_record_v3 import ScanReportOfRecordV3
@@ -45,6 +46,10 @@ _NOT_FOUND_MAX_ATTEMPTS = 5
 _NOT_FOUND_BASE_DELAY_SECONDS = 0.5
 _POLL_BASE_DELAY_SECONDS = 0.1
 _POLL_MAX_DELAY_SECONDS = 30
+# Past this the delay is at its cap, and an unbounded exponent overflows a float after about 1,000 polls.
+_POLL_MAX_EXPONENT = 10
+# The generated client retries a failed connection, not a timeout or a dropped read as 3.x did.
+_POLL_MAX_TRANSPORT_FAILURES = 3
 
 # Deprecated top-level report fields that mirror `.summary.*` per the API contract.
 _DEPRECATED_SUMMARY_MIRROR_FIELDS = (
@@ -74,7 +79,16 @@ def _not_found_delay(attempt: int) -> float:
 
 
 def _poll_delay(attempt: int) -> float:
-    return min(_POLL_BASE_DELAY_SECONDS * 2**attempt + random.uniform(0, 1), _POLL_MAX_DELAY_SECONDS)
+    backoff = _POLL_BASE_DELAY_SECONDS * 2 ** min(attempt, _POLL_MAX_EXPONENT)
+    return min(backoff + random.uniform(0, 1), _POLL_MAX_DELAY_SECONDS)
+
+
+def _may_poll_again(error: httpx.TransportError, failures: int) -> bool:
+    """Whether a status poll that failed in transit is retried: all but the third failure in a row."""
+    if failures >= _POLL_MAX_TRANSPORT_FAILURES:
+        return False
+    logger.warning("scan status request failed, retrying: %r", error)
+    return True
 
 
 def _collect_file_results(client: "HiddenLayer", *, scan_id: str) -> List[ScanFileResultWithComplianceV3]:
@@ -132,16 +146,25 @@ def wait_for_scan_results(client: "HiddenLayer", *, scan_id: str) -> ScanReport:
     """Waits for the scan to finish, failed and canceled scans included, then returns its report.
 
     Polls the summary endpoint with exponential backoff, capped at 30 seconds, for as long as the scan runs.
+
+    Raises:
+        httpx.TransportError: If three status polls in a row time out or lose their connection.
     """
     attempt = 0
+    transport_failures = 0
     while True:
         try:
             summary = client.scans.results.retrieve_summary(scan_id)
+            transport_failures = 0
             if summary.status in _TERMINAL_STATUSES:
                 break
             logger.info("scan status: %s", summary.status)
         except NotFoundError:
             logger.info("scan not found yet, retrying...")
+        except httpx.TransportError as error:
+            transport_failures += 1
+            if not _may_poll_again(error, transport_failures):
+                raise
         attempt += 1
         time.sleep(_poll_delay(attempt))
     return _build_scan_report(summary, _collect_file_results(client, scan_id=scan_id))
@@ -172,14 +195,20 @@ async def get_scan_results_async(client: "AsyncHiddenLayer", *, scan_id: str) ->
 async def wait_for_scan_results_async(client: "AsyncHiddenLayer", *, scan_id: str) -> ScanReport:
     """Async version of wait_for_scan_results."""
     attempt = 0
+    transport_failures = 0
     while True:
         try:
             summary = await client.scans.results.retrieve_summary(scan_id)
+            transport_failures = 0
             if summary.status in _TERMINAL_STATUSES:
                 break
             logger.info("scan status: %s", summary.status)
         except NotFoundError:
             logger.info("scan not found yet, retrying...")
+        except httpx.TransportError as error:
+            transport_failures += 1
+            if not _may_poll_again(error, transport_failures):
+                raise
         attempt += 1
         await asyncio.sleep(_poll_delay(attempt))
     return _build_scan_report(summary, await _collect_file_results_async(client, scan_id=scan_id))

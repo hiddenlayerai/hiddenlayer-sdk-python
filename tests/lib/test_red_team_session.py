@@ -613,23 +613,28 @@ class TestRunWithCallbackParallel:
 
         assert len(api.submitted) == 2
 
-    async def test_a_refused_session_id_raises_invalid_session(self) -> None:
+    # Above 1, the failed task finishes while the run still has room for more actions.
+    @pytest.mark.parametrize("max_parallel_techniques", [1, 4])
+    async def test_a_refused_session_id_raises_invalid_session(self, max_parallel_techniques: int) -> None:
         api = FakeRedTeamApi(next_actions=[*self.attacks(1), NOT_READY], submit_status=400)
+        session = async_session(api, max_parallel_techniques=max_parallel_techniques, poll_max_wait=60.0)
 
         async def handler(*arguments: Any) -> str:
             return "No."
 
         with pytest.raises(InvalidSessionError, match="Invalid session_id: session-1"):
-            await async_session(api).run_with_callback_parallel(handler)
+            await session.run_with_callback_parallel(handler)
 
-    async def test_a_handler_error_stops_the_run(self) -> None:
+    @pytest.mark.parametrize("max_parallel_techniques", [1, 4])
+    async def test_a_handler_error_stops_the_run(self, max_parallel_techniques: int) -> None:
         api = FakeRedTeamApi(next_actions=[*self.attacks(1), NOT_READY])
+        session = async_session(api, max_parallel_techniques=max_parallel_techniques, poll_max_wait=60.0)
 
         async def handler(*arguments: Any) -> str:
             raise ConnectionError("target unreachable")
 
         with pytest.raises(ConnectionError, match="target unreachable"):
-            await async_session(api).run_with_callback_parallel(handler)
+            await session.run_with_callback_parallel(handler)
 
         assert api.submitted == []
 

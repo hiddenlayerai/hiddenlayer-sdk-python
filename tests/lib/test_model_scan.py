@@ -432,6 +432,17 @@ async def test_async_scan_file_uploads_the_file_in_parts_then_returns_the_report
     assert report.status == "done"
 
 
+async def test_async_presigned_uploads_carry_no_api_credentials(model_file: Path) -> None:
+    api = FakeScanApi()
+
+    await async_client(api).model_scanner.scan_file(model_name="sentiment-classifier", model_path=model_file)
+
+    uploads = [request for request in api.requests if str(request.url).startswith(UPLOAD_URL)]
+    assert len(uploads) == 3
+    for upload in uploads:
+        assert "authorization" not in upload.headers
+
+
 async def test_async_scan_file_raises_when_a_presigned_upload_is_refused(model_file: Path) -> None:
     api = FakeScanApi()
     api.upload_status = 403

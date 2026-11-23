@@ -11,6 +11,7 @@ API_URL = "https://api.hiddenlayer.test"
 UPLOAD_URL = "https://uploads.hiddenlayer.test"
 SCAN_ID = "5f1d6a8e-3c2b-4e7a-9d1f-0a2b3c4d5e6f"
 NOT_FOUND = 404
+TIMED_OUT = 0
 
 
 def file_result(name: str) -> Dict[str, Any]:
@@ -30,8 +31,8 @@ class FakeScanApi:
     """Serves one scan: the upload, the scan job, the summary and the paginated file results.
 
     Args:
-        summaries: What the summary endpoint answers, call by call, as a scan status or 404; the
-            last one repeats.
+        summaries: What the summary endpoint answers, call by call, as a scan status, 404 or
+            TIMED_OUT, a request that times out; the last one repeats.
         files: File names the files endpoint lists, a page at a time.
         part_size: Bytes per presigned upload part.
         duplicate_files: File names the API refuses as already uploaded.
@@ -129,6 +130,8 @@ class FakeScanApi:
         answer = self._summaries.pop(0) if len(self._summaries) > 1 else self._summaries[0]
         if answer == NOT_FOUND:
             return httpx.Response(404, json={"detail": "scan not found"})
+        if answer == TIMED_OUT:
+            raise httpx.ReadTimeout("The read operation timed out")
         return httpx.Response(
             200,
             json={

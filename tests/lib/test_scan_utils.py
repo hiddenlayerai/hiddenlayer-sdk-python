@@ -4,7 +4,7 @@ from typing import List
 
 import httpx
 import pytest
-from fake_scan_api import API_URL, NOT_FOUND, SCAN_ID, FakeScanApi
+from fake_scan_api import API_URL, NOT_FOUND, SCAN_ID, TIMED_OUT, FakeScanApi
 
 from hiddenlayer import AsyncHiddenLayer, HiddenLayer
 from hiddenlayer.errors import NotFoundError
@@ -124,6 +124,50 @@ def test_wait_for_scan_results_backs_off_to_30_seconds_at_most(sleeps: List[floa
     assert sleeps[:3] == [0.2, 0.4, 0.8]
     assert max(sleeps) == 30
     assert sleeps[-1] == 30
+
+
+def test_wait_for_scan_results_keeps_polling_a_scan_that_runs_for_hours(sleeps: List[float]) -> None:
+    api = FakeScanApi(summaries=["running"] * 1100 + ["done"])
+
+    report = wait_for_scan_results(sync_client(api), scan_id=SCAN_ID)
+
+    assert report.status == "done"
+    assert sleeps[-1] == 30
+
+
+def test_wait_for_scan_results_polls_through_requests_that_time_out(sleeps: List[float]) -> None:
+    api = FakeScanApi(summaries=["running", TIMED_OUT, TIMED_OUT, "running", TIMED_OUT, TIMED_OUT, "done"])
+
+    report = wait_for_scan_results(sync_client(api), scan_id=SCAN_ID)
+
+    assert report.status == "done"
+    assert len(api.calls("GET", SUMMARY_PATH)) == 7
+
+
+def test_wait_for_scan_results_gives_up_after_three_timeouts_in_a_row(sleeps: List[float]) -> None:
+    api = FakeScanApi(summaries=["running", TIMED_OUT])
+
+    with pytest.raises(httpx.ReadTimeout):
+        wait_for_scan_results(sync_client(api), scan_id=SCAN_ID)
+
+    assert len(api.calls("GET", SUMMARY_PATH)) == 4
+
+
+async def test_async_wait_for_scan_results_polls_through_requests_that_time_out(sleeps: List[float]) -> None:
+    api = FakeScanApi(summaries=[TIMED_OUT, TIMED_OUT, "done"])
+
+    report = await wait_for_scan_results_async(async_client(api), scan_id=SCAN_ID)
+
+    assert report.status == "done"
+
+
+async def test_async_wait_for_scan_results_gives_up_after_three_timeouts_in_a_row(sleeps: List[float]) -> None:
+    api = FakeScanApi(summaries=[TIMED_OUT])
+
+    with pytest.raises(httpx.ReadTimeout):
+        await wait_for_scan_results_async(async_client(api), scan_id=SCAN_ID)
+
+    assert len(api.calls("GET", SUMMARY_PATH)) == 3
 
 
 async def test_async_get_scan_results_reads_every_page_and_retries_not_found(sleeps: List[float]) -> None:

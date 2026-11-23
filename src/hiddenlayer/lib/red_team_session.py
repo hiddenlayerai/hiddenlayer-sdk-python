@@ -38,6 +38,23 @@ def _failed_action(action: NextActionResponse) -> RedTeamSessionError:
     return RedTeamSessionError(action.message if action.message else "Workflow failed")
 
 
+def _still_running(tasks: set[asyncio.Task[None]]) -> set[asyncio.Task[None]]:
+    """Returns the tasks that haven't finished, once every finished one is known to have succeeded.
+
+    Raises:
+        Exception: The error a finished task ended with, after the running tasks are cancelled.
+    """
+    running = {task for task in tasks if not task.done()}
+    for task in tasks - running:
+        try:
+            task.result()
+        except Exception:
+            for other in running:
+                other.cancel()
+            raise
+    return running
+
+
 def _next_action_server_error(workflow_id: str, workflow_status: Optional[str]) -> RedTeamSessionError:
     if workflow_status is None:
         return RedTeamSessionError(
@@ -593,14 +610,8 @@ class AsyncRedTeamSession:
             self._check_timeout()
 
             if len(pending_tasks) >= max_parallel:
-                done, pending_tasks = await asyncio.wait(pending_tasks, return_when=asyncio.FIRST_COMPLETED)
-                for task in done:
-                    try:
-                        task.result()
-                    except Exception:
-                        for pending in pending_tasks:
-                            pending.cancel()
-                        raise
+                await asyncio.wait(pending_tasks, return_when=asyncio.FIRST_COMPLETED)
+            pending_tasks = _still_running(pending_tasks)
 
             try:
                 available_actions = await self.get_available_actions(max_actions=max_parallel - len(pending_tasks))
@@ -613,7 +624,8 @@ class AsyncRedTeamSession:
                 for action in available_actions:
                     pending_tasks.add(asyncio.create_task(self._process_single_action(action, handler)))
             else:
-                action = await self.get_next_action(block=True)
+                # Blocking here while a handler runs would hide its failure: the workflow waits for its response.
+                action = await self.get_next_action(block=not pending_tasks)
 
                 if action.action_type == "complete":
                     if pending_tasks:

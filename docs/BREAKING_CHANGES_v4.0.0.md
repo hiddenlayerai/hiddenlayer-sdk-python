@@ -41,8 +41,9 @@ from hiddenlayer.types.scans import ScanReport
 
 # v4.0.0
 from hiddenlayer import ScanReportOfRecordV3
-from hiddenlayer.lib import ScanReport  # the same class, under its v3.x name
 ```
+
+`hiddenlayer.ScanReport` still imports in v4.0.0, but it is another type: the report of an integration's scan, with fields such as `scan_result` and `download_url`. Code that kept the v3.x name would import it without an error, so rename every use to `ScanReportOfRecordV3`.
 
 A few types that only one group of methods uses are exported from that group's module instead, such as `hiddenlayer.scans.StartUploadResponse`. [Methods and types](#methods-and-types) gives the module of each. `hiddenlayer.resources`, `hiddenlayer.pagination` and every module whose name starts with an underscore are gone.
 
@@ -175,11 +176,11 @@ List methods return a `SyncPager`, or an `AsyncPager` from the async client. Ite
 | Every item, async | `async for item in client.models.cards.list()` | `async for item in await client.models.cards.list()` |
 | The current page's items | `page.results` or `page.items`, by endpoint | `page.items` |
 | Whether there is another page | `page.has_next_page()` | `page.has_next` |
-| The next page | `page.get_next_page()` | `page.next_page()`, or `None` after the last |
+| The next page | `page.get_next_page()` | `page.next_page()`, while `page.has_next` is true |
 | Every page | `page.iter_pages()` | unchanged |
 | The response envelope | the page itself | `page.response` |
 
-`page.next_page_info()` is removed.
+`page.next_page_info()` is removed. Check `page.has_next` before each `page.next_page()`: after the last page it sends another request instead of returning `None`, and a list paged by cursor starts again from its first page.
 
 Two methods change shape on purpose. In v3.x they returned the raw response envelope; in v4.0.0 they return a pager of its items:
 
@@ -280,9 +281,10 @@ sensor = response.data
 
 `client.model_scanner` (`scan_file`, `scan_folder`, `scan_s3_model`, `scan_azure_blob_model`, `scan_huggingface_model`, `scan_result`) and `client.community_scanner` (`community_scan`, `scan_result`) keep their arguments, defaults and behaviour, on both clients. What changes:
 
-- They return `ScanReport`, which is now `ScanReportOfRecordV3`, with the fields v3.10.0's `ScanReport` had. `hiddenlayer.lib.ScanReport` is the same class.
+- They return `ScanReportOfRecordV3`, which has the fields v3.10.0's `ScanReport` had.
 - A file a scan refuses is reported by the generated client's `BadRequestError`, and a scan that isn't found by its `NotFoundError`.
 - A part with no start offset or upload URL raises `ValueError` (v3.x: `Exception`).
+- While a scan runs, a status poll that times out or loses its connection is tried again, and the third such failure in a row is raised. v3.x retried each request twice instead.
 
 `boto3`, `azure-identity`, `azure-storage-blob` and `huggingface_hub` stay optional: install the ones for the scans you run.
 
@@ -296,6 +298,7 @@ sensor = response.data
   - `InvalidSessionError` when `run_with_callback_parallel` submits a response and the API answers 400.
 - **`wait_for_completion` polls through a 408, 429 or 5xx** until `max_wait`, and raises any other API error at once. v3.x raised every API error at once.
 - **A poll that outlasts `poll_max_wait` raises `PollTimeoutError`**, a `RedTeamSessionError`. v3.x raised a bare `Exception` with the same message.
+- **`run_with_callback_parallel` raises a handler's error, or a refused response, as soon as it happens.** v3.x noticed it only once `max_parallel` handlers were running, and otherwise kept polling.
 - **`start_session` takes `None` for an option that isn't sent**, where v3.x took its `omit` sentinel. The defaults are the same.
 - **`severity_mapping`'s values** are typed as `HighestSeverity`, the same five strings.
 - **Actions are `NextActionResponse`**, and `retrieve_evaluation_results` returns a `WorkflowResultResponse` whose `report` is a model ([Request and response models](#request-and-response-models)).
@@ -318,7 +321,7 @@ The first call to a beta endpoint still emits a `BetaWarning`. Three things chan
 
 ## Dependencies
 
-- `requests`, `requests-auth`, `types-requests`, `anyio`, `distro` and `sniffio` are no longer installed with the SDK. `httpx`, `pydantic` and `typing_extensions` stay, and `pydantic-core` is new.
+- `requests`, `requests-auth`, `types-requests`, `anyio`, `distro` and `sniffio` are no longer dependencies of the SDK; `httpx` still installs `anyio`. `httpx`, `pydantic` and `typing_extensions` stay, and `pydantic-core` is new.
 - The `aiohttp` extra stays: `pip install hiddenlayer-sdk[aiohttp]`. With it installed, `AsyncHiddenLayer` uses aiohttp by default; v3.x used it only when `http_client=DefaultAioHttpClient()` was passed. `DefaultAioHttpClient` and `DefaultAsyncHttpxClient` are still exported.
 
 ## Removed
@@ -339,7 +342,7 @@ v4.0.0 covers every public operation in the specification, 207 in all, against 2
 - [ ] Run on Python 3.10 or later.
 - [ ] Rename `bearer_token`, `default_headers` and `http_client` to `token`, `headers` and `httpx_client`.
 - [ ] If a token and client credentials are both set, check that the token is the one to use.
-- [ ] Replace types imported from `hiddenlayer.types.*` with the v4.0.0 names, from `hiddenlayer`.
+- [ ] Replace types imported from `hiddenlayer.types.*` with the v4.0.0 names, from `hiddenlayer`. `ScanReport` becomes `ScanReportOfRecordV3`; v4.0.0's `ScanReport` is another type.
 - [ ] Rename `x_requester_id`, and `body` on `runtime.evaluate_request` and `evaluate_response`; swap the arguments of `scans.upload.file.complete`.
 - [ ] Iterate `scans.jobs.list` and `sensors.query` as pages, or read `page.response`; add `await` before an async pager.
 - [ ] Replace `APIStatusError` and its subclasses with `ApiError` and the typed errors; catch httpx's errors for timeouts and failed connections.
