@@ -1,94 +1,45 @@
-# HiddenLayer Python API library
+# HiddenLayer Python API Library
 
-<!-- prettier-ignore -->
-[![PyPI version](https://img.shields.io/pypi/v/hiddenlayer-sdk.svg?label=pypi%20(stable))](https://pypi.org/project/hiddenlayer-sdk/)
+[![PyPI version](<https://img.shields.io/pypi/v/hiddenlayer-sdk.svg?label=pypi%20(stable)>)](https://pypi.org/project/hiddenlayer-sdk/)
 
-The HiddenLayer Python library provides convenient access to the HiddenLayer REST API from any Python 3.9+
-application. The library includes type definitions for all request params and response fields,
-and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
+This library provides access to the HiddenLayer REST API from Python 3.10 or later, with synchronous and asynchronous clients built on [httpx](https://github.com/encode/httpx). The REST API documentation is on [dev.hiddenlayer.ai](https://dev.hiddenlayer.ai); every method of this library is in [reference.md](reference.md).
 
-It is generated with [Stainless](https://www.stainless.com/).
-
-## Documentation
-
-The REST API documentation can be found on [dev.hiddenlayer.ai](https://dev.hiddenlayer.ai). The full API of this library can be found in [api.md](api.md).
-
-## Beta APIs
-
-Some HiddenLayer APIs are marked as **Beta**, meaning they are not yet generally available (GA) or production ready. Beta APIs can be used in a production environment, but at your own risk and discretion. For full details, see the [Beta API Guidelines](https://dev.hiddenlayer.ai/docs/beta-api-faq) on the developer portal.
-
-- HiddenLayer does not provide compatibility guarantees for Beta APIs. Breaking changes may occur at any time.
-- SDK functions and types associated with Beta APIs are excluded when determining semver release versions.
+Upgrading from 3.x? [docs/BREAKING_CHANGES_v4.0.0.md](docs/BREAKING_CHANGES_v4.0.0.md) lists every change.
 
 ## Installation
 
 ```sh
-# install from PyPI
 pip install hiddenlayer-sdk
 ```
 
 ## Usage
 
-The full API of this library can be found in [api.md](api.md).
-
 ```python
-from hiddenlayer import HiddenLayer
+from hiddenlayer import HiddenLayer, InteractionsInput, InteractionsMetadata, InteractionsTextContent
 
 client = HiddenLayer(
-    # defaults to "prod-us".
-    environment="prod-eu",
+    environment="prod-eu",  # defaults to "prod-us"
 )
 
 response = client.interactions.analyze(
-    metadata={
-        "model": "REPLACE_ME",
-        "requester_id": "REPLACE_ME",
-    },
-    input={
-        "messages": [
-            {
-                "role": "user",
-                "content": "REPLACE_ME",
-            }
-        ]
-    },
+    metadata=InteractionsMetadata(model="gpt-5", requester_id="user-1234", provider="openai"),
+    input=InteractionsInput(messages=[InteractionsTextContent(role="user", content="Hello")]),
 )
 print(response.analysis)
 ```
 
-While you can provide a `bearer_token` keyword argument,
-we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `HIDDENLAYER_TOKEN="My Bearer Token"` to your `.env` file
-so that your Bearer Token is not stored in source control.
-
-## Async usage
-
-Simply import `AsyncHiddenLayer` instead of `HiddenLayer` and use `await` with each API call:
+`AsyncHiddenLayer` has the same methods, as coroutines:
 
 ```python
 import asyncio
-from hiddenlayer import AsyncHiddenLayer
 
-client = AsyncHiddenLayer(
-    # defaults to "prod-us".
-    environment="prod-eu",
-)
+from hiddenlayer import AsyncHiddenLayer, InteractionsMetadata
 
 
 async def main() -> None:
+    client = AsyncHiddenLayer()
     response = await client.interactions.analyze(
-        metadata={
-            "model": "REPLACE_ME",
-            "requester_id": "REPLACE_ME",
-        },
-        input={
-            "messages": [
-                {
-                    "role": "user",
-                    "content": "REPLACE_ME",
-                }
-            ]
-        },
+        metadata=InteractionsMetadata(model="gpt-5", requester_id="user-1234"),
     )
     print(response.analysis)
 
@@ -96,456 +47,158 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-Functionality between the synchronous and asynchronous clients is otherwise identical.
+With the `aiohttp` extra installed, `pip install hiddenlayer-sdk[aiohttp]`, the async client sends its requests with aiohttp instead of httpx's own transport.
 
-### With aiohttp
+### Credentials
 
-By default, the async client uses `httpx` for HTTP requests. However, for improved concurrency performance you may also use `aiohttp` as the HTTP backend.
-
-You can enable this by installing `aiohttp`:
-
-```sh
-# install from PyPI
-pip install hiddenlayer-sdk[aiohttp]
-```
-
-Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
+Give the client a client ID and secret, created under Client Credentials in the HiddenLayer Console. It exchanges them for an access token on its first call, reuses that token, and gets a new one two minutes before it expires:
 
 ```python
-import asyncio
-from hiddenlayer import DefaultAioHttpClient
-from hiddenlayer import AsyncHiddenLayer
+import os
 
-
-async def main() -> None:
-    async with AsyncHiddenLayer(
-        http_client=DefaultAioHttpClient(),
-    ) as client:
-        response = await client.interactions.analyze(
-            metadata={
-                "model": "REPLACE_ME",
-                "requester_id": "REPLACE_ME",
-            },
-            input={
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": "REPLACE_ME",
-                    }
-                ]
-            },
-        )
-        print(response.analysis)
-
-
-asyncio.run(main())
-```
-
-## Using types
-
-Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typing.html#typing.TypedDict). Responses are [Pydantic models](https://docs.pydantic.dev) which also provide helper methods for things like:
-
-- Serializing back into JSON, `model.to_json()`
-- Converting to a dictionary, `model.to_dict()`
-
-Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
-
-## Pagination
-
-List methods in the HiddenLayer API are paginated.
-
-This library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:
-
-```python
 from hiddenlayer import HiddenLayer
 
-client = HiddenLayer()
-
-all_cards = []
-# Automatically fetches more pages as needed.
-for card in client.models.cards.list():
-    # Do something with card here
-    all_cards.append(card)
-print(all_cards)
-```
-
-Or, asynchronously:
-
-```python
-import asyncio
-from hiddenlayer import AsyncHiddenLayer
-
-client = AsyncHiddenLayer()
-
-
-async def main() -> None:
-    all_cards = []
-    # Iterate through items across all pages, issuing requests as needed.
-    async for card in client.models.cards.list():
-        all_cards.append(card)
-    print(all_cards)
-
-
-asyncio.run(main())
-```
-
-Alternatively, you can use the `.has_next_page()`, `.next_page_info()`, or `.get_next_page()` methods for more granular control working with pages:
-
-```python
-first_page = await client.models.cards.list()
-if first_page.has_next_page():
-    print(f"will fetch next page using these details: {first_page.next_page_info()}")
-    next_page = await first_page.get_next_page()
-    print(f"number of items we just fetched: {len(next_page.results)}")
-
-# Remove `await` for non-async usage.
-```
-
-Or just work directly with the returned data:
-
-```python
-first_page = await client.models.cards.list()
-for card in first_page.results:
-    print(card.model_id)
-
-# Remove `await` for non-async usage.
-```
-
-## Nested params
-
-Nested parameters are dictionaries, typed using `TypedDict`, for example:
-
-```python
-from hiddenlayer import HiddenLayer
-
-client = HiddenLayer()
-
-response = client.interactions.analyze(
-    metadata={
-        "model": "gpt-5",
-        "requester_id": "user-1234",
-        "provider": "openai",
-    },
+client = HiddenLayer(
+    client_id=os.environ["HIDDENLAYER_CLIENT_ID"],
+    client_secret=os.environ["HIDDENLAYER_CLIENT_SECRET"],
 )
-print(response.metadata)
 ```
+
+The client authenticates with the first of these it finds, arguments before the environment:
+
+1. `token`: a Static API Key or a JWT, sent as a bearer token. The client never refreshes a token it's given. To keep one current, pass a function that returns it, which the client calls before every request. `AsyncHiddenLayer` also takes `async_token`, an async function.
+2. `client_id` and `client_secret`.
+3. The `HIDDENLAYER_TOKEN` environment variable.
+4. The `HIDDENLAYER_CLIENT_ID` and `HIDDENLAYER_CLIENT_SECRET` environment variables.
+
+The variables are read when the client is constructed. With no credentials at all, each request raises an `ApiError` that names what to set.
+
+### Environments
+
+`environment` takes a region by name, `"prod-us"` or `"prod-eu"`, or a `HiddenLayerEnvironment` value. `base_url` overrides it with any URL. With neither argument, the client uses `HIDDENLAYER_BASE_URL` if it is set, and `prod-us` otherwise.
+
+## Model scanning
+
+```python
+report = client.model_scanner.scan_file(
+    model_name="my-model",
+    model_path="./models/model.pkl",
+)
+print(report.summary.severity)
+```
+
+`client.model_scanner` also has `scan_folder`, `scan_s3_model`, `scan_azure_blob_model` and `scan_huggingface_model`; `client.community_scanner.community_scan` scans a model the scanner fetches from a remote location. Each waits for the scan to finish unless you pass `wait_for_results=False`. [examples/demo.py](examples/demo.py) shows every scan.
+
+The S3, Azure Blob Storage and Hugging Face scans download the model first, and need `boto3`, `azure-identity` with `azure-storage-blob`, or `huggingface_hub`. The SDK doesn't install them: install the ones for the scans you run.
+
+## Red team sessions
+
+`client.evaluation_sessions.red_team` starts a red team evaluation and hands each attack prompt to a function of yours, which calls your target and returns its reply:
+
+```python
+import asyncio
+
+from hiddenlayer import AsyncHiddenLayer
+
+
+async def handler(prompt, history, session_id, target_system_prompt) -> str:
+    return "I can't help with that."  # call your target here
+
+
+async def main() -> None:
+    client = AsyncHiddenLayer()
+    session = await client.evaluation_sessions.red_team.start_session(
+        name="my-evaluation",
+        target_model="my-target-model",
+    )
+    await session.run_with_callback_parallel(handler=handler)
+    results = await client.evaluations.red_team.retrieve_evaluation_results(session.workflow_id)
+    print(results.status)
+
+
+asyncio.run(main())
+```
+
+[examples/red_team](examples/red_team) has a notebook for each kind of target.
+
+## Request and response types
+
+Every request and response type is importable from `hiddenlayer`:
+
+```python
+from hiddenlayer import EnrichedResponse, InteractionsMetadata
+
+metadata = InteractionsMetadata(model="gpt-5", requester_id="user-1234")
+response: EnrichedResponse = client.interactions.analyze(metadata=metadata)
+```
+
+Responses are pydantic models: `response.dict()` gives a plain dict, and a field the API adds after this release is still readable as an attribute.
 
 ## Handling errors
 
-When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `hiddenlayer.APIConnectionError` is raised.
-
-When the API returns a non-success status code (that is, 4xx or 5xx
-response), a subclass of `hiddenlayer.APIStatusError` is raised, containing `status_code` and `response` properties.
-
-All errors inherit from `hiddenlayer.APIError`.
+A response outside 2xx raises an `ApiError`, with `status_code`, `headers` and the decoded `body`, or the subclass the endpoint declares for that status, such as `NotFoundError`:
 
 ```python
-import hiddenlayer
-from hiddenlayer import HiddenLayer
-
-client = HiddenLayer()
+from hiddenlayer import NotFoundError
+from hiddenlayer.core import ApiError
 
 try:
-    client.interactions.analyze(
-        metadata={
-            "model": "REPLACE_ME",
-            "requester_id": "REPLACE_ME",
-        },
-        input={
-            "messages": [
-                {
-                    "role": "user",
-                    "content": "REPLACE_ME",
-                }
-            ]
-        },
-    )
-except hiddenlayer.APIConnectionError as e:
-    print("The server could not be reached")
-    print(e.__cause__)  # an underlying Exception, likely raised within httpx.
-except hiddenlayer.RateLimitError as e:
-    print("A 429 status code was received; we should back off a bit.")
-except hiddenlayer.APIStatusError as e:
-    print("Another non-200-range status code was received")
-    print(e.status_code)
-    print(e.response)
+    client.sensors.retrieve("unknown")
+except NotFoundError:
+    print("no such sensor")
+except ApiError as error:
+    print(error.status_code, error.body)
 ```
 
-Error codes are as follows:
+A request that times out raises `httpx.TimeoutException`, and one that can't connect `httpx.ConnectError`.
 
-| Status Code | Error Type                 |
-| ----------- | -------------------------- |
-| 400         | `BadRequestError`          |
-| 401         | `AuthenticationError`      |
-| 403         | `PermissionDeniedError`    |
-| 404         | `NotFoundError`            |
-| 422         | `UnprocessableEntityError` |
-| 429         | `RateLimitError`           |
-| >=500       | `InternalServerError`      |
-| N/A         | `APIConnectionError`       |
+## Pagination
 
-### Retries
-
-Certain errors are automatically retried 2 times by default, with a short exponential backoff.
-Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
-429 Rate Limit, and >=500 Internal errors are all retried by default.
-
-You can use the `max_retries` option to configure or disable retry settings:
+List methods return a pager. Iterating it walks every item across pages:
 
 ```python
-from hiddenlayer import HiddenLayer
+from hiddenlayer import SensorSorQueryFilter
 
-# Configure the default for all requests:
-client = HiddenLayer(
-    # default is 2
-    max_retries=0,
-)
-
-# Or, configure per-request:
-client.with_options(max_retries=5).interactions.analyze(
-    metadata={
-        "model": "REPLACE_ME",
-        "requester_id": "REPLACE_ME",
-    },
-    input={
-        "messages": [
-            {
-                "role": "user",
-                "content": "REPLACE_ME",
-            }
-        ]
-    },
-)
+for sensor in client.sensors.query(filter=SensorSorQueryFilter(active=True)):
+    print(sensor.sensor_id)
 ```
 
-### Timeouts
+`page.items` holds the current page's items, `page.response` the whole response, and `page.has_next` and `page.next_page()` move through pages by hand. The async client's pager is awaited first: `async for sensor in await client.sensors.query()`.
 
-By default requests time out after 1 minute. You can configure this with a `timeout` option,
-which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:
+## Retries and timeouts
+
+408, 409, 429 and 5xx responses and failed connections are retried twice by default, with exponential backoff. Requests time out after 60 seconds. Both can be set for the client or for one call:
 
 ```python
-from hiddenlayer import HiddenLayer
+client = HiddenLayer(max_retries=0, timeout=20.0)
 
-# Configure the default for all requests:
-client = HiddenLayer(
-    # 20 seconds (default is 1 minute)
-    timeout=20.0,
-)
-
-# More granular control:
-client = HiddenLayer(
-    timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
-)
-
-# Override per-request:
-client.with_options(timeout=5.0).interactions.analyze(
-    metadata={
-        "model": "REPLACE_ME",
-        "requester_id": "REPLACE_ME",
-    },
-    input={
-        "messages": [
-            {
-                "role": "user",
-                "content": "REPLACE_ME",
-            }
-        ]
-    },
-)
+client.sensors.retrieve("sensor-id", request_options={"max_retries": 5, "timeout": 5.0})
 ```
 
-On timeout, an `APITimeoutError` is thrown.
-
-Note that requests that time out are [retried twice by default](#retries).
-
-## Advanced
-
-### Logging
-
-We use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.
-
-You can enable logging by setting the environment variable `HIDDENLAYER_LOG` to `info`.
-
-```shell
-$ export HIDDENLAYER_LOG=info
-```
-
-Or to `debug` for more verbose logging.
-
-### How to tell whether `None` means `null` or missing
-
-In an API response, a field may be explicitly `null`, or missing entirely; in either case, its value is `None` in this library. You can differentiate the two cases with `.model_fields_set`:
-
-```py
-if response.my_field is None:
-  if 'my_field' not in response.model_fields_set:
-    print('Got json like {}, without a "my_field" key present at all.')
-  else:
-    print('Got json like {"my_field": null}.')
-```
-
-### Accessing raw response data (e.g. headers)
-
-The "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,
-
-```py
-from hiddenlayer import HiddenLayer
-
-client = HiddenLayer()
-response = client.interactions.with_raw_response.analyze(
-    metadata={
-        "model": "REPLACE_ME",
-        "requester_id": "REPLACE_ME",
-    },
-    input={
-        "messages": [{
-            "role": "user",
-            "content": "REPLACE_ME",
-        }]
-    },
-)
-print(response.headers.get('X-My-Header'))
-
-interaction = response.parse()  # get the object that `interactions.analyze()` would have returned
-print(interaction.analysis)
-```
-
-These methods return an [`APIResponse`](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) object.
-
-The async client returns an [`AsyncAPIResponse`](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/tree/main/src/hiddenlayer/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
-
-#### `.with_streaming_response`
-
-The above interface eagerly reads the full response body when you make the request, which may not always be what you want.
-
-To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
+## Raw responses
 
 ```python
-with client.interactions.with_streaming_response.analyze(
-    metadata={
-        "model": "REPLACE_ME",
-        "requester_id": "REPLACE_ME",
-    },
-    input={
-        "messages": [
-            {
-                "role": "user",
-                "content": "REPLACE_ME",
-            }
-        ]
-    },
-) as response:
-    print(response.headers.get("X-My-Header"))
-
-    for line in response.iter_lines():
-        print(line)
+response = client.sensors.with_raw_response.retrieve("sensor-id")
+print(response.headers.get("x-request-id"))
+print(response.data.sensor_id)
 ```
 
-The context manager is required so that the response will reliably be closed.
+## Beta APIs
 
-### Making custom/undocumented requests
+Some HiddenLayer APIs are marked **Beta**: not yet generally available or production ready. They can be used in production at your own risk; see the [Beta API Guidelines](https://dev.hiddenlayer.ai/docs/beta-api-faq).
 
-This library is typed for convenient access to the documented API.
-
-If you need to access undocumented endpoints, params, or response properties, the library can still be used.
-
-#### Undocumented endpoints
-
-To make requests to undocumented endpoints, you can make requests using `client.get`, `client.post`, and other
-http verbs. Options on the client will be respected (such as retries) when making this request.
-
-```py
-import httpx
-
-response = client.post(
-    "/foo",
-    cast_to=httpx.Response,
-    body={"my_param": True},
-)
-
-print(response.headers.get("x-foo"))
-```
-
-#### Undocumented request params
-
-If you want to explicitly send an extra param, you can do so with the `extra_query`, `extra_body`, and `extra_headers` request
-options.
-
-#### Undocumented response properties
-
-To access undocumented response properties, you can access the extra fields like `response.unknown_prop`. You
-can also get all the extra fields on the Pydantic model as a dict with
-[`response.model_extra`](https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel.model_extra).
-
-### Configuring the HTTP client
-
-You can directly override the [httpx client](https://www.python-httpx.org/api/#client) to customize it for your use case, including:
-
-- Support for [proxies](https://www.python-httpx.org/advanced/proxies/)
-- Custom [transports](https://www.python-httpx.org/advanced/transports/)
-- Additional [advanced](https://www.python-httpx.org/advanced/clients/) functionality
-
-```python
-import httpx
-from hiddenlayer import HiddenLayer, DefaultHttpxClient
-
-client = HiddenLayer(
-    # Or use the `HIDDENLAYER_BASE_URL` env var
-    base_url="http://my.test.server.example.com:8083",
-    http_client=DefaultHttpxClient(
-        proxy="http://my.test.proxy.example.com",
-        transport=httpx.HTTPTransport(local_address="0.0.0.0"),
-    ),
-)
-```
-
-You can also customize the client on a per-request basis by using `with_options()`:
-
-```python
-client.with_options(http_client=DefaultHttpxClient(...))
-```
-
-### Managing HTTP resources
-
-By default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.
-
-```py
-from hiddenlayer import HiddenLayer
-
-with HiddenLayer() as client:
-  # make requests here
-  ...
-
-# HTTP client is now closed
-```
-
-## Versioning
-
-This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
-
-1. Changes that only affect static types, without breaking runtime behavior.
-2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_
-3. Changes that we do not expect to impact the vast majority of users in practice.
-
-We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
-
-We are keen for your feedback; please open an [issue](https://www.github.com/hiddenlayerai/hiddenlayer-sdk-python/issues) with questions, bugs, or suggestions.
-
-### Determining the installed version
-
-If you've upgraded to the latest version but aren't seeing any new features you were expecting then your python environment is likely still using an older version.
-
-You can determine the version that is being used at runtime with:
-
-```py
-import hiddenlayer
-print(hiddenlayer.__version__)
-```
+- HiddenLayer makes no compatibility guarantees for Beta APIs. Breaking changes may occur at any time.
+- Changes to Beta APIs don't count towards this package's semantic version.
+- The first call a client makes to each beta endpoint emits a `hiddenlayer.BetaWarning`. Python's [warnings filter](https://docs.python.org/3/library/warnings.html#the-warnings-filter) silences it or turns it into an error.
 
 ## Requirements
 
-Python 3.9 or higher.
+Python 3.10 or later.
+
+## Versioning and changelog
+
+Releases follow [SemVer](https://semver.org/spec/v2.0.0.html), apart from Beta APIs. [CHANGELOG.md](CHANGELOG.md) lists each release, and `hiddenlayer.__version__` is the installed version.
 
 ## Contributing
 
-See [the contributing documentation](./CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md). A pull request that changes `src/` needs a changeset: run `npx changeset` and describe the change for the changelog.

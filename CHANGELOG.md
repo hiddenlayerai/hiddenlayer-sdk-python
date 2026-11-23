@@ -1,6 +1,8 @@
 # Changelog
 
-## [3.10.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.9.0...v3.10.0) (2026-09-09)
+## 3.10.0 (2026-09-09)
+
+[Full diff](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.9.0...v3.10.0)
 
 
 ### Features
@@ -19,7 +21,9 @@
 
 * restore CHANGELOG entries and generated-file alignment (reverts [#271](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/271)) ([#272](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/issues/272)) ([8c5a995](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/8c5a9958e7fa4ab11b8ef7cfcb31d999732389c0))
 
-## [3.9.0](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.8.0...v3.9.0) (2026-08-10)
+## 3.9.0 (2026-08-10)
+
+[Full diff](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.8.0...v3.9.0)
 
 
 ### Features
