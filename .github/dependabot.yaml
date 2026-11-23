@@ -1,13 +1,22 @@
 version: 2
 updates:
-  - package-ecosystem: "pip"
-    directory: "/"
+  # The ledger and its lockfile are .fernignored, so this repo owns their versions.
+  - package-ecosystem: npm
+    directory: /
     schedule:
-      interval: "monthly"
-    target-branch: "next"
+      interval: monthly
 
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  # No pip ecosystem: Fern writes pyproject.toml and poetry.lock on every run, so a bump here
+  # merges without a changeset, never releases, and is undone by the next Fern push.
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "monthly"
-    target-branch: "next"
+      interval: monthly
+    ignore:
+      # Owned by hl-sdk-gen's SDK repo template, which pins them and copies them here.
+      - dependency-name: actions/checkout
+      - dependency-name: actions/setup-node
+      - dependency-name: actions/upload-artifact
+      - dependency-name: actions/download-artifact
+      - dependency-name: actions/create-github-app-token
+      - dependency-name: astral-sh/setup-uv
