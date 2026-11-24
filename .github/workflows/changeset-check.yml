@@ -1,0 +1,55 @@
+# .github/workflows/changeset-check.yml
+#
+# Fails a pull request that changes released code without a changeset. Branch
+# protection requires this check on main. Released code is whatever
+# .changeset/config.json's changedFilePatterns matches; a PR that changes
+# nothing a release ships, such as one to CI or docs, needs no changeset.
+# hl-sdk-gen's Fern PRs always carry one.
+#
+# From hl-sdk-gen's template/; the same file in every SDK repo.
+
+name: Changeset
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  changeset:
+    name: changeset
+    # hiddenlayerai has no scale-set runners
+    runs-on: ${{ github.repository_owner == 'hiddenlayerai' && 'ubuntu-latest' || 'github-runner-scale-set-default' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # changeset status diffs against origin/main.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          # A restored cache must not be able to change what a release ships.
+          package-manager-cache: false
+
+      - name: Install the release tooling
+        # Only changesets runs here, so no install script needs to.
+        run: |
+          # The package manager comes from package.json's packageManager pin, which Corepack enforces; the ledgers have none.
+          case "$(node -p "(require('./package.json').packageManager ?? 'npm').split('@')[0]")" in
+            pnpm) corepack enable && pnpm install --frozen-lockfile --ignore-scripts ;;
+            yarn) corepack enable && YARN_ENABLE_SCRIPTS=false yarn install --immutable ;;
+            *) npm ci --ignore-scripts ;;
+          esac
+
+      - name: Require a changeset for released code
+        # npm exec --no fails if @changesets/cli is missing; npx would fetch the unrelated "changeset" package.
+        run: npm exec --no -- changeset status --since=origin/main

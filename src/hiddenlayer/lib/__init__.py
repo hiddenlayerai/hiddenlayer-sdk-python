@@ -1,18 +1,19 @@
-# Custom extensions for HiddenLayer SDK
-from ._beta import BetaWarning, warn_beta, check_beta_endpoint
-from .model_scan import ModelScanner, AsyncModelScanner
-from .community_scan import CommunityScanner, CommunityScanSource, AsyncCommunityScanner
-from .evaluation_sessions import EvaluationSessionsResource, AsyncEvaluationSessionsResource
+"""Hand-written helpers on top of the generated client: scanners, red team sessions and beta warnings."""
+
+from ._beta import BetaWarning, check_beta_endpoint, warn_beta
+from .community_scan import AsyncCommunityScanner, CommunityScanner, CommunityScanSource
+from .evaluation_sessions import AsyncEvaluationSessionsResource, EvaluationSessionsResource
+from .model_scan import AsyncModelScanner, ModelScanner
 
 __all__ = [
-    "BetaWarning",
-    "warn_beta",
-    "check_beta_endpoint",
-    "CommunityScanner",
     "AsyncCommunityScanner",
-    "ModelScanner",
-    "AsyncModelScanner",
-    "CommunityScanSource",
-    "EvaluationSessionsResource",
     "AsyncEvaluationSessionsResource",
+    "AsyncModelScanner",
+    "BetaWarning",
+    "CommunityScanSource",
+    "CommunityScanner",
+    "EvaluationSessionsResource",
+    "ModelScanner",
+    "check_beta_endpoint",
+    "warn_beta",
 ]

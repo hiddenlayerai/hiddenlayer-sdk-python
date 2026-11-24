@@ -1,4 +1,4 @@
-"""Exception classes for HiddenLayer AI Red Team SDK."""
+"""Exceptions raised by red team sessions."""
 
 
 class RedTeamSessionError(Exception):

@@ -1,0 +1,192 @@
+# .github/workflows/draft-release.yml
+#
+# Draft-release maintenance, copied from visiblelayer (PLT-1361) by hl-sdk-gen's
+# SDK repo template (PLT-1425): on every push to main, compute the next version
+# from pending changesets and keep exactly one bot-owned draft release carrying
+# that tag and a changelog preview. Publishing the draft fires the publish
+# workflow.
+#
+# Publishing turns the draft into a regular release, so there is nothing to
+# clean up on that path. The stale case is the other one: when some other
+# release consumed the pending changesets, the next push to main finds
+# nothing pending and leaves no bot draft behind. While a published release's
+# version commit is still on its way to main, no draft is maintained: main's
+# pending changesets are the ones that release is consuming.
+#
+# Invariants:
+#   - compute installs dependencies and runs changesets with a read-only
+#     token. draft, the only job with contents: write, checks nothing out and
+#     runs only gh on what compute handed it, so dependency code never holds
+#     a token that can create tags or releases or push a branch.
+#   - Bot drafts are identified by the marker on the first line of their
+#     body, never by tag; drafts without it are human-owned and left alone.
+#
+# workflow_dispatch only prints the computed version.
+#
+# From hl-sdk-gen's template/; the same file in every public SDK repo.
+
+name: Maintain draft release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: draft-release
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  MARKER: "<!-- ${{ github.event.repository.name }}-draft-release-bot -->"
+
+jobs:
+  compute:
+    # hiddenlayerai has no scale-set runners
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # @changesets/changelog-github reads each changeset commit's associatedPullRequests.
+      pull-requests: read
+    outputs:
+      pending: ${{ steps.next.outputs.pending }}
+      version: ${{ steps.next.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The changeset changelog generator reads commit history.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          # A restored cache must not be able to change what a release ships.
+          package-manager-cache: false
+
+      - name: Install the release tooling
+        # Only changesets runs here, so no install script needs to.
+        run: |
+          # The package manager comes from package.json's packageManager pin, which Corepack enforces; the ledgers have none.
+          case "$(node -p "(require('./package.json').packageManager ?? 'npm').split('@')[0]")" in
+            pnpm) corepack enable && pnpm install --frozen-lockfile --ignore-scripts ;;
+            yarn) corepack enable && YARN_ENABLE_SCRIPTS=false yarn install --immutable ;;
+            *) npm ci --ignore-scripts ;;
+          esac
+
+      - name: Compute next version and changelog preview
+        id: next
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # @changesets/changelog-github looks up each changeset's PR and author.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Between a release being published and its version commit landing, main still holds
+          # the changesets that release is consuming. A draft computed now would repeat them,
+          # so stand down until the commit-back lands, which is itself a push to main.
+          LEDGER=$(node -p "require('./package.json').version")
+          LATEST=$(gh release list --exclude-drafts --exclude-pre-releases --limit 1 --json tagName --jq '.[0].tagName // empty')
+          if [ -n "$LATEST" ] && [ "$(printf '%s\n%s\n' "$LEDGER" "${LATEST#v}" | sort -V | tail -1)" != "$LEDGER" ]; then
+            echo "pending=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::$LATEST is published but its version commit hasn't landed on main (main is at $LEDGER); the draft refreshes on the next push."
+            exit 0
+          fi
+          # changeset version exits 1 when nothing is pending (v3 behaviour), so
+          # check before running it rather than failing the step on an ordinary
+          # push to main. Same test as Guard 1 in the publish workflow.
+          if ! find .changeset -maxdepth 1 -name '*.md' ! -name README.md | grep -q .; then
+            echo "pending=false" >> "$GITHUB_OUTPUT"
+            echo "No pending changesets"
+            exit 0
+          fi
+          # Dry-run the version bump in the runner only; nothing is pushed and
+          # the runner is discarded. npm exec --no fails if @changesets/cli is
+          # missing; npx would fetch the unrelated "changeset" package.
+          npm exec --no -- changeset version
+          if git diff --quiet -- package.json; then
+            echo "pending=false" >> "$GITHUB_OUTPUT"
+            echo "No release pending"
+            exit 0
+          fi
+          VERSION=$(node -p "require('./package.json').version")
+          echo "pending=true" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Next version: $VERSION"
+          mkdir -p "$RUNNER_TEMP/draft"
+          {
+            echo "$MARKER"
+            echo "Auto-maintained from pending changesets on \`main\`. Publish this release to version and publish $VERSION."
+            echo
+            awk '/^## /{n++} n==1' CHANGELOG.md
+          } > "$RUNNER_TEMP/draft/draft-body.md"
+
+      - name: Upload the draft body
+        if: steps.next.outputs.pending == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: draft-body
+          path: ${{ runner.temp }}/draft/draft-body.md
+          if-no-files-found: error
+          overwrite: true
+          retention-days: 1
+
+  draft:
+    needs: compute
+    # hiddenlayerai has no scale-set runners
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      PENDING: ${{ needs.compute.outputs.pending }}
+      VERSION: ${{ needs.compute.outputs.version }}
+    steps:
+      - name: Download the draft body
+        if: github.event_name == 'push' && env.PENDING == 'true'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: draft-body
+          path: ${{ runner.temp }}/draft
+
+      - name: Remove the previous bot-owned draft
+        if: github.event_name == 'push'
+        run: |
+          # shellcheck disable=SC2016 # $ENV.MARKER is jq, not shell
+          # Bot ownership = marker on the first line of the body, never the tag,
+          # so a human draft that merely quotes the marker is never touched.
+          gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" \
+            --jq '.[] | select(.draft and ((.body // "") | startswith($ENV.MARKER))) | .id' \
+          | while read -r id; do
+              gh api -X DELETE "repos/$GITHUB_REPOSITORY/releases/$id"
+              echo "Deleted previous bot draft $id"
+            done
+
+      - name: Create the draft
+        if: github.event_name == 'push' && env.PENDING == 'true'
+        run: |
+          # The tag is created where the body was computed, not wherever main is when a
+          # maintainer publishes, so the published tree is the one the notes describe.
+          # The publish workflow keys on tag_name, and bot drafts are found by the marker,
+          # so the title is for people only.
+          gh release create "v$VERSION" --draft --target "$GITHUB_SHA" \
+            --title "v$VERSION" \
+            --notes-file "$RUNNER_TEMP/draft/draft-body.md"
+          echo "Created bot draft v$VERSION"
+
+      - name: Report computed version
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "$PENDING" = "true" ]; then
+            echo "Next version: $VERSION" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No pending changesets" >> "$GITHUB_STEP_SUMMARY"
+          fi

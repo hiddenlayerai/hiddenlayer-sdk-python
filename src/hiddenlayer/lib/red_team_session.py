@@ -1,33 +1,140 @@
+"""Red team sessions: start or resume a workflow, answer its attack prompts, and wait for it to finish."""
+
 from __future__ import annotations
 
-import time
 import asyncio
 import logging
-from typing import TYPE_CHECKING, Any, Dict, Callable, Iterator, Awaitable, AsyncIterator, cast
-from typing_extensions import Literal
+import time
+from typing import TYPE_CHECKING, Any, AsyncIterator, Awaitable, Callable, Dict, Iterator, List, Optional
 
-import httpx
+from ..core.api_error import ApiError
+from ..types.next_action_response import NextActionResponse
+from ..types.severity_mapping import SeverityMapping
+from .red_team_exceptions import InvalidSessionError, PollTimeoutError, RedTeamSessionError, WorkflowNotFoundError
 
-from .._types import Omit, omit
-from .._resource import SyncAPIResource, AsyncAPIResource
-from ..types.evaluations import RedTeamCreateResponse, RedTeamRetrieveNextActionResponse
-from .red_team_exceptions import PollTimeoutError, InvalidSessionError, RedTeamSessionError, WorkflowNotFoundError
+if TYPE_CHECKING:
+    from ..client import AsyncHiddenLayer, HiddenLayer
 
 logger = logging.getLogger(__name__)
 
-if TYPE_CHECKING:
-    from .._client import HiddenLayer, AsyncHiddenLayer
+# attack_prompt, history, session_id and target_system_prompt, answered with the target's response.
+Handler = Callable[[Optional[str], Optional[List[Dict[str, Any]]], Optional[str], Optional[str]], str]
+AsyncHandler = Callable[[Optional[str], Optional[List[Dict[str, Any]]], Optional[str], Optional[str]], Awaitable[str]]
+
+_EXECUTION_STRATEGY_TYPES = ("single", "random", "static_prompt_set")
+_TERMINAL_STATES = frozenset({"COMPLETED", "FAILED", "CANCELLED", "TERMINATED", "TIMED_OUT"})
+
+
+def _is_transient(error: ApiError) -> bool:
+    status = error.status_code
+    return status is not None and (status in (408, 429) or status >= 500)
+
+
+def _not_found(workflow_id: str) -> WorkflowNotFoundError:
+    return WorkflowNotFoundError(f"Workflow not found: {workflow_id}")
+
+
+def _failed_action(action: NextActionResponse) -> RedTeamSessionError:
+    return RedTeamSessionError(action.message if action.message else "Workflow failed")
+
+
+def _still_running(tasks: set[asyncio.Task[None]]) -> set[asyncio.Task[None]]:
+    """Returns the tasks that haven't finished, once every finished one is known to have succeeded.
+
+    Raises:
+        Exception: The error a finished task ended with, after the running tasks are cancelled.
+    """
+    running = {task for task in tasks if not task.done()}
+    for task in tasks - running:
+        try:
+            task.result()
+        except Exception:
+            for other in running:
+                other.cancel()
+            raise
+    return running
+
+
+def _next_action_server_error(workflow_id: str, workflow_status: Optional[str]) -> RedTeamSessionError:
+    if workflow_status is None:
+        return RedTeamSessionError(
+            f"Server error getting next action for workflow {workflow_id}. "
+            "The workflow may be in a bad state. Try checking the workflow status or restarting."
+        )
+    return RedTeamSessionError(
+        f"Server error getting next action. Workflow status: {workflow_status}. Workflow ID: {workflow_id}"
+    )
+
+
+def _poll_timeout(start: float, max_wait: Optional[float]) -> Optional[PollTimeoutError]:
+    if max_wait is None:
+        return None
+    elapsed = time.monotonic() - start
+    if elapsed <= max_wait:
+        return None
+    return PollTimeoutError(f"Polling timed out after {elapsed:.1f}s (max: {max_wait}s)")
+
+
+def _create_arguments(
+    *,
+    name: str,
+    objective_ids: Optional[List[str]],
+    target_model: str,
+    target_system_prompt: str,
+    refusal_judge_model: Optional[str],
+    objective_judge_model: Optional[str],
+    attacker_model: Optional[str],
+    evaluation_report_model: Optional[str],
+    attacker_guidance: Optional[str],
+    severity_mapping: Optional[SeverityMapping],
+    config_id: Optional[str],
+    max_turns: int,
+    execution_strategy_type: str,
+    attacker_max_generation_attempts: int,
+    n_random_techniques: int,
+    max_parallel_techniques: int,
+    prompt_set_id: Optional[str],
+    hiddenlayer_project_id: Optional[str],
+    sessions_per_technique: Optional[int],
+) -> Dict[str, Any]:
+    """The arguments of `evaluations.red_team.create`: an option left as None isn't sent at all."""
+    if execution_strategy_type not in _EXECUTION_STRATEGY_TYPES:
+        raise ValueError("execution_strategy_type must be 'single', 'random', or 'static_prompt_set'.")
+    optional = {
+        "objective_ids": objective_ids,
+        "refusal_judge_model": refusal_judge_model,
+        "objective_judge_model": objective_judge_model,
+        "attacker_model": attacker_model,
+        "evaluation_report_model": evaluation_report_model,
+        "attacker_guidance": attacker_guidance,
+        "severity_mapping": severity_mapping,
+        "config_id": config_id,
+        "prompt_set_id": prompt_set_id,
+        "hl_project_id": hiddenlayer_project_id,
+        "sessions_per_technique": sessions_per_technique,
+    }
+    return {
+        "name": name,
+        "target_model": target_model,
+        "target_system_prompt": target_system_prompt,
+        # The API's values are upper case; callers pass lower case.
+        "execution_strategy_type": execution_strategy_type.upper(),
+        "max_turns": max_turns,
+        "attacker_max_generation_attempts": attacker_max_generation_attempts,
+        "n_random_techniques": n_random_techniques,
+        "max_parallel_techniques": max_parallel_techniques,
+        **{key: value for key, value in optional.items() if value is not None},
+    }
+
 
 class RedTeamSession:
-    """Represents an active red team session (async-only).
+    """A red team workflow in progress, driven synchronously.
 
     Usage:
-        async for action in session.iterate_actions():
+        for action in session.iterate_actions():
             ...
     Or:
-        await session.run_with_callback(handler)
-    Or:
-        await session.run_with_callback_parallel(handler)
+        session.run_with_callback(handler)
     """
 
     def __init__(
@@ -45,8 +152,8 @@ class RedTeamSession:
         self._poll_interval = poll_interval
         self._poll_max_wait = poll_max_wait
         self._max_parallel_techniques = max_parallel_techniques
-        self._start_monotonic = time.time()
-        self._last_action: RedTeamRetrieveNextActionResponse | None = None
+        self._start_monotonic = time.monotonic()
+        self._last_action: NextActionResponse | None = None
 
     @property
     def workflow_id(self) -> str:
@@ -57,49 +164,41 @@ class RedTeamSession:
         return self._name
 
     def _check_timeout(self) -> None:
-        if self._poll_max_wait is not None:
-            elapsed = time.time() - self._start_monotonic
-            if elapsed > self._poll_max_wait:
-                raise Exception(
-                    f"Polling timed out after {elapsed:.1f}s (max: {self._poll_max_wait}s)"
-                )
+        timeout = _poll_timeout(self._start_monotonic, self._poll_max_wait)
+        if timeout is not None:
+            raise timeout
 
+    def _workflow_status(self) -> Optional[str]:
+        try:
+            return self._client.evaluations.red_team.retrieve_status(self._workflow_id).status
+        except Exception:
+            return None
 
-    def get_next_action(self, *, block: bool = True) -> RedTeamRetrieveNextActionResponse:
-        """Sync poll for next action."""
+    def get_next_action(self, *, block: bool = True) -> NextActionResponse:
+        """Polls for the next action.
+
+        Args:
+            block: Whether to keep polling until an action is ready.
+
+        Raises:
+            WorkflowNotFoundError: If the workflow doesn't exist.
+            RedTeamSessionError: If the API answers 500.
+            PollTimeoutError: If the session's poll_max_wait has passed.
+        """
         while True:
             self._check_timeout()
             try:
                 action = self._client.evaluations.red_team.retrieve_next_action(self._workflow_id)
-            except httpx.HTTPStatusError as e:
-                if e.response.status_code == 404:
-                    raise WorkflowNotFoundError(
-                        f"Workflow not found: {self._workflow_id}"
-                    ) from e
-                if e.response.status_code == 500:
-                    try:
-                        status = self._client.evaluations.red_team.retrieve_status(self._workflow_id)
-                        workflow_status = status.status
-                        raise RedTeamSessionError(
-                            f"Server error getting next action. "
-                            f"Workflow status: {workflow_status}. "
-                            f"Workflow ID: {self._workflow_id}"
-                        ) from e
-                    except Exception:
-                        # If status check also fails, raise original error
-                        raise RedTeamSessionError(
-                            f"Server error getting next action "
-                            f"for workflow {self._workflow_id}. "
-                            f"The workflow may be in a bad state. "
-                            f"Try checking the workflow status or restarting."
-                        ) from e
+            except ApiError as e:
+                if e.status_code == 404:
+                    raise _not_found(self._workflow_id) from e
+                if e.status_code == 500:
+                    raise _next_action_server_error(self._workflow_id, self._workflow_status()) from e
                 raise
 
             self._last_action = action
-
             if action.is_ready or not block:
                 return action
-
             time.sleep(self._poll_interval)
 
     def wait_for_completion(
@@ -108,213 +207,166 @@ class RedTeamSession:
         max_wait: float | None = 300.0,
         verbose: bool = False,
     ) -> None:
-        """Poll status until workflow reaches terminal state.
+        """Polls the workflow's status until it reaches a terminal state.
 
-        This method is automatically called by run_with_callback() and
-        run_with_callback_parallel() to ensure the workflow has fully completed
-        before returning.
+        run_with_callback calls this before it returns. A 408, 429 or 5xx answer is polled through
+        until max_wait.
 
         Args:
-            poll_interval: How often to check status (default: 3.0s)
-            max_wait: Maximum time to wait for completion (default: 300s / 5 min)
-            verbose: If True, print status updates (default: False)
+            poll_interval: Seconds between status checks.
+            max_wait: Seconds to wait before giving up, or None to wait indefinitely.
+            verbose: Whether to log progress.
 
         Raises:
-            PollTimeoutError: If max_wait is exceeded
-            RedTeamSessionError: If workflow fails
+            PollTimeoutError: If max_wait passes first.
+            RedTeamSessionError: If the workflow failed.
+            WorkflowNotFoundError: If the workflow doesn't exist.
         """
-        start_time = time.time()
-        terminal_states = {
-            "COMPLETED",
-            "FAILED",
-            "CANCELLED",
-            "TERMINATED",
-            "TIMED_OUT",
-        }
-
+        start = time.monotonic()
         if verbose:
             logger.info(f"⏳ Waiting for workflow {self._workflow_id[:8]}... to complete...")
 
         while True:
-            # Check timeout
-            if max_wait is not None:
-                elapsed = time.time() - start_time
-                if elapsed > max_wait:
-                    raise PollTimeoutError(f"Workflow did not complete within {max_wait}s")
+            if max_wait is not None and time.monotonic() - start > max_wait:
+                raise PollTimeoutError(f"Workflow did not complete within {max_wait}s")
 
             try:
                 status = self._client.evaluations.red_team.retrieve_status(self._workflow_id)
-                workflow_status = status.status
-
-                if workflow_status in terminal_states:
-                    if workflow_status == "FAILED":
-                        error_msg = status.error
-                        raise RedTeamSessionError(f"Workflow failed: {error_msg}")
-
-                    # Workflow is complete
+            except ApiError as e:
+                if e.status_code == 404:
+                    raise _not_found(self._workflow_id) from e
+                if not _is_transient(e):
+                    raise
+            else:
+                if status.status == "FAILED":
+                    raise RedTeamSessionError(f"Workflow failed: {status.error}")
+                if status.status in _TERMINAL_STATES:
                     if verbose:
-                        elapsed = asyncio.get_event_loop().time() - start_time
-                        logger.info(f"✅ Workflow completed in {elapsed:.1f}s.")
+                        logger.info(f"✅ Workflow completed in {time.monotonic() - start:.1f}s.")
                     return
-
-            except httpx.HTTPStatusError as e:
-                # If we get 404, workflow doesn't exist
-                if e.response.status_code == 404:
-                    raise WorkflowNotFoundError(
-                        f"Workflow not found: {self._workflow_id}"
-                    ) from e
-                # For other errors, keep retrying unless we're at max_wait
-                if max_wait is not None:
-                    elapsed = asyncio.get_event_loop().time() - start_time
-                    if elapsed > max_wait:
-                        raise
 
             time.sleep(poll_interval)
 
-    def iterate_actions(self) -> Iterator[RedTeamRetrieveNextActionResponse]:
-        """Yield attack_task actions until workflow completes/fails."""
+    def iterate_actions(self) -> Iterator[NextActionResponse]:
+        """Yields each attack task until the workflow completes.
+
+        Raises:
+            RedTeamSessionError: If the workflow fails.
+        """
         while True:
             action = self.get_next_action(block=True)
-
             if action.action_type == "complete":
                 return
             if action.action_type == "failed":
-                raise RedTeamSessionError(action.message if action.message else "Workflow failed")
+                raise _failed_action(action)
             if action.is_ready and action.action_type == "attack_task":
                 yield action
 
-    def run_with_callback(
-        self,
-        handler: Callable[[str | None, list[dict[str, Any]] | None, str | None, str | None], str],
-    ) -> None:
-        """Run session with sequential action processing.
+    def run_with_callback(self, handler: Handler) -> None:
+        """Answers each attack task with the handler, one at a time, then waits for the workflow to finish.
 
         Args:
-            handler: Sync function that takes
-                (attack_prompt, history, session_id, target_system_prompt)
-                and returns target response
+            handler: Takes (attack_prompt, history, session_id, target_system_prompt) and returns
+                the target's response.
         """
         for action in self.iterate_actions():
-            attack_prompt = action.attack_prompt
-            history = action.history
-            # TODO: the API should be updated to make this field mandatory in responses
-            # TODO: since it is required downstream
+            # The API doesn't require session_id in its responses, though submitting needs one.
             session_id = action.session_id if action.session_id else ""
-            target_system_prompt = action.target_system_prompt
-            target_response = handler(
-                attack_prompt, history, session_id, target_system_prompt
-            )
+            target_response = handler(action.attack_prompt, action.history, session_id, action.target_system_prompt)
             self._client.evaluations.red_team.submit_target_response(
-                workflow_id=self._workflow_id,
-                session_id=session_id,
-                target_response=target_response)
-        # Wait for workflow to fully complete
+                self._workflow_id, session_id=session_id, target_response=target_response
+            )
         return self.wait_for_completion()
 
 
-class RedTeamSessionsResource(SyncAPIResource):
+class RedTeamSessionsResource:
     def __init__(self, client: HiddenLayer):
-        super().__init__(client)
+        self._client = client
 
     def start_session(
-            self,
-            *,
-            name: str,
-            objective_ids: list[str] | Omit = omit,
-            target_model: str,
-            target_system_prompt: str = "",
-            refusal_judge_model: str | Omit = omit,
-            objective_judge_model: str | Omit = omit,
-            attacker_model: str | Omit = omit,
-            evaluation_report_model: str | Omit = omit,
-            attacker_guidance: str | Omit = omit,
-            severity_mapping: Dict[str, Literal["CRITICAL", "HIGH", "MEDIUM", "LOW", "NONE"]] | Omit = omit,
-            config_id: str | Omit = omit,
-            max_turns: int = 3,
-            execution_strategy_type: str = "random",
-            attacker_max_generation_attempts: int = 2,
-            n_random_techniques: int = 1,
-            max_parallel_techniques: int = 1,
-            prompt_set_id: str | Omit = omit,
-            hiddenlayer_project_id: str | None = None,
-            poll_interval: float = 2.0,
-            poll_max_wait: float | None = None,
-            sessions_per_technique: int | None = 1,
+        self,
+        *,
+        name: str,
+        objective_ids: Optional[List[str]] = None,
+        target_model: str,
+        target_system_prompt: str = "",
+        refusal_judge_model: Optional[str] = None,
+        objective_judge_model: Optional[str] = None,
+        attacker_model: Optional[str] = None,
+        evaluation_report_model: Optional[str] = None,
+        attacker_guidance: Optional[str] = None,
+        severity_mapping: Optional[SeverityMapping] = None,
+        config_id: Optional[str] = None,
+        max_turns: int = 3,
+        execution_strategy_type: str = "random",
+        attacker_max_generation_attempts: int = 2,
+        n_random_techniques: int = 1,
+        max_parallel_techniques: int = 1,
+        prompt_set_id: Optional[str] = None,
+        hiddenlayer_project_id: Optional[str] = None,
+        poll_interval: float = 2.0,
+        poll_max_wait: float | None = None,
+        sessions_per_technique: Optional[int] = 1,
     ) -> RedTeamSession:
-        """Start a new red team session.
+        """Starts a red team workflow.
 
-        Uses adaptive multi-objective evaluation: each session runs to
-        max_turns (no short-circuit), tests all provided objectives, and
-        maintains cross-session state for adaptive attacks.
+        Each session runs to max_turns without stopping early, tests every objective given, and
+        keeps state across sessions for adaptive attacks. An option left as None isn't sent.
 
         Args:
-            name: Session name
-            objective_ids: List of objective IDs to test (e.g., ["HLO.03"])
-            target_model: Model identifier for the target being tested
-            target_system_prompt: System prompt for the target model
-            refusal_judge_model: Model to use for refusal judging
-            objective_judge_model: Model to use for objective judging
-            attacker_model: Model to use for generating attacks
-            evaluation_report_model: Model to use for evaluation reports
-            attacker_guidance: Optional intent-only natural-language text to focus the
-                attacker LLM within the configured objectives. No-op for the
-                static_prompt_set strategy.
-            severity_mapping: Map from objective ID to a severity level, used to derive
-                the per-session severity from the worst objective achieved.
-            config_id: Optional preset config to seed the workflow settings. Any field
-                also passed here overrides the corresponding value from the config.
-            max_turns: Maximum conversation turns per session
-            execution_strategy_type: Strategy type ("single", "random", or "static_prompt_set")
-            attacker_max_generation_attempts: Max attempts for attacker to generate prompts
-            n_random_techniques: Number of techniques to select per turn
-            max_parallel_techniques: Number of techniques to run in parallel
-            prompt_set_id: ID of prompt set (if using static_prompt_set strategy)
-            hiddenlayer_project_id: Optional HiddenLayer project ID
-            poll_interval: How often to poll for actions (seconds, default: 2.0s)
-            poll_max_wait: Maximum time to wait for actions (seconds)
-            sessions_per_technique: Number of sessions to run per technique
-
-        Returns:
-            RedTeamSession instance
+            name: Session name.
+            objective_ids: Objective IDs to test, e.g. ["HLO.03"].
+            target_model: Identifier of the model being tested.
+            target_system_prompt: The target model's system prompt.
+            refusal_judge_model: Model that judges refusals.
+            objective_judge_model: Model that judges objectives.
+            attacker_model: Model that generates attacks.
+            evaluation_report_model: Model that writes evaluation reports.
+            attacker_guidance: Intent-only natural-language text that focuses the attacker within
+                the objectives. The static_prompt_set strategy ignores it.
+            severity_mapping: Objective ID to severity level; a session's severity comes from the
+                worst objective achieved.
+            config_id: A preset config to start from. Any option also given here overrides it.
+            max_turns: Maximum conversation turns per session.
+            execution_strategy_type: "single", "random" or "static_prompt_set".
+            attacker_max_generation_attempts: Attempts the attacker gets to generate a prompt.
+            n_random_techniques: Techniques selected per turn.
+            max_parallel_techniques: Techniques run in parallel.
+            prompt_set_id: The prompt set, for the static_prompt_set strategy.
+            hiddenlayer_project_id: A HiddenLayer project to scope the run to.
+            poll_interval: Seconds between polls for actions.
+            poll_max_wait: Seconds the session may poll for actions in all, or None for no limit.
+            sessions_per_technique: Sessions run per technique.
 
         Raises:
-            ValueError: If execution_strategy_type is invalid
+            ValueError: If execution_strategy_type isn't one of the three.
         """
-        # Validate execution strategy
-        if execution_strategy_type not in ["single", "random", "static_prompt_set"]:
-            raise ValueError(
-                "execution_strategy_type must be 'single', 'random', or 'static_prompt_set'."
+        response = self._client.evaluations.red_team.create(
+            **_create_arguments(
+                name=name,
+                objective_ids=objective_ids,
+                target_model=target_model,
+                target_system_prompt=target_system_prompt,
+                refusal_judge_model=refusal_judge_model,
+                objective_judge_model=objective_judge_model,
+                attacker_model=attacker_model,
+                evaluation_report_model=evaluation_report_model,
+                attacker_guidance=attacker_guidance,
+                severity_mapping=severity_mapping,
+                config_id=config_id,
+                max_turns=max_turns,
+                execution_strategy_type=execution_strategy_type,
+                attacker_max_generation_attempts=attacker_max_generation_attempts,
+                n_random_techniques=n_random_techniques,
+                max_parallel_techniques=max_parallel_techniques,
+                prompt_set_id=prompt_set_id,
+                hiddenlayer_project_id=hiddenlayer_project_id,
+                sessions_per_technique=sessions_per_technique,
             )
-        # The API enum is UPPER_SNAKE_CASE; callers may pass lowercase.
-        wire_execution_strategy_type = cast(
-            Literal["RANDOM", "SINGLE", "STATIC_PROMPT_SET"],
-            execution_strategy_type.upper(),
-        )
-
-        resp: RedTeamCreateResponse = self._client.evaluations.red_team.create(
-            name=name,
-            target_system_prompt=target_system_prompt,
-            objective_ids=objective_ids,
-            target_model=target_model,
-            refusal_judge_model=refusal_judge_model,
-            objective_judge_model=objective_judge_model,
-            attacker_model=attacker_model,
-            evaluation_report_model=evaluation_report_model,
-            attacker_guidance=attacker_guidance,
-            severity_mapping=severity_mapping,
-            config_id=config_id,
-            execution_strategy_type=wire_execution_strategy_type,
-            max_turns=max_turns,
-            attacker_max_generation_attempts=attacker_max_generation_attempts,
-            n_random_techniques=n_random_techniques,
-            max_parallel_techniques=max_parallel_techniques,
-            hl_project_id=hiddenlayer_project_id if hiddenlayer_project_id is not None else omit,
-            prompt_set_id=prompt_set_id,
-            sessions_per_technique=sessions_per_technique if sessions_per_technique is not None else omit,
         )
         return RedTeamSession(
             client=self._client,
-            workflow_id=resp.workflow_id,
+            workflow_id=response.workflow_id,
             name=name,
             poll_interval=poll_interval,
             poll_max_wait=poll_max_wait,
@@ -322,84 +374,58 @@ class RedTeamSessionsResource(SyncAPIResource):
         )
 
     def resume_session(
-            self,
-            workflow_id: str,
-            *,
-            poll_interval: float = 2.0,
-            poll_max_wait: float | None = None,
-            max_parallel_techniques: int | None = None,
+        self,
+        workflow_id: str,
+        *,
+        poll_interval: float = 2.0,
+        poll_max_wait: float | None = None,
+        max_parallel_techniques: int | None = None,
     ) -> RedTeamSession:
-        """Resume an existing red team session by workflow ID.
-
-        This allows you to reconnect to a workflow that was previously started,
-        either from a different process or after an interruption.
+        """Reconnects to a workflow started earlier, from another process or after an interruption.
 
         Args:
-            workflow_id: The workflow ID to resume
-            poll_interval: How often to poll for actions (seconds, default: 2.0s)
-            poll_max_wait: Maximum time to wait for actions (seconds)
-            max_parallel_techniques: Override parallel techniques setting
-                (if None, will fetch from workflow status)
-
-        Returns:
-            AsyncRedTeamSession instance connected to the existing workflow
+            workflow_id: The workflow to resume.
+            poll_interval: Seconds between polls for actions.
+            poll_max_wait: Seconds the session may poll for actions in all, or None for no limit.
+            max_parallel_techniques: Actions run_with_callback_parallel handles at once. Defaults to 1.
 
         Raises:
-            WorkflowNotFoundError: If workflow_id doesn't exist
-            RedTeamSessionError: If unable to fetch workflow info
+            WorkflowNotFoundError: If the workflow doesn't exist.
+            RedTeamSessionError: If the workflow's status can't be fetched.
         """
-        # Fetch workflow status to get metadata
         try:
             status = self._client.evaluations.red_team.retrieve_status(workflow_id)
-        except httpx.HTTPStatusError as e:
-            if hasattr(e, "response") and e.response.status_code == 404:
-                raise WorkflowNotFoundError(f"Workflow not found: {workflow_id}") from e
+        except ApiError as e:
+            if e.status_code == 404:
+                raise _not_found(workflow_id) from e
             raise RedTeamSessionError(f"Failed to fetch workflow info: {e}") from e
-
-        # Extract session metadata
-        name = status.name
-
-        # Use provided max_parallel or fetch from status
-        if max_parallel_techniques is None:
-            max_parallel_techniques = 1
 
         return RedTeamSession(
             client=self._client,
             workflow_id=workflow_id,
-            name=name,
+            name=status.name,
             poll_interval=poll_interval,
             poll_max_wait=poll_max_wait,
-            max_parallel_techniques=max_parallel_techniques,
+            max_parallel_techniques=1 if max_parallel_techniques is None else max_parallel_techniques,
         )
 
-    def terminate_session(
-            self,
-            workflow_id: str,
-    ) -> None:
-        """Terminate an existing red team session by workflow ID.
-
-        This allows you to stop a workflow currently in progress.
-
-        Args:
-            workflow_id: The workflow ID to terminate
+    def terminate_session(self, workflow_id: str) -> None:
+        """Stops a workflow in progress.
 
         Raises:
-            WorkflowNotFoundError: If workflow_id doesn't exist
-            RedTeamSessionError: If unable to fetch workflow info
+            WorkflowNotFoundError: If the workflow doesn't exist.
+            RedTeamSessionError: If the workflow can't be terminated.
         """
-
         try:
             self._client.evaluations.red_team.terminate(workflow_id)
-        except httpx.HTTPStatusError as e:
-            if hasattr(e, "response") and e.response.status_code == 404:
-                raise WorkflowNotFoundError(f"Workflow not found: {workflow_id}") from e
-            raise RedTeamSessionError(f"Failed to fetch workflow info: {e}") from e
-
-        return
+        except ApiError as e:
+            if e.status_code == 404:
+                raise _not_found(workflow_id) from e
+            raise RedTeamSessionError(f"Failed to terminate workflow: {e}") from e
 
 
 class AsyncRedTeamSession:
-    """Represents an active red team session (async-only).
+    """A red team workflow in progress, driven asynchronously.
 
     Usage:
         async for action in session.iterate_actions():
@@ -425,8 +451,8 @@ class AsyncRedTeamSession:
         self._poll_interval = poll_interval
         self._poll_max_wait = poll_max_wait
         self._max_parallel_techniques = max_parallel_techniques
-        self._start_monotonic = asyncio.get_event_loop().time()
-        self._last_action: RedTeamRetrieveNextActionResponse | None = None
+        self._start_monotonic = time.monotonic()
+        self._last_action: NextActionResponse | None = None
 
     @property
     def workflow_id(self) -> str:
@@ -437,49 +463,32 @@ class AsyncRedTeamSession:
         return self._name
 
     def _check_timeout(self) -> None:
-        if self._poll_max_wait is not None:
-            elapsed = asyncio.get_event_loop().time() - self._start_monotonic
-            if elapsed > self._poll_max_wait:
-                raise Exception(
-                    f"Polling timed out after {elapsed:.1f}s (max: {self._poll_max_wait}s)"
-                )
+        timeout = _poll_timeout(self._start_monotonic, self._poll_max_wait)
+        if timeout is not None:
+            raise timeout
 
+    async def _workflow_status(self) -> Optional[str]:
+        try:
+            return (await self._client.evaluations.red_team.retrieve_status(self._workflow_id)).status
+        except Exception:
+            return None
 
-    async def get_next_action(self, *, block: bool = True) -> RedTeamRetrieveNextActionResponse:
-        """Async poll for next action."""
+    async def get_next_action(self, *, block: bool = True) -> NextActionResponse:
+        """Async version of RedTeamSession.get_next_action."""
         while True:
             self._check_timeout()
             try:
                 action = await self._client.evaluations.red_team.retrieve_next_action(self._workflow_id)
-            except httpx.HTTPStatusError as e:
-                if e.response.status_code == 404:
-                    raise WorkflowNotFoundError(
-                        f"Workflow not found: {self._workflow_id}"
-                    ) from e
-                if e.response.status_code == 500:
-                    try:
-                        status = await self._client.evaluations.red_team.retrieve_status(self._workflow_id)
-                        workflow_status = status.status
-                        raise RedTeamSessionError(
-                            f"Server error getting next action. "
-                            f"Workflow status: {workflow_status}. "
-                            f"Workflow ID: {self._workflow_id}"
-                        ) from e
-                    except Exception:
-                        # If status check also fails, raise original error
-                        raise RedTeamSessionError(
-                            f"Server error getting next action "
-                            f"for workflow {self._workflow_id}. "
-                            f"The workflow may be in a bad state. "
-                            f"Try checking the workflow status or restarting."
-                        ) from e
+            except ApiError as e:
+                if e.status_code == 404:
+                    raise _not_found(self._workflow_id) from e
+                if e.status_code == 500:
+                    raise _next_action_server_error(self._workflow_id, await self._workflow_status()) from e
                 raise
 
             self._last_action = action
-
             if action.is_ready or not block:
                 return action
-
             await asyncio.sleep(self._poll_interval)
 
     async def wait_for_completion(
@@ -488,165 +497,110 @@ class AsyncRedTeamSession:
         max_wait: float | None = 300.0,
         verbose: bool = False,
     ) -> None:
-        """Poll status until workflow reaches terminal state.
+        """Async version of RedTeamSession.wait_for_completion.
 
-        This method is automatically called by run_with_callback() and
-        run_with_callback_parallel() to ensure the workflow has fully completed
-        before returning.
-
-        Args:
-            poll_interval: How often to check status (default: 3.0s)
-            max_wait: Maximum time to wait for completion (default: 300s / 5 min)
-            verbose: If True, print status updates (default: False)
-
-        Raises:
-            PollTimeoutError: If max_wait is exceeded
-            RedTeamSessionError: If workflow fails
+        run_with_callback and run_with_callback_parallel call this before they return.
         """
-        start_time = asyncio.get_event_loop().time()
-        terminal_states = {
-            "COMPLETED",
-            "FAILED",
-            "CANCELLED",
-            "TERMINATED",
-            "TIMED_OUT",
-        }
-
+        start = time.monotonic()
         if verbose:
             logger.info(f"⏳ Waiting for workflow {self._workflow_id[:8]}... to complete...")
 
         while True:
-            # Check timeout
-            if max_wait is not None:
-                elapsed = asyncio.get_event_loop().time() - start_time
-                if elapsed > max_wait:
-                    raise PollTimeoutError(f"Workflow did not complete within {max_wait}s")
+            if max_wait is not None and time.monotonic() - start > max_wait:
+                raise PollTimeoutError(f"Workflow did not complete within {max_wait}s")
 
             try:
                 status = await self._client.evaluations.red_team.retrieve_status(self._workflow_id)
-                workflow_status = status.status
-
-                if workflow_status in terminal_states:
-                    if workflow_status == "FAILED":
-                        error_msg = status.error
-                        raise RedTeamSessionError(f"Workflow failed: {error_msg}")
-
-                    # Workflow is complete
+            except ApiError as e:
+                if e.status_code == 404:
+                    raise _not_found(self._workflow_id) from e
+                if not _is_transient(e):
+                    raise
+            else:
+                if status.status == "FAILED":
+                    raise RedTeamSessionError(f"Workflow failed: {status.error}")
+                if status.status in _TERMINAL_STATES:
                     if verbose:
-                        elapsed = asyncio.get_event_loop().time() - start_time
-                        logger.info(f"✅ Workflow completed in {elapsed:.1f}s.")
+                        logger.info(f"✅ Workflow completed in {time.monotonic() - start:.1f}s.")
                     return
-
-            except httpx.HTTPStatusError as e:
-                # If we get 404, workflow doesn't exist
-                if e.response.status_code == 404:
-                    raise WorkflowNotFoundError(
-                        f"Workflow not found: {self._workflow_id}"
-                    ) from e
-                # For other errors, keep retrying unless we're at max_wait
-                if max_wait is not None:
-                    elapsed = asyncio.get_event_loop().time() - start_time
-                    if elapsed > max_wait:
-                        raise
 
             await asyncio.sleep(poll_interval)
 
-    async def iterate_actions(self) -> AsyncIterator[RedTeamRetrieveNextActionResponse]:
-        """Yield attack_task actions until workflow completes/fails."""
+    async def iterate_actions(self) -> AsyncIterator[NextActionResponse]:
+        """Async version of RedTeamSession.iterate_actions."""
         while True:
             action = await self.get_next_action(block=True)
-
             if action.action_type == "complete":
                 return
             if action.action_type == "failed":
-                raise RedTeamSessionError(action.message if action.message else "Workflow failed")
+                raise _failed_action(action)
             if action.is_ready and action.action_type == "attack_task":
                 yield action
 
-    async def run_with_callback(
-        self,
-        handler: Callable[[str | None, list[dict[str, Any]] | None, str | None, str | None], Awaitable[str]],
-    ) -> None:
-        """Run session with sequential action processing.
-
-        Args:
-            handler: Async function that takes
-                (attack_prompt, history, session_id, target_system_prompt)
-                and returns target response
-        """
+    async def run_with_callback(self, handler: AsyncHandler) -> None:
+        """Async version of RedTeamSession.run_with_callback; the handler is awaited."""
         async for action in self.iterate_actions():
-            attack_prompt = action.attack_prompt
-            history = action.history
-            # TODO: same as sync; need to update API contract so this doesn't need to be handled
             session_id = action.session_id if action.session_id else ""
-            target_system_prompt = action.target_system_prompt
             target_response = await handler(
-                attack_prompt, history, session_id, target_system_prompt
+                action.attack_prompt, action.history, session_id, action.target_system_prompt
             )
             await self._client.evaluations.red_team.submit_target_response(
-                workflow_id=self._workflow_id,
-                session_id=session_id,
-                target_response=target_response)
-        # Wait for workflow to fully complete
+                self._workflow_id, session_id=session_id, target_response=target_response
+            )
         return await self.wait_for_completion()
 
-    async def get_available_actions(self, max_actions: int = 10) -> list[RedTeamRetrieveNextActionResponse]:
-        """Get up to max_actions that are currently ready (non-blocking)."""
-        actions: list[RedTeamRetrieveNextActionResponse] = []
+    async def get_available_actions(self, max_actions: int = 10) -> list[NextActionResponse]:
+        """Returns up to max_actions attack tasks that are ready now, without waiting for more.
+
+        Raises:
+            RedTeamSessionError: If the workflow failed.
+        """
+        actions: list[NextActionResponse] = []
         for _ in range(max_actions):
             action = await self.get_next_action(block=False)
             if action.action_type == "complete":
                 return actions
             if action.action_type == "failed":
-                raise RedTeamSessionError(action.message if action.message else "Workflow failed")
-            if action.is_ready and action.action_type == "attack_task":
-                actions.append(action)
-            else:
-                # No more ready actions
+                raise _failed_action(action)
+            if not (action.is_ready and action.action_type == "attack_task"):
                 break
+            actions.append(action)
         return actions
 
-    async def _process_single_action(
-        self,
-        action: RedTeamRetrieveNextActionResponse,
-        handler: Callable[[str | None, list[dict[str, Any]] | None, str | None, str | None], Awaitable[str]],
-    ) -> None:
-        """Process a single action with the handler and submit response."""
-        attack_prompt = action.attack_prompt
-        history = action.history if action.history else []
+    async def _process_single_action(self, action: NextActionResponse, handler: AsyncHandler) -> None:
+        """Answers one attack task with the handler and submits the response."""
         session_id = action.session_id if action.session_id else ""
-        target_system_prompt = action.target_system_prompt
-
-        # Call handler to get target response
-        target_response = await handler(attack_prompt, history, session_id, target_system_prompt)
-
-        # Submit response
+        target_response = await handler(
+            action.attack_prompt, action.history if action.history else [], session_id, action.target_system_prompt
+        )
         try:
             await self._client.evaluations.red_team.submit_target_response(
-                workflow_id=self._workflow_id, session_id=session_id, target_response=target_response
+                self._workflow_id, session_id=session_id, target_response=target_response
             )
-        except httpx.HTTPStatusError as e:
-            if e.response.status_code == 400:
+        except ApiError as e:
+            if e.status_code == 400:
                 raise InvalidSessionError(f"Invalid session_id: {session_id}") from e
             raise
 
     async def run_with_callback_parallel(
         self,
-        handler: Callable[[str | None, list[dict[str, Any]] | None, str | None, str | None], Awaitable[str]],
+        handler: AsyncHandler,
         max_parallel: int | None = None,
         poll_batch_interval: float = 0.5,
     ) -> None:
-        """Run session with parallel action processing.
+        """Answers attack tasks with the handler, several at a time, then waits for the workflow to finish.
 
         Args:
-            handler: Async function to handle attack prompts and return target responses
-            max_parallel: Maximum number of actions to process in parallel.
-                         If None, automatically uses max_parallel_techniques from session config.
-                         You may want to set this lower for rate limiting or higher if techniques
-                         can generate multiple actions per turn.
-            poll_batch_interval: How often to check for new actions when at max capacity
+            handler: Takes (attack_prompt, history, session_id, target_system_prompt) and returns
+                the target's response.
+            max_parallel: Actions handled at once. Defaults to the session's max_parallel_techniques;
+                set it lower for rate limits, or higher if a technique produces several actions per turn.
+            poll_batch_interval: Seconds between checks for new actions.
+
+        Raises:
+            RedTeamSessionError: If the workflow fails.
+            InvalidSessionError: If the API refuses a response's session_id.
         """
-        # Auto-detect max_parallel from session config if not specified
         if max_parallel is None:
             max_parallel = self._max_parallel_techniques
 
@@ -655,165 +609,96 @@ class AsyncRedTeamSession:
         while True:
             self._check_timeout()
 
-            # Wait for some tasks to complete if at max capacity
             if len(pending_tasks) >= max_parallel:
-                done, pending_tasks = await asyncio.wait(
-                    pending_tasks, return_when=asyncio.FIRST_COMPLETED
-                )
-                # Check for exceptions in completed tasks
-                for task in done:
-                    try:
-                        task.result()
-                    except Exception:
-                        # Cancel remaining tasks and re-raise
-                        for t in pending_tasks:
-                            t.cancel()
-                        raise
+                await asyncio.wait(pending_tasks, return_when=asyncio.FIRST_COMPLETED)
+            pending_tasks = _still_running(pending_tasks)
 
-            # Get available actions
             try:
-                available_actions = await self.get_available_actions(
-                    max_actions=max_parallel - len(pending_tasks)
-                )
+                available_actions = await self.get_available_actions(max_actions=max_parallel - len(pending_tasks))
             except RedTeamSessionError:
-                # Workflow failed, wait for pending tasks and re-raise
                 if pending_tasks:
                     await asyncio.gather(*pending_tasks, return_exceptions=True)
                 raise
 
             if available_actions:
-                # Start processing new actions
                 for action in available_actions:
-                    task = asyncio.create_task(self._process_single_action(action, handler))
-                    pending_tasks.add(task)
+                    pending_tasks.add(asyncio.create_task(self._process_single_action(action, handler)))
             else:
-                # Check if workflow is complete
-                action = await self.get_next_action(block=True)
+                # Blocking here while a handler runs would hide its failure: the workflow waits for its response.
+                action = await self.get_next_action(block=not pending_tasks)
 
                 if action.action_type == "complete":
-                    # Wait for all pending tasks to complete
                     if pending_tasks:
                         await asyncio.gather(*pending_tasks)
-                    # Wait for workflow to fully complete before
                     return await self.wait_for_completion()
 
                 if action.action_type == "failed":
-                    # Wait for pending tasks and raise error
                     if pending_tasks:
                         await asyncio.gather(*pending_tasks, return_exceptions=True)
-                    raise RedTeamSessionError(action.message if action.message else "Workflow failed")
+                    raise _failed_action(action)
 
                 if action.is_ready and action.action_type == "attack_task":
-                    # Process this action
-                    task = asyncio.create_task(self._process_single_action(action, handler))
-                    pending_tasks.add(task)
+                    pending_tasks.add(asyncio.create_task(self._process_single_action(action, handler)))
 
             await asyncio.sleep(poll_batch_interval)
 
 
-class AsyncRedTeamSessionsResource(AsyncAPIResource):
+class AsyncRedTeamSessionsResource:
     def __init__(self, client: AsyncHiddenLayer):
-        super().__init__(client)
+        self._client = client
 
     async def start_session(
-            self,
-            *,
-            name: str,
-            objective_ids: list[str] | Omit = omit,
-            target_model: str,
-            target_system_prompt: str = "",
-            refusal_judge_model: str | Omit = omit,
-            objective_judge_model: str | Omit = omit,
-            attacker_model: str | Omit = omit,
-            evaluation_report_model: str | Omit = omit,
-            attacker_guidance: str | Omit = omit,
-            severity_mapping: Dict[str, Literal["CRITICAL", "HIGH", "MEDIUM", "LOW", "NONE"]] | Omit = omit,
-            config_id: str | Omit = omit,
-            max_turns: int = 3,
-            execution_strategy_type: str = "random",
-            attacker_max_generation_attempts: int = 2,
-            n_random_techniques: int = 1,
-            max_parallel_techniques: int = 1,
-            prompt_set_id: str | Omit = omit,
-            hiddenlayer_project_id: str | None = None,
-            poll_interval: float = 2.0,
-            poll_max_wait: float | None = None,
-            sessions_per_technique: int | None = 1,
+        self,
+        *,
+        name: str,
+        objective_ids: Optional[List[str]] = None,
+        target_model: str,
+        target_system_prompt: str = "",
+        refusal_judge_model: Optional[str] = None,
+        objective_judge_model: Optional[str] = None,
+        attacker_model: Optional[str] = None,
+        evaluation_report_model: Optional[str] = None,
+        attacker_guidance: Optional[str] = None,
+        severity_mapping: Optional[SeverityMapping] = None,
+        config_id: Optional[str] = None,
+        max_turns: int = 3,
+        execution_strategy_type: str = "random",
+        attacker_max_generation_attempts: int = 2,
+        n_random_techniques: int = 1,
+        max_parallel_techniques: int = 1,
+        prompt_set_id: Optional[str] = None,
+        hiddenlayer_project_id: Optional[str] = None,
+        poll_interval: float = 2.0,
+        poll_max_wait: float | None = None,
+        sessions_per_technique: Optional[int] = 1,
     ) -> AsyncRedTeamSession:
-        """Start a new red team session.
-
-        Uses adaptive multi-objective evaluation: each session runs to
-        max_turns (no short-circuit), tests all provided objectives, and
-        maintains cross-session state for adaptive attacks.
-
-        Args:
-            name: Session name
-            objective_ids: List of objective IDs to test (e.g., ["HLO.03"])
-            target_model: Model identifier for the target being tested
-            target_system_prompt: System prompt for the target model
-            refusal_judge_model: Model to use for refusal judging
-            objective_judge_model: Model to use for objective judging
-            attacker_model: Model to use for generating attacks
-            evaluation_report_model: Model to use for evaluation reports
-            attacker_guidance: Optional intent-only natural-language text to focus the
-                attacker LLM within the configured objectives. No-op for the
-                static_prompt_set strategy.
-            severity_mapping: Map from objective ID to a severity level, used to derive
-                the per-session severity from the worst objective achieved.
-            config_id: Optional preset config to seed the workflow settings. Any field
-                also passed here overrides the corresponding value from the config.
-            max_turns: Maximum conversation turns per session
-            execution_strategy_type: Strategy type ("single", "random", or "static_prompt_set")
-            attacker_max_generation_attempts: Max attempts for attacker to generate prompts
-            n_random_techniques: Number of techniques to select per turn
-            max_parallel_techniques: Number of techniques to run in parallel
-            prompt_set_id: ID of prompt set (if using static_prompt_set strategy)
-            hiddenlayer_project_id: Optional HiddenLayer project ID
-            poll_interval: How often to poll for actions (seconds, default: 2.0s)
-            poll_max_wait: Maximum time to wait for actions (seconds)
-            sessions_per_technique: Number of sessions to run per technique
-
-        Returns:
-            AsyncRedTeamSession instance
-
-        Raises:
-            ValueError: If execution_strategy_type is invalid
-        """
-        # Validate execution strategy
-        if execution_strategy_type not in ["single", "random", "static_prompt_set"]:
-            raise ValueError(
-                "execution_strategy_type must be 'single', 'random', or 'static_prompt_set'."
+        """Async version of RedTeamSessionsResource.start_session."""
+        response = await self._client.evaluations.red_team.create(
+            **_create_arguments(
+                name=name,
+                objective_ids=objective_ids,
+                target_model=target_model,
+                target_system_prompt=target_system_prompt,
+                refusal_judge_model=refusal_judge_model,
+                objective_judge_model=objective_judge_model,
+                attacker_model=attacker_model,
+                evaluation_report_model=evaluation_report_model,
+                attacker_guidance=attacker_guidance,
+                severity_mapping=severity_mapping,
+                config_id=config_id,
+                max_turns=max_turns,
+                execution_strategy_type=execution_strategy_type,
+                attacker_max_generation_attempts=attacker_max_generation_attempts,
+                n_random_techniques=n_random_techniques,
+                max_parallel_techniques=max_parallel_techniques,
+                prompt_set_id=prompt_set_id,
+                hiddenlayer_project_id=hiddenlayer_project_id,
+                sessions_per_technique=sessions_per_technique,
             )
-        # The API enum is UPPER_SNAKE_CASE; callers may pass lowercase.
-        wire_execution_strategy_type = cast(
-            Literal["RANDOM", "SINGLE", "STATIC_PROMPT_SET"],
-            execution_strategy_type.upper(),
-        )
-
-        resp: RedTeamCreateResponse = await self._client.evaluations.red_team.create(
-            name=name,
-            target_system_prompt=target_system_prompt,
-            objective_ids=objective_ids,
-            target_model=target_model,
-            refusal_judge_model=refusal_judge_model,
-            objective_judge_model=objective_judge_model,
-            attacker_model=attacker_model,
-            evaluation_report_model=evaluation_report_model,
-            attacker_guidance=attacker_guidance,
-            severity_mapping=severity_mapping,
-            config_id=config_id,
-            execution_strategy_type=wire_execution_strategy_type,
-            max_turns=max_turns,
-            attacker_max_generation_attempts=attacker_max_generation_attempts,
-            n_random_techniques=n_random_techniques,
-            max_parallel_techniques=max_parallel_techniques,
-            hl_project_id=hiddenlayer_project_id if hiddenlayer_project_id is not None else omit,
-            prompt_set_id=prompt_set_id,
-            sessions_per_technique=sessions_per_technique if sessions_per_technique is not None else omit,
         )
         return AsyncRedTeamSession(
             client=self._client,
-            workflow_id=resp.workflow_id,
+            workflow_id=response.workflow_id,
             name=name,
             poll_interval=poll_interval,
             poll_max_wait=poll_max_wait,
@@ -821,77 +706,35 @@ class AsyncRedTeamSessionsResource(AsyncAPIResource):
         )
 
     async def resume_session(
-            self,
-            workflow_id: str,
-            *,
-            poll_interval: float = 2.0,
-            poll_max_wait: float | None = None,
-            max_parallel_techniques: int | None = None,
+        self,
+        workflow_id: str,
+        *,
+        poll_interval: float = 2.0,
+        poll_max_wait: float | None = None,
+        max_parallel_techniques: int | None = None,
     ) -> AsyncRedTeamSession:
-        """Resume an existing red team session by workflow ID.
-
-        This allows you to reconnect to a workflow that was previously started,
-        either from a different process or after an interruption.
-
-        Args:
-            workflow_id: The workflow ID to resume
-            poll_interval: How often to poll for actions (seconds, default: 2.0s)
-            poll_max_wait: Maximum time to wait for actions (seconds)
-            max_parallel_techniques: Override parallel techniques setting
-                (if None, will fetch from workflow status)
-
-        Returns:
-            AsyncRedTeamSession instance connected to the existing workflow
-
-        Raises:
-            WorkflowNotFoundError: If workflow_id doesn't exist
-            RedTeamSessionError: If unable to fetch workflow info
-        """
-        # Fetch workflow status to get metadata
+        """Async version of RedTeamSessionsResource.resume_session."""
         try:
             status = await self._client.evaluations.red_team.retrieve_status(workflow_id)
-        except httpx.HTTPStatusError as e:
-            if hasattr(e, "response") and e.response.status_code == 404:
-                raise WorkflowNotFoundError(f"Workflow not found: {workflow_id}") from e
+        except ApiError as e:
+            if e.status_code == 404:
+                raise _not_found(workflow_id) from e
             raise RedTeamSessionError(f"Failed to fetch workflow info: {e}") from e
-
-        # Extract session metadata
-        name = status.name
-
-        # Use provided max_parallel or fetch from status
-        if max_parallel_techniques is None:
-            max_parallel_techniques = 1
 
         return AsyncRedTeamSession(
             client=self._client,
             workflow_id=workflow_id,
-            name=name,
+            name=status.name,
             poll_interval=poll_interval,
             poll_max_wait=poll_max_wait,
-            max_parallel_techniques=max_parallel_techniques,
+            max_parallel_techniques=1 if max_parallel_techniques is None else max_parallel_techniques,
         )
 
-    async def terminate_session(
-            self,
-            workflow_id: str,
-    ) -> None:
-        """Terminate an existing red team session by workflow ID.
-
-        This allows you to stop a workflow currently in progress.
-
-        Args:
-            workflow_id: The workflow ID to terminate
-
-        Raises:
-            WorkflowNotFoundError: If workflow_id doesn't exist
-            RedTeamSessionError: If unable to fetch workflow info
-        """
-
+    async def terminate_session(self, workflow_id: str) -> None:
+        """Async version of RedTeamSessionsResource.terminate_session."""
         try:
             await self._client.evaluations.red_team.terminate(workflow_id)
-        except httpx.HTTPStatusError as e:
-            if hasattr(e, "response") and e.response.status_code == 404:
-                raise WorkflowNotFoundError(f"Workflow not found: {workflow_id}") from e
-            raise RedTeamSessionError(f"Failed to fetch workflow info: {e}") from e
-
-        return
+        except ApiError as e:
+            if e.status_code == 404:
+                raise _not_found(workflow_id) from e
+            raise RedTeamSessionError(f"Failed to terminate workflow: {e}") from e
