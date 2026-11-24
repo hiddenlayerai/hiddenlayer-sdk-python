@@ -18854,7 +18854,7 @@ client = HiddenLayer(
 
 client.scans.upload.file.add(
     scan_id="00000000-0000-0000-0000-000000000000",
-    file_content_length=1,
+    file_content_length=1000000,
     file_name="exampleFile.txt",
 )
 
