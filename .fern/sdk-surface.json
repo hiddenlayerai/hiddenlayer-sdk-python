@@ -2592,6 +2592,12 @@
             "type": "string"
           },
           {
+            "name": "detection_count_start_at",
+            "in": "query",
+            "required": false,
+            "type": "string(date-time)"
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,

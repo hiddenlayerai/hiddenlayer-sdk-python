@@ -52,6 +52,7 @@ class ProjectsClient:
         limit: typing.Optional[Limit] = None,
         cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        detection_count_start_at: typing.Optional[dt.datetime] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> SyncPager[GetProjectItem, ListProjectsResponse]:
         """
@@ -82,7 +83,10 @@ class ProjectsClient:
             Cursor for pagination, used to navigate through pages of results
 
         sort : typing.Optional[str]
-            allow sorting by name or modified_at, ascending (+) or the default descending (-)
+            allow sorting by name, modified_at or detection_count, ascending (+) or the default descending (-). detection_count is the number of the project's events from `POST /api/v2/events/query` with severity HIGH, MEDIUM or LOW between the response's `detection_count_start_at` and `detection_count_end_at`, 0 when it has none; ties sort by name, then project ID. Every page of one listing keeps the first page's window; a detection that arrives late but is dated inside it can still move a project between pages.
+
+        detection_count_start_at : typing.Optional[dt.datetime]
+            Start of the detection_count window; used only when sorting by detection_count. Must not be in the future or more than 8 days ago; fractional seconds are dropped. Defaults to midnight UTC 6 days ago.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -119,6 +123,7 @@ class ProjectsClient:
             limit=limit,
             cursor=cursor,
             sort=sort,
+            detection_count_start_at=detection_count_start_at,
             request_options=request_options,
         )
 
@@ -466,6 +471,7 @@ class AsyncProjectsClient:
         limit: typing.Optional[Limit] = None,
         cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        detection_count_start_at: typing.Optional[dt.datetime] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncPager[GetProjectItem, ListProjectsResponse]:
         """
@@ -496,7 +502,10 @@ class AsyncProjectsClient:
             Cursor for pagination, used to navigate through pages of results
 
         sort : typing.Optional[str]
-            allow sorting by name or modified_at, ascending (+) or the default descending (-)
+            allow sorting by name, modified_at or detection_count, ascending (+) or the default descending (-). detection_count is the number of the project's events from `POST /api/v2/events/query` with severity HIGH, MEDIUM or LOW between the response's `detection_count_start_at` and `detection_count_end_at`, 0 when it has none; ties sort by name, then project ID. Every page of one listing keeps the first page's window; a detection that arrives late but is dated inside it can still move a project between pages.
+
+        detection_count_start_at : typing.Optional[dt.datetime]
+            Start of the detection_count window; used only when sorting by detection_count. Must not be in the future or more than 8 days ago; fractional seconds are dropped. Defaults to midnight UTC 6 days ago.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -542,6 +551,7 @@ class AsyncProjectsClient:
             limit=limit,
             cursor=cursor,
             sort=sort,
+            detection_count_start_at=detection_count_start_at,
             request_options=request_options,
         )
 

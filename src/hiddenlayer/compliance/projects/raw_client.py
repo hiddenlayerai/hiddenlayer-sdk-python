@@ -6,6 +6,7 @@ from json.decoder import JSONDecodeError
 
 from ...core.api_error import ApiError
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ...core.datetime_utils import serialize_datetime
 from ...core.http_response import AsyncHttpResponse, HttpResponse
 from ...core.jsonable_encoder import quote_path_param
 from ...core.pagination import AsyncPager, SyncPager
@@ -55,6 +56,7 @@ class RawProjectsClient:
         limit: typing.Optional[Limit] = None,
         cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        detection_count_start_at: typing.Optional[dt.datetime] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> SyncPager[GetProjectItem, ListProjectsResponse]:
         """
@@ -85,7 +87,10 @@ class RawProjectsClient:
             Cursor for pagination, used to navigate through pages of results
 
         sort : typing.Optional[str]
-            allow sorting by name or modified_at, ascending (+) or the default descending (-)
+            allow sorting by name, modified_at or detection_count, ascending (+) or the default descending (-). detection_count is the number of the project's events from `POST /api/v2/events/query` with severity HIGH, MEDIUM or LOW between the response's `detection_count_start_at` and `detection_count_end_at`, 0 when it has none; ties sort by name, then project ID. Every page of one listing keeps the first page's window; a detection that arrives late but is dated inside it can still move a project between pages.
+
+        detection_count_start_at : typing.Optional[dt.datetime]
+            Start of the detection_count window; used only when sorting by detection_count. Must not be in the future or more than 8 days ago; fractional seconds are dropped. Defaults to midnight UTC 6 days ago.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -116,6 +121,9 @@ class RawProjectsClient:
                 "limit": limit,
                 "cursor": cursor,
                 "sort": sort,
+                "detection_count_start_at": serialize_datetime(detection_count_start_at)
+                if detection_count_start_at is not None
+                else None,
             },
             request_options=request_options,
         )
@@ -141,11 +149,23 @@ class RawProjectsClient:
                     limit=limit,
                     cursor=_parsed_next,
                     sort=sort,
+                    detection_count_start_at=detection_count_start_at,
                     request_options=request_options,
                 )
                 return SyncPager(has_next=_has_next, items=_items, get_next=_get_next, response=_parsed_response)
             if _response.status_code == 400:
                 raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -794,6 +814,7 @@ class AsyncRawProjectsClient:
         limit: typing.Optional[Limit] = None,
         cursor: typing.Optional[str] = None,
         sort: typing.Optional[str] = None,
+        detection_count_start_at: typing.Optional[dt.datetime] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncPager[GetProjectItem, ListProjectsResponse]:
         """
@@ -824,7 +845,10 @@ class AsyncRawProjectsClient:
             Cursor for pagination, used to navigate through pages of results
 
         sort : typing.Optional[str]
-            allow sorting by name or modified_at, ascending (+) or the default descending (-)
+            allow sorting by name, modified_at or detection_count, ascending (+) or the default descending (-). detection_count is the number of the project's events from `POST /api/v2/events/query` with severity HIGH, MEDIUM or LOW between the response's `detection_count_start_at` and `detection_count_end_at`, 0 when it has none; ties sort by name, then project ID. Every page of one listing keeps the first page's window; a detection that arrives late but is dated inside it can still move a project between pages.
+
+        detection_count_start_at : typing.Optional[dt.datetime]
+            Start of the detection_count window; used only when sorting by detection_count. Must not be in the future or more than 8 days ago; fractional seconds are dropped. Defaults to midnight UTC 6 days ago.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -855,6 +879,9 @@ class AsyncRawProjectsClient:
                 "limit": limit,
                 "cursor": cursor,
                 "sort": sort,
+                "detection_count_start_at": serialize_datetime(detection_count_start_at)
+                if detection_count_start_at is not None
+                else None,
             },
             request_options=request_options,
         )
@@ -882,12 +909,24 @@ class AsyncRawProjectsClient:
                         limit=limit,
                         cursor=_parsed_next,
                         sort=sort,
+                        detection_count_start_at=detection_count_start_at,
                         request_options=request_options,
                     )
 
                 return AsyncPager(has_next=_has_next, items=_items, get_next=_get_next, response=_parsed_response)
             if _response.status_code == 400:
                 raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        parse_obj_as(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
