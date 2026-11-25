@@ -212,6 +212,7 @@ class RawRedTeamV2Client:
 
         Starts a run against a target that the client calls. Poll `next-action` for each attack prompt and post the target's reply to `target-response` until `action_type` is `COMPLETED` or `FAILED`.
         The body's fields depend on `execution_strategy_type`; a field that strategy does not use is a 422. `is_runtime_trace_enabled: true` also requires the `inference:read` scope.
+        Runs use Runtime Security v2 where the deployment supports it.
 
         Parameters
         ----------
@@ -327,6 +328,7 @@ class RawRedTeamV2Client:
 
         Starts a run that attacks a built-in target model, with no client calls after this one. `target_model` must be in the target model catalog.
         The body's fields depend on `execution_strategy_type`; a field that strategy does not use is a 422. `is_runtime_trace_enabled: true` also requires the `inference:read` scope.
+        Runs use Runtime Security v2 where the deployment supports it.
 
         Parameters
         ----------
@@ -451,7 +453,7 @@ class RawRedTeamV2Client:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-        Returns the settings the calling tenant's next run uses.
+        Returns the Runtime Security mode supported by the deployment.
 
         Parameters
         ----------
@@ -1367,6 +1369,7 @@ class AsyncRawRedTeamV2Client:
 
         Starts a run against a target that the client calls. Poll `next-action` for each attack prompt and post the target's reply to `target-response` until `action_type` is `COMPLETED` or `FAILED`.
         The body's fields depend on `execution_strategy_type`; a field that strategy does not use is a 422. `is_runtime_trace_enabled: true` also requires the `inference:read` scope.
+        Runs use Runtime Security v2 where the deployment supports it.
 
         Parameters
         ----------
@@ -1482,6 +1485,7 @@ class AsyncRawRedTeamV2Client:
 
         Starts a run that attacks a built-in target model, with no client calls after this one. `target_model` must be in the target model catalog.
         The body's fields depend on `execution_strategy_type`; a field that strategy does not use is a 422. `is_runtime_trace_enabled: true` also requires the `inference:read` scope.
+        Runs use Runtime Security v2 where the deployment supports it.
 
         Parameters
         ----------
@@ -1606,7 +1610,7 @@ class AsyncRawRedTeamV2Client:
         """
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-        Returns the settings the calling tenant's next run uses.
+        Returns the Runtime Security mode supported by the deployment.
 
         Parameters
         ----------
