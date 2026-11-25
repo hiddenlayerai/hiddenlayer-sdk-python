@@ -9159,7 +9159,7 @@ projects. Evaluations without a project never match.
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L167-L314">create</a>(...) -> StartWorkflowResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L167-L315">create</a>(...) -> StartWorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -9175,6 +9175,7 @@ projects. Evaluations without a project never match.
 
 Start a new red team client workflow.
 Auto-triggers planning phase. Client should then poll /next-action.
+Runs use Runtime Security v1.
 </dd>
 </dl>
 </dd>
@@ -9405,7 +9406,7 @@ No-op for the `STATIC_PROMPT_SET` execution strategy.
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L316-L350">retrieve_status</a>(...) -> WorkflowStatusResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L317-L351">retrieve_status</a>(...) -> WorkflowStatusResponse</code></summary>
 <dl>
 <dd>
 
@@ -9481,7 +9482,7 @@ client.evaluations.red_team.retrieve_status(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L352-L392">retrieve_next_action</a>(...) -> NextActionResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L353-L393">retrieve_next_action</a>(...) -> NextActionResponse</code></summary>
 <dl>
 <dd>
 
@@ -9563,7 +9564,7 @@ client.evaluations.red_team.retrieve_next_action(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L394-L446">submit_target_response</a>(...) -> SubmitTargetResponseResult</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L395-L447">submit_target_response</a>(...) -> SubmitTargetResponseResult</code></summary>
 <dl>
 <dd>
 
@@ -9660,7 +9661,7 @@ client.evaluations.red_team.submit_target_response(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L448-L482">retrieve_evaluation_results</a>(...) -> WorkflowResultResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L449-L483">retrieve_evaluation_results</a>(...) -> WorkflowResultResponse</code></summary>
 <dl>
 <dd>
 
@@ -9736,7 +9737,7 @@ client.evaluations.red_team.retrieve_evaluation_results(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L484-L515">delete</a>(...)</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L485-L516">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -9812,7 +9813,7 @@ client.evaluations.red_team.delete(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L517-L548">terminate</a>(...)</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L518-L549">terminate</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -9888,7 +9889,7 @@ client.evaluations.red_team.terminate(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L550-L688">simulated</a>(...) -> StartWorkflowResponse</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L551-L690">simulated</a>(...) -> StartWorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -9903,6 +9904,7 @@ client.evaluations.red_team.terminate(
 [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
 Start a new simulated red team workflow with a built-in target model.
+Runs use Runtime Security v1.
 </dd>
 </dl>
 </dd>
@@ -10125,7 +10127,7 @@ for the `STATIC_PROMPT_SET` execution strategy.
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L690-L724">csv</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.evaluations.red_team.<a href="src/hiddenlayer/evaluations/red_team/client.py#L692-L726">csv</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 
@@ -11823,7 +11825,7 @@ client.evaluations.red_team_v2.list(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L130-L166">create</a>(...) -> RedTeamRunCreated</code></summary>
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L130-L167">create</a>(...) -> RedTeamRunCreated</code></summary>
 <dl>
 <dd>
 
@@ -11839,6 +11841,7 @@ client.evaluations.red_team_v2.list(
 
 Starts a run against a target that the client calls. Poll `next-action` for each attack prompt and post the target's reply to `target-response` until `action_type` is `COMPLETED` or `FAILED`.
 The body's fields depend on `execution_strategy_type`; a field that strategy does not use is a 422. `is_runtime_trace_enabled: true` also requires the `inference:read` scope.
+Runs use Runtime Security v2 where the deployment supports it.
 </dd>
 </dl>
 </dd>
@@ -11902,7 +11905,7 @@ client.evaluations.red_team_v2.create(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L168-L204">simulated</a>(...) -> RedTeamRunCreated</code></summary>
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L169-L206">simulated</a>(...) -> RedTeamRunCreated</code></summary>
 <dl>
 <dd>
 
@@ -11918,6 +11921,7 @@ client.evaluations.red_team_v2.create(
 
 Starts a run that attacks a built-in target model, with no client calls after this one. `target_model` must be in the target model catalog.
 The body's fields depend on `execution_strategy_type`; a field that strategy does not use is a 422. `is_runtime_trace_enabled: true` also requires the `inference:read` scope.
+Runs use Runtime Security v2 where the deployment supports it.
 </dd>
 </dl>
 </dd>
@@ -11981,7 +11985,7 @@ client.evaluations.red_team_v2.simulated(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L206-L233">settings</a>() -> RedTeamTenantSettings</code></summary>
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L208-L235">settings</a>() -> RedTeamTenantSettings</code></summary>
 <dl>
 <dd>
 
@@ -11995,7 +11999,7 @@ client.evaluations.red_team_v2.simulated(
 
 [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
-Returns the settings the calling tenant's next run uses.
+Returns the Runtime Security mode supported by the deployment.
 </dd>
 </dl>
 </dd>
@@ -12047,7 +12051,7 @@ client.evaluations.red_team_v2.settings()
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L235-L267">get</a>(...) -> RedTeamRun</code></summary>
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L237-L269">get</a>(...) -> RedTeamRun</code></summary>
 <dl>
 <dd>
 
@@ -12123,7 +12127,7 @@ client.evaluations.red_team_v2.get(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L269-L298">delete</a>(...)</code></summary>
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L271-L300">delete</a>(...)</code></summary>
 <dl>
 <dd>
 
@@ -12197,7 +12201,7 @@ client.evaluations.red_team_v2.delete(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L300-L334">status</a>(...) -> RedTeamRunProgress</code></summary>
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L302-L336">status</a>(...) -> RedTeamRunProgress</code></summary>
 <dl>
 <dd>
 
@@ -12273,7 +12277,7 @@ client.evaluations.red_team_v2.status(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L336-L373">next_action</a>(...) -> RedTeamNextAction</code></summary>
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L338-L375">next_action</a>(...) -> RedTeamNextAction</code></summary>
 <dl>
 <dd>
 
@@ -12352,7 +12356,7 @@ client.evaluations.red_team_v2.next_action(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L375-L424">target_response</a>(...) -> RedTeamTargetResponseResult</code></summary>
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L377-L426">target_response</a>(...) -> RedTeamTargetResponseResult</code></summary>
 <dl>
 <dd>
 
@@ -12446,7 +12450,7 @@ client.evaluations.red_team_v2.target_response(
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L426-L460">csv</a>(...) -> typing.Iterator[bytes]</code></summary>
+<details><summary><code>client.evaluations.red_team_v2.<a href="src/hiddenlayer/evaluations/red_team_v2/client.py#L428-L462">csv</a>(...) -> typing.Iterator[bytes]</code></summary>
 <dl>
 <dd>
 

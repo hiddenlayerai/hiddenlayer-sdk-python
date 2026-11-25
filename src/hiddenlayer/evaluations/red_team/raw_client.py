@@ -315,6 +315,7 @@ class RawRedTeamClient:
 
         Start a new red team client workflow.
         Auto-triggers planning phase. Client should then poll /next-action.
+        Runs use Runtime Security v1.
 
         Parameters
         ----------
@@ -1077,6 +1078,7 @@ class RawRedTeamClient:
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
         Start a new simulated red team workflow with a built-in target model.
+        Runs use Runtime Security v1.
 
         Parameters
         ----------
@@ -1632,6 +1634,7 @@ class AsyncRawRedTeamClient:
 
         Start a new red team client workflow.
         Auto-triggers planning phase. Client should then poll /next-action.
+        Runs use Runtime Security v1.
 
         Parameters
         ----------
@@ -2394,6 +2397,7 @@ class AsyncRawRedTeamClient:
         [BETA] This endpoint is not GA or Production ready and is subject to changes at any time. Breaking changes may occur.
 
         Start a new simulated red team workflow with a built-in target model.
+        Runs use Runtime Security v1.
 
         Parameters
         ----------
