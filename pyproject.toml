@@ -6,7 +6,7 @@ license-files = ["LICENSE"]
 
 [tool.poetry]
 name = "hiddenlayer-sdk"
-version = "3.10.0"
+version = "4.0.0"
 description = "The official Python library for the HiddenLayer API"
 readme = "README.md"
 authors = [

@@ -33,12 +33,12 @@ class BaseClientWrapper:
         import platform
 
         headers: typing.Dict[str, str] = {
-            "User-Agent": "hiddenlayer-sdk/3.10.0",
+            "User-Agent": "hiddenlayer-sdk/4.0.0",
             "X-Fern-Language": "Python",
             "X-Fern-Runtime": f"python/{platform.python_version()}",
             "X-Fern-Platform": f"{platform.system().lower()}/{platform.release()}",
             "X-Fern-SDK-Name": "hiddenlayer-sdk",
-            "X-Fern-SDK-Version": "3.10.0",
+            "X-Fern-SDK-Version": "4.0.0",
             **(self.get_custom_headers() or {}),
         }
         if include_token:

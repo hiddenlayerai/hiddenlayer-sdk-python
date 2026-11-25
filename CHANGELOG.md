@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.0.0
+
+### Major Changes
+
+- [#292](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/pull/292) [`19e9a65`](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/19e9a65661eb6f28c9d00757afb571a312f3321b) Thanks [@hl-dbohling](https://github.com/hl-dbohling)! - Generate the SDK with Fern. The package name, the `HiddenLayer` and `AsyncHiddenLayer` clients, their environment variables, the model and community scanners and the red team sessions stay; Python 3.10 is now the minimum, `bearer_token` becomes `token`, response types are named after the API's schemas, errors derive from `ApiError`, per-request options move into `request_options`, `scans.jobs.list` and `sensors.query` return pagers, and every public API in the specification is now covered. [docs/BREAKING_CHANGES_v4.0.0.md](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/blob/main/docs/BREAKING_CHANGES_v4.0.0.md) lists every change.
+
+### Patch Changes
+
+- [#293](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/pull/293) [`c2b5dc6`](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/commit/c2b5dc63e9b56efce517754cca8b5a57303e2856) Thanks [@hiddenlayer-opensource-exporter](https://github.com/apps/hiddenlayer-opensource-exporter)! - Generated from the API specification
+
 ## 3.10.0 (2026-09-09)
 
 [Full diff](https://github.com/hiddenlayerai/hiddenlayer-sdk-python/compare/v3.9.0...v3.10.0)
