@@ -10,6 +10,7 @@ from .highest_severity import HighestSeverity
 from .red_team_objective_ref import RedTeamObjectiveRef
 from .red_team_run_status import RedTeamRunStatus
 from .red_team_runtime_security_mode import RedTeamRuntimeSecurityMode
+from .red_team_runtime_security_status import RedTeamRuntimeSecurityStatus
 from .red_team_workflow_type import RedTeamWorkflowType
 
 
@@ -76,6 +77,10 @@ class RedTeamRunListItem(UniversalBaseModel):
 
     runtime_security_mode: RedTeamRuntimeSecurityMode
     workflow_type: RedTeamWorkflowType
+    runtime_security_status: typing.Optional[RedTeamRuntimeSecurityStatus] = pydantic.Field(default=None)
+    """
+    Whether Runtime Security evaluated every message; null for a run that recorded no status.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -5,6 +5,7 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from .red_team_run_failure_reason import RedTeamRunFailureReason
+from .red_team_run_runtime_security import RedTeamRunRuntimeSecurity
 from .red_team_run_status import RedTeamRunStatus
 
 
@@ -39,6 +40,8 @@ class RedTeamRunMeasurement(UniversalBaseModel):
     """
     A readable account of the failure; set only for a FAILED run.
     """
+
+    runtime_security: typing.Optional[RedTeamRunRuntimeSecurity] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
