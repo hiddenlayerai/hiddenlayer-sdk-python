@@ -5,6 +5,7 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from .red_team_run_phase import RedTeamRunPhase
+from .red_team_run_runtime_security import RedTeamRunRuntimeSecurity
 from .red_team_workflow_status import RedTeamWorkflowStatus
 
 
@@ -88,6 +89,11 @@ class RedTeamRunProgress(UniversalBaseModel):
     eta_seconds: typing.Optional[float] = pydantic.Field(default=None)
     """
     Estimated seconds until the run finishes.
+    """
+
+    runtime_security: typing.Optional[RedTeamRunRuntimeSecurity] = pydantic.Field(default=None)
+    """
+    The stored run's Runtime Security status; null until the run is stored, and for a run that recorded none.
     """
 
     if IS_PYDANTIC_V2:

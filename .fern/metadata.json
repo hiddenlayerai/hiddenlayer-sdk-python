@@ -26,10 +26,10 @@
     "offset_semantics": "item-index",
     "encode_path_params": true
   },
-  "originGitCommit": "df3aaebc72203a2375fc4ba2582b7f57878cf366",
+  "originGitCommit": "cf62fd3dbf9bcd0c0ed6ee479ba3685ffb0e80dc",
   "originGitCommitIsDirty": true,
   "invokedBy": "ci",
-  "requestedVersion": "3.10.0",
+  "requestedVersion": "4.0.0",
   "ciProvider": "github",
-  "sdkVersion": "3.10.0"
+  "sdkVersion": "4.0.0"
 }

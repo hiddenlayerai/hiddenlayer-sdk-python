@@ -8557,6 +8557,17 @@
         ]
       },
       {
+        "name": "RedTeamRuntimeSecurityStatus",
+        "values": [
+          "COMPLETE",
+          "INCOMPLETE"
+        ],
+        "members": {},
+        "locations": [
+          "/components/schemas/RedTeamRuntimeSecurityStatus"
+        ]
+      },
+      {
         "values": [
           "RETRIEVAL_IN_PROGRESS",
           "SUBMITTED",
@@ -9905,6 +9916,7 @@
       "/components/schemas/RedTeamRunPhase",
       "/components/schemas/RedTeamRunProgress",
       "/components/schemas/RedTeamRunReport",
+      "/components/schemas/RedTeamRunRuntimeSecurity",
       "/components/schemas/RedTeamRunSettings",
       "/components/schemas/RedTeamRunStatus",
       "/components/schemas/RedTeamRunSummary",
@@ -9912,6 +9924,7 @@
       "/components/schemas/RedTeamRuntimeSecurityDetection",
       "/components/schemas/RedTeamRuntimeSecurityMode",
       "/components/schemas/RedTeamRuntimeSecurityOutcome",
+      "/components/schemas/RedTeamRuntimeSecurityStatus",
       "/components/schemas/RedTeamRuntimeSessionCalls",
       "/components/schemas/RedTeamRuntimeSessionLookup",
       "/components/schemas/RedTeamRuntimeSessionRecord",

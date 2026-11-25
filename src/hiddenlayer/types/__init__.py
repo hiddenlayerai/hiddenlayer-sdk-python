@@ -478,6 +478,7 @@ if typing.TYPE_CHECKING:
     from .red_team_run_phase import RedTeamRunPhase
     from .red_team_run_progress import RedTeamRunProgress
     from .red_team_run_report import RedTeamRunReport
+    from .red_team_run_runtime_security import RedTeamRunRuntimeSecurity
     from .red_team_run_settings import RedTeamRunSettings
     from .red_team_run_settings_execution_strategy_type import RedTeamRunSettingsExecutionStrategyType
     from .red_team_run_status import RedTeamRunStatus
@@ -487,6 +488,7 @@ if typing.TYPE_CHECKING:
     from .red_team_runtime_security_mode import RedTeamRuntimeSecurityMode
     from .red_team_runtime_security_outcome import RedTeamRuntimeSecurityOutcome
     from .red_team_runtime_security_outcome_status import RedTeamRuntimeSecurityOutcomeStatus
+    from .red_team_runtime_security_status import RedTeamRuntimeSecurityStatus
     from .red_team_runtime_session_calls import RedTeamRuntimeSessionCalls
     from .red_team_runtime_session_lookup import RedTeamRuntimeSessionLookup
     from .red_team_runtime_session_record import RedTeamRuntimeSessionRecord
@@ -1200,6 +1202,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "RedTeamRunPhase": ".red_team_run_phase",
     "RedTeamRunProgress": ".red_team_run_progress",
     "RedTeamRunReport": ".red_team_run_report",
+    "RedTeamRunRuntimeSecurity": ".red_team_run_runtime_security",
     "RedTeamRunSettings": ".red_team_run_settings",
     "RedTeamRunSettingsExecutionStrategyType": ".red_team_run_settings_execution_strategy_type",
     "RedTeamRunStatus": ".red_team_run_status",
@@ -1209,6 +1212,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "RedTeamRuntimeSecurityMode": ".red_team_runtime_security_mode",
     "RedTeamRuntimeSecurityOutcome": ".red_team_runtime_security_outcome",
     "RedTeamRuntimeSecurityOutcomeStatus": ".red_team_runtime_security_outcome_status",
+    "RedTeamRuntimeSecurityStatus": ".red_team_runtime_security_status",
     "RedTeamRuntimeSessionCalls": ".red_team_runtime_session_calls",
     "RedTeamRuntimeSessionLookup": ".red_team_runtime_session_lookup",
     "RedTeamRuntimeSessionRecord": ".red_team_runtime_session_record",
@@ -1942,6 +1946,7 @@ __all__ = [
     "RedTeamRunPhase",
     "RedTeamRunProgress",
     "RedTeamRunReport",
+    "RedTeamRunRuntimeSecurity",
     "RedTeamRunSettings",
     "RedTeamRunSettingsExecutionStrategyType",
     "RedTeamRunStatus",
@@ -1951,6 +1956,7 @@ __all__ = [
     "RedTeamRuntimeSecurityMode",
     "RedTeamRuntimeSecurityOutcome",
     "RedTeamRuntimeSecurityOutcomeStatus",
+    "RedTeamRuntimeSecurityStatus",
     "RedTeamRuntimeSessionCalls",
     "RedTeamRuntimeSessionLookup",
     "RedTeamRuntimeSessionRecord",
